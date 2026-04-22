@@ -1,15 +1,36 @@
-[tool.poetry]
-name = "demo-package"
+[project]
+name = "radmatch"
 version = "0.1.0"
-description = ""
-authors = ["Raidium"]
+description = "Finding-based matching for radiology report generation evaluation"
+authors = [{ name = "Raidium" }]
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 readme = "README.md"
-packages = [{ include = "raidium", from = "src" }]
+requires-python = ">=3.11"
+dependencies = [
+    "tqdm>=4.66.1,<5",
+    "openai>=2.7.1",
+    "mistralai>=1.9.11,<2",
+    "python-dotenv>=1.0.1,<2",
+]
 
-[tool.poetry.dependencies]
-python = "^3.12"
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "ruff>=0.6.0",
+]
 
+[project.urls]
+Repository = "https://github.com/raidium-med/RadMatch"
+Issues = "https://github.com/raidium-med/RadMatch/issues"
+
+[project.scripts]
+radmatch = "radmatch.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/radmatch"]
+include = ["assets/**/*"]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"

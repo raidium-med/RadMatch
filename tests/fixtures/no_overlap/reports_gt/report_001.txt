@@ -1,0 +1,13 @@
+FINDINGS:
+Liver: Diffuse hepatic steatosis.
+Biliary tree: Mild intrahepatic biliary dilatation.
+Gallbladder: Multiple gallstones.
+Pancreas: 2 cm pancreatic cyst in the body.
+Spleen: Splenomegaly measuring 15 cm.
+
+IMPRESSION:
+1. Hepatic steatosis.
+2. Cholelithiasis.
+3. Pancreatic cyst.
+4. Splenomegaly.
+5. Mild biliary dilatation.
