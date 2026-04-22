@@ -1,0 +1,12 @@
+FINDINGS:
+Lungs: Bilateral pulmonary nodules measuring up to 8 mm.
+Heart: Mild cardiomegaly.
+Mediastinum: Enlarged mediastinal lymph nodes.
+Pleura: Small bilateral pleural effusions.
+Chest wall: Normal.
+
+IMPRESSION:
+1. Bilateral pulmonary nodules.
+2. Mild cardiomegaly.
+3. Mediastinal lymphadenopathy.
+4. Small bilateral pleural effusions.
