@@ -147,6 +147,8 @@ The evaluation process uses a **finding-by-finding** matching approach with an L
    - Matches findings that describe the same clinical observation, even with different wording
    - Does not require exact text matches (e.g., "pulmonary nodule" matches "lung nodule")
 
+The judge is defined by a carefully crafted prompt at [`assets/prompts/prompt_llm_judge.md`](assets/prompts/prompt_llm_judge.md). The matching code only enforces the one-to-one constraint; every actual match decision flows from this prompt.
+
 ### Computing metrics
 
 Three metric variants are computed from the match set:
