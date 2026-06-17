@@ -1,8 +1,14 @@
-# RadMatch: Finding-Based Matching for Radiology Report Generation Evaluation
+# [🚧 Update in progress] RadMatch: Finding-Based Matching for Radiology Report Generation Evaluation
 
 [![CI](https://img.shields.io/github/actions/workflow/status/raidium-med/RadMatch/ci.yaml?branch=main&label=CI)](https://github.com/raidium-med/RadMatch/actions/workflows/ci.yaml)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/downloads/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+> [!NOTE]
+> A substantially updated version of RadMatch is on the way. We have been
+> developing a new version internally that differs significantly from the
+> currently released code. It will be presented soon. The code on `main`
+> reflects the previously released version.
 
 **RadMatch** is an LLM-based evaluation pipeline for radiology report generation. It extracts structured findings from each report, uses an LLM judge to match predictions to ground truth on **clinical equivalence**, and counts matched predictions as true positives, unmatched predictions as false positives, and unmatched ground-truth findings as false negatives. From these, RadMatch reports **precision, recall, and F1** — overall, per report, and per finding type.
 
