@@ -1,0 +1,196 @@
+[
+  {
+    "text": "Mild atelectasis in the lung bases.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Mild intrahepatic biliary prominence, increased compared to prior.",
+    "measurements": [],
+    "comparison": "worsening",
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Small hypodense focus within the right hepatic lobe.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Gallbladder surgically absent.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Common bile duct measures up to 8 mm, increased from 5 mm previously, and tapers distally.",
+    "measurements": [
+      {
+        "value": 8,
+        "unit": "mm",
+        "category": "size"
+      },
+      {
+        "value": 5,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "comparison": "worsening",
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "Focus of internal density within the common bile duct.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "Previously described trace pelvic free fluid has resolved.",
+    "measurements": [],
+    "comparison": "resolved",
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Spleen normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Pancreas normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No pancreatitis.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Adrenal glands normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Kidneys normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Ureters normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "2 cm structure with fecalized internal contents associated with the proximal jejunum, not identified on the prior study, causing approximately 50% luminal narrowing.",
+    "measurements": [
+      {
+        "value": 2,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 50,
+        "unit": "pct",
+        "category": "ratio"
+      }
+    ],
+    "comparison": "new",
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "No free fluid.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Mild bladder wall thickening.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Uterus is normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "2.1 x 1.5 cm right corpus luteum cyst.",
+    "measurements": [
+      {
+        "value": 2.1,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 1.5,
+        "unit": "cm",
+        "category": "size"
+      }
+    ],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Left ovary unremarkable.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Vasculature is patent.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Lymph nodes are normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Abdominal wall is normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Musculoskeletal system normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  }
+]

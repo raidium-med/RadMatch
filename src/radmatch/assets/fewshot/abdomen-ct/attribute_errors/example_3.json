@@ -1,0 +1,35 @@
+{
+  "scenario": "Certainty minor + clean pairs (size/comparison handled deterministically)",
+  "description": "Stage 3b call derived from the matches in abdomen-ct/matching/example_3.json. The hepatic-cyst pair's size + comparison losses (gt 9 mm + stable; pred drops both) are deterministic Stage 3a concerns. There is also a certainty diff on the hepatic-cyst pair: gt asserts a definite 'cyst', pred hedges to 'small hypodense focus' — a one-step certainty difference (definite vs hedged-descriptive) without crossing into 'possible / cannot exclude', tagged minor. CBD prior-measurement difference (6 mm vs 5 mm) is Stage 3a.",
+  "user": {
+    "series_uuid": "abdomen-ct_example_3",
+    "pairs": [
+      {
+        "pred_finding": {"finding_id": "p_1", "text": "Small hypodense focus within the right hepatic lobe.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_1", "text": "Cyst in the right hepatic lobe measuring 9 mm unchanged.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": [{"value": 9, "unit": "mm", "category": "size"}]}
+      },
+      {
+        "pred_finding": {"finding_id": "p_2", "text": "Common bile duct measures up to 8 mm, increased from 5 mm previously, and tapers distally.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "worsening", "measurements": [{"value": 8, "unit": "mm", "category": "size"}, {"value": 5, "unit": "mm", "category": "size"}]},
+        "gt_finding":   {"finding_id": "gt_2", "text": "Common bile duct measures up to 8 mm, increased from 6 mm previously, and tapers distally.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "worsening", "measurements": [{"value": 8, "unit": "mm", "category": "size"}, {"value": 6, "unit": "mm", "category": "size"}]}
+      },
+      {
+        "pred_finding": {"finding_id": "p_3", "text": "Focus of internal density within the common bile duct.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_3", "text": "Focus of internal density within the common bile duct.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": null, "measurements": []}
+      },
+      {
+        "pred_finding": {"finding_id": "p_4", "text": "2 cm structure with fecalized internal contents associated with the proximal jejunum, not identified on the prior study, causing approximately 50% luminal narrowing.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "new", "measurements": [{"value": 2, "unit": "cm", "category": "size"}, {"value": 50, "unit": "pct", "category": "ratio"}]},
+        "gt_finding":   {"finding_id": "gt_4", "text": "Approximately 2 cm structure with fecalized internal contents associated with the proximal jejunum, not identified on the prior study, causing approximately 50% luminal narrowing.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "new", "measurements": [{"value": 2, "unit": "cm", "category": "size"}, {"value": 50, "unit": "pct", "category": "ratio"}]}
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_match": [
+      [
+        {"dimension": "certainty", "severity": "minor", "reasoning": "Gt asserts a definite cyst; pred hedges to 'small hypodense focus' — one step down on the certainty scale without crossing into 'possible / cannot exclude'."}
+      ],
+      [],
+      [],
+      []
+    ]
+  }
+}

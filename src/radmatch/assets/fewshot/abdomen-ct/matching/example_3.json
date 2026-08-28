@@ -1,0 +1,87 @@
+{
+  "scenario": "N:1 aggregate — multiple atomic pred cysts covering one umbrella GT",
+  "description": "GT 'Multiple bilateral simple renal cysts' is a clinically real aggregation. The predictor surfaced two specific atomic cysts, each binding to the same GT umbrella; both pred rows → `aggregate`.",
+  "user": {
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Right kidney simple cyst, 8 mm.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 8,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_2",
+        "text": "Left kidney simple cyst, 6 mm.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 6,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_3",
+        "text": "Pancreas normal.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Multiple bilateral simple renal cysts, the largest measuring 9 mm.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 9,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "Pancreas normal.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "GT umbrella names pathology (simple cysts) + parent anatomy (bilateral renal); covers the right-kidney atom.",
+        "match_scope": "aggregate"
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_1",
+        "reasoning": "Same GT umbrella also covers the left-kidney cyst atom — second row, same gt_id.",
+        "match_scope": "aggregate"
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_2",
+        "reasoning": "Identical pancreas-normal statement.",
+        "match_scope": "direct"
+      }
+    ],
+    "unmatched_pred": [],
+    "unmatched_gt": []
+  }
+}

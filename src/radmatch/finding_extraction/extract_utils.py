@@ -3,17 +3,26 @@
 from __future__ import annotations
 
 import logging
-import re
 import shutil
-from typing import TYPE_CHECKING, Sequence
+from typing import TYPE_CHECKING, Literal, Sequence, TypedDict
 
 if TYPE_CHECKING:
     from pathlib import Path
 
 from radmatch import constants, io
-from radmatch.llm_utils import prompts
 
 logger = logging.getLogger(__name__)
+
+
+class Finding(TypedDict):
+    """A single radiology finding, after extraction + normalisation."""
+
+    finding_id: str
+    text: str
+    clinical_status: Literal["normal", "abnormal"]
+    clinical_significance: Literal["critical", "urgent", "notable", "routine"]
+    comparison: Literal["stable", "improving", "worsening", "new", "resolved"] | None
+    measurements: list[dict]
 
 
 # ============================================================================
@@ -52,34 +61,82 @@ def _normalize_unit(unit_str: str, category: str) -> str | None:
     return unit_lower
 
 
-def _parse_value_and_unit(value_str: str, category: str) -> tuple[float, str | None] | None:
-    """Parse 'number' or 'number unit' from a string (e.g. '2.3 cm'). Returns (value, unit) or None."""
-    if not value_str or not isinstance(value_str, str):
-        return None
-    value_str = value_str.strip()
-    match = re.match(r"^\s*([+-]?\d*\.?\d+)\s*([a-zA-Z%]+)?\s*$", value_str)
-    if not match:
-        return None
-    try:
-        num = float(match.group(1))
-    except ValueError:
-        return None
-    unit = match.group(2).strip() if match.group(2) else None
-    return (num, unit or None)
+# ============================================================================
+# Finding Normalisation
+# ============================================================================
 
 
-def normalize_measurement_to_base_unit(value: float, unit: str | None, category: str) -> float | None:
-    """Convert a measurement value to its base unit for comparison."""
-    if unit is None:
-        return value
+def validate_and_normalize_finding(finding: dict) -> dict:
+    """Copy of `finding` with its enum fields validated.
 
-    unit_lower = unit.lower().strip()
-    conversion_factor = constants.MEASUREMENT_UNIT_CONVERSION.get(unit_lower)
+    `clinical_status` and `clinical_significance` fall back to their defaults;
+    invalid non-null `comparison` becomes None. The three stay independent — a
+    `normal + critical` rule-out is left alone. Everything else passes through, and
+    the input is never mutated.
 
-    if conversion_factor is None:
-        return value
+    Applied both to fresh LLM output and to findings loaded from disk, which defends
+    against schema drift and hand-edited annotations.
+    """
+    out = dict(finding)
+    label = out.get("finding_id") or (out.get("text") or "")[:40]
 
-    return value * conversion_factor
+    status = out.get("clinical_status")
+    if status is None:
+        logger.warning(
+            "finding %r missing clinical_status; filling with default %r", label, constants.DEFAULT_CLINICAL_STATUS
+        )
+        out["clinical_status"] = constants.DEFAULT_CLINICAL_STATUS
+    elif status not in constants.CLINICAL_STATUS_VALUES:
+        logger.warning(
+            "finding %r has invalid clinical_status %r; falling back to default %r",
+            label,
+            status,
+            constants.DEFAULT_CLINICAL_STATUS,
+        )
+        out["clinical_status"] = constants.DEFAULT_CLINICAL_STATUS
+
+    sig = out.get("clinical_significance")
+    if sig is None:
+        logger.warning(
+            "finding %r missing clinical_significance; filling with default %r",
+            label,
+            constants.DEFAULT_CLINICAL_SIGNIFICANCE,
+        )
+        out["clinical_significance"] = constants.DEFAULT_CLINICAL_SIGNIFICANCE
+    elif sig not in constants.CLINICAL_SIGNIFICANCE_VALUES:
+        logger.warning(
+            "finding %r has invalid clinical_significance %r; falling back to default %r",
+            label,
+            sig,
+            constants.DEFAULT_CLINICAL_SIGNIFICANCE,
+        )
+        out["clinical_significance"] = constants.DEFAULT_CLINICAL_SIGNIFICANCE
+
+    comparison = out.get("comparison")
+    if comparison is not None and comparison not in constants.COMPARISON_VALUES:
+        logger.warning("finding %r has invalid comparison %r; falling back to None", label, comparison)
+        out["comparison"] = None
+
+    return out
+
+
+_CANONICAL_FINDING_FIELDS = (
+    "finding_id",
+    "text",
+    "clinical_status",
+    "clinical_significance",
+    "comparison",
+    "measurements",
+)
+
+
+def project_to_canonical_finding(finding: dict[str, object]) -> dict[str, object]:
+    """Validate + normalize then project to the canonical 6-field schema.
+    Used when serializing findings into LLM prompts (few-shot examples) so
+    the wire format stays minimal."""
+    normalized = validate_and_normalize_finding(finding)
+    defaults = {"finding_id": "", "text": "", "measurements": []}
+    return {k: normalized.get(k, defaults.get(k)) for k in _CANONICAL_FINDING_FIELDS}
 
 
 # ============================================================================
@@ -128,92 +185,58 @@ def extract_findings_list(
                     else constants.DEFAULT_MEASUREMENT_CATEGORY
                 )
 
-                # Keep value as numeric (int or float)
+                # Coerce numeric strings, drop anything else — rare schema drift.
                 value_raw = m.get("value")
-                unit_from_str: str | None = None
                 try:
                     if isinstance(value_raw, (int, float)):
                         numeric_value = value_raw
                     else:
                         value_str = str(value_raw).strip()
-                        try:
-                            numeric_value = int(value_str)
-                        except ValueError:
-                            numeric_value = float(value_str)
+                        numeric_value = float(value_str) if "." in value_str else int(value_str)
                 except (ValueError, TypeError):
-                    value_str = str(value_raw).strip() if value_raw is not None else ""
-                    parsed = _parse_value_and_unit(value_str, normalized_category)
-                    if parsed is None:
-                        logger.warning(f"Skipping measurement with invalid value '{value_raw}'")
-                        continue
-                    numeric_value, unit_from_str = parsed
+                    logger.warning("Skipping measurement with invalid value %r", value_raw)
+                    continue
 
                 unit_raw = m.get("unit")
-                unit_to_normalize = unit_from_str or unit_raw
-                normalized_unit = _normalize_unit(unit_to_normalize, normalized_category) if unit_to_normalize else None
+                normalized_unit = _normalize_unit(unit_raw, normalized_category) if unit_raw else None
 
                 measurements.append({"value": numeric_value, "unit": normalized_unit, "category": normalized_category})
 
-        clinical_status_raw = finding.get("clinical_status", constants.DEFAULT_CLINICAL_STATUS)
-        clinical_status = (
-            clinical_status_raw
-            if clinical_status_raw in constants.CLINICAL_STATUS_VALUES
-            else constants.DEFAULT_CLINICAL_STATUS
-        )
-
-        # Normalize comparison
-        comparison = finding.get("comparison")
-        if comparison and comparison not in constants.COMPARISON_VALUES:
-            comparison = None
-
-        findings_list.append(
+        normalized = validate_and_normalize_finding(
             {
                 "finding_id": f"{series_uuid}_{i:03d}",
                 "text": finding.get("text", ""),
-                "clinical_status": clinical_status,
-                "comparison": comparison,
+                "clinical_status": finding.get("clinical_status"),
+                "clinical_significance": finding.get("clinical_significance"),
+                "comparison": finding.get("comparison"),
                 "measurements": measurements,
             }
         )
+        findings_list.append(normalized)
 
     return findings_list
-
-
-def write_findings_output(series_uuid: str, findings_list: list[dict[str, object]], findings_dir: Path) -> None:
-    """Write findings list to JSON file."""
-    findings_output = findings_dir / f"{series_uuid}.json"
-    io.save_json(findings_list, findings_output)
 
 
 def copy_findings_from_directory(
     source_dir: Path,
     target_dir: Path,
-    logger_instance: logging.Logger | None = None,
     series_uuid_list: Sequence[str] | None = None,
 ) -> int:
-    """Copy and filter findings files from source to target directory."""
-    logger_inst = io.get_logger(logger_instance)
-
+    """Copy filtered findings files from source to target. Returns count copied."""
     if not source_dir.exists():
-        logger_inst.warning("Source findings directory does not exist: %s", source_dir)
+        logger.warning("Source findings directory does not exist: %s", source_dir)
         return 0
 
     target_dir.mkdir(parents=True, exist_ok=True)
+    series_uuid_set = set(series_uuid_list) if series_uuid_list else None
     copied_count = 0
     skipped_count = 0
 
-    # Create set for O(1) lookup if filtering by series_uuid
-    series_uuid_set = set(series_uuid_list) if series_uuid_list else None
-
     for findings_file in source_dir.glob("*.json"):
         series_uuid = findings_file.stem
-
-        # Filter by series_uuid if list provided
         if series_uuid_set is not None and series_uuid not in series_uuid_set:
             continue
-
         target_file = target_dir / f"{series_uuid}.json"
-
         if target_file.exists():
             skipped_count += 1
             continue
@@ -221,123 +244,44 @@ def copy_findings_from_directory(
         try:
             findings_list = io.load_json(findings_file, raise_on_error=True)
             if not isinstance(findings_list, list):
-                logger_inst.warning("Skipping %s: not a list", findings_file.name)
+                logger.warning("Skipping %s: not a list", findings_file.name)
                 continue
-
-            # Filter findings to only include needed fields
-            filtered_findings = [
-                prompts.filter_finding_fields(finding) for finding in findings_list if isinstance(finding, dict)
-            ]
-
-            # Write filtered findings
-            write_findings_output(series_uuid, filtered_findings, target_dir)
+            filtered = [project_to_canonical_finding(f) for f in findings_list if isinstance(f, dict)]
+            io.save_json(filtered, target_file)
             copied_count += 1
         except (OSError, ValueError, KeyError, TypeError) as exc:
-            logger_inst.warning("Failed to copy findings from %s: %s", findings_file.name, exc)
-            continue
+            logger.warning("Failed to copy findings from %s: %s", findings_file.name, exc)
 
     if copied_count > 0:
-        logger_inst.info("Copied %d findings files from %s", copied_count, source_dir)
+        logger.info("Copied %d findings files from %s", copied_count, source_dir)
     if skipped_count > 0:
-        logger_inst.info("Skipped %d findings files that already have outputs", skipped_count)
-
+        logger.info("Skipped %d findings files that already have outputs", skipped_count)
     return copied_count
-
-
-def log_completion_stats(
-    total_reports: int,
-    processed_reports: int,
-    skipped_reports: int,
-    failed_reports: int,
-    total_findings: int,
-    findings_dir: Path,
-    logger_instance: logging.Logger | None = None,
-) -> None:
-    """Log completion statistics."""
-    logger_inst = io.get_logger(logger_instance)
-
-    avg = total_findings / processed_reports if processed_reports else 0
-
-    logger_inst.info("=" * 90)
-    logger_inst.info("COMPLETE")
-    logger_inst.info(f"  Total reports: {total_reports:6d}")
-    logger_inst.info(f"    • processed: {processed_reports:6d}")
-    logger_inst.info(f"    • skipped:   {skipped_reports:6d}")
-    logger_inst.info(f"    • failed:    {failed_reports:6d}")
-    logger_inst.info(f"  Total findings: {total_findings:6d}")
-    logger_inst.info(f"  Average findings/report: {avg:.1f}")
-    logger_inst.info(f"  Findings dir: {findings_dir}")
-    logger_inst.info("=" * 90)
-
-
-def setup_processing_context(
-    reports_dir: Path,
-    fewshot: str | None = None,
-    limit: int | None = None,
-) -> tuple[list[Path], Sequence[dict[str, object]]]:
-    """Set up processing context: find report files and load few-shot examples."""
-    logger = logging.getLogger(__name__)
-
-    if not reports_dir.exists():
-        raise FileNotFoundError(f"Reports directory not found: {reports_dir}")
-
-    examples_list: Sequence[dict[str, object]] = []
-    if fewshot:
-        examples_list = prompts.load_fewshot(fewshot)
-        if examples_list:
-            logger.info(f"Loaded {len(examples_list)} few-shot examples for '{fewshot}'")
-        else:
-            logger.info("No few-shot examples loaded")
-
-    # Find report files
-    report_files = io.find_report_files(reports_dir)
-    if not report_files:
-        raise ValueError(f"No .txt reports found in {reports_dir}")
-
-    # Apply limit if specified
-    if limit is not None:
-        report_files = report_files[:limit]
-        logger.info(f"Limited processing to first {len(report_files)} reports")
-
-    return report_files, examples_list
 
 
 def copy_reports_directory(
     source_dir: Path,
     target_dir: Path,
-    logger_instance: logging.Logger | None = None,
     series_uuid_list: Sequence[str] | None = None,
 ) -> int:
-    """Copy report .txt files from source to target directory."""
-    logger_inst = io.get_logger(logger_instance)
-
+    """Copy report .txt files from source to target. Returns count copied."""
     if not source_dir.exists():
-        logger_inst.warning("Source reports directory does not exist: %s", source_dir)
+        logger.warning("Source reports directory does not exist: %s", source_dir)
         return 0
 
     target_dir.mkdir(parents=True, exist_ok=True)
+    series_uuid_set = set(series_uuid_list) if series_uuid_list else None
     copied_count = 0
 
-    # Create set for O(1) lookup if filtering by series_uuid
-    series_uuid_set = set(series_uuid_list) if series_uuid_list else None
-
     for report_file in source_dir.glob("*.txt"):
-        series_uuid = report_file.stem
-
-        # Filter by series_uuid if list provided
-        if series_uuid_set is not None and series_uuid not in series_uuid_set:
+        if series_uuid_set is not None and report_file.stem not in series_uuid_set:
             continue
-
-        target_file = target_dir / report_file.name
-
         try:
-            shutil.copy2(report_file, target_file)
+            shutil.copy2(report_file, target_dir / report_file.name)
             copied_count += 1
         except (OSError, PermissionError, shutil.SameFileError) as exc:
-            logger_inst.warning("Failed to copy report from %s: %s", report_file.name, exc)
-            continue
+            logger.warning("Failed to copy report from %s: %s", report_file.name, exc)
 
     if copied_count > 0:
-        logger_inst.info("Copied %d report files from %s to %s", copied_count, source_dir, target_dir)
-
+        logger.info("Copied %d report files from %s to %s", copied_count, source_dir, target_dir)
     return copied_count

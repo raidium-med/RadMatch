@@ -1,0 +1,35 @@
+{
+  "scenario": "Severity_descriptor minor + clean pairs",
+  "description": "Stage 3b call derived from the matches in chest-xr/matching/example_1.json. The status-conflict pair (pleural effusion, gt 'No' vs pred 'small bilateral') is excluded upstream by Stage 3a — INC pairs never reach Stage 3b. The remaining 4 matched pairs are shown; only the cardiomegaly pair carries a free-text attribute difference (mild vs moderate descriptor, one step apart on a continuous scale — minor per the prompt rubric).",
+  "user": {
+    "series_uuid": "chest-xr_example_1",
+    "pairs": [
+      {
+        "pred_finding": {"finding_id": "p_1", "text": "Right pleural thickening is chronic.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_2", "text": "Right pleural thickening is chronic.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []}
+      },
+      {
+        "pred_finding": {"finding_id": "p_2", "text": "Moderate cardiomegaly.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_3", "text": "Mild cardiomegaly, unchanged.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": []}
+      },
+      {
+        "pred_finding": {"finding_id": "p_4", "text": "No pneumothorax.", "clinical_status": "normal", "clinical_significance": "critical", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_5", "text": "No pneumothorax.", "clinical_status": "normal", "clinical_significance": "critical", "comparison": null, "measurements": []}
+      },
+      {
+        "pred_finding": {"finding_id": "p_5", "text": "No evidence of pneumonia.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_6", "text": "No evidence of pneumonia.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []}
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_match": [
+      [],
+      [
+        {"dimension": "severity", "severity": "minor", "reasoning": "Pred says moderate, gt says mild — one step apart on the cardiomegaly descriptor scale; no clear management threshold crossed."}
+      ],
+      [],
+      []
+    ]
+  }
+}

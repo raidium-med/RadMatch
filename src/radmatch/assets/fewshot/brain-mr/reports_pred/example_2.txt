@@ -1,0 +1,22 @@
+BRAIN MRI
+
+Clinical information: Metastatic breast carcinoma, follow-up
+
+Technique: Sagittal and axial T1-weighted; sagittal, axial and coronal FLAIR; axial T2-weighted, DWI, ADC and SWI. T1-weighted in 3 planes after contrast agent injection.
+
+Comparison: [date_1] dated Cranial MRI
+
+Findings:
+
+- On the left inferior surface of the tentorium, a leptomeningeal metastasis that was of punctate size on the previous examination is now forming a mass 2 cm in diameter and 1.5 cm in thickness; massive edema extending to the brainstem and cerebellum associated with this mass is observed.
+- Cerebellar metastases that enhanced on the previous examination have disappeared or transformed into cystic focal areas. No new metastatic foci added in the posterior fossa during the interval.
+- Metastases measuring 17 mm in diameter in the right putamen, 5 mm in diameter in the head of the left caudate nucleus, and 1 cm in diameter in the left posterior parietal cortex have developed, not found on the previous examination. Extensive edema is present around the putaminal metastasis.
+- Not found on the previous examination, an extra-axial metastasis in the left lateral occipital region, 17 mm in diameter, forming massive parenchymal edema, 5 mm in diameter within the left Sylvian fissure, and 3 extra-axial metastases in the left frontal have developed.
+- The metastasis infiltrating the anterior lobe and stalk of the pituitary gland appears stable on the current examination.
+- Bone metastases are present in the clivus and cervical vertebrae, and bilateral mandibular condyles, but bone metastasis is not seen in the cranium.
+
+Impression:
+
+- Parenchymal metastases in the putamen, caudate nucleus, and parietal lobe; multiple new leptomeningeal metastases in the left infratentorial region and left cerebral convexity.
+- Pituitary metastasis appears stable.
+- Widespread bone metastases.

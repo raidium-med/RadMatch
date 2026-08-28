@@ -1,0 +1,57 @@
+[
+  {
+    "text": "Clear lungs without focal consolidation.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No pneumothorax.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "critical"
+  },
+  {
+    "text": "Pulmonary vasculature is not engorged.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "A 6 mm pulmonary nodule in the peripheral right upper lobe has slightly increased compared to the preceding radiograph.",
+    "measurements": [
+      {
+        "value": 6,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "comparison": "worsening",
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "Cardiac silhouette is normal in size.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Mediastinal and hilar contours are within normal limits.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No acute cardiopulmonary process.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  }
+]

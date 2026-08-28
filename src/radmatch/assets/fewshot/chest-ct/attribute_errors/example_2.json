@@ -1,0 +1,23 @@
+{
+  "scenario": "No free-text attribute errors after INC exclusion",
+  "description": "Stage 3b call derived from the matches in chest-ct/matching/example_2.json. The hepatic lesion pair is a status conflict (gt: newly enlarged segment-VI lesion, pred: 'No suspicious hepatic lesion') → excluded from Stage 3b at Stage 3a (INC). The remaining 2 matched pairs (pulmonary nodules and retroperitoneal nodes) carry measurement differences only on the largest target lesion, which Stage 3a handles; no free-text attribute differences exist within the 4 LLM dimensions.",
+  "user": {
+    "series_uuid": "chest-ct_example_2",
+    "pairs": [
+      {
+        "pred_finding": {"finding_id": "p_1", "text": "Slight interval enlargement of multiple pulmonary nodules, largest in the right lung base measuring 2.5 x 1.6 cm, previously 2.3 x 1.5 cm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "worsening", "measurements": [{"value": 2.5, "unit": "cm", "category": "size"}, {"value": 1.6, "unit": "cm", "category": "size"}, {"value": 2.3, "unit": "cm", "category": "size"}, {"value": 1.5, "unit": "cm", "category": "size"}]},
+        "gt_finding":   {"finding_id": "gt_1", "text": "Slight interval enlargement of multiple pulmonary nodules, largest in the right lung base measuring 3.1 x 1.7 cm, previously 2.3 x 1.5 cm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "worsening", "measurements": [{"value": 3.1, "unit": "cm", "category": "size"}, {"value": 1.7, "unit": "cm", "category": "size"}, {"value": 2.3, "unit": "cm", "category": "size"}, {"value": 1.5, "unit": "cm", "category": "size"}]}
+      },
+      {
+        "pred_finding": {"finding_id": "p_3", "text": "Interval enlargement of multiple retroperitoneal and aortocaval lymph nodes, largest left retroperitoneal node measuring 2.4 x 1.7 cm, previously 2.0 x 1.2 cm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "worsening", "measurements": [{"value": 2.4, "unit": "cm", "category": "size"}, {"value": 1.7, "unit": "cm", "category": "size"}, {"value": 2.0, "unit": "cm", "category": "size"}, {"value": 1.2, "unit": "cm", "category": "size"}]},
+        "gt_finding":   {"finding_id": "gt_3", "text": "Interval enlargement of multiple retroperitoneal and aortocaval lymph nodes, largest left retroperitoneal node measuring 2.4 x 1.7 cm, previously 2.0 x 1.2 cm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "worsening", "measurements": [{"value": 2.4, "unit": "cm", "category": "size"}, {"value": 1.7, "unit": "cm", "category": "size"}, {"value": 2.0, "unit": "cm", "category": "size"}, {"value": 1.2, "unit": "cm", "category": "size"}]}
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_match": [
+      [],
+      []
+    ]
+  }
+}

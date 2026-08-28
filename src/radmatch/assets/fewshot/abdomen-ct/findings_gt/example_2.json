@@ -1,0 +1,247 @@
+[
+  {
+    "text": "Small right pleural effusion.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Minimal right lower lobe atelectasis.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Diffuse hepatic steatosis.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Subtle nodular contour of the liver, which may represent fibrotic or cirrhotic changes.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Gallbladder surgically absent.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Common bile duct measures up to 7 mm in diameter but tapers distally, likely secondary to postcholecystectomy state.",
+    "measurements": [
+      {
+        "value": 7,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Spleen normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Pancreas normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Adrenal glands normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No hydronephrosis.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Symmetric nephrograms and excretion of contrast.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Approximately 2.3 cm simple renal cyst noted in the superior pole of the left kidney.",
+    "measurements": [
+      {
+        "value": 2.3,
+        "unit": "cm",
+        "category": "size"
+      }
+    ],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Approximately 1.3 cm renal cyst in the left lower pole measuring approximately 26 Hounsfield units.",
+    "measurements": [
+      {
+        "value": 1.3,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 26,
+        "unit": "hu",
+        "category": "attenuation"
+      }
+    ],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "No evidence of bowel obstruction.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No bowel wall thickening.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Normal caliber appendix.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Trace fluid in the pelvis likely physiologic.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "No evidence of retroperitoneal hematoma.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Bladder wall is thickened, likely secondary to underdistention.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Focus of air in the bladder, likely related to instrumentation.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "An intrauterine device is in place.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Mild atherosclerosis.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "No aneurysm.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Lymph nodes normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Focus of subcutaneous emphysema with surrounding fat stranding in the anterior abdominal wall, correlate with history of injections.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Marked laxity of the pelvic floor with prolapse.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Left adductor intramuscular hematoma measuring 7 x 4.7 cm (decreased from 9 x 5 cm on prior exam) with a small 6 mm central focus of hyperdensity / contrast blush on early-phase imaging that did not persist on delayed imaging.",
+    "measurements": [
+      {
+        "value": 7,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 4.7,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 9,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 5,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 6,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "comparison": "improving",
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "Small focus of slow, active bleeding which did not continue on delays, versus pseudoaneurysm.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  }
+]

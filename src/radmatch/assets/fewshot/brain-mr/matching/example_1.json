@@ -1,0 +1,102 @@
+{
+  "scenario": "Status flip on cortical sulci + SPU on sinus + merge of medulla/cerebellum",
+  "description": "Real subset of brain-mr/findings_{gt,pred}/example_1 (negative scan in gt, pred adds two abnormalities and merges some completeness statements). Demonstrates a status flip on hemispheric cortical sulci (gt 'compatible with age' = normal vs pred 'mildly prominent for age' = abnormal — INC downstream), a hallucinated abnormality (SPU on left maxillary sinus mucosal thickening), and a split/merge artifact where pred fuses two gt findings (medulla/pons/mesencephalon + cerebellum) into one — that merged pred entity is matched against the better-fitting gt finding and the other becomes MIS.",
+  "user": {
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Medulla oblongata, pons, mesencephalon, both cerebellar hemispheres, and vermis parenchyma are normal.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "Hemispheric cortical sulcal widths are mildly prominent for the patient's age.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_3",
+        "text": "Bilateral orbits and paranasal sinuses are normal.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_4",
+        "text": "Mucosal thickening in the left maxillary sinus.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Medulla oblongata, pons, mesencephalon are normal.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "Both cerebellar hemispheres and vermis parenchyma are normal.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "Hemispheric cortical sulcal widths are compatible with the patient's age.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "Bilateral orbits are normal.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_5",
+        "text": "Paranasal sinuses are normal.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "Pred merges medulla/pons/mesencephalon with cerebellum into a single completeness statement; aligned with the gt's medulla/pons/mesencephalon entry. The unmatched gt cerebellum statement is the split/merge artifact.",
+        "match_scope": "direct"
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_3",
+        "reasoning": "Same anatomy (hemispheric cortical sulci). Pred says 'mildly prominent for age' (abnormal), gt says 'compatible with age' (normal) — status flip kept in matches so Stage 3 can classify INC.",
+        "match_scope": "direct"
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_5",
+        "reasoning": "Pred merges orbits + paranasal sinuses into a single completeness statement; the closer gt counterpart is the paranasal sinuses statement.",
+        "match_scope": "direct"
+      }
+    ],
+    "unmatched_pred": [
+      "p_4"
+    ],
+    "unmatched_gt": [
+      "gt_2",
+      "gt_4"
+    ]
+  }
+}

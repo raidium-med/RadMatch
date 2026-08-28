@@ -1,14 +1,11 @@
-"""Core extraction logic for finding extraction."""
+"""Stage 1 — extract findings from radiology reports using an LLM."""
 
 from __future__ import annotations
 
-import concurrent.futures
 import json
 import logging
-import threading
+from dataclasses import dataclass
 from pathlib import Path
-
-from tqdm import tqdm
 
 from radmatch import constants, io
 from radmatch.finding_extraction import extract_utils
@@ -17,324 +14,374 @@ from radmatch.llm_utils import llm_clients, prompts
 logger = logging.getLogger(__name__)
 
 
-class FindingExtractor:
-    """Extract findings from radiology reports using an LLM."""
+# Deliberately soft on enum values (open `string` for clinical_*, comparison,
+# measurement.category) — `extract_utils.validate_and_normalize_finding` normalizes
+# them downstream, as Stage 3b does after its own soft schema.
+_FINDINGS_SCHEMA = {
+    "type": "json_schema",
+    "json_schema": {
+        "name": "findings_output",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "findings": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "text": {"type": "string"},
+                            "clinical_status": {"type": "string"},
+                            "clinical_significance": {"type": "string"},
+                            "comparison": {"type": ["string", "null"]},
+                            "measurements": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "value": {"type": "number"},
+                                        "unit": {"type": ["string", "null"]},
+                                        "category": {"type": "string"},
+                                    },
+                                    "required": ["value", "unit", "category"],
+                                    "additionalProperties": False,
+                                },
+                            },
+                        },
+                        "required": [
+                            "text",
+                            "clinical_status",
+                            "clinical_significance",
+                            "comparison",
+                            "measurements",
+                        ],
+                        "additionalProperties": False,
+                    },
+                },
+            },
+            "required": ["findings"],
+            "additionalProperties": False,
+        },
+    },
+}
 
-    def __init__(
-        self,
-        model_name: str,
-        examples: list[dict[str, object]],
-        workers: int,
-        max_tokens: int,
-        reasoning: str = "none",
+
+# ============================================================================
+# Per-stage data shapes
+# ============================================================================
+
+
+@dataclass
+class ExtractionStats:
+    """Counts returned by `run_extraction` for one side (GT or pred).
+
+    `findings` is the total number of findings across all processed reports.
+    """
+
+    total: int = 0
+    processed: int = 0
+    skipped: int = 0
+    failed: int = 0
+    findings: int = 0
+
+    @property
+    def avg_findings_per_report(self) -> float:
+        return self.findings / self.processed if self.processed else 0.0
+
+
+@dataclass
+class _FailedReport:
+    series_uuid: str
+    reason: str
+    raw_response: str | None = None
+
+    def as_dict(self) -> dict[str, str | None]:
+        out: dict[str, str | None] = {"series_uuid": self.series_uuid, "reason": self.reason}
+        if self.raw_response is not None:
+            out["raw_response"] = self.raw_response
+        return out
+
+
+@dataclass
+class _ExtractionResult:
+    series_uuid: str
+    findings: list[dict[str, object]] | None
+    failure: _FailedReport | None = None
+
+
+# ============================================================================
+# Per-report extraction
+# ============================================================================
+
+
+def _extract_one_report(
+    report_path: Path,
+    client: llm_clients.Client,
+    fewshot_messages: tuple[dict, ...],
+    indication: str = "",
+) -> _ExtractionResult:
+    """Extract findings for a single report; returns either findings or a failure record."""
+    series_uuid = report_path.stem
+    report_text = io.read_text_file(report_path)
+    if not report_text:
+        return _ExtractionResult(
+            series_uuid, None, _FailedReport(series_uuid, "Failed to read report or report is empty")
+        )
+
+    messages = prompts.build_messages(
+        prompts.load_prompt(prompts.PROMPT_FINDING_EXTRACTION),
+        report_text,
+        fewshot_messages,
+        indication=indication or None,
+    )
+    try:
+        content = llm_clients.call_llm(client, messages, response_format=_FINDINGS_SCHEMA)
+    except Exception as exc:  # noqa: BLE001 — LLM clients can raise anything provider-specific
+        logger.error("[Report %s] LLM call failed: %s", series_uuid, exc)
+        return _ExtractionResult(series_uuid, None, _FailedReport(series_uuid, f"LLM call failed: {exc}"))
+
+    try:
+        raw = json.loads(content)
+    except json.JSONDecodeError:
+        return _ExtractionResult(
+            series_uuid, None, _FailedReport(series_uuid, "JSON parsing failed for API response", content)
+        )
+    if not isinstance(raw, dict) or not isinstance(raw.get("findings"), list):
+        return _ExtractionResult(
+            series_uuid, None, _FailedReport(series_uuid, 'LLM response missing "findings" array', content)
+        )
+
+    findings = extract_utils.extract_findings_list(raw["findings"], series_uuid)
+    return _ExtractionResult(series_uuid, findings)
+
+
+# ============================================================================
+# Dataset-level extraction
+# ============================================================================
+
+
+def run_extraction(
+    report_files: list[Path],
+    findings_dir: Path,
+    client: llm_clients.Client,
+    fewshot_messages: tuple[dict, ...],
+    workers: int,
+    indications: dict[str, str] | None = None,
+) -> ExtractionStats:
+    """Extract findings into `findings_dir/<series>.json`, skipping reports that already
+    have output. Failures accumulate into `failed_reports.json`.
+
+    `fewshot_messages` is pre-serialized once by `prompts.extraction_fewshot_messages`
+    and passed to every worker as-is.
+    """
+    total = len(report_files)
+    to_process, skipped = io.filter_files_needing_processing(report_files, findings_dir, ".json")
+    stats = ExtractionStats(total=total, skipped=skipped)
+    if not to_process:
+        return stats
+
+    logger.info("Processing %d/%d reports with %d worker(s)", len(to_process), total, min(workers, len(to_process)))
+
+    indications = indications or {}
+    failures: list[_FailedReport] = []
+    for result in io.process_pairs_in_parallel(
+        to_process,
+        lambda path: _extract_one_report(path, client, fewshot_messages, indications.get(path.stem, "")),
+        workers=workers,
+        desc="Processing",
+        unit="report",
     ):
-        """Initialize the finding extractor."""
-        self.model_name = model_name
-        self.examples = examples
-        self.workers = workers
-        self.max_tokens = max_tokens
-        self.client = llm_clients.build_single_client(
-            model=self.model_name, max_tokens=self.max_tokens, reasoning=reasoning
-        )
-        self._failed_lock = threading.Lock()
-        self._failed_reports: list[dict[str, object]] = []
-        logger.info(f"Initialized with model: {model_name}")
+        if result.failure is not None:
+            failures.append(result.failure)
+            stats.failed += 1
+            logger.error("Failed %s: %s", result.series_uuid, result.failure.reason)
+            continue
+        if result.findings is None:
+            stats.failed += 1
+            continue
+        io.save_json(result.findings, findings_dir / f"{result.series_uuid}.json")
+        stats.processed += 1
+        stats.findings += len(result.findings)
 
-    def _extract_findings(
-        self, series_uuid: str, report_text: str
-    ) -> tuple[list[dict[str, object]] | None, str | None, str | None]:
-        """Extract findings from report text using LLM with automatic retry.
+    if failures:
+        failed_path = findings_dir.parent / constants.FAILED_REPORTS_FILE
+        io.save_json([f.as_dict() for f in failures], failed_path)
+        logger.info("Saved %d failed reports to: %s", len(failures), failed_path)
 
-        Returns:
-            Tuple of (findings_list, failure_reason, raw_response)
-        """
-        messages = prompts.build_report_processing_messages(report_text, self.examples)
+    return stats
 
-        def _call_api() -> str:
-            content = self.client.complete(messages=messages, response_format=None)
-            if not content:
-                raise ValueError("Empty API response")
-            return content
 
-        content, failure_reason = llm_clients.call_with_llm_retry(
-            _call_api,
-            series_uuid=series_uuid,
-            logger_instance=logger,
-        )
+# ============================================================================
+# Top-level orchestrator
+# ============================================================================
 
-        if content is None:
-            return None, failure_reason, None
 
-        try:
-            result = json.loads(content)
-            if not isinstance(result, list):
-                return None, "LLM response is not a list", content
-            return result, None, content
-        except json.JSONDecodeError:
-            return None, "JSON parsing failed for API response", content
+def _prepare_predicted_reports(
+    reports_pred_dir: Path,
+    limit: int | None,
+) -> list[Path]:
+    """Discover predicted reports and apply `limit` if any. Fails fast on empty input."""
+    if not reports_pred_dir.exists():
+        raise FileNotFoundError(f"Reports directory not found: {reports_pred_dir}")
+    report_files = sorted(reports_pred_dir.glob("*.txt"))
+    if not report_files:
+        raise ValueError(f"No .txt reports found in {reports_pred_dir}")
+    if limit is not None:
+        report_files = report_files[:limit]
+        logger.info("Limited processing to first %d reports", len(report_files))
+    return report_files
 
-    def run(self, report_files: list[Path], findings_dir: Path) -> tuple[int, int, int, int, int]:
-        """Extract findings from all reports using concurrent workers.
 
-        Returns:
-            Tuple of (total_reports, processed_reports, skipped_reports, failed_reports, total_findings)
-        """
-        total_reports = len(report_files)
+def _adapt_gt_findings(findings_gt_dir: Path, output_dir: Path, series_uuids: list[str]) -> ExtractionStats:
+    """Copy + filter existing GT findings into `output_dir`. Returns the resulting stats."""
+    logger.info("")
+    logger.info("-" * 90)
+    logger.info("(1) Adapting existing ground truth findings...")
+    copied = extract_utils.copy_findings_from_directory(findings_gt_dir, output_dir, series_uuids)
+    total_files = sum(1 for _ in output_dir.glob("*.json"))
+    total_findings = 0
+    for findings_file in output_dir.glob("*.json"):
+        loaded = io.load_json(findings_file, raise_on_error=False)
+        if isinstance(loaded, list):
+            total_findings += len(loaded)
+    return ExtractionStats(
+        total=total_files,
+        processed=copied,
+        skipped=total_files - copied,
+        failed=0,
+        findings=total_findings,
+    )
 
-        # Filter reports that need processing (skip those with existing results)
-        reports_to_process, skipped_reports = io.filter_files_needing_processing(
-            report_files, findings_dir, ".json", logger
-        )
 
-        if not reports_to_process:
-            return (total_reports, 0, skipped_reports, 0, 0)
+def _extract_gt_findings(
+    reports_gt_dir: Path,
+    output_dir: Path,
+    series_uuids: list[str],
+    client: llm_clients.Client,
+    fewshot_messages: tuple[dict, ...],
+    workers: int,
+    indications: dict[str, str] | None = None,
+) -> ExtractionStats | None:
+    """Extract GT findings from raw reports. Returns None if no GT reports match the pred series."""
+    all_gt = sorted(reports_gt_dir.glob("*.txt"))
+    if not all_gt:
+        raise ValueError(f"No .txt reports found in {reports_gt_dir}")
+    series_set = set(series_uuids)
+    report_files = [f for f in all_gt if f.stem in series_set]
+    if not report_files:
+        logger.warning("No matching ground truth reports found for the predicted reports")
+        return None
+    logger.info("")
+    logger.info("-" * 90)
+    logger.info("(1) Processing ground truth reports...")
+    return run_extraction(report_files, output_dir, client, fewshot_messages, workers, indications)
 
-        # Adapt workers to actual number of files to process
-        actual_workers = min(self.workers, len(reports_to_process))
-        logger.info(
-            "Processing %d/%d reports with %d worker(s)",
-            len(reports_to_process),
-            total_reports,
-            actual_workers,
-        )
 
-        with self._failed_lock:
-            self._failed_reports = []
-
-        processed_reports = 0
-        failed_reports = 0
-        total_findings = 0
-
-        with concurrent.futures.ThreadPoolExecutor(max_workers=actual_workers) as executor:
-            futures = {
-                executor.submit(
-                    self._process_one_report,
-                    report_path,
-                    findings_dir,
-                ): report_path
-                for report_path in reports_to_process
-            }
-
-            for future in tqdm(
-                concurrent.futures.as_completed(futures),
-                total=len(reports_to_process),
-                desc="Processing",
-                unit="report",
-            ):
-                report_path = futures[future]
-                try:
-                    status, series_uuid, findings_list = future.result()
-                except (OSError, ValueError, RuntimeError, KeyError) as exc:
-                    self._record_failure(report_path.stem, f"Unexpected error: {exc}")
-                    logger.error("Error processing %s: %s", report_path.name, exc)
-                    failed_reports += 1
-                    continue
-
-                if status == "failed":
-                    failed_reports += 1
-                    continue
-
-                if status == "success" and findings_list is not None:
-                    extract_utils.write_findings_output(series_uuid, findings_list, findings_dir)
-                    processed_reports += 1
-                    total_findings += len(findings_list)
-
-        # Save failed reports
-        with self._failed_lock:
-            failed_entries = list(self._failed_reports)
-
-        if failed_entries:
-            failed_path = findings_dir.parent / constants.FAILED_REPORTS_FILE
-            io.save_json(failed_entries, failed_path)
-            logger.info("Saved %d failed reports to: %s", len(failed_entries), failed_path)
-
-        return (total_reports, processed_reports, skipped_reports, failed_reports, total_findings)
-
-    def _process_one_report(
-        self,
-        report_path: Path,
-        findings_dir: Path,
-    ) -> tuple[str, str, list[dict[str, object]] | None]:
-        """Process a single report file and return findings."""
-        series_uuid = report_path.stem
-
-        report_text = io.read_text_file(report_path, logger)
-        if not report_text:
-            error_msg = "Failed to read report or report is empty"
-            self._record_failure(series_uuid, error_msg)
-            return ("failed", series_uuid, None)
-
-        findings_raw, failure_reason, raw_response = self._extract_findings(series_uuid, report_text)
-        if findings_raw is None:
-            reason = failure_reason or "Unknown processing error"
-            logger.error("Failed %s: %s", series_uuid, reason)
-            self._record_failure(series_uuid, reason, raw_response)
-            return ("failed", series_uuid, None)
-
-        findings_list = extract_utils.extract_findings_list(findings_raw, series_uuid)
-
-        return ("success", series_uuid, findings_list)
-
-    def _record_failure(self, series_uuid: str, reason: str, raw_response: str | None = None) -> None:
-        """Record a failed report (for in-memory tracking)."""
-        entry: dict[str, str | None] = {
-            "series_uuid": series_uuid,
-            "reason": reason,
-        }
-        if raw_response is not None:
-            entry["raw_response"] = raw_response
-        with self._failed_lock:
-            self._failed_reports.append(entry)
+def _side_summary_lines(label: str, stats: ExtractionStats | None) -> list[str]:
+    """Format one side of the EXTRACTION SUMMARY block (returns no lines if stats is None)."""
+    if stats is None:
+        return []
+    return [
+        f"{label}:",
+        f"  Total reports:     {stats.total:6d}",
+        f"    • processed:     {stats.processed:6d}",
+        f"    • skipped:       {stats.skipped:6d}",
+        f"    • failed:        {stats.failed:6d}",
+        f"  Total findings:    {stats.findings:6d}",
+        f"  Avg findings/report: {stats.avg_findings_per_report:.1f}",
+        "",
+    ]
 
 
 def extract_findings(
     reports_gt_dir: Path | None,
     reports_pred_dir: Path,
     output_dir: Path,
-    model_name: str,
+    llm_extractor: str,
     fewshot: str | None = None,
-    workers: int = 5,
+    workers: int = 15,
     limit: int | None = None,
     findings_gt_dir: Path | None = None,
     reasoning: str = "none",
+    client_factory=None,
+    indications_dir: Path | None = None,
 ) -> None:
-    """Extract findings from ground truth and predicted reports.
+    """Extract findings from ground-truth and predicted reports into
+    `output_dir/radmatch_results/findings_{gt,pred}/`.
 
-    Args:
-        reports_gt_dir: Directory containing ground truth report .txt files (optional if findings_gt_dir provided)
-        reports_pred_dir: Directory containing predicted report .txt files
-        output_dir: Output directory
-        model_name: LLM model name
-        fewshot: Optional name of few-shot example set to load
-        workers: Number of concurrent workers
-        limit: Optional limit on number of reports to process
-        findings_gt_dir: Optional path to existing ground truth findings to adapt (alternative to reports_gt_dir)
+    Exactly one of `reports_gt_dir` (raw text) or `findings_gt_dir` (already
+    extracted) is required; predicted reports are always extracted.
+    `indications_dir` is injected as context and copied into the results directory so
+    later stages find it without the flag.
+    `client_factory(model, max_tokens, reasoning) -> Client` overrides construction
+    for testing.
     """
-    # Validate: either reports_gt_dir or findings_gt_dir must be provided
     if not reports_gt_dir and not findings_gt_dir:
         raise ValueError("Either reports_gt_dir or findings_gt_dir must be provided")
 
-    logger.info("")
-    logger.info("=" * 90)
-    logger.info("FINDING EXTRACTION")
-    logger.info("-" * 90)
-    logger.info("Configuration:")
-    logger.info("  • model:         %s", model_name)
-    if reports_gt_dir:
-        logger.info("  • reports_gt:    %s", reports_gt_dir)
-    if findings_gt_dir:
-        logger.info("  • findings_gt:   %s", findings_gt_dir)
-    logger.info("  • reports_pred:  %s", reports_pred_dir)
     result_dir = output_dir / constants.RESULTS_DIR
-    logger.info("  • output:        %s", result_dir)
-    logger.info("  • fewshot:       %s", fewshot or "None")
-    logger.info("  • workers:       %d", workers)
-    logger.info("  • limit:         %s", limit or "None")
-    logger.info("=" * 90)
-    logger.info("")
+    config = [
+        ("model", llm_extractor),
+        ("reports_gt", reports_gt_dir),
+        ("findings_gt", findings_gt_dir),
+        ("reports_pred", reports_pred_dir),
+        ("output", result_dir),
+        ("fewshot", fewshot),
+        ("workers", workers),
+        ("limit", limit),
+        ("indications", indications_dir),
+    ]
+    io.log_stage_banner(
+        "FINDING EXTRACTION",
+        [(label, value) for label, value in config if value is not None or label in {"fewshot", "limit"}],
+    )
 
-    # Create output directories
-    output_findings_gt_dir, output_findings_pred_dir = extract_utils.create_output_directories(result_dir)
+    if client_factory is None:
+        llm_clients.assert_credentials_for(llm_extractor)
+        client_factory = llm_clients.build_client
 
-    # Get series_uuid list from predicted reports to align GT processing
-    report_files_pred, examples_list = extract_utils.setup_processing_context(reports_pred_dir, fewshot, limit)
-    series_uuid_list = [f.stem for f in report_files_pred]
+    output_gt_dir, output_pred_dir = extract_utils.create_output_directories(result_dir)
+    report_files_pred = _prepare_predicted_reports(reports_pred_dir, limit)
+    fewshot_messages = prompts.extraction_fewshot_messages(fewshot)
+    if fewshot:
+        logger.info("Loaded %d few-shot example(s) for '%s'", len(fewshot_messages) // 2, fewshot)
 
-    # Handle ground truth: either adapt existing findings or process reports
-    stats_gt: tuple[int, int, int, int, int] | None = None
+    series_uuids = [f.stem for f in report_files_pred]
+    indications = io.load_indications(indications_dir)
+    if indications:
+        nonempty = sum(1 for v in indications.values() if v)
+        logger.info("Loaded %d indications (%d non-empty) from %s", len(indications), nonempty, indications_dir)
+    # One client serves both sides — same model, same provider.
+    client = client_factory(model=llm_extractor, max_tokens=constants.MAX_TOKENS, reasoning=reasoning)
+
+    stats_gt: ExtractionStats | None = None
     if findings_gt_dir:
-        findings_gt_path = findings_gt_dir if isinstance(findings_gt_dir, Path) else Path(findings_gt_dir)
-        logger.info("")
-        logger.info("-" * 90)
-        logger.info("(1) Adapting existing ground truth findings...")
-        copied_count = extract_utils.copy_findings_from_directory(
-            findings_gt_path, output_findings_gt_dir, logger, series_uuid_list
-        )
-        # For adapted findings, count total findings files and findings
-        total_gt_files = len([f for f in output_findings_gt_dir.glob("*.json")])
-        total_gt_findings = 0
-        for findings_file in output_findings_gt_dir.glob("*.json"):
-            try:
-                findings_list = io.load_json(findings_file, raise_on_error=False)
-                if isinstance(findings_list, list):
-                    total_gt_findings += len(findings_list)
-            except (OSError, ValueError, KeyError):
-                pass
-        stats_gt = (total_gt_files, copied_count, total_gt_files - copied_count, 0, total_gt_findings)
+        stats_gt = _adapt_gt_findings(Path(findings_gt_dir), output_gt_dir, series_uuids)
     elif reports_gt_dir:
-        # Filter GT reports to match the predicted reports that will be processed
-        all_report_files_gt = io.find_report_files(reports_gt_dir)
-        if not all_report_files_gt:
-            raise ValueError(f"No .txt reports found in {reports_gt_dir}")
+        stats_gt = _extract_gt_findings(
+            reports_gt_dir, output_gt_dir, series_uuids, client, fewshot_messages, workers, indications
+        )
 
-        # Create a set for fast lookup
-        series_uuid_set = set(series_uuid_list)
-        report_files_gt = [f for f in all_report_files_gt if f.stem in series_uuid_set]
-
-        if not report_files_gt:
-            logger.warning("No matching ground truth reports found for the predicted reports")
-        else:
-            logger.info("")
-            logger.info("-" * 90)
-            logger.info("(1) Processing ground truth reports...")
-            extractor_gt = FindingExtractor(
-                model_name=model_name,
-                examples=examples_list,
-                workers=workers,
-                max_tokens=constants.MAX_TOKENS,
-                reasoning=reasoning,
-            )
-            stats_gt = extractor_gt.run(report_files_gt, output_findings_gt_dir)
-
-    # Copy ground truth reports
     if reports_gt_dir and reports_gt_dir.exists():
         logger.info("Copying reports to results directory...")
-        extract_utils.copy_reports_directory(reports_gt_dir, result_dir / "reports_gt", logger, series_uuid_list)
+        extract_utils.copy_reports_directory(reports_gt_dir, result_dir / constants.REPORTS_GT_DIR, series_uuids)
+    if indications_dir:
+        # Skip the copy when source == target (e.g. `run_all --extract-indications` wrote
+        # straight into the results dir).
+        target_indications_dir = result_dir / constants.INDICATIONS_DIR
+        if indications_dir.resolve() != target_indications_dir.resolve():
+            logger.info("Copying indications to results directory...")
+            extract_utils.copy_reports_directory(indications_dir, target_indications_dir, series_uuids)
 
-    # Process predicted reports
     logger.info("")
     logger.info("-" * 90)
     logger.info("(2) Processing predicted reports...")
-    extractor_pred = FindingExtractor(
-        model_name=model_name,
-        examples=examples_list,
-        workers=workers,
-        max_tokens=constants.MAX_TOKENS,
-        reasoning=reasoning,
-    )
-    stats_pred = extractor_pred.run(report_files_pred, output_findings_pred_dir)
+    stats_pred = run_extraction(report_files_pred, output_pred_dir, client, fewshot_messages, workers, indications)
 
-    # Copy predicted reports
-    if reports_pred_dir and reports_pred_dir.exists():
+    if reports_pred_dir.exists():
         logger.info("Copying reports to results directory...")
-        extract_utils.copy_reports_directory(reports_pred_dir, result_dir / "reports_pred", logger, series_uuid_list)
+        extract_utils.copy_reports_directory(reports_pred_dir, result_dir / constants.REPORTS_PRED_DIR, series_uuids)
 
-    # Display combined statistics
-    logger.info("")
-    logger.info("-" * 90)
-    logger.info("EXTRACTION SUMMARY")
-
-    if stats_pred:
-        total_pred, processed_pred, skipped_pred, failed_pred, findings_pred = stats_pred
-        avg_pred = findings_pred / processed_pred if processed_pred > 0 else 0
-        logger.info("PREDICTED REPORTS:")
-        logger.info("  Total reports:     %6d", total_pred)
-        logger.info("    • processed:     %6d", processed_pred)
-        logger.info("    • skipped:       %6d", skipped_pred)
-        logger.info("    • failed:        %6d", failed_pred)
-        logger.info("  Total findings:    %6d", findings_pred)
-        logger.info("  Avg findings/report: %.1f", avg_pred)
-        logger.info("")
-
-    if stats_gt:
-        total_gt, processed_gt, skipped_gt, failed_gt, findings_gt = stats_gt
-        avg_gt = findings_gt / processed_gt if processed_gt > 0 else 0
-        logger.info("GROUND TRUTH REPORTS:")
-        logger.info("  Total reports:     %6d", total_gt)
-        logger.info("    • processed:     %6d", processed_gt)
-        logger.info("    • skipped:       %6d", skipped_gt)
-        logger.info("    • failed:        %6d", failed_gt)
-        logger.info("  Total findings:    %6d", findings_gt)
-        logger.info("  Avg findings/report: %.1f", avg_gt)
-
-    logger.info("=" * 90)
+    io.log_stage_summary(
+        "EXTRACTION SUMMARY",
+        _side_summary_lines("PREDICTED REPORTS", stats_pred) + _side_summary_lines("GROUND TRUTH REPORTS", stats_gt),
+    )

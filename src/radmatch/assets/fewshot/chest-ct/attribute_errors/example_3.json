@@ -1,0 +1,23 @@
+{
+  "scenario": "No free-text attribute errors after INC exclusion — measurement diff is deterministic",
+  "description": "Stage 3b call derived from the matches in chest-ct/matching/example_3.json. The pleural-effusion pair is a status conflict (gt 'No pleural effusion' vs pred 'Small right pleural effusion') → excluded from Stage 3b at Stage 3a (INC). The LLL nodule pair has a measurement difference (11 mm vs 13 mm) but no free-text attribute difference; Stage 3a owns the measurement comparison. The hilar-node pair is identical.",
+  "user": {
+    "series_uuid": "chest-ct_example_3",
+    "pairs": [
+      {
+        "pred_finding": {"finding_id": "p_1", "text": "Left lower lobe nodule with smooth margins measuring 11 mm, noncalcified.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": null, "measurements": [{"value": 11, "unit": "mm", "category": "size"}]},
+        "gt_finding":   {"finding_id": "gt_1", "text": "Left lower lobe nodule with smooth margins measuring 13 mm, noncalcified.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": null, "measurements": [{"value": 13, "unit": "mm", "category": "size"}]}
+      },
+      {
+        "pred_finding": {"finding_id": "p_3", "text": "Right hilar lymph node enlargement measuring 14 mm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": null, "measurements": [{"value": 14, "unit": "mm", "category": "size"}]},
+        "gt_finding":   {"finding_id": "gt_3", "text": "Right hilar lymph node enlargement measuring 14 mm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": null, "measurements": [{"value": 14, "unit": "mm", "category": "size"}]}
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_match": [
+      [],
+      []
+    ]
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "scenario": "N:1 aggregate — atomic pred pulmonary nodules covering one umbrella GT",
+  "description": "GT 'Multiple bilateral pulmonary nodules, the largest 6 mm.' is a real clinical aggregation. The predictor specified two atomic nodules; both pred rows → `aggregate`.",
+  "user": {
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "5 mm right upper lobe pulmonary nodule.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 5,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_2",
+        "text": "4 mm left lower lobe pulmonary nodule.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 4,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_3",
+        "text": "No pleural effusion.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Multiple bilateral pulmonary nodules, the largest 6 mm.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 6,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "No pleural effusion.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "GT names pathology (pulmonary nodules) + bilateral anatomy; covers the RUL atom.",
+        "match_scope": "aggregate"
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_1",
+        "reasoning": "Same umbrella covers the LLL atom — second row, same gt_id.",
+        "match_scope": "aggregate"
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_2",
+        "reasoning": "Identical no-effusion statement.",
+        "match_scope": "direct"
+      }
+    ],
+    "unmatched_pred": [],
+    "unmatched_gt": []
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "scenario": "1:N aggregate — pred parent-anatomy claim covering several GT atoms",
+  "description": "Pred 'No biliary ductal dilatation.' is a parent-anatomy claim that explicitly names the pathology (dilation) and the parent structure (biliary tree, containing both intrahepatic and extrahepatic). Each multi-bind row → `aggregate`. The remaining rows are 1:1 `direct`.",
+  "user": {
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "No biliary ductal dilatation.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "Simple cyst in right hepatic lobe, 12 mm.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 12,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_3",
+        "text": "Spleen normal.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "No intrahepatic biliary dilation.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "No extrahepatic biliary dilation.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "Simple cyst in right hepatic lobe measuring 12 mm.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 12,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "Spleen normal.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "Pred names biliary ducts (parent of intrahepatic) + pathology (dilation); covers the intrahepatic atom.",
+        "match_scope": "aggregate"
+      },
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_2",
+        "reasoning": "Same parent-anatomy claim also covers the extrahepatic atom — second row, same pred_id.",
+        "match_scope": "aggregate"
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_3",
+        "reasoning": "Same finding entity (right hepatic cyst, 12 mm).",
+        "match_scope": "direct"
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_4",
+        "reasoning": "Identical normal spleen statement.",
+        "match_scope": "direct"
+      }
+    ],
+    "unmatched_pred": [],
+    "unmatched_gt": []
+  }
+}

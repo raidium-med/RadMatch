@@ -1,0 +1,182 @@
+[
+  {
+    "text": "Minor pleural-parenchymal scarring in the lung apices.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Minor chronic atelectasis medially in the left lower lobe.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "No evidence for pneumonia.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No evidence for bronchitis.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Minimal cylindrical bronchiectasis most apparent in the right lung apex.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "No emphysema.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No evidence for diffuse interstitial lung disease.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Heart is not enlarged.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Severe coronary artery calcifications.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Ascending aortic diameter is normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Mild widening of the anterior aortic arch diameter to 3.6 cm.",
+    "measurements": [
+      {
+        "value": 3.6,
+        "unit": "cm",
+        "category": "size"
+      }
+    ],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Remainder of the thoracic aorta is normal in caliber.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Moderately prominent atherosclerotic calcifications along the arch and descending thoracic aorta.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Main pulmonary artery diameter is 2.5 cm.",
+    "measurements": [
+      {
+        "value": 2.5,
+        "unit": "cm",
+        "category": "size"
+      }
+    ],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Esophagus is normal in appearance.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Potentially a small decompressed hiatal hernia.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "No enlarged mediastinal lymph nodes.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No pleural effusion.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No axillary adenopathy.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No concerning pathology of the included breast tissues.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Small stable hypodense lesion in the right lobe of the liver consistent with incidental benign pathology.",
+    "measurements": [],
+    "comparison": "stable",
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Surface of the liver exhibits nodularity suggesting cirrhosis.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Degenerative changes in the shoulders and thoracic spine.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "No acute appearing cardiopulmonary pathology.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  }
+]

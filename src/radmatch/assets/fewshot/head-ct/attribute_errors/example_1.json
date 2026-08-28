@@ -1,0 +1,30 @@
+{
+  "scenario": "Major laterality location error on lateralized brain pathology + clean pairs",
+  "description": "Stage 3b call derived from the matches in head-ct/matching/example_1.json. The temporal-sequelae pair flips laterality on lateralized brain pathology (right vs left temporal pole and lobe) — major. The remaining 2 matched pairs (left temporal horn ventricular traction and ventricular completeness) are identical.",
+  "user": {
+    "series_uuid": "head-ct_example_1",
+    "pairs": [
+      {
+        "pred_finding": {"finding_id": "p_1", "text": "Hypodense cortico-subcortical sequelae in the right temporal pole and right temporal lobe, without spontaneous hyperdensity.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_1", "text": "Hypodense cortico-subcortical sequelae in the left temporal pole and left temporal lobe, without spontaneous hyperdensity.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []}
+      },
+      {
+        "pred_finding": {"finding_id": "p_2", "text": "Passive traction of the left temporal horn of the lateral ventricle.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_2", "text": "Passive traction of the left temporal horn of the lateral ventricle.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []}
+      },
+      {
+        "pred_finding": {"finding_id": "p_3", "text": "Ventricular system normal in size and morphology.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_3", "text": "Ventricular system normal in size and morphology.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []}
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_match": [
+      [
+        {"dimension": "location", "severity": "major", "reasoning": "Pred says right temporal pole / lobe, gt says left temporal pole / lobe — laterality flip on lateralized brain pathology (different hemisphere, different downstream clinical implication)."}
+      ],
+      [],
+      []
+    ]
+  }
+}

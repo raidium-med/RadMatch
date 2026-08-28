@@ -1,0 +1,289 @@
+[
+  {
+    "text": "Right chest port catheter.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Scattered aortic atherosclerosis.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Left coronary artery calcifications.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Normal heart size.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No pericardial effusion.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No enlarged mediastinal, hilar, or axillary lymph nodes.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Thyroid gland, trachea, and esophagus demonstrate no significant findings.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Slight interval enlargement of multiple pulmonary nodules, largest in the right lung base measuring 2.5 x 1.6 cm, previously 2.3 x 1.5 cm.",
+    "measurements": [
+      {
+        "value": 2.5,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 1.6,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 2.3,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 1.5,
+        "unit": "cm",
+        "category": "size"
+      }
+    ],
+    "comparison": "worsening",
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "Interval enlargement of a flattened nodule of the inferior right upper lobe abutting the minor fissure, measuring 1.0 x 0.9 cm, previously 0.4 x 0.4 cm.",
+    "measurements": [
+      {
+        "value": 1.0,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 0.9,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 0.4,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 0.4,
+        "unit": "cm",
+        "category": "size"
+      }
+    ],
+    "comparison": "worsening",
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "Multiple additional bilateral pulmonary nodules are unchanged.",
+    "measurements": [],
+    "comparison": "stable",
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Small left-sided pleural effusion.",
+    "measurements": [],
+    "comparison": "new",
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "No pneumothorax.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "critical"
+  },
+  {
+    "text": "No chest wall mass or suspicious bone lesions.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No suspicious hepatic lesion identified.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No gallstones, gallbladder wall thickening, or biliary dilatation.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Pancreas unremarkable.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Spleen normal in size.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Adrenal glands unremarkable.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Kidneys normal without renal calculi, solid lesion, or hydronephrosis.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Bladder is unremarkable.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Stomach is within normal limits.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Appendix appears normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Interval enlargement of multiple retroperitoneal and aortocaval lymph nodes, largest left retroperitoneal node measuring 2.4 x 1.7 cm, previously 2.0 x 1.2 cm.",
+    "measurements": [
+      {
+        "value": 2.4,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 1.7,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 2.0,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 1.2,
+        "unit": "cm",
+        "category": "size"
+      }
+    ],
+    "comparison": "worsening",
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "Enlarged left iliac lymph node significantly decreased in size, measuring 1.0 x 0.8 cm, previously 2.2 x 1.4 cm.",
+    "measurements": [
+      {
+        "value": 1.0,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 0.8,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 2.2,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 1.4,
+        "unit": "cm",
+        "category": "size"
+      }
+    ],
+    "comparison": "improving",
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Status post hysterectomy.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Low midline ventral hernia containing multiple loops of nonobstructed small bowel.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "No abdominopelvic ascites.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No acute or significant osseous findings.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Mixed response to treatment.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  }
+]

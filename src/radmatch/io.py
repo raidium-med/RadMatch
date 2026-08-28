@@ -1,57 +1,42 @@
-"""I/O helpers for JSON and file operations."""
+"""I/O + orchestration helpers shared across stages.
+
+Holds:
+- JSON / text file utilities (read, write, validate-and-load).
+- Pair-discovery helper used by the dataset orchestrators.
+- A small `process_pairs_in_parallel` helper that wraps the
+  ThreadPoolExecutor + tqdm pattern that all three stages need.
+- Consistent stage-banner / stage-summary logging helpers.
+"""
 
 from __future__ import annotations
 
+import concurrent.futures
 import json
 import logging
-from typing import TYPE_CHECKING, TypeVar
+import os
+import tempfile
+from pathlib import Path
+from typing import Callable, Iterable, Sequence, TypeVar
 
-if TYPE_CHECKING:
-    from pathlib import Path
+from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
 
 T = TypeVar("T")
+R = TypeVar("R")
 
 
-def read_text_file(file_path: Path, logger_instance: logging.Logger | None = None) -> str | None:
-    """Read and validate text from a file.
-
-    Args:
-        file_path: Path to the text file
-        logger_instance: Optional logger instance (uses module logger if None)
-
-    Returns:
-        File text as string, or None if file is empty or cannot be read
-    """
-    logger_inst = get_logger(logger_instance)
-
+def read_text_file(file_path: Path) -> str | None:
+    """Read and validate text from a file. Returns None if empty or unreadable."""
     try:
         text = file_path.read_text(encoding="utf-8").strip()
         if not text:
-            logger_inst.warning(f"Empty file: {file_path.name}")
+            logger.warning("Empty file: %s", file_path.name)
             return None
         return text
     except (FileNotFoundError, PermissionError, UnicodeDecodeError, OSError) as exc:
-        logger_inst.error(f"Failed to read {file_path.name}: {exc}")
+        logger.error("Failed to read %s: %s", file_path.name, exc)
         return None
-
-
-def get_logger(logger_instance: logging.Logger | None, module_name: str | None = None) -> logging.Logger:
-    """Get logger instance, using module logger if None provided.
-
-    Args:
-        logger_instance: Optional logger instance
-        module_name: Optional module name for logger (uses __name__ if None)
-
-    Returns:
-        Logger instance
-    """
-    if logger_instance is not None:
-        return logger_instance
-    if module_name:
-        return logging.getLogger(module_name)
-    return logging.getLogger(__name__)
 
 
 def load_json(path: Path, default: T | None = None, raise_on_error: bool = True) -> object | T:
@@ -81,54 +66,130 @@ def load_json(path: Path, default: T | None = None, raise_on_error: bool = True)
 
 
 def save_json(data: object, path: Path, indent: int = 2, ensure_ascii: bool = False) -> None:
-    """Save data as JSON with consistent formatting."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, indent=indent, ensure_ascii=ensure_ascii), encoding="utf-8")
+    """Save data as JSON, written atomically.
 
-
-def find_report_files(directory: Path) -> list[Path]:
-    """Find all .txt report files in directory.
-
-    Args:
-        directory: Directory to search
-
-    Returns:
-        Sorted list of .txt file paths
+    Temp file + `os.replace`, so an interrupted run can't leave a half-written cache
+    file — the Stage 1 cache is existence-based and would treat it as complete.
     """
-    return sorted(file for file in directory.iterdir() if file.is_file() and file.suffix.lower() == ".txt")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = json.dumps(data, indent=indent, ensure_ascii=ensure_ascii)
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", dir=path.parent, prefix=f".{path.name}.", suffix=".tmp", delete=False
+    ) as tmp:
+        tmp.write(payload)
+        tmp_path = Path(tmp.name)
+    os.replace(tmp_path, path)
+
+
+def load_indications(indications_dir: Path | None) -> dict[str, str]:
+    """Load `<series_uuid>.txt` indication files into a dict.
+
+    Empty dict when the directory is None or missing; empty string per unreadable
+    file. Callers treat a missing indication as a no-op.
+    """
+    if indications_dir is None:
+        return {}
+    try:
+        paths = list(indications_dir.glob("*.txt"))
+    except (FileNotFoundError, NotADirectoryError):
+        return {}
+    return {path.stem: read_text_file(path) or "" for path in paths}
+
+
+def resolve_indications_dir(explicit: Path | None, results_dir: Path) -> Path | None:
+    """Explicit override, else `<results_dir>/indications/` if it exists.
+
+    Lets `match` / `score` reuse what `extract_findings` copied in, without
+    re-supplying `--indications`.
+    """
+    from radmatch import constants
+
+    if explicit is not None:
+        return explicit
+    fallback = results_dir / constants.INDICATIONS_DIR
+    return fallback if fallback.exists() else None
 
 
 def filter_files_needing_processing(
     input_files: list[Path],
     output_dir: Path,
     output_extension: str = ".json",
-    logger_instance: logging.Logger | None = None,
 ) -> tuple[list[Path], int]:
-    """Filter files that need processing (skip those with existing outputs).
+    """Partition `input_files` into (files needing processing, skipped count).
 
-    Args:
-        input_files: List of input file paths
-        output_dir: Directory containing output files
-        output_extension: Extension of output files (default: ".json")
-        logger_instance: Optional logger instance
-
-    Returns:
-        Tuple of (files_to_process, skipped_count)
+    A file is skipped if `output_dir/<stem><output_extension>` already exists.
     """
-    logger_inst = get_logger(logger_instance)
-    files_to_process = []
+    files_to_process: list[Path] = []
     skipped_count = 0
-
     for input_file in input_files:
-        output_path = output_dir / f"{input_file.stem}{output_extension}"
-
-        if output_path.exists():
+        if (output_dir / f"{input_file.stem}{output_extension}").exists():
             skipped_count += 1
-            continue
-
-        files_to_process.append(input_file)
+        else:
+            files_to_process.append(input_file)
 
     if skipped_count > 0:
-        logger_inst.info("Skipping %d report files that already have outputs", skipped_count)
-
+        logger.info("Skipping %d report files that already have outputs", skipped_count)
     return files_to_process, skipped_count
+
+
+# ============================================================================
+# Stage logging helpers
+# ============================================================================
+
+
+_BANNER_WIDTH = 90
+
+
+def log_stage_banner(title: str, config: Sequence[tuple[str, object]]) -> None:
+    """Top-of-stage banner with config bullets. Used by all three stage orchestrators."""
+    logger.info("")
+    logger.info("=" * _BANNER_WIDTH)
+    logger.info(title)
+    logger.info("-" * _BANNER_WIDTH)
+    logger.info("Configuration:")
+    label_width = max((len(label) for label, _ in config), default=0)
+    for label, value in config:
+        logger.info("  • %-*s %s", label_width + 1, f"{label}:", value if value is not None else "None")
+    logger.info("=" * _BANNER_WIDTH)
+    logger.info("")
+
+
+def log_stage_summary(title: str, lines: Sequence[str]) -> None:
+    """Bottom-of-stage summary block."""
+    logger.info("")
+    logger.info("-" * _BANNER_WIDTH)
+    logger.info(title)
+    for line in lines:
+        logger.info(line)
+    logger.info("=" * _BANNER_WIDTH)
+
+
+# ============================================================================
+# Parallel pair processing
+# ============================================================================
+
+
+def process_pairs_in_parallel(
+    items: Sequence[T],
+    work_fn: Callable[[T], R],
+    workers: int,
+    desc: str,
+    unit: str = "pair",
+) -> Iterable[R]:
+    """Run `work_fn` over `items` in a thread pool, yielding in completion order.
+
+    Exceptions propagate — `work_fn` owns its own error handling if it wants to
+    fail soft per item.
+    """
+    if not items:
+        return
+    actual_workers = min(workers, len(items))
+    with concurrent.futures.ThreadPoolExecutor(max_workers=actual_workers) as executor:
+        futures = {executor.submit(work_fn, item): item for item in items}
+        for future in tqdm(
+            concurrent.futures.as_completed(futures),
+            total=len(items),
+            desc=desc,
+            unit=unit,
+        ):
+            yield future.result()

@@ -1,0 +1,23 @@
+{
+  "scenario": "No free-text attribute errors after INC exclusion",
+  "description": "Stage 3b call derived from the matches in brain-mr/matching/example_1.json. The cortical-sulci pair (gt 'compatible with age' vs pred 'mildly prominent for age') is a clinical_status conflict → excluded from Stage 3b upstream (INC at Stage 3a). The remaining 2 pairs are both merged completeness statements with no free-text attribute differences within the 4 LLM dimensions.",
+  "user": {
+    "series_uuid": "brain-mr_example_1",
+    "pairs": [
+      {
+        "pred_finding": {"finding_id": "p_1", "text": "Medulla oblongata, pons, mesencephalon, both cerebellar hemispheres, and vermis parenchyma are normal.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_1", "text": "Medulla oblongata, pons, mesencephalon are normal.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []}
+      },
+      {
+        "pred_finding": {"finding_id": "p_3", "text": "Bilateral orbits and paranasal sinuses are normal.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_5", "text": "Paranasal sinuses are normal.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []}
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_match": [
+      [],
+      []
+    ]
+  }
+}

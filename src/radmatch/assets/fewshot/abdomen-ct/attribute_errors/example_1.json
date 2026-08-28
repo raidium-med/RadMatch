@@ -1,0 +1,38 @@
+{
+  "scenario": "No free-text attribute errors — deterministic comparators own these differences",
+  "description": "Stage 3b call derived from the matches in abdomen-ct/matching/example_1.json. The mesenteric-LN comparison flip (stable vs worsening) and the portal-vein percentage spread (60% vs 50–60%) are both handled by Stage 3a deterministic comparators, so Stage 3b emits no free-text attribute errors. The renal-cysts descriptor pair ('subcentimeter' vs 'small') is treated as near-synonymous — no error.",
+  "user": {
+    "series_uuid": "abdomen-ct_example_1",
+    "pairs": [
+      {
+        "pred_finding": {"finding_id": "p_1", "text": "Hepatic veins are patent.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_1", "text": "Hepatic veins patent.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []}
+      },
+      {
+        "pred_finding": {"finding_id": "p_2", "text": "Multiple small hypodense lesions in both kidneys, likely representing cysts.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_2", "text": "Multiple subcentimeter hypodense lesions in the bilateral kidneys, likely small cysts.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []}
+      },
+      {
+        "pred_finding": {"finding_id": "p_3", "text": "No hydronephrosis.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_3", "text": "No hydronephrosis.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []}
+      },
+      {
+        "pred_finding": {"finding_id": "p_4", "text": "Three mesenteric lymph nodes measuring up to 12 mm, worsening compared to prior CT.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "worsening", "measurements": [{"value": 3, "unit": null, "category": "count"}, {"value": 12, "unit": "mm", "category": "size"}]},
+        "gt_finding":   {"finding_id": "gt_4", "text": "Three mesenteric lymph nodes measuring up to 12 mm, unchanged compared to prior CT.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": [{"value": 3, "unit": null, "category": "count"}, {"value": 12, "unit": "mm", "category": "size"}]}
+      },
+      {
+        "pred_finding": {"finding_id": "p_5", "text": "Portal vein shows approximately 50-60% narrowing at the porta hepatis.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": null, "measurements": [{"value": 50, "unit": "pct", "category": "ratio"}, {"value": 60, "unit": "pct", "category": "ratio"}]},
+        "gt_finding":   {"finding_id": "gt_5", "text": "Main portal vein demonstrates approximately 60% luminal narrowing at the porta hepatis.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": null, "measurements": [{"value": 60, "unit": "pct", "category": "ratio"}]}
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_match": [
+      [],
+      [],
+      [],
+      [],
+      []
+    ]
+  }
+}

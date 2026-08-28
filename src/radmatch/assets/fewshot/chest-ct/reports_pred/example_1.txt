@@ -1,0 +1,52 @@
+CT CHEST WITHOUT CONTRAST, [DATE]:
+CLINICAL INDICATION:  87-year-old with persistent cough. Patient has been
+having
+recurrent pneumonia. Patient denies history of malignancy.
+A search for DICOM formatted images was conducted for prior CT imaging studies
+completed at a non-affiliated media free facility.
+COMPARISON:  There are no prior exam(s) available for comparison within the
+past
+12 months; however, comparison was made to the prior exam(s) dated prior CT
+chest [DATE].
+TECHNIQUE: The region of interest was scanned without contrast on a high
+resolution low dose CT scanner.  3-D renderings were reconstructed on an
+independent workstation. As per the [HOSPITAL] guidelines 3-
+D
+reconstructions are performed with concurrent physician supervision.
+FINDINGS:
+Minor pleural-parenchymal scarring is in the lung apices. Minor chronic
+atelectasis is medially in the left lower lobe. There is no evidence for
+pneumonia or bronchitis. Minimal cylindrical bronchiectasis most apparent in
+the left lung apex. There is no emphysema or evidence for diffuse
+interstitial
+lung disease. The heart is mildly enlarged. There are moderate coronary artery
+calcifications. Ascending aortic diameter is normal. In the anterior aortic
+arch
+there is mild widening of the diameter to 4.1 cm. Remainder of the thoracic
+aorta is normal in caliber. Moderately prominent atherosclerotic
+calcifications
+along the arch and descending thoracic aorta are present. Main pulmonary
+artery
+diameter is 2.5 cm. The esophagus is normal in appearance. There is
+potentially
+a small decompressed hiatal hernia. No enlarged mediastinal lymph nodes are
+found. There is no pleural effusion. No axillary adenopathy is present.
+No concerning pathology of the included breast tissues. Limited imaging of the
+upper abdomen shows small stable hypodense lesion in the right lobe of the
+liver
+consistent with incidental benign pathology. The surface of the liver exhibits
+nodularity suggesting cirrhosis. Degenerative changes are in the shoulders and
+thoracic spine. The thyroid gland is not well characterized given the
+limited cranial extent of the scan.
+IMPRESSION:
+1. No acute appearing cardiopulmonary pathology and specifically no evidence
+for
+pneumonia.
+2. Moderate coronary artery calcifications.
+3. Mild cardiomegaly.
+4. Potentially cirrhotic liver.
+RADIATION DOSE REDUCTION: All CT scans are performed using radiation dose
+reduction techniques, when applicable.  Technical factors are evaluated and
+adjusted to ensure appropriate moderation of exposure.  Automated dose
+management technology is applied to adjust the radiation doses to minimize
+exposure while achieving diagnostic quality images.

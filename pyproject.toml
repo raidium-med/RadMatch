@@ -1,7 +1,7 @@
 [project]
 name = "radmatch"
-version = "0.1.0"
-description = "Finding-based matching for radiology report generation evaluation"
+version = "2.0.0"
+description = "Finding-level, safety-aware evaluation for radiology report generation"
 authors = [{ name = "Raidium" }]
 license = "Apache-2.0"
 license-files = ["LICENSE"]
@@ -10,11 +10,21 @@ requires-python = ">=3.11"
 dependencies = [
     "tqdm>=4.66.1,<5",
     "openai>=2.7.1",
+    # mistralai 2.x moved the client out of the package root, breaking
+    # `from mistralai import Mistral`. Keep the major pinned.
     "mistralai>=1.9.11,<2",
+    "anthropic>=0.69.0",
+    "tenacity>=9.0.0",
     "python-dotenv>=1.0.1,<2",
 ]
 
 [project.optional-dependencies]
+dashboard = [
+    "streamlit>=1.30.0",
+    "plotly>=5.18.0",
+    "pandas>=2.0.0",
+    "pyarrow>=14.0.0",
+]
 dev = [
     "pytest>=7.0.0",
     "ruff>=0.6.0",
@@ -26,11 +36,28 @@ Issues = "https://github.com/raidium-med/RadMatch/issues"
 
 [project.scripts]
 radmatch = "radmatch.cli:main"
+radmatch-dashboard = "radmatch.dashboard.launch:main"
 
+# Assets live at src/radmatch/assets/, so hatchling ships them with the package.
+# A top-level assets/ dir does not survive a wheel build under `packages = [...]`.
 [tool.hatch.build.targets.wheel]
 packages = ["src/radmatch"]
-include = ["assets/**/*"]
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+# src layout: tells isort that `radmatch` is first-party.
+src = ["src", "."]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.ruff.lint.per-file-ignores]
+# Streamlit pages run top-to-bottom as scripts: st.set_page_config must precede the
+# imports that touch streamlit state, so module-level import order is deliberate.
+"src/radmatch/dashboard/pages/*" = ["E402"]
+"src/radmatch/dashboard/Home.py" = ["E402"]

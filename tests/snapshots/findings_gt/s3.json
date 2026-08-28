@@ -1,0 +1,10 @@
+[
+  {
+    "finding_id": "s3_001",
+    "text": "Small left apical pneumothorax.",
+    "clinical_status": "abnormal",
+    "clinical_significance": "critical",
+    "comparison": "new",
+    "measurements": []
+  }
+]
