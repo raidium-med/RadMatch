@@ -1,0 +1,26 @@
+[
+  {
+    "matches": [{"pred_id": "s1_001", "gt_id": "s1_001", "reasoning": "same finding", "match_scope": "direct"}],
+    "unmatched_pred": [],
+    "unmatched_gt": []
+  },
+  {
+    "matches": [{"pred_id": "s2_001", "gt_id": "s2_001", "reasoning": "same finding, different laterality", "match_scope": "direct"}],
+    "unmatched_pred": [],
+    "unmatched_gt": []
+  },
+  {
+    "matches": [{"pred_id": "s3_001", "gt_id": "s3_001", "reasoning": "anatomy + pathology match (status conflict)", "match_scope": "direct"}],
+    "unmatched_pred": [],
+    "unmatched_gt": []
+  },
+  {
+    "errors_per_match": [[]]
+  },
+  {
+    "errors_per_match": [[{"dimension": "location", "severity": "major", "reasoning": "left vs right laterality"}]]
+  },
+  {
+    "errors_per_match": [[]]
+  }
+]

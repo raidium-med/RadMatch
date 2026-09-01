@@ -1,0 +1,78 @@
+[
+  {
+    "text": "Clear lungs without focal consolidation.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No pleural effusion.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No pneumothorax.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "critical"
+  },
+  {
+    "text": "Pulmonary vasculature is not engorged.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "A 4 mm pulmonary nodule in the peripheral right upper lobe is unchanged from the preceding radiograph.",
+    "measurements": [
+      {
+        "value": 4,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "comparison": "stable",
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Several pulmonary nodules demonstrated on recent CT, not appreciated by radiography.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Cardiac silhouette is normal in size.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Mediastinal contours are within normal limits and unchanged.",
+    "measurements": [],
+    "comparison": "stable",
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Hilar contours are within normal limits and unchanged.",
+    "measurements": [],
+    "comparison": "stable",
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No acute cardiopulmonary process.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  }
+]

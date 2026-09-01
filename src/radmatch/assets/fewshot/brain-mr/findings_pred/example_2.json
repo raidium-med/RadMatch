@@ -1,0 +1,140 @@
+[
+  {
+    "text": "Leptomeningeal metastasis on the left inferior surface of the tentorium, now forming a mass 2 cm in diameter and 1.5 cm in thickness, previously punctate.",
+    "measurements": [
+      {
+        "value": 2,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 1.5,
+        "unit": "cm",
+        "category": "size"
+      }
+    ],
+    "comparison": "worsening",
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "Massive edema extending to the brainstem and cerebellum associated with the left tentorial mass.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "critical"
+  },
+  {
+    "text": "Cerebellar metastases that enhanced on the previous examination have disappeared or transformed into cystic focal areas.",
+    "measurements": [],
+    "comparison": "improving",
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "No new metastatic foci in the posterior fossa.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "New metastasis measuring 17 mm in diameter in the right putamen with extensive perilesional edema.",
+    "measurements": [
+      {
+        "value": 17,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "comparison": "new",
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "New metastasis measuring 5 mm in diameter in the head of the left caudate nucleus.",
+    "measurements": [
+      {
+        "value": 5,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "comparison": "new",
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "New metastasis measuring 1 cm in diameter in the left posterior parietal cortex.",
+    "measurements": [
+      {
+        "value": 1,
+        "unit": "cm",
+        "category": "size"
+      }
+    ],
+    "comparison": "new",
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "New extra-axial metastasis in the left lateral occipital region, 17 mm in diameter, forming massive parenchymal edema.",
+    "measurements": [
+      {
+        "value": 17,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "comparison": "new",
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "New 5 mm extra-axial metastasis within the left Sylvian fissure.",
+    "measurements": [
+      {
+        "value": 5,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "comparison": "new",
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "Three new extra-axial metastases in the left frontal region.",
+    "measurements": [
+      {
+        "value": 3,
+        "unit": null,
+        "category": "count"
+      }
+    ],
+    "comparison": "new",
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "Pituitary metastasis infiltrating the anterior lobe and stalk appears stable.",
+    "measurements": [],
+    "comparison": "stable",
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Bone metastases in the clivus, cervical vertebrae, and bilateral mandibular condyles.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "No bone metastasis in the cranium.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  }
+]

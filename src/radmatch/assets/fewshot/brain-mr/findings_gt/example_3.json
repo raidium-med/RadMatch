@@ -1,0 +1,131 @@
+[
+  {
+    "text": "Medulla oblongata, pons, midbrain, both cerebellar hemispheres and vermis, cerebellar folia are normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "The 4th ventricle is midline and of normal width.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Basal cisterns, cerebellopontine angle cisterns, internal acoustic canal widths, 5th, 7th-8th cranial nerves are normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "An 11 mm long diameter hypointense appearance on T2 sequence in the frontal region at the interhemispheric fissure location, consistent with falx calcification.",
+    "measurements": [
+      {
+        "value": 11,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Cavum septum pellucidum et vergae variation.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Bilateral basal ganglia, internal and external capsules, both thalami, corpus callosum, corona radiata are normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No pathological intensity change detected within the cerebral parenchyma.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No area of restriction compatible with acute infarct on Diffusion-ADC mapping.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "critical"
+  },
+  {
+    "text": "No space-occupying lesion detected in the cerebral parenchyma.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "The third and both lateral ventricles are midline and of normal width.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Hemispheric cortical sulcus and gyrus structure is normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Main cerebral vascular structures are patent.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Cranium bone structures, both globes, retrobulbar fat tissue, optic nerves, and optic chiasm are normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Paranasal sinuses and mastoid air cell aeration are intact.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Multiple oval-shaped lymphadenopathy in both cervical chains.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Well-defined 12x10 mm mass lesion within the left suboccipital fatty tissue, hypointense on T1 and hyperintense on T2.",
+    "measurements": [
+      {
+        "value": 12,
+        "unit": "mm",
+        "category": "size"
+      },
+      {
+        "value": 10,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  }
+]

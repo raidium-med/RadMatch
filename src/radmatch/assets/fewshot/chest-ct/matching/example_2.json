@@ -1,0 +1,95 @@
+{
+  "scenario": "1:N aggregate — pred enumerates spinal levels covering multiple GT atoms",
+  "description": "Pred 'Multilevel cervical spondylosis from C2-C3 through C7-T1.' explicitly enumerates the spinal levels and names the pathology. GT atomizes at each level. Each multi-bind row → `aggregate` (the levels are explicitly named in the pred). The thoracic finding is a 1:1 `direct`.",
+  "user": {
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Multilevel cervical spondylosis from C2-C3 through C7-T1.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "Mild scoliosis of the thoracic spine.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Spondylosis at C3-C4.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "Spondylosis at C4-C5.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "Spondylosis at C5-C6.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "Spondylosis at C6-C7.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_5",
+        "text": "Mild thoracic scoliosis.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "Pred enumerates C2-C3 through C7-T1; C3-C4 is in the named range.",
+        "match_scope": "aggregate"
+      },
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_2",
+        "reasoning": "C4-C5 is in the explicitly enumerated range.",
+        "match_scope": "aggregate"
+      },
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_3",
+        "reasoning": "C5-C6 is in the explicitly enumerated range.",
+        "match_scope": "aggregate"
+      },
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_4",
+        "reasoning": "C6-C7 is in the explicitly enumerated range.",
+        "match_scope": "aggregate"
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_5",
+        "reasoning": "Same finding entity (mild thoracic scoliosis).",
+        "match_scope": "direct"
+      }
+    ],
+    "unmatched_pred": [],
+    "unmatched_gt": []
+  }
+}

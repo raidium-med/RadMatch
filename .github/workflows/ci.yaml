@@ -23,10 +23,55 @@ jobs:
         run: uv python install ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: uv sync --extra dev --python ${{ matrix.python-version }}
+        run: uv sync --extra dev --extra dashboard --python ${{ matrix.python-version }}
 
       - name: Run tests
         run: uv run --python ${{ matrix.python-version }} pytest tests/ -v
+
+  # The bug this export exists to fix: the previous wheel shipped no assets, because
+  # they lived outside the package directory. A source checkout could never catch it.
+  packaging:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Build wheel
+        run: uv build --wheel --out-dir dist
+
+      - name: Install the wheel into a clean environment
+        run: |
+          uv venv /tmp/clean
+          uv pip install --python /tmp/clean/bin/python "$(ls dist/*.whl)[dashboard]" pytest
+
+      - name: Prompts and few-shot bundles load from the installed package
+        run: |
+          /tmp/clean/bin/python - <<'PY'
+          import pathlib
+          from radmatch import constants
+          from radmatch.llm_utils import prompts
+
+          assert "site-packages" in str(pathlib.Path(prompts.__file__).resolve())
+          for name in (
+              prompts.PROMPT_FINDING_EXTRACTION,
+              prompts.PROMPT_MATCHING,
+              prompts.PROMPT_ATTRIBUTE_ERRORS,
+              prompts.PROMPT_INDICATION_EXTRACTION,
+          ):
+              assert len(prompts.load_prompt(name)) > 500, name
+          bundles = sorted(d.name for d in (prompts._ASSETS_DIR / constants.FEWSHOT_DIR).iterdir() if d.is_dir())
+          assert bundles == ["abdomen-ct", "brain-mr", "chest-ct", "chest-xr", "head-ct"], bundles
+          for bundle in bundles:
+              assert prompts.load_extraction_fewshot(bundle), bundle
+              assert prompts.load_matching_fewshot(bundle), bundle
+              assert prompts.load_attribute_errors_fewshot(bundle), bundle
+          print(f"{len(bundles)} bundles + 4 prompts loaded from {prompts._ASSETS_DIR}")
+          PY
+
+      - name: Test suite against the installed package
+        run: /tmp/clean/bin/python -m pytest tests/ -q
 
   lint:
     runs-on: ubuntu-latest
@@ -37,7 +82,7 @@ jobs:
         uses: astral-sh/setup-uv@v5
 
       - name: Install dependencies
-        run: uv sync --extra dev
+        run: uv sync --extra dev --extra dashboard
 
       - name: Run ruff
         run: uv run ruff check .

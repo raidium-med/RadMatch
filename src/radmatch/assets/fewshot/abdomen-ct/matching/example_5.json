@@ -1,0 +1,48 @@
+{
+  "scenario": "Direct match despite a measurement difference",
+  "description": "Matching aligns findings on clinical equivalence, not on attribute agreement. Both sides describe a dilated common bile duct that has worsened, so they match directly even though the quoted sizes differ; the discrepancy is Stage 3's to grade, not a reason to leave either side unmatched.",
+  "user": {
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Common bile duct dilated to 8 mm, increased from 5 mm previously.",
+        "clinical_status": "abnormal",
+        "comparison": "worsening",
+        "measurements": [
+          {
+            "value": 8.0,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Common bile duct measures 8 mm, up from 6 mm on the prior study.",
+        "clinical_status": "abnormal",
+        "comparison": "worsening",
+        "measurements": [
+          {
+            "value": 8.0,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "Same anatomy (common bile duct), same pathology (dilatation), same comparison (worsening) and same current size; only the prior measurement differs.",
+        "match_scope": "direct"
+      }
+    ],
+    "unmatched_pred": [],
+    "unmatched_gt": []
+  }
+}

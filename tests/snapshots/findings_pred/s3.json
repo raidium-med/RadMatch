@@ -1,0 +1,10 @@
+[
+  {
+    "finding_id": "s3_001",
+    "text": "No pneumothorax identified.",
+    "clinical_status": "normal",
+    "clinical_significance": "critical",
+    "comparison": null,
+    "measurements": []
+  }
+]

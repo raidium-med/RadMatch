@@ -1,0 +1,102 @@
+{
+  "scenario": "1:N aggregate — pred parent-anatomy negative covering several GT rule-out atoms",
+  "description": "Pred 'Cerebellum unremarkable.' names the parent anatomy AND is the radiologist's conventional aggregation of multiple cerebellar rule-outs (no tumor, no hemorrhage, no infarct, no traumatic lesion). Each multi-bind row → `aggregate`. The 1:1 rows are `direct`.",
+  "user": {
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Cerebellum unremarkable.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "Ventricles and basal cisterns normal.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_3",
+        "text": "Small lacunar infarct in the right basal ganglia.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "No tumoral lesion in the cerebellum.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "No hemorrhagic lesion in the cerebellum.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "No ischemic lesion in the cerebellum.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "Ventricles and basal cisterns normal.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_5",
+        "text": "Small lacunar infarct in the right basal ganglia.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "Pred names cerebellum + 'unremarkable' = no abnormal entities; covers the no-tumor atom by clinical convention.",
+        "match_scope": "aggregate"
+      },
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_2",
+        "reasoning": "Same cerebellum-unremarkable claim covers the no-hemorrhage atom.",
+        "match_scope": "aggregate"
+      },
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_3",
+        "reasoning": "Same claim covers the no-ischemic-lesion atom.",
+        "match_scope": "aggregate"
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_4",
+        "reasoning": "Identical ventricles + cisterns normal statement.",
+        "match_scope": "direct"
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_5",
+        "reasoning": "Same anatomic + pathologic finding (right basal ganglia lacunar infarct).",
+        "match_scope": "direct"
+      }
+    ],
+    "unmatched_pred": [],
+    "unmatched_gt": []
+  }
+}

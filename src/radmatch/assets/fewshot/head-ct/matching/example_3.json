@@ -1,0 +1,69 @@
+{
+  "scenario": "N:1 aggregate — atomic pred mastoid findings covering one umbrella GT",
+  "description": "GT 'Bilateral mastoid air-cell opacification' is a single clinical aggregation. The predictor split it into left + right atoms; both pred rows → `aggregate`.",
+  "user": {
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Right mastoid air-cell opacification.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "Left mastoid air-cell opacification.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_3",
+        "text": "Calvarium intact.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Bilateral mastoid air-cell opacification.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "Calvarium intact.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "GT names pathology (mastoid opacification) + bilateral anatomy; covers the right side.",
+        "match_scope": "aggregate"
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_1",
+        "reasoning": "Same umbrella covers the left side — second row, same gt_id.",
+        "match_scope": "aggregate"
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_2",
+        "reasoning": "Identical calvarium-intact statement.",
+        "match_scope": "direct"
+      }
+    ],
+    "unmatched_pred": [],
+    "unmatched_gt": []
+  }
+}

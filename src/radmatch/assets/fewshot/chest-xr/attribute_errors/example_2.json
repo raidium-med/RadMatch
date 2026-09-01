@@ -1,0 +1,37 @@
+{
+  "scenario": "Severity_descriptor major + location sub-anatomic major + clean negation",
+  "description": "Stage 3b call derived from the matches in chest-xr/matching/example_2.json. The pleural-effusion pair has a comparison flip (Stage 3a deterministic) but no status conflict, so it reaches Stage 3b with no free-text attribute errors. The LLL consolidation pair has a major severity error (pred dropped 'severe collapse' to 'likely atelectasis'). The central line pair has a major sub-anatomic location error (upper right atrium vs lower SVC — different management). The pneumothorax pair is clean.",
+  "user": {
+    "series_uuid": "chest-xr_example_2",
+    "pairs": [
+      {
+        "pred_finding": {"finding_id": "p_1", "text": "Stable bilateral pleural effusion.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": []},
+        "gt_finding":   {"finding_id": "gt_1", "text": "Moderate bilateral pleural effusion has increased.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "worsening", "measurements": []}
+      },
+      {
+        "pred_finding": {"finding_id": "p_2", "text": "Left basilar opacity, likely atelectasis.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_2", "text": "Severe left lower lobe consolidation, presumably collapse, has not improved.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "stable", "measurements": []}
+      },
+      {
+        "pred_finding": {"finding_id": "p_3", "text": "Right PICC line ends in the lower SVC.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_3", "text": "Right central venous line ends in the upper right atrium.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": null, "measurements": []}
+      },
+      {
+        "pred_finding": {"finding_id": "p_4", "text": "No pneumothorax.", "clinical_status": "normal", "clinical_significance": "critical", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_4", "text": "No pneumothorax.", "clinical_status": "normal", "clinical_significance": "critical", "comparison": null, "measurements": []}
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_match": [
+      [],
+      [
+        {"dimension": "severity", "severity": "major", "reasoning": "Gt says 'severe ... presumably collapse', pred says 'likely atelectasis' — pred drops the severity descriptor entirely and downgrades the interpretation from collapse to atelectasis. In an intubated ICU patient, severe LLL collapse triggers bronchoscopy whereas atelectasis is typically observed; clinical management threshold is crossed."}
+      ],
+      [
+        {"dimension": "location", "severity": "major", "reasoning": "Pred places the tip in the lower SVC, gt places it in the upper right atrium — different anatomic position; atrial tips are conventionally pulled back due to arrhythmia / perforation risk, so the discrepancy changes management."}
+      ],
+      []
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+CT HEAD
+
+
+
+INDICATION:
+
+Head trauma [DATE] with left frontotemporal hemorrhagic contusion, thin left temporal subdural hematoma
+
+
+
+TECHNIQUE:
+
+Non-contrast acquisition. DLP: 933 mGy·cm
+
+
+
+FINDINGS:
+
+Compared with the MRI dated [DATE]:
+
+At the supratentorial level:
+
+Hypodense cortico-subcortical sequelae in the right temporal pole and right temporal lobe, without spontaneous hyperdensity.
+Passive traction of the left temporal horn of the lateral ventricle.
+
+Ventricular system normal in size and morphology.
+
+At the infratentorial level:
+
+No spontaneous density abnormality in the brainstem or cerebellum.
+
+Midline fourth ventricle normal in size and morphology.
+
+Normal appearance of the basal cisterns.
+
+Mild mucosal thickening of the sphenoid sinus.
+
+The skull base is not adequately characterized on this acquisition.
+
+
+
+IMPRESSION:
+
+Hypodense cortico-subcortical sequelae in the right temporal lobe, without spontaneous hyperdensity.
+
+[FIRST NAME] [NAME], MD

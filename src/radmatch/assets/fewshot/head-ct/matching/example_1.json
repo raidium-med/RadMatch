@@ -1,0 +1,85 @@
+{
+  "scenario": "Laterality flip on temporal sequelae + SPU on sphenoid + clean matches",
+  "description": "Real subset of head-ct/findings_{gt,pred}/example_1. Demonstrates a laterality flip on lateralized brain pathology (gt 'left temporal pole' hemorrhagic sequelae vs pred 'right temporal pole' — opposite hemisphere; status agrees so it's a major location error, not INC), a hallucinated mucosal thickening of the sphenoid sinus in the prediction (SPU), and a clean direct match on the left temporal horn ventricular traction.",
+  "user": {
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Hypodense cortico-subcortical sequelae in the right temporal pole and right temporal lobe, without spontaneous hyperdensity.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "Passive traction of the left temporal horn of the lateral ventricle.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_3",
+        "text": "Ventricular system normal in size and morphology.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_4",
+        "text": "Mild mucosal thickening of the sphenoid sinus.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Hypodense cortico-subcortical sequelae in the left temporal pole and left temporal lobe, without spontaneous hyperdensity.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "Passive traction of the left temporal horn of the lateral ventricle.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "Ventricular system normal in size and morphology.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "Same lesion entity (hypodense cortico-subcortical hemorrhagic sequelae of the temporal pole / lobe, without spontaneous hyperdensity). Pred says right side, gt says left side — laterality flip kept in matches; status agrees so Stage 3 will flag the location error rather than INC.",
+        "match_scope": "direct"
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_2",
+        "reasoning": "Identical description of passive traction of the left temporal horn.",
+        "match_scope": "direct"
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_3",
+        "reasoning": "Identical completeness statement about the ventricular system.",
+        "match_scope": "direct"
+      }
+    ],
+    "unmatched_pred": [
+      "p_4"
+    ],
+    "unmatched_gt": []
+  }
+}

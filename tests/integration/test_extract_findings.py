@@ -1,351 +1,160 @@
-"""Integration tests for finding extraction functionality."""
+"""Stage 1 integration — finding extraction workflow on disk."""
 
 from __future__ import annotations
 
 import json
-import tempfile
-import unittest
-from pathlib import Path
-from unittest.mock import MagicMock, patch
+from typing import TYPE_CHECKING
+from unittest.mock import MagicMock
+
+import pytest
 
 from radmatch import constants, io
 from radmatch.finding_extraction import extract_findings
 
+if TYPE_CHECKING:
+    from pathlib import Path
 
-class TestExtractFindings(unittest.TestCase):
-    """Test extract_findings function."""
 
-    def setUp(self):
-        """Set up test fixtures."""
-        self.tmp_dir = tempfile.TemporaryDirectory()
-        self.tmp_path = Path(self.tmp_dir.name)
-        self.reports_gt_dir = self.tmp_path / "reports_gt"
-        self.reports_pred_dir = self.tmp_path / "reports_pred"
-        self.output_dir = self.tmp_path / "output"
-        self.results_dir = self.output_dir / constants.RESULTS_DIR
-        self.reports_gt_dir.mkdir()
-        self.reports_pred_dir.mkdir()
+def _report(path: Path, series: str, content: str) -> None:
+    (path / f"{series}.txt").write_text(content, encoding="utf-8")
 
-    def tearDown(self):
-        """Clean up after tests."""
-        self.tmp_dir.cleanup()
 
-    def _create_report_file(self, dir_path: Path, series_uuid: str, content: str) -> None:
-        """Helper to create a report text file."""
-        report_file = dir_path / f"{series_uuid}.txt"
-        report_file.write_text(content, encoding="utf-8")
+def _mock_response(findings: list[dict]) -> str:
+    # Stage 1 expects a json_schema-shaped object root with a `findings` key.
+    return json.dumps({"findings": findings})
 
-    def _create_mock_llm_response(self, findings: list[dict]) -> str:
-        """Helper to create mock LLM response."""
-        return json.dumps(findings)
 
-    @patch("radmatch.finding_extraction.inference.llm_clients.build_single_client")
-    @patch("radmatch.finding_extraction.inference.llm_clients.call_with_llm_retry")
-    def test_extract_findings_basic(self, mock_retry, mock_build_client):
-        """Test basic finding extraction workflow."""
-        series_uuid = "test_001"
-        report_text = "Pneumonia in right lower lobe. No other abnormalities."
-        self._create_report_file(self.reports_gt_dir, series_uuid, report_text)
-        self._create_report_file(self.reports_pred_dir, series_uuid, report_text)
+@pytest.fixture
+def workdir(tmp_path):
+    """Standard workspace for Stage 1 integration: reports_gt/, reports_pred/, output/."""
+    (tmp_path / "reports_gt").mkdir()
+    (tmp_path / "reports_pred").mkdir()
+    return {
+        "gt": tmp_path / "reports_gt",
+        "pred": tmp_path / "reports_pred",
+        "out": tmp_path / "output",
+        "results": tmp_path / "output" / constants.RESULTS_DIR,
+    }
 
-        mock_findings = [
-            {
-                "text": "Pneumonia in right lower lobe",
-                "clinical_status": "abnormal",
-                "comparison": None,
-                "measurements": [],
-            }
-        ]
 
-        def retry_side_effect(call_func, **kwargs):
-            return (self._create_mock_llm_response(mock_findings), None)
+@pytest.fixture
+def mock_client():
+    """A MagicMock that emits a single canned finding."""
+    sample = [{"text": "Pneumonia in RLL", "clinical_status": "abnormal", "comparison": None, "measurements": []}]
+    client = MagicMock()
+    client.complete.return_value = _mock_response(sample)
+    return client
 
-        mock_retry.side_effect = retry_side_effect
-        mock_client = MagicMock()
-        mock_build_client.return_value = mock_client
 
-        extract_findings(
-            reports_gt_dir=self.reports_gt_dir,
-            reports_pred_dir=self.reports_pred_dir,
-            output_dir=self.output_dir,
-            model_name="test-model",
-            workers=1,
-        )
+def test_basic_extraction_writes_findings_per_series(workdir, mock_client):
+    _report(workdir["gt"], "s_001", "Pneumonia in RLL.")
+    _report(workdir["pred"], "s_001", "Pneumonia in RLL.")
 
-        findings_gt_dir = self.results_dir / constants.FINDINGS_GT_DIR
-        findings_pred_dir = self.results_dir / constants.FINDINGS_PRED_DIR
+    extract_findings(
+        reports_gt_dir=workdir["gt"],
+        reports_pred_dir=workdir["pred"],
+        output_dir=workdir["out"],
+        llm_extractor="test-model",
+        workers=1,
+        client_factory=lambda **_kw: mock_client,
+    )
 
-        self.assertTrue(findings_gt_dir.exists())
-        self.assertTrue(findings_pred_dir.exists())
+    gt_findings = io.load_json(workdir["results"] / constants.FINDINGS_GT_DIR / "s_001.json")
+    assert gt_findings[0]["finding_id"] == "s_001_001"
+    assert gt_findings[0]["clinical_status"] == "abnormal"
 
-        gt_file = findings_gt_dir / f"{series_uuid}.json"
-        pred_file = findings_pred_dir / f"{series_uuid}.json"
 
-        self.assertTrue(gt_file.exists())
-        self.assertTrue(pred_file.exists())
+def test_extraction_resumes_existing_findings(workdir, mock_client):
+    """Existing findings on disk are not overwritten; missing ones are extracted."""
+    _report(workdir["gt"], "s1", "r1")
+    _report(workdir["pred"], "s1", "r1")
+    _report(workdir["gt"], "s2", "r2")
+    _report(workdir["pred"], "s2", "r2")
 
-        gt_findings = io.load_json(gt_file)
-        pred_findings = io.load_json(pred_file)
+    gt_dir = workdir["results"] / constants.FINDINGS_GT_DIR
+    pred_dir = workdir["results"] / constants.FINDINGS_PRED_DIR
+    gt_dir.mkdir(parents=True)
+    pred_dir.mkdir(parents=True)
+    existing = [{"finding_id": "s1_001", "text": "Existing", "clinical_status": "abnormal", "measurements": []}]
+    io.save_json(existing, gt_dir / "s1.json")
+    io.save_json(existing, pred_dir / "s1.json")
 
-        self.assertEqual(len(gt_findings), 1)
-        self.assertEqual(len(pred_findings), 1)
-        self.assertEqual(gt_findings[0]["text"], "Pneumonia in right lower lobe")
-        self.assertEqual(gt_findings[0]["clinical_status"], "abnormal")
-        self.assertEqual(gt_findings[0]["finding_id"], f"{series_uuid}_001")
+    extract_findings(
+        reports_gt_dir=workdir["gt"],
+        reports_pred_dir=workdir["pred"],
+        output_dir=workdir["out"],
+        llm_extractor="test-model",
+        workers=1,
+        client_factory=lambda **_kw: mock_client,
+    )
 
-    @patch("radmatch.finding_extraction.inference.llm_clients.build_single_client")
-    @patch("radmatch.finding_extraction.inference.llm_clients.call_with_llm_retry")
-    def test_extract_findings_multiple_reports(self, mock_retry, mock_build_client):
-        """Test extraction with multiple reports."""
-        mock_findings = [
-            {
-                "text": "Test finding",
-                "clinical_status": "abnormal",
-                "comparison": None,
-                "measurements": [],
-            }
-        ]
+    assert io.load_json(gt_dir / "s1.json")[0]["text"] == "Existing"
+    assert (gt_dir / "s2.json").exists()
+    # Only the 2 missing reports (s2 gt + s2 pred) hit the LLM
+    assert mock_client.complete.call_count == 2
 
-        def retry_side_effect(call_func, **kwargs):
-            return (self._create_mock_llm_response(mock_findings), None)
 
-        mock_retry.side_effect = retry_side_effect
-        mock_client = MagicMock()
-        mock_build_client.return_value = mock_client
+def test_extraction_accepts_existing_findings_gt_dir(workdir, tmp_path, mock_client):
+    """`findings_gt_dir` (pre-extracted) is an alternative to `reports_gt_dir`."""
+    _report(workdir["pred"], "s1", "pred report")
+    existing_gt = tmp_path / "findings_gt_source"
+    existing_gt.mkdir()
+    gt_payload = [{"finding_id": "s1_001", "text": "GT finding", "clinical_status": "abnormal", "measurements": []}]
+    io.save_json(gt_payload, existing_gt / "s1.json")
 
-        for i in range(3):
-            series_uuid = f"test_{i:03d}"
-            report_text = f"Report {i} content"
-            self._create_report_file(self.reports_gt_dir, series_uuid, report_text)
-            self._create_report_file(self.reports_pred_dir, series_uuid, report_text)
+    extract_findings(
+        reports_gt_dir=None,
+        reports_pred_dir=workdir["pred"],
+        output_dir=workdir["out"],
+        llm_extractor="test-model",
+        workers=1,
+        findings_gt_dir=existing_gt,
+        client_factory=lambda **_kw: mock_client,
+    )
 
-        extract_findings(
-            reports_gt_dir=self.reports_gt_dir,
-            reports_pred_dir=self.reports_pred_dir,
-            output_dir=self.output_dir,
-            model_name="test-model",
-            workers=2,
-        )
+    gt_dir = workdir["results"] / constants.FINDINGS_GT_DIR
+    assert io.load_json(gt_dir / "s1.json")[0]["text"] == "GT finding"
 
-        findings_gt_dir = self.results_dir / constants.FINDINGS_GT_DIR
-        findings_pred_dir = self.results_dir / constants.FINDINGS_PRED_DIR
 
-        for i in range(3):
-            series_uuid = f"test_{i:03d}"
-            self.assertTrue((findings_gt_dir / f"{series_uuid}.json").exists())
-            self.assertTrue((findings_pred_dir / f"{series_uuid}.json").exists())
+def test_extraction_records_failed_reports(workdir):
+    """LLM failure for one report is logged; others succeed."""
+    _report(workdir["gt"], "s1", "r1")
+    _report(workdir["pred"], "s1", "r1")
+    _report(workdir["gt"], "s2", "r2")
+    _report(workdir["pred"], "s2", "r2")
 
-    @patch("radmatch.finding_extraction.inference.llm_clients.build_single_client")
-    @patch("radmatch.finding_extraction.inference.llm_clients.call_with_llm_retry")
-    def test_extract_findings_resume(self, mock_retry, mock_build_client):
-        """Test resume functionality with existing findings."""
-        series_uuid_1 = "test_001"
-        series_uuid_2 = "test_002"
+    successful = _mock_response([{"text": "F", "clinical_status": "abnormal", "comparison": None, "measurements": []}])
 
-        self._create_report_file(self.reports_gt_dir, series_uuid_1, "Report 1")
-        self._create_report_file(self.reports_pred_dir, series_uuid_1, "Report 1")
-        self._create_report_file(self.reports_gt_dir, series_uuid_2, "Report 2")
-        self._create_report_file(self.reports_pred_dir, series_uuid_2, "Report 2")
+    call_count = 0
 
-        findings_gt_dir = self.results_dir / constants.FINDINGS_GT_DIR
-        findings_pred_dir = self.results_dir / constants.FINDINGS_PRED_DIR
-        findings_gt_dir.mkdir(parents=True)
-        findings_pred_dir.mkdir(parents=True)
+    def side_effect(*_args, **_kwargs):
+        nonlocal call_count
+        call_count += 1
+        if call_count == 1:
+            raise RuntimeError("LLM API error")
+        return successful
 
-        existing_findings = [
-            {
-                "finding_id": f"{series_uuid_1}_001",
-                "text": "Existing finding",
-                "clinical_status": "abnormal",
-                "measurements": [],
-            }
-        ]
-        io.save_json(existing_findings, findings_gt_dir / f"{series_uuid_1}.json")
-        io.save_json(existing_findings, findings_pred_dir / f"{series_uuid_1}.json")
+    failing_client = MagicMock()
+    failing_client.complete.side_effect = side_effect
+    extract_findings(
+        reports_gt_dir=workdir["gt"],
+        reports_pred_dir=workdir["pred"],
+        output_dir=workdir["out"],
+        llm_extractor="test-model",
+        workers=1,
+        client_factory=lambda **_kw: failing_client,
+    )
 
-        mock_findings = [
-            {
-                "text": "New finding",
-                "clinical_status": "abnormal",
-                "comparison": None,
-                "measurements": [],
-            }
-        ]
+    failed = io.load_json(workdir["results"] / constants.FAILED_REPORTS_FILE)
+    assert len(failed) > 0
 
-        def retry_side_effect(call_func, **kwargs):
-            return (self._create_mock_llm_response(mock_findings), None)
 
-        mock_retry.side_effect = retry_side_effect
-        mock_client = MagicMock()
-        mock_build_client.return_value = mock_client
-
-        extract_findings(
-            reports_gt_dir=self.reports_gt_dir,
-            reports_pred_dir=self.reports_pred_dir,
-            output_dir=self.output_dir,
-            model_name="test-model",
-            workers=1,
-        )
-
-        self.assertTrue((findings_gt_dir / f"{series_uuid_1}.json").exists())
-        self.assertTrue((findings_gt_dir / f"{series_uuid_2}.json").exists())
-
-        existing_loaded = io.load_json(findings_gt_dir / f"{series_uuid_1}.json")
-        self.assertEqual(existing_loaded[0]["text"], "Existing finding")
-
-        self.assertEqual(mock_retry.call_count, 2)
-
-    @patch("radmatch.finding_extraction.inference.llm_clients.build_single_client")
-    @patch("radmatch.finding_extraction.inference.llm_clients.call_with_llm_retry")
-    def test_extract_findings_with_findings_gt_dir(self, mock_retry, mock_build_client):
-        """Test extraction when findings_gt_dir is provided instead of reports_gt_dir."""
-        series_uuid = "test_001"
-        self._create_report_file(self.reports_pred_dir, series_uuid, "Predicted report")
-
-        findings_gt_source_dir = self.tmp_path / "findings_gt_source"
-        findings_gt_source_dir.mkdir()
-        existing_gt_findings = [
-            {
-                "finding_id": f"{series_uuid}_001",
-                "text": "Ground truth finding",
-                "clinical_status": "abnormal",
-                "measurements": [],
-            }
-        ]
-        io.save_json(existing_gt_findings, findings_gt_source_dir / f"{series_uuid}.json")
-
-        mock_findings = [
-            {
-                "text": "Predicted finding",
-                "clinical_status": "abnormal",
-                "comparison": None,
-                "measurements": [],
-            }
-        ]
-
-        def retry_side_effect(call_func, **kwargs):
-            return (self._create_mock_llm_response(mock_findings), None)
-
-        mock_retry.side_effect = retry_side_effect
-        mock_client = MagicMock()
-        mock_build_client.return_value = mock_client
-
+def test_extraction_requires_gt_source(workdir):
+    with pytest.raises(ValueError):
         extract_findings(
             reports_gt_dir=None,
-            reports_pred_dir=self.reports_pred_dir,
-            output_dir=self.output_dir,
-            model_name="test-model",
-            workers=1,
-            findings_gt_dir=findings_gt_source_dir,
+            reports_pred_dir=workdir["pred"],
+            output_dir=workdir["out"],
+            llm_extractor="test-model",
+            findings_gt_dir=None,
         )
-
-        findings_gt_dir = self.results_dir / constants.FINDINGS_GT_DIR
-        findings_pred_dir = self.results_dir / constants.FINDINGS_PRED_DIR
-
-        self.assertTrue((findings_gt_dir / f"{series_uuid}.json").exists())
-        self.assertTrue((findings_pred_dir / f"{series_uuid}.json").exists())
-
-        gt_findings = io.load_json(findings_gt_dir / f"{series_uuid}.json")
-        self.assertEqual(gt_findings[0]["text"], "Ground truth finding")
-
-    @patch("radmatch.finding_extraction.inference.llm_clients.build_single_client")
-    @patch("radmatch.finding_extraction.inference.llm_clients.call_with_llm_retry")
-    def test_extract_findings_with_limit(self, mock_retry, mock_build_client):
-        """Test extraction with limit on number of reports."""
-        mock_findings = [
-            {
-                "text": "Test finding",
-                "clinical_status": "abnormal",
-                "comparison": None,
-                "measurements": [],
-            }
-        ]
-
-        def retry_side_effect(call_func, **kwargs):
-            return (self._create_mock_llm_response(mock_findings), None)
-
-        mock_retry.side_effect = retry_side_effect
-        mock_client = MagicMock()
-        mock_build_client.return_value = mock_client
-
-        for i in range(5):
-            series_uuid = f"test_{i:03d}"
-            report_text = f"Report {i}"
-            self._create_report_file(self.reports_gt_dir, series_uuid, report_text)
-            self._create_report_file(self.reports_pred_dir, series_uuid, report_text)
-
-        extract_findings(
-            reports_gt_dir=self.reports_gt_dir,
-            reports_pred_dir=self.reports_pred_dir,
-            output_dir=self.output_dir,
-            model_name="test-model",
-            workers=1,
-            limit=3,
-        )
-
-        findings_gt_dir = self.results_dir / constants.FINDINGS_GT_DIR
-
-        processed_count = len(list(findings_gt_dir.glob("*.json")))
-        self.assertLessEqual(processed_count, 3)
-
-    @patch("radmatch.finding_extraction.inference.llm_clients.build_single_client")
-    @patch("radmatch.finding_extraction.inference.llm_clients.call_with_llm_retry")
-    def test_extract_findings_handles_failures(self, mock_retry, mock_build_client):
-        """Test that extraction handles LLM failures gracefully."""
-        series_uuid_1 = "test_001"
-        series_uuid_2 = "test_002"
-
-        self._create_report_file(self.reports_gt_dir, series_uuid_1, "Report 1")
-        self._create_report_file(self.reports_pred_dir, series_uuid_1, "Report 1")
-        self._create_report_file(self.reports_gt_dir, series_uuid_2, "Report 2")
-        self._create_report_file(self.reports_pred_dir, series_uuid_2, "Report 2")
-
-        call_count = 0
-
-        def retry_side_effect(call_func, **kwargs):
-            nonlocal call_count
-            call_count += 1
-            if call_count == 1:
-                return (None, "LLM API error")
-            mock_findings = [
-                {
-                    "text": "Successful finding",
-                    "clinical_status": "abnormal",
-                    "comparison": None,
-                    "measurements": [],
-                }
-            ]
-            return (self._create_mock_llm_response(mock_findings), None)
-
-        mock_retry.side_effect = retry_side_effect
-        mock_client = MagicMock()
-        mock_build_client.return_value = mock_client
-
-        extract_findings(
-            reports_gt_dir=self.reports_gt_dir,
-            reports_pred_dir=self.reports_pred_dir,
-            output_dir=self.output_dir,
-            model_name="test-model",
-            workers=1,
-        )
-
-        findings_gt_dir = self.results_dir / constants.FINDINGS_GT_DIR
-
-        failed_reports_file = self.results_dir / constants.FAILED_REPORTS_FILE
-        self.assertTrue(failed_reports_file.exists())
-
-        failed_reports = io.load_json(failed_reports_file)
-        self.assertGreater(len(failed_reports), 0)
-
-        self.assertTrue((findings_gt_dir / f"{series_uuid_2}.json").exists())
-
-    def test_extract_findings_raises_without_gt(self):
-        """Test that extract_findings raises error when neither reports_gt_dir nor findings_gt_dir provided."""
-        with self.assertRaises(ValueError):
-            extract_findings(
-                reports_gt_dir=None,
-                reports_pred_dir=self.reports_pred_dir,
-                output_dir=self.output_dir,
-                model_name="test-model",
-                findings_gt_dir=None,
-            )

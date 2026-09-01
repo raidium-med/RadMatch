@@ -1,0 +1,226 @@
+{
+  "actionable_errors_per_finding": 0.75,
+  "actionable_errors_per_report": 0.6,
+  "actionable_errors_total": 3,
+  "actionable_findings_total": 4,
+  "attribute_breakdown": {
+    "certainty": {
+      "clean": 3,
+      "clean_pct": 1.0,
+      "evaluated": 3,
+      "major": 0,
+      "major_pct": 0.0,
+      "minor": 0,
+      "minor_pct": 0.0
+    },
+    "clinical_status": {
+      "clean": 2,
+      "clean_pct": 0.666667,
+      "evaluated": 3,
+      "major": 1,
+      "major_pct": 0.333333,
+      "minor": 0,
+      "minor_pct": 0.0
+    },
+    "comparison": {
+      "clean": 2,
+      "clean_pct": 0.666667,
+      "evaluated": 3,
+      "major": 0,
+      "major_pct": 0.0,
+      "minor": 1,
+      "minor_pct": 0.333333
+    },
+    "location": {
+      "clean": 2,
+      "clean_pct": 0.666667,
+      "evaluated": 3,
+      "major": 1,
+      "major_pct": 0.333333,
+      "minor": 0,
+      "minor_pct": 0.0
+    },
+    "measurement": {
+      "clean": 3,
+      "clean_pct": 1.0,
+      "evaluated": 3,
+      "major": 0,
+      "major_pct": 0.0,
+      "minor": 0,
+      "minor_pct": 0.0
+    },
+    "morphology": {
+      "clean": 3,
+      "clean_pct": 1.0,
+      "evaluated": 3,
+      "major": 0,
+      "major_pct": 0.0,
+      "minor": 0,
+      "minor_pct": 0.0
+    },
+    "severity": {
+      "clean": 3,
+      "clean_pct": 1.0,
+      "evaluated": 3,
+      "major": 0,
+      "major_pct": 0.0,
+      "minor": 0,
+      "minor_pct": 0.0
+    }
+  },
+  "clinical_safety_summary": {
+    "actionable_gt_total": 4,
+    "actionable_hit_count": 1,
+    "actionable_inc_count": 2,
+    "actionable_mis_count": 1,
+    "actionable_precision": 0.333333,
+    "actionable_pred_hit_count": 1,
+    "actionable_pred_total": 3,
+    "actionable_recall": 0.25,
+    "triage_gt_total": 3,
+    "triage_hit_count": 1,
+    "triage_inc_count": 2,
+    "triage_mis_count": 0,
+    "triage_precision": 0.333333,
+    "triage_pred_hit_count": 1,
+    "triage_pred_total": 3,
+    "triage_recall": 0.333333
+  },
+  "metadata": {
+    "fewshot": null,
+    "llm_judge": "fake",
+    "n_failed_reports": 0,
+    "n_reports": 5,
+    "total_gt_findings": 4,
+    "total_pred_findings": 4
+  },
+  "muc_counts": {
+    "COR": 1,
+    "INC": 2,
+    "MIS": 1,
+    "PAR": 0,
+    "SPU": 1
+  },
+  "subsets": {
+    "abnormal-regular": {
+      "actionable_errors_per_finding": 0.5,
+      "actionable_errors_total": 1,
+      "actionable_findings_total": 2,
+      "clinical_safety_summary": {
+        "actionable_gt_total": 2,
+        "actionable_hit_count": 1,
+        "actionable_inc_count": 1,
+        "actionable_mis_count": 0,
+        "actionable_precision": 0.5,
+        "actionable_pred_hit_count": 1,
+        "actionable_pred_total": 2,
+        "actionable_recall": 0.5,
+        "triage_gt_total": 2,
+        "triage_hit_count": 1,
+        "triage_inc_count": 1,
+        "triage_mis_count": 0,
+        "triage_precision": 0.5,
+        "triage_pred_hit_count": 1,
+        "triage_pred_total": 2,
+        "triage_recall": 0.5
+      },
+      "muc_counts": {
+        "COR": 1,
+        "INC": 1,
+        "MIS": 0,
+        "PAR": 0,
+        "SPU": 0
+      }
+    },
+    "comparison": {
+      "actionable_errors_per_finding": 1.0,
+      "actionable_errors_total": 2,
+      "actionable_findings_total": 2,
+      "clinical_safety_summary": {
+        "actionable_gt_total": 2,
+        "actionable_hit_count": 0,
+        "actionable_inc_count": 1,
+        "actionable_mis_count": 1,
+        "actionable_precision": 0.0,
+        "actionable_pred_hit_count": 0,
+        "actionable_pred_total": 1,
+        "actionable_recall": 0.0,
+        "triage_gt_total": 1,
+        "triage_hit_count": 0,
+        "triage_inc_count": 1,
+        "triage_mis_count": 0,
+        "triage_precision": 0.0,
+        "triage_pred_hit_count": 0,
+        "triage_pred_total": 1,
+        "triage_recall": 0.0
+      },
+      "muc_counts": {
+        "COR": 0,
+        "INC": 1,
+        "MIS": 1,
+        "PAR": 0,
+        "SPU": 0
+      }
+    },
+    "measurement": {
+      "actionable_errors_per_finding": 1.0,
+      "actionable_errors_total": 1,
+      "actionable_findings_total": 1,
+      "clinical_safety_summary": {
+        "actionable_gt_total": 1,
+        "actionable_hit_count": 0,
+        "actionable_inc_count": 0,
+        "actionable_mis_count": 1,
+        "actionable_precision": null,
+        "actionable_pred_hit_count": 0,
+        "actionable_pred_total": 0,
+        "actionable_recall": 0.0,
+        "triage_gt_total": 0,
+        "triage_hit_count": 0,
+        "triage_inc_count": 0,
+        "triage_mis_count": 0,
+        "triage_precision": null,
+        "triage_pred_hit_count": 0,
+        "triage_pred_total": 0,
+        "triage_recall": null
+      },
+      "muc_counts": {
+        "COR": 0,
+        "INC": 0,
+        "MIS": 1,
+        "PAR": 0,
+        "SPU": 0
+      }
+    },
+    "normal-regular": {
+      "actionable_errors_per_finding": 0.0,
+      "actionable_errors_total": 0,
+      "actionable_findings_total": 0,
+      "clinical_safety_summary": {
+        "actionable_gt_total": 0,
+        "actionable_hit_count": 0,
+        "actionable_inc_count": 0,
+        "actionable_mis_count": 0,
+        "actionable_precision": null,
+        "actionable_pred_hit_count": 0,
+        "actionable_pred_total": 0,
+        "actionable_recall": null,
+        "triage_gt_total": 0,
+        "triage_hit_count": 0,
+        "triage_inc_count": 0,
+        "triage_mis_count": 0,
+        "triage_precision": null,
+        "triage_pred_hit_count": 0,
+        "triage_pred_total": 0,
+        "triage_recall": null
+      },
+      "muc_counts": {
+        "COR": 0,
+        "INC": 0,
+        "MIS": 0,
+        "PAR": 0,
+        "SPU": 1
+      }
+    }
+  }
+}

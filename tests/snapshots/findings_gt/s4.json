@@ -1,0 +1,12 @@
+[
+  {
+    "finding_id": "s4_001",
+    "text": "Stable 6 mm simple cyst in segment IV of the liver.",
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable",
+    "comparison": "stable",
+    "measurements": [
+      {"value": 6, "unit": "mm", "category": "size"}
+    ]
+  }
+]

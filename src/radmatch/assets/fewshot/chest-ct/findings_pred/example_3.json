@@ -1,0 +1,173 @@
+[
+  {
+    "text": "Marked bilateral, diffuse paraseptal emphysema, non-confluent.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Left apical pleural cap.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "No progressive pleuroparenchymal abnormality.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Left lower lobe nodule with smooth margins measuring 11 mm, noncalcified.",
+    "measurements": [
+      {
+        "value": 11,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "9 mm left lower lobe nodule with smooth margins.",
+    "measurements": [
+      {
+        "value": 9,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "Small 3.5 mm left lower lobe nodule with smooth margins.",
+    "measurements": [
+      {
+        "value": 3.5,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Perifissural lymph node in the posterior lingula measuring 5 mm.",
+    "measurements": [
+      {
+        "value": 5,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "8 mm nodule with smooth margins in the lateral segment of the right middle lobe.",
+    "measurements": [
+      {
+        "value": 8,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "Small right pleural effusion.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Right hilar lymph node enlargement measuring 14 mm.",
+    "measurements": [
+      {
+        "value": 14,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "Subcentimeter left interbronchial lymph node.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Ectasia of the descending thoracic aorta beginning at the aortic isthmus, with a maximal diameter measuring 38 x 39 mm over a length of 5.3 cm.",
+    "measurements": [
+      {
+        "value": 38,
+        "unit": "mm",
+        "category": "size"
+      },
+      {
+        "value": 39,
+        "unit": "mm",
+        "category": "size"
+      },
+      {
+        "value": 5.3,
+        "unit": "cm",
+        "category": "size"
+      }
+    ],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "No signs of mural hematoma or dissection.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "critical"
+  },
+  {
+    "text": "No endobronchial abnormality.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No osseous abnormality.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Adrenal glands are slender.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Hepatic dysmorphism without signs of portal hypertension.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  }
+]

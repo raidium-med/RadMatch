@@ -1,0 +1,32 @@
+{
+  "scenario": "Direct matches + severity diff + status flip + MIS",
+  "description": "Real subset of chest-xr/findings_{gt,pred}/example_1. Demonstrates a clean match (right pleural thickening), a match with a severity difference (mild vs moderate cardiomegaly), a status-flip match kept in matches so Stage 3a fires INC (gt 'No pleural effusion' vs pred 'Small bilateral pleural effusions'), and a GT-only finding that becomes MIS (the bilateral pleural plaques the prediction missed).",
+  "user": {
+    "pred_findings": [
+      {"finding_id": "p_1", "text": "Right pleural thickening is chronic.", "clinical_status": "abnormal", "comparison": null, "measurements": []},
+      {"finding_id": "p_2", "text": "Moderate cardiomegaly.", "clinical_status": "abnormal", "comparison": null, "measurements": []},
+      {"finding_id": "p_3", "text": "Small bilateral pleural effusions are noted.", "clinical_status": "abnormal", "comparison": null, "measurements": []},
+      {"finding_id": "p_4", "text": "No pneumothorax.", "clinical_status": "normal", "comparison": null, "measurements": []},
+      {"finding_id": "p_5", "text": "No evidence of pneumonia.", "clinical_status": "normal", "comparison": null, "measurements": []}
+    ],
+    "gt_findings": [
+      {"finding_id": "gt_1", "text": "Numerous bilateral pleural plaques are similar to the prior study.", "clinical_status": "abnormal", "comparison": "stable", "measurements": []},
+      {"finding_id": "gt_2", "text": "Right pleural thickening is chronic.", "clinical_status": "abnormal", "comparison": null, "measurements": []},
+      {"finding_id": "gt_3", "text": "Mild cardiomegaly, unchanged.", "clinical_status": "abnormal", "comparison": "stable", "measurements": []},
+      {"finding_id": "gt_4", "text": "No pleural effusion.", "clinical_status": "normal", "comparison": null, "measurements": []},
+      {"finding_id": "gt_5", "text": "No pneumothorax.", "clinical_status": "normal", "comparison": null, "measurements": []},
+      {"finding_id": "gt_6", "text": "No evidence of pneumonia.", "clinical_status": "normal", "comparison": null, "measurements": []}
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {"pred_id": "p_1", "gt_id": "gt_2", "reasoning": "Both describe chronic right pleural thickening.", "match_scope": "direct"},
+      {"pred_id": "p_2", "gt_id": "gt_3", "reasoning": "Same finding entity (cardiomegaly); pred and gt disagree on severity descriptor but the anatomy + pathology align.", "match_scope": "direct"},
+      {"pred_id": "p_3", "gt_id": "gt_4", "reasoning": "Same finding entity (pleural effusion). Pred says present (small bilateral), gt says absent — status flip kept in matches so Stage 3 can classify INC.", "match_scope": "direct"},
+      {"pred_id": "p_4", "gt_id": "gt_5", "reasoning": "Identical negative finding for pneumothorax.", "match_scope": "direct"},
+      {"pred_id": "p_5", "gt_id": "gt_6", "reasoning": "Identical negative finding for pneumonia.", "match_scope": "direct"}
+    ],
+    "unmatched_pred": [],
+    "unmatched_gt": ["gt_1"]
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "scenario": "1:N aggregate — `Lungs are clear` covers atomic consolidation negatives",
+  "description": "Pred 'Lungs are clear.' is a parent-anatomy claim (lungs ⊃ each lobe) that explicitly addresses the pathology (no consolidation). Each multi-bind row → `aggregate`. The 1:1 rows are `direct`.",
+  "user": {
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Lungs are clear.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "Cardiomediastinal silhouette is normal.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_3",
+        "text": "No pleural effusion.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "No focal consolidation in the right lung.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "No focal consolidation in the left lung.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "Cardiac silhouette within normal limits.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "No pleural effusion.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "Lungs ⊃ right lung; 'clear' entails 'no consolidation'.",
+        "match_scope": "aggregate"
+      },
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_2",
+        "reasoning": "Same parent-anatomy claim covers the left lung atom — second row, same pred_id.",
+        "match_scope": "aggregate"
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_3",
+        "reasoning": "Cardiomediastinal silhouette normal statement matches cardiac silhouette WNL.",
+        "match_scope": "direct"
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_4",
+        "reasoning": "Identical no-effusion statement.",
+        "match_scope": "direct"
+      }
+    ],
+    "unmatched_pred": [],
+    "unmatched_gt": []
+  }
+}

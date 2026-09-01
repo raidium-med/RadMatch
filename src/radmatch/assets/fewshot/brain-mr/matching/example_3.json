@@ -1,0 +1,69 @@
+{
+  "scenario": "N:1 aggregate — atomic pred WMH findings covering one umbrella GT",
+  "description": "GT 'Bilateral periventricular white matter T2 hyperintensities, age-related.' is a real clinical aggregation. The predictor described each side separately; both pred rows → `aggregate`.",
+  "user": {
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "T2 hyperintensity in the right periventricular white matter.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "T2 hyperintensity in the left periventricular white matter.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_3",
+        "text": "Pituitary gland normal.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Bilateral periventricular white matter T2 hyperintensities, age-related.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "Pituitary gland normal.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "GT names pathology (T2 hyperintensity) + parent anatomy (bilateral periventricular WM); covers the right-side atom.",
+        "match_scope": "aggregate"
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_1",
+        "reasoning": "Same umbrella covers the left-side atom — second row, same gt_id.",
+        "match_scope": "aggregate"
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_2",
+        "reasoning": "Identical pituitary-normal statement.",
+        "match_scope": "direct"
+      }
+    ],
+    "unmatched_pred": [],
+    "unmatched_gt": []
+  }
+}

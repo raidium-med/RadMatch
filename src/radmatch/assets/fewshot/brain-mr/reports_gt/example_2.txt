@@ -1,0 +1,23 @@
+BRAIN MRI
+
+Clinical information: Metastatic breast carcinoma, follow-up
+
+Technique: Sagittal and axial T1-weighted; sagittal, axial and coronal FLAIR; axial T2-weighted, DWI, ADC and SWI. T1-weighted in 3 planes after contrast agent injection.
+
+Comparison: [date_1] dated Cranial MRI
+
+Findings:
+
+- On the left inferior surface of the tentorium, a leptomeningeal metastasis that was of punctate size on the previous examination is now forming a mass 2.5 cm in diameter and 2 cm in thickness; massive edema extending to the brainstem and cerebellum associated with this mass is observed.
+- Cerebellar metastases that enhanced on the previous examination have disappeared or transformed into cystic focal areas. Only the right central cerebellar 7 mm diameter metastasis (previous examination axial postcontrast slice 88) continues to enhance punctately on the new examination (postcontrast 58). No new metastatic foci added in the posterior fossa during the interval.
+- Metastases measuring 17 mm in diameter in the left putamen, 5 mm in diameter in the head of the left caudate nucleus, and 1 cm in diameter in the left posterior parietal cortex have developed, not found on the previous examination. Extensive edema is present around the left putaminal metastasis.
+- No growth is observed in the plaque-like leptomeningeal metastasis located at the vertex on the right parasagittal region, present on the previous examination.
+- Not found on the previous examination, an extra-axial metastasis in the left lateral occipital region, 17 mm in diameter, forming massive parenchymal edema (postcontrast axial slice 103), 5 mm in diameter within the left Sylvian fissure (slice 103), and 3 extra-axial metastases in the left frontal (slices 149, 105) have developed.
+- The metastasis infiltrating the anterior lobe and stalk of the pituitary gland, whose regression was observed on the previous examination, is also progressively growing and forming a mass, exerting pressure on the optic chiasm and left optic tract is observed.
+- Bone metastases are present in the clivus and cervical vertebrae, and bilateral mandibular condyles, but bone metastasis is not seen in the cranium.
+
+Impression:
+
+- Parenchymal metastases in the left putamen, caudate nucleus, and parietal lobe; multiple new leptomeningeal metastases in the left infratentorial region and left cerebral convexity.
+- Pituitary metastasis shows progression.
+- Widespread bone metastases.

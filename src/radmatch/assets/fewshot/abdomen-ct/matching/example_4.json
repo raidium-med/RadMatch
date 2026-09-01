@@ -1,0 +1,54 @@
+{
+  "scenario": "SPU + MIS — a pred finding the GT never assesses, and a GT finding with no pred counterpart",
+  "description": "The predicted sigmoid wall thickening has no counterpart: the ground truth never assesses the colon, so there is nothing to align it to and it is spurious. Note the contrast with an inverted status — had the GT said the colon was normal, that would be a match. The GT pancreatic duct finding has no pred counterpart and is missed.",
+  "user": {
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Circumferential wall thickening of the sigmoid colon.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "Liver parenchyma is normal.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Liver shows no focal lesion.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "Mild pancreatic duct dilatation.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_1",
+        "reasoning": "Both state the liver is unremarkable; same anatomy, same status.",
+        "match_scope": "direct"
+      }
+    ],
+    "unmatched_pred": [
+      "p_1"
+    ],
+    "unmatched_gt": [
+      "gt_2"
+    ]
+  }
+}

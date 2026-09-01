@@ -1,0 +1,28 @@
+{
+  "scenario": "No free-text attribute errors — pure measurement diff handled deterministically",
+  "description": "Stage 3b call derived from the matches in head-ct/matching/example_3.json. The micronodule pair carries only a sub-mm measurement difference (4.4 vs 5.1 mm) — Stage 3a deterministic owns that, Stage 3b does not re-emit. The other two pairs (congenital sinus hypoplasia, no pleural / pericardial effusion) are identical.",
+  "user": {
+    "series_uuid": "head-ct_example_3",
+    "pairs": [
+      {
+        "pred_finding": {"finding_id": "p_1", "text": "Congenital hypoplasia of the paranasal sinuses with agenesis of the frontal sinuses.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_1", "text": "Congenital hypoplasia of the paranasal sinuses with agenesis of the frontal sinuses.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []}
+      },
+      {
+        "pred_finding": {"finding_id": "p_2", "text": "Stable nonspecific micronodule of the right upper lobe measuring 5.1 mm.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": [{"value": 5.1, "unit": "mm", "category": "size"}]},
+        "gt_finding":   {"finding_id": "gt_2", "text": "Stable nonspecific micronodule of the right upper lobe measuring 4.4 mm.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": [{"value": 4.4, "unit": "mm", "category": "size"}]}
+      },
+      {
+        "pred_finding": {"finding_id": "p_3", "text": "No pleural or pericardial effusion.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_6", "text": "No pleural or pericardial effusion.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []}
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_match": [
+      [],
+      [],
+      []
+    ]
+  }
+}
