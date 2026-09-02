@@ -4,7 +4,7 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/downloads/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-**RadMatch** is an LLM-based evaluation metric for radiology report generation. It extracts atomic findings from each report, matches predictions to ground truth on **clinical equivalence**, and characterizes every error across **seven clinical attribute dimensions** — so a discrepancy is reported as a laterality flip, a severity change or a missed measurement rather than an undifferentiated penalty. From these it reports the **count of errors on clinically relevant findings**, alongside **safety recall and precision** for life-threatening findings.
+**RadMatch** is an LLM-based evaluation framework for radiology report generation. It extracts atomic findings from each report, matches predictions to ground truth on **clinical equivalence**, and characterizes every error across **seven clinical attribute dimensions** — so a discrepancy is reported as a laterality flip, a severity change or a missed measurement rather than an undifferentiated penalty. From these it reports the **count of errors on clinically relevant findings**, alongside **safety recall and precision** for life-threatening findings.
 
 The headline score is `actionable_errors_per_report`: the mean per-report count of errors involving non-routine findings. **Lower is better.**
 

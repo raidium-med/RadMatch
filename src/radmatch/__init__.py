@@ -1,4 +1,4 @@
-"""RadMatch — LLM-based evaluation metric for radiology report generation.
+"""RadMatch — LLM-based evaluation framework for radiology report generation.
 
 `run_all` chains the three stages over a directory of reports; the per-stage functions
 run them individually, each caching to disk so a costly earlier stage is reused.
