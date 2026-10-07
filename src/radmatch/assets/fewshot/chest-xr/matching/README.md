@@ -4,9 +4,9 @@ Three worked examples of the alignment patterns Stage 2 has to get right. Findin
 
 | File | Scenario |
 |------|----------|
-| `example_1.json` | Direct matches + severity diff + status flip + MIS |
-| `example_2.json` | 1:N aggregate — `Lungs are clear` covers atomic consolidation negatives |
-| `example_3.json` | N:1 aggregate — atomic pred effusions covering one umbrella GT |
+| `example_1.json` | 1:1 matches + severity diff + status flip + MIS |
+| `example_2.json` | 1:N umbrella — `Lungs are clear` covers atomic consolidation negatives |
+| `example_3.json` | N:1 umbrella — atomic pred effusions covering one umbrella GT |
 
 ## Format
 

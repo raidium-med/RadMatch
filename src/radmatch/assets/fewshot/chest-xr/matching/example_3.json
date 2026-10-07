@@ -1,6 +1,6 @@
 {
-  "scenario": "N:1 aggregate — atomic pred effusions covering one umbrella GT",
-  "description": "GT 'Bilateral pleural effusions' is a clinically real aggregation. The predictor split it into left + right atoms; both pred rows → `aggregate`.",
+  "scenario": "N:1 umbrella — atomic pred effusions covering one umbrella GT",
+  "description": "GT 'Bilateral pleural effusions' is a clinically real aggregation. The predictor split it into left + right atoms; both pred rows bind to it.",
   "user": {
     "pred_findings": [
       {
@@ -47,20 +47,17 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "GT names pathology (pleural effusion) + bilateral anatomy; covers the left atom.",
-        "match_scope": "aggregate"
+        "reasoning": "GT names pathology (pleural effusion) + bilateral anatomy; covers the left atom."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_1",
-        "reasoning": "Same umbrella covers the right atom — second row, same gt_id.",
-        "match_scope": "aggregate"
+        "reasoning": "Same umbrella covers the right atom — second row, same gt_id."
       },
       {
         "pred_id": "p_3",
         "gt_id": "gt_2",
-        "reasoning": "Heart size normal ≈ cardiac silhouette WNL.",
-        "match_scope": "direct"
+        "reasoning": "Heart size normal ≈ cardiac silhouette WNL."
       }
     ],
     "unmatched_pred": [],

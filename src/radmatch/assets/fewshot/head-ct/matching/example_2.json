@@ -1,6 +1,6 @@
 {
-  "scenario": "1:N aggregate — `No acute intracranial hemorrhage` covers hemorrhage-type rule-outs",
-  "description": "Pred 'No acute intracranial hemorrhage.' is the conventional aggregate negative for SDH / EDH / SAH / IVH rule-outs. Each multi-bind row → `aggregate`. The 1:1 row is `direct`.",
+  "scenario": "1:N umbrella — `No acute intracranial hemorrhage` covers hemorrhage-type rule-outs",
+  "description": "Pred 'No acute intracranial hemorrhage.' is the conventional umbrella negative for SDH / EDH / SAH / IVH rule-outs.",
   "user": {
     "pred_findings": [
       {
@@ -68,38 +68,32 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "'Intracranial hemorrhage' is the parent class containing SDH; pred explicitly rules it out.",
-        "match_scope": "aggregate"
+        "reasoning": "'Intracranial hemorrhage' is the parent class containing SDH; pred explicitly rules it out."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_2",
-        "reasoning": "Same parent rule-out covers EDH.",
-        "match_scope": "aggregate"
+        "reasoning": "Same parent rule-out covers EDH."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_3",
-        "reasoning": "Same parent rule-out covers SAH.",
-        "match_scope": "aggregate"
+        "reasoning": "Same parent rule-out covers SAH."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_4",
-        "reasoning": "Same parent rule-out covers IVH.",
-        "match_scope": "aggregate"
+        "reasoning": "Same parent rule-out covers IVH."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_5",
-        "reasoning": "Pred bundles mass effect + midline shift in one statement; covers the no-mass-effect atom.",
-        "match_scope": "aggregate"
+        "reasoning": "Pred bundles mass effect + midline shift in one statement; covers the no-mass-effect atom."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_6",
-        "reasoning": "Same bundled negative covers the no-midline-shift atom.",
-        "match_scope": "aggregate"
+        "reasoning": "Same bundled negative covers the no-midline-shift atom."
       }
     ],
     "unmatched_pred": [],

@@ -12,7 +12,7 @@ import json
 import logging
 from typing import TYPE_CHECKING
 
-from radmatch import constants, io
+from radmatch import io
 from radmatch.llm_utils import llm_clients, prompts
 
 if TYPE_CHECKING:
@@ -119,7 +119,7 @@ def extract_indications(
     if client_factory is None:
         llm_clients.assert_credentials_for(llm_extractor)
         client_factory = llm_clients.build_client
-    client = client_factory(model=llm_extractor, max_tokens=constants.MAX_TOKENS, reasoning=reasoning)
+    client = client_factory(model=llm_extractor, reasoning=reasoning)
     system_prompt = prompts.load_prompt(prompts.PROMPT_INDICATION_EXTRACTION)
 
     failed = 0

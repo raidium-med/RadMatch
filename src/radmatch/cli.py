@@ -75,7 +75,6 @@ def handle_score(args: argparse.Namespace) -> None:
         reasoning=args.reasoning,
         indications_dir=Path(args.indications) if args.indications else None,
         max_score_retries=args.score_retries,
-        retry_degraded=args.retry_degraded,
     )
 
 
@@ -189,21 +188,21 @@ def _add_score_retry_argument(parser: argparse.ArgumentParser) -> None:
         type=int,
         default=scoring_inference.DEFAULT_MAX_RETRIES,
         help=(
-            "Extra Stage 3b attempts on a malformed attribute-errors reply before dropping "
-            f"the report's text errors (default: {scoring_inference.DEFAULT_MAX_RETRIES})"
+            "Extra attempts per Stage 3b chunk on a malformed attribute-errors reply before "
+            f"splitting the chunk (default: {scoring_inference.DEFAULT_MAX_RETRIES})"
         ),
     )
 
 
 def _add_retry_degraded_argument(parser: argparse.ArgumentParser) -> None:
-    """Revisit reports that fell back rather than failed. Off by default: a fallback
-    writes valid cached output, so retrying it re-pays the LLM cost every run."""
+    """Revisit reports whose Stage 2 fell back rather than failed. Off by default: a
+    fallback writes valid cached output, so retrying it re-pays the LLM cost every run."""
     parser.add_argument(
         "--retry-degraded",
         action="store_true",
         help=(
-            "Recompute reports whose cached result fell back — a Stage 2 validation "
-            "fallback or a degraded Stage 3b payload (default: reuse them)"
+            "Re-match reports whose cached Stage 2 result fell back to the valid subset "
+            "of its matches (default: reuse them)"
         ),
     )
 
@@ -237,13 +236,14 @@ Examples:
   radmatch run_all \\
     --reports-gt /path/to/gt --reports-pred /path/to/pred \\
     --output-dir /path/to/output \\
-    --llm-extractor gpt-5.2 --llm-judge gpt-5.2 --workers 20 --fewshot chest-ct
+    --llm-extractor local:google/gemma-4-31B-it --llm-judge local:google/gemma-4-31B-it \\
+    --workers 64 --fewshot chest-ct
 
   # Or one stage at a time, reusing the previous stage's output
   radmatch extract_findings --reports-gt ... --reports-pred ... --output-dir ... \\
-    --llm-extractor gpt-5.2
-  radmatch match --results-dir /path/to/output/radmatch_results --llm-judge gpt-5.2
-  radmatch score --results-dir /path/to/output/radmatch_results --llm-judge gpt-5.2
+    --llm-extractor local:google/gemma-4-31B-it
+  radmatch match --results-dir /path/to/output/radmatch_results --llm-judge local:google/gemma-4-31B-it
+  radmatch score --results-dir /path/to/output/radmatch_results --llm-judge local:google/gemma-4-31B-it
         """,
     )
     sub = parser.add_subparsers(dest="command", required=True, help="Command to execute")
@@ -261,7 +261,6 @@ Examples:
     parser_score = sub.add_parser("score", help="Stage 3 — score the alignment produced by Stage 2")
     _add_judge_arguments(parser_score)
     _add_score_retry_argument(parser_score)
-    _add_retry_degraded_argument(parser_score)
     parser_score.set_defaults(func=handle_score)
 
     parser_run_all = sub.add_parser("run_all", help="Run full pipeline: extract → match → score")

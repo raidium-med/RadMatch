@@ -11,13 +11,7 @@ from typing import TYPE_CHECKING, Literal
 from radmatch import constants, io
 from radmatch.finding_extraction.extract_utils import validate_and_normalize_finding
 from radmatch.llm_utils import llm_clients, prompts
-from radmatch.matching.utils import (
-    MATCHING_SCHEMA,
-    build_matching_messages,
-    canonical_order,
-    normalize_match_scopes,
-    validate_matching_output,
-)
+from radmatch.matching.utils import MATCHING_SCHEMA, build_matching_messages, canonical_order, validate_matching_output
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -30,10 +24,8 @@ logger = logging.getLogger(__name__)
 # ============================================================================
 
 
-# Sized for reasoning models: the budget covers hidden reasoning tokens plus the
-# answer, and a heavy reasoner can burn >8k thinking before returning anything.
-_MAX_TOKENS_MATCHING: int = 32768
 DEFAULT_MAX_RETRIES: int = 2
+_MATCHING_TIMEOUT_S: float = 3 * constants.LLM_REQUEST_TIMEOUT_S
 
 
 @dataclass
@@ -69,7 +61,7 @@ def _attempt_match_call(
         ctx.client,
         messages=messages,
         response_format=MATCHING_SCHEMA,
-        max_tokens=_MAX_TOKENS_MATCHING,
+        timeout=_MATCHING_TIMEOUT_S,
     )
     try:
         parsed = json.loads(content)
@@ -133,15 +125,12 @@ def _fallback_match_result(
         pid = m.get("pred_id")
         gid = m.get("gt_id")
         if pid in input_pred_ids and gid in input_gt_ids and (pid, gid) not in seen_pairs:
-            scope = m.get("match_scope")
-            if scope not in constants.MATCH_SCOPE_VALUES:
-                continue
-            accepted.append({"pred_id": pid, "gt_id": gid, "reasoning": m.get("reasoning", ""), "match_scope": scope})
+            accepted.append({"pred_id": pid, "gt_id": gid, "reasoning": m.get("reasoning", "")})
             seen_pred.add(pid)
             seen_gt.add(gid)
             seen_pairs.add((pid, gid))
     return {
-        "matches": canonical_order(normalize_match_scopes(accepted), pred_id_order),
+        "matches": canonical_order(accepted, pred_id_order),
         "unmatched_pred": sorted(input_pred_ids - seen_pred),
         "unmatched_gt": sorted(input_gt_ids - seen_gt),
         "validation_fallback": True,
@@ -195,7 +184,7 @@ def match_findings(
         if outcome.status == "success":
             parsed = outcome.parsed or {}
             return {
-                "matches": canonical_order(normalize_match_scopes(parsed.get("matches", [])), pred_id_order),
+                "matches": canonical_order(parsed.get("matches", []), pred_id_order),
                 "unmatched_pred": list(parsed.get("unmatched_pred", [])),
                 "unmatched_gt": list(parsed.get("unmatched_gt", [])),
                 "validation_fallback": False,
@@ -226,23 +215,31 @@ def match_findings(
 # ============================================================================
 
 
-def _matching_cache_valid(
-    path: Path, expected_config: dict[str, object], retry_degraded: bool = False
-) -> bool:
-    """Cached `matching/<series>.json` is valid iff it exists and its `matching_config`
-    matches the current judge / fewshot / reasoning / prompt hash. Files from earlier
-    versions (no stamp, or a different prompt hash) count as stale.
+def _matching_config(llm_judge: str, fewshot: str | None, reasoning: str) -> dict[str, object]:
+    """The config stamped into each `matching/<series>.json`; a cached file is reused only under the same one."""
+    return {
+        "judge": llm_judge,
+        "fewshot": fewshot,
+        "reasoning": reasoning,
+        "prompt_hash": prompts.prompt_fingerprint(prompts.PROMPT_MATCHING),
+        "schema_hash": io.fingerprint(MATCHING_SCHEMA),
+    }
+
+
+def _findings_fingerprint(gt_findings: list[dict], pred_findings: list[dict], indication: str) -> str:
+    """Hash of the Stage 2 inputs, so findings re-extracted under the same IDs force a re-match."""
+    return io.fingerprint({"gt": gt_findings, "pred": pred_findings, "indication": indication})
+
+
+def _matching_cache_valid(path: Path, stamps: dict[str, object], retry_degraded: bool = False) -> bool:
+    """Cached `matching/<series>.json` is valid iff it exists and carries the same stamps.
 
     With `retry_degraded`, a cached result that fell back is also treated as stale — a
     fallback keeps only the valid subset of matches, so re-asking is worth the cost."""
-    if not path.exists():
+    cached = io.load_json(path, raise_on_error=False) if path.exists() else None
+    if not isinstance(cached, dict) or (retry_degraded and cached.get("validation_fallback")):
         return False
-    cached = io.load_json(path, raise_on_error=False)
-    if not isinstance(cached, dict):
-        return False
-    if retry_degraded and cached.get("validation_fallback"):
-        return False
-    return cached.get("matching_config") == expected_config
+    return all(cached.get(k) == v for k, v in stamps.items())
 
 
 def match_dataset(
@@ -265,7 +262,7 @@ def match_dataset(
     `series_allowlist` restricts the run to the given stems, so `--limit` against a
     directory holding a larger prior run does not pick up stale files.
     `indications_dir` defaults to `output_dir/indications/` when present.
-    `client_factory(model, max_tokens, reasoning) -> Client` overrides construction
+    `client_factory(model, reasoning) -> Client` overrides construction
     for testing.
     """
     if client_factory is None:
@@ -286,20 +283,22 @@ def match_dataset(
         shared_set &= series_allowlist
     shared = sorted(shared_set)
 
-    # Stamp each `matching/<series>.json` with the producing config so a
-    # subsequent run with a different judge / fewshot / reasoning invalidates
-    # the cache instead of silently scoring stale alignments.
-    matching_config = {
-        "judge": llm_judge,
-        "fewshot": fewshot,
-        "reasoning": reasoning,
-        "prompt_hash": prompts.prompt_fingerprint(prompts.PROMPT_MATCHING),
-    }
-    todo = [
-        s
-        for s in shared
-        if not _matching_cache_valid(matching_dir / f"{s}.json", matching_config, retry_degraded)
-    ]
+    matching_config = _matching_config(llm_judge, fewshot, reasoning)
+
+    def _inputs(series_uuid: str) -> tuple[list[dict], list[dict], str, dict[str, object]]:
+        gt = [validate_and_normalize_finding(f) for f in io.load_json(gt_files[series_uuid], raise_on_error=True)]
+        pred = [validate_and_normalize_finding(f) for f in io.load_json(pred_files[series_uuid], raise_on_error=True)]
+        indication = indications.get(series_uuid, "")
+        fingerprint = _findings_fingerprint(gt, pred, indication)
+        return gt, pred, indication, {"matching_config": matching_config, "findings_fingerprint": fingerprint}
+
+    def _cached(series_uuid: str) -> bool:
+        try:
+            return _matching_cache_valid(matching_dir / f"{series_uuid}.json", _inputs(series_uuid)[3], retry_degraded)
+        except Exception:  # noqa: BLE001 — unreadable inputs are reported by `_match_one`
+            return False
+
+    todo = [s for s in shared if not _cached(s)]
     skipped = len(shared) - len(todo)
 
     io.log_stage_banner(
@@ -327,7 +326,7 @@ def match_dataset(
     if client_factory is None:
         client_factory = llm_clients.build_client
     ctx = MatchingContext(
-        client=client_factory(model=llm_judge, max_tokens=constants.MAX_TOKENS, reasoning=reasoning),
+        client=client_factory(model=llm_judge, reasoning=reasoning),
         fewshot=fewshot,
         max_validation_retries=max_match_retries,
     )
@@ -336,12 +335,9 @@ def match_dataset(
 
     def _match_one(series_uuid: str) -> tuple[str, dict | None, str | None]:
         try:
-            gt_findings = io.load_json(gt_files[series_uuid], raise_on_error=True)
-            pred_findings = io.load_json(pred_files[series_uuid], raise_on_error=True)
-            gt_norm = [validate_and_normalize_finding(f) for f in gt_findings]
-            pred_norm = [validate_and_normalize_finding(f) for f in pred_findings]
-            result = match_findings(pred_norm, gt_norm, series_uuid, ctx, indications.get(series_uuid, ""))
-            io.save_json({**result, "matching_config": matching_config}, matching_dir / f"{series_uuid}.json")
+            gt_norm, pred_norm, indication, stamps = _inputs(series_uuid)
+            result = match_findings(pred_norm, gt_norm, series_uuid, ctx, indication)
+            io.save_json({**result, **stamps}, matching_dir / f"{series_uuid}.json")
             return series_uuid, result, None
         except Exception as exc:  # noqa: BLE001 — soft-fail per pair, surface in summary
             logger.error("[Report %s] Stage 2 failed: %s", series_uuid, exc)

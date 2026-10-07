@@ -1,6 +1,6 @@
 {
-  "scenario": "1:N aggregate — `Lungs are clear` covers atomic consolidation negatives",
-  "description": "Pred 'Lungs are clear.' is a parent-anatomy claim (lungs ⊃ each lobe) that explicitly addresses the pathology (no consolidation). Each multi-bind row → `aggregate`. The 1:1 rows are `direct`.",
+  "scenario": "1:N umbrella — `Lungs are clear` covers atomic consolidation negatives",
+  "description": "Pred 'Lungs are clear.' is a parent-anatomy claim (lungs ⊃ each lobe) that explicitly addresses the pathology (no consolidation).",
   "user": {
     "pred_findings": [
       {
@@ -61,26 +61,22 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Lungs ⊃ right lung; 'clear' entails 'no consolidation'.",
-        "match_scope": "aggregate"
+        "reasoning": "Lungs ⊃ right lung; 'clear' entails 'no consolidation'."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_2",
-        "reasoning": "Same parent-anatomy claim covers the left lung atom — second row, same pred_id.",
-        "match_scope": "aggregate"
+        "reasoning": "Same parent-anatomy claim covers the left lung atom — second row, same pred_id."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_3",
-        "reasoning": "Cardiomediastinal silhouette normal statement matches cardiac silhouette WNL.",
-        "match_scope": "direct"
+        "reasoning": "Cardiomediastinal silhouette normal statement matches cardiac silhouette WNL."
       },
       {
         "pred_id": "p_3",
         "gt_id": "gt_4",
-        "reasoning": "Identical no-effusion statement.",
-        "match_scope": "direct"
+        "reasoning": "Identical no-effusion statement."
       }
     ],
     "unmatched_pred": [],

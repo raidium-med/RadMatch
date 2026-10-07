@@ -5,8 +5,8 @@ Three worked examples of the alignment patterns Stage 2 has to get right. Findin
 | File | Scenario |
 |------|----------|
 | `example_1.json` | Laterality flip on temporal sequelae + SPU on sphenoid + clean matches |
-| `example_2.json` | 1:N aggregate — `No acute intracranial hemorrhage` covers hemorrhage-type rule-outs |
-| `example_3.json` | N:1 aggregate — atomic pred mastoid findings covering one umbrella GT |
+| `example_2.json` | 1:N umbrella — `No acute intracranial hemorrhage` covers hemorrhage-type rule-outs |
+| `example_3.json` | N:1 umbrella — atomic pred mastoid findings covering one umbrella GT |
 
 ## Format
 

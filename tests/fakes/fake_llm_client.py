@@ -39,6 +39,7 @@ class FakeLLMClient(llm_clients.Client):
         messages: Sequence[Mapping[str, object]],
         response_format: Mapping[str, object] | None = None,
         max_tokens: int | None = None,
+        timeout: float | None = None,
     ) -> str:
         self.calls.append(
             {

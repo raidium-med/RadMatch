@@ -98,19 +98,13 @@ def _filter_panel(
                 key="filter_comparison",
             )
 
-        # Row 3: match outcomes / match scope / actionable errors.
-        col_outcome, col_scope, col_err = st.columns(3)
+        # Row 3: match outcomes / actionable errors.
+        col_outcome, col_err = st.columns(2)
         with col_outcome:
             outcome_filters = st.multiselect(
                 "Match outcomes",
                 options=list(radmatch_constants.MUC_CATEGORIES),
                 key="filter_has_outcome",
-            )
-        with col_scope:
-            scope_filters = st.multiselect(
-                "Match scope",
-                options=list(radmatch_constants.MATCH_SCOPE_VALUES),
-                key="filter_match_scope",
             )
         with col_err:
             max_err = int(index_df["actionable_errors"].max()) if "actionable_errors" in index_df.columns else 0
@@ -135,8 +129,6 @@ def _filter_panel(
     if outcome_filters:
         outcome_cols = [f"muc_{cat.lower()}" for cat in outcome_filters]
         df = df[df[outcome_cols].gt(0).all(axis=1)]
-    if scope_filters and "match_scopes" in df.columns:
-        df = df[df["match_scopes"].apply(lambda lst: _all_present(lst, scope_filters))]
     df = df[(df["actionable_errors"] >= err_range[0]) & (df["actionable_errors"] <= err_range[1])]
     df = df.sort_values("report_id")
 

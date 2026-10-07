@@ -1,6 +1,6 @@
 {
   "scenario": "Laterality flip on temporal sequelae + SPU on sphenoid + clean matches",
-  "description": "Real subset of head-ct/findings_{gt,pred}/example_1. Demonstrates a laterality flip on lateralized brain pathology (gt 'left temporal pole' hemorrhagic sequelae vs pred 'right temporal pole' — opposite hemisphere; status agrees so it's a major location error, not INC), a hallucinated mucosal thickening of the sphenoid sinus in the prediction (SPU), and a clean direct match on the left temporal horn ventricular traction.",
+  "description": "Real subset of head-ct/findings_{gt,pred}/example_1. Demonstrates a laterality flip on lateralized brain pathology (gt 'left temporal pole' hemorrhagic sequelae vs pred 'right temporal pole' — opposite hemisphere; status agrees so it's a major location error, not INC), a hallucinated mucosal thickening of the sphenoid sinus in the prediction (SPU), and a clean 1:1 match on the left temporal horn ventricular traction.",
   "user": {
     "pred_findings": [
       {
@@ -61,20 +61,17 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Same lesion entity (hypodense cortico-subcortical hemorrhagic sequelae of the temporal pole / lobe, without spontaneous hyperdensity). Pred says right side, gt says left side — laterality flip kept in matches; status agrees so Stage 3 will flag the location error rather than INC.",
-        "match_scope": "direct"
+        "reasoning": "Same lesion entity (hypodense cortico-subcortical hemorrhagic sequelae of the temporal pole / lobe, without spontaneous hyperdensity). Pred says right side, gt says left side — laterality flip kept in matches; status agrees so Stage 3 will flag the location error rather than INC."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_2",
-        "reasoning": "Identical description of passive traction of the left temporal horn.",
-        "match_scope": "direct"
+        "reasoning": "Identical description of passive traction of the left temporal horn."
       },
       {
         "pred_id": "p_3",
         "gt_id": "gt_3",
-        "reasoning": "Identical completeness statement about the ventricular system.",
-        "match_scope": "direct"
+        "reasoning": "Identical completeness statement about the ventricular system."
       }
     ],
     "unmatched_pred": [

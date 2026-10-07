@@ -1,6 +1,6 @@
 {
-  "scenario": "1:N aggregate — pred enumerates spinal levels covering multiple GT atoms",
-  "description": "Pred 'Multilevel cervical spondylosis from C2-C3 through C7-T1.' explicitly enumerates the spinal levels and names the pathology. GT atomizes at each level. Each multi-bind row → `aggregate` (the levels are explicitly named in the pred). The thoracic finding is a 1:1 `direct`.",
+  "scenario": "1:N umbrella — pred enumerates spinal levels covering multiple GT atoms",
+  "description": "Pred 'Multilevel cervical spondylosis from C2-C3 through C7-T1.' explicitly enumerates the spinal levels and names the pathology. GT atomizes at each level. The pred binds each level (they are explicitly named in the pred).",
   "user": {
     "pred_findings": [
       {
@@ -61,32 +61,27 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Pred enumerates C2-C3 through C7-T1; C3-C4 is in the named range.",
-        "match_scope": "aggregate"
+        "reasoning": "Pred enumerates C2-C3 through C7-T1; C3-C4 is in the named range."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_2",
-        "reasoning": "C4-C5 is in the explicitly enumerated range.",
-        "match_scope": "aggregate"
+        "reasoning": "C4-C5 is in the explicitly enumerated range."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_3",
-        "reasoning": "C5-C6 is in the explicitly enumerated range.",
-        "match_scope": "aggregate"
+        "reasoning": "C5-C6 is in the explicitly enumerated range."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_4",
-        "reasoning": "C6-C7 is in the explicitly enumerated range.",
-        "match_scope": "aggregate"
+        "reasoning": "C6-C7 is in the explicitly enumerated range."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_5",
-        "reasoning": "Same finding entity (mild thoracic scoliosis).",
-        "match_scope": "direct"
+        "reasoning": "Same finding entity (mild thoracic scoliosis)."
       }
     ],
     "unmatched_pred": [],

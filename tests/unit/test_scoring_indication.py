@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 from radmatch.scoring import inference, pipeline
 
 
@@ -15,7 +17,6 @@ def test_detect_attribute_errors_includes_indication(fake_client, ok, make_findi
         matches=matches,
         findings_pred={"p1": pred[0]},
         findings_gt={"g1": gt[0]},
-        structured_errors_per_pair=[[]],
         series_uuid="s1",
         client=client,
         indication="Trauma — r/o pneumothorax",
@@ -31,21 +32,20 @@ def test_detect_attribute_errors_accepts_measurement_dimension(fake_client, ok, 
     matches = [{"pred_id": "p1", "gt_id": "g1", "reasoning": ""}]
     meas_err = {"dimension": "measurement", "severity": "major", "reasoning": "13.0 cm normal vs 13.5 cm splenomegaly"}
     client = fake_client(ok({"errors_per_match": [[meas_err]]}))
-    out, _degraded = inference.detect_attribute_errors(
+    out = inference.detect_attribute_errors(
         matches=matches,
         findings_pred={"p1": pred[0]},
         findings_gt={"g1": gt[0]},
-        structured_errors_per_pair=[[]],
         series_uuid="s1",
         client=client,
     )
     assert out[0] == [meas_err]
 
 
-def test_detect_attribute_errors_drops_all_on_length_mismatch(fake_client, ok, make_finding):
+def test_detect_attribute_errors_raises_on_length_mismatch(fake_client, ok, make_finding):
     """A per-match array whose length != number of matches is untrustworthy —
-    positional realignment would mis-attribute errors — so after retries all text
-    errors for the report are dropped (pairs still score via Stage 3a)."""
+    positional realignment would mis-attribute errors — so after retries it raises
+    rather than degrading the report to no attribute errors."""
     gt = [make_finding("g1")]
     pred = [make_finding("p1")]
     matches = [{"pred_id": "p1", "gt_id": "g1", "reasoning": ""}]
@@ -59,17 +59,15 @@ def test_detect_attribute_errors_drops_all_on_length_mismatch(fake_client, ok, m
         }
     )
     client = fake_client(bad, bad)  # malformed on both the initial call and the retry
-    out, degraded = inference.detect_attribute_errors(
-        matches=matches,
-        findings_pred={"p1": pred[0]},
-        findings_gt={"g1": gt[0]},
-        structured_errors_per_pair=[[]],
-        series_uuid="s1",
-        client=client,
-        max_retries=1,
-    )
-    assert out == [[]]
-    assert degraded is True, "the caller needs to know these empty errors are not a clean result"
+    with pytest.raises(ValueError):
+        inference.detect_attribute_errors(
+            matches=matches,
+            findings_pred={"p1": pred[0]},
+            findings_gt={"g1": gt[0]},
+            series_uuid="s1",
+            client=client,
+            max_retries=1,
+        )
     assert len(client.calls) == 2  # initial + 1 retry, per max_retries
 
 
@@ -80,14 +78,13 @@ def test_detect_attribute_errors_retries_malformed_then_recovers(fake_client, ok
     pred = [make_finding("p1")]
     matches = [{"pred_id": "p1", "gt_id": "g1", "reasoning": ""}]
     loc_err = {"dimension": "location", "severity": "major", "reasoning": "left vs right"}
-    bad = ok({"errors_per_match": [[], []]})  # 2 lists for 1 match → malformed
+    bad = ok({"errors_per_match": [[], [loc_err]]})
     good = ok({"errors_per_match": [[loc_err]]})
     client = fake_client(bad, good)
-    out, _degraded = inference.detect_attribute_errors(
+    out = inference.detect_attribute_errors(
         matches=matches,
         findings_pred={"p1": pred[0]},
         findings_gt={"g1": gt[0]},
-        structured_errors_per_pair=[[]],
         series_uuid="s1",
         client=client,
     )
@@ -104,7 +101,6 @@ def test_detect_attribute_errors_omits_empty_indication(fake_client, ok, make_fi
         matches=matches,
         findings_pred={"p1": pred[0]},
         findings_gt={"g1": gt[0]},
-        structured_errors_per_pair=[[]],
         series_uuid="s1",
         client=client,
     )

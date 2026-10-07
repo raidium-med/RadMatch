@@ -405,7 +405,6 @@ class CounterpartMatchInfo:
     match_reasoning: str | None
     structured_errors: list[dict[str, object]]
     text_errors: list[dict[str, object]]
-    match_scope: str | None = None
 
 
 # Under N:N, a finding identified by ANY pred is a hit even if another verbose pred
@@ -473,7 +472,6 @@ def build_match_index(
                 match_reasoning=m.get("reasoning"),
                 structured_errors=structured,
                 text_errors=text,
-                match_scope=m.get("match_scope"),
             )
         )
         pred_cps.setdefault(pred_id, []).append(
@@ -483,7 +481,6 @@ def build_match_index(
                 match_reasoning=m.get("reasoning"),
                 structured_errors=structured,
                 text_errors=text,
-                match_scope=m.get("match_scope"),
             )
         )
 
@@ -732,47 +729,6 @@ _SIGNIFICANCE_COLORS = {
 }
 
 
-_MATCH_SCOPE_COLORS: dict[str, str] = {
-    "direct": "#6b7280",  # slate — neutral, 1:1 default
-    "aggregate": "#4f6987",  # muted blue — legitimate umbrella claim
-    "generic": "#a16207",  # muted amber — boilerplate cover, gates safety credit
-}
-
-
-_SCOPE_CONCERN_RANK = {"direct": 0, "aggregate": 1, "generic": 2}
-
-
-def _summarise_scopes(scopes: list[str | None]) -> str | None:
-    """Most concerning scope across a counterpart list (generic > aggregate > direct).
-    Returns None when no scopes are present (MIS / SPU)."""
-    valid = [s for s in scopes if s]
-    if not valid:
-        return None
-    return max(valid, key=lambda s: _SCOPE_CONCERN_RANK.get(s, -1))
-
-
-def _scope_badge(scope: str | None, *, font_size: str, padding: str, extra_style: str = "") -> str:
-    """Outlined pill with the scope-specific color. Empty string on MIS / SPU."""
-    if not scope:
-        return ""
-    color = _MATCH_SCOPE_COLORS.get(scope, "#6b7280")
-    return (
-        f"<span style='font-size:{font_size};color:{color};border:1px solid {color};"
-        f"padding:{padding};border-radius:0.2rem;font-weight:600;text-transform:uppercase;"
-        f"background:transparent;letter-spacing:0.02em;{extra_style}'>{scope}</span>"
-    )
-
-
-def build_match_scope_badge(scope: str | None) -> str:
-    """Standard chip used next to the Matching Reasoning header on the detail panel."""
-    return _scope_badge(scope, font_size="0.62rem", padding="0.08rem 0.35rem")
-
-
-def build_match_scope_badge_compact(scope: str | None) -> str:
-    """Tighter variant for the meta row of a finding card."""
-    return _scope_badge(scope, font_size="0.55rem", padding="0.02rem 0.25rem", extra_style="line-height:1;")
-
-
 def build_significance_badge(finding: dict[str, object]) -> str:
     """Standalone badge for the finding's clinical_significance.
 
@@ -851,9 +807,6 @@ def render_finding_card(
         labels = [_html.escape(format_finding_id(c.counterpart_id, is_gt=not is_gt)) for c in info.counterparts]
         rendered = labels[0] if len(labels) == 1 else "{" + ", ".join(labels) + "}"
         id_html += f"<span class='finding-meta'> → {rendered}</span>"
-        # One chip per finding. When multi-bind rows disagree, show the most
-        # concerning scope so vagueness isn't hidden by a friendlier sibling row.
-        id_html += build_match_scope_badge_compact(_summarise_scopes([c.match_scope for c in info.counterparts]))
     return (
         f"<div class='{card_class}'>"
         f"<div style='display:flex;justify-content:space-between;align-items:center;gap:0.5rem;'>"

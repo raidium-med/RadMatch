@@ -1,6 +1,6 @@
 {
-  "scenario": "N:1 aggregate — atomic pred pulmonary nodules covering one umbrella GT",
-  "description": "GT 'Multiple bilateral pulmonary nodules, the largest 6 mm.' is a real clinical aggregation. The predictor specified two atomic nodules; both pred rows → `aggregate`.",
+  "scenario": "N:1 umbrella — atomic pred pulmonary nodules covering one umbrella GT",
+  "description": "GT 'Multiple bilateral pulmonary nodules, the largest 6 mm.' is a real clinical aggregation. The predictor specified two atomic nodules; both pred rows bind to it.",
   "user": {
     "pred_findings": [
       {
@@ -65,20 +65,17 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "GT names pathology (pulmonary nodules) + bilateral anatomy; covers the RUL atom.",
-        "match_scope": "aggregate"
+        "reasoning": "GT names pathology (pulmonary nodules) + bilateral anatomy; covers the RUL atom."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_1",
-        "reasoning": "Same umbrella covers the LLL atom — second row, same gt_id.",
-        "match_scope": "aggregate"
+        "reasoning": "Same umbrella covers the LLL atom — second row, same gt_id."
       },
       {
         "pred_id": "p_3",
         "gt_id": "gt_2",
-        "reasoning": "Identical no-effusion statement.",
-        "match_scope": "direct"
+        "reasoning": "Identical no-effusion statement."
       }
     ],
     "unmatched_pred": [],

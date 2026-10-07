@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import os
+
 # ============================================================================
 # Finding Schema Constants
 # ============================================================================
@@ -29,10 +31,13 @@ ACTIVE_COMPARISONS: frozenset[str] = frozenset({"worsening", "new"})
 # LLM Configuration
 # ============================================================================
 
-# Catalog of supported models organized by provider. Routing only — RadMatch does
-# not price requests.
-MODEL_CATALOG: dict[str, set[str]] = {
-    "mistral": {"magistral-medium-2509"},
+# Catalog of supported models organized by provider, with list prices in USD per 1M
+# tokens (standard tier, short context) used to report `token_cost`. A `None` price
+# routes the model without pricing it.
+MODEL_CATALOG: dict[str, dict[str, dict[str, float] | None]] = {
+    "mistral": {
+        "magistral-medium-2509": {"input": 2.00, "output": 5.00, "cached_input": 0.20},
+    },
     # "openai" routes through OpenAIClient, which talks to Azure OpenAI when
     # AZURE_OPENAI_ENDPOINT is set and api.openai.com otherwise. GPT models plus the
     # non-OpenAI families served over the same OpenAI-compatible Azure route (Kimi,
@@ -42,41 +47,52 @@ MODEL_CATALOG: dict[str, set[str]] = {
     # Azure route — deployment names are chosen per resource, so edit this set to match
     # your own.
     "openai": {
-        "gpt-4.1",
-        "gpt-5",
-        "gpt-5.1",
-        "gpt-5.2",
-        "gpt-5.5",
-        "gpt-5-4",
-        "gpt-5.4-mini",
-        "gpt-5.4-nano",
-        "gpt-5-mini",
-        "gpt-5-nano",
-        "kimi-k2.6",
-        "deepseek-v4-pro",
+        "gpt-4.1": {"input": 2.00, "output": 8.00, "cached_input": 0.50},
+        "gpt-5": {"input": 1.25, "output": 10.00, "cached_input": 0.125},
+        "gpt-5.1": {"input": 1.25, "output": 10.00, "cached_input": 0.125},
+        "gpt-5.2": {"input": 1.25, "output": 10.00, "cached_input": 0.125},
+        "gpt-5.5": {"input": 5.00, "output": 30.00, "cached_input": 0.50},
+        "gpt-5-4": {"input": 2.50, "output": 15.00, "cached_input": 0.25},  # gpt-5.4 deployment
+        "gpt-5.4-mini": {"input": 0.75, "output": 4.50, "cached_input": 0.075},
+        "gpt-5.4-nano": {"input": 0.20, "output": 1.25, "cached_input": 0.02},
+        "gpt-5-mini": {"input": 0.25, "output": 2.00, "cached_input": 0.025},
+        "gpt-5-nano": {"input": 0.05, "output": 0.40, "cached_input": 0.005},
+        "gpt-5.6-sol": {"input": 4.00, "output": 20.00, "cached_input": 0.40},
+        "gpt-5.6-terra": {"input": 2.00, "output": 12.00, "cached_input": 0.20},
+        "gpt-5.6-luna": {"input": 0.20, "output": 1.20, "cached_input": 0.02},
+        "gpt-6-sol": {"input": 2.00, "output": 10.00, "cached_input": 0.20},
+        "gpt-6-luna": {"input": 0.10, "output": 0.50, "cached_input": 0.01},
+        "gpt-6-astra": {"input": 10.00, "output": 50.00, "cached_input": 1.00},
+        "kimi-k2.6": {"input": 0.95, "output": 4.00, "cached_input": 0.095},
+        "deepseek-v4-pro": {"input": 1.74, "output": 3.48, "cached_input": 0.174},
     },
     # Claude answers the Anthropic Messages API, not the OpenAI surface, so it routes
-    # through a dedicated AnthropicClient (json_schema structured output is emulated
-    # with a forced tool). Azure Foundry when ANTHROPIC_FOUNDRY_BASE_URL is set,
-    # api.anthropic.com otherwise.
+    # through a dedicated AnthropicClient (json_schema structured output maps to the
+    # native `output_config.format`). Azure Foundry when ANTHROPIC_FOUNDRY_BASE_URL is
+    # set, api.anthropic.com otherwise.
     "anthropic": {
-        "claude-opus-4-8",
-        "claude-fable-5",
+        "claude-opus-4-8": {"input": 5.00, "output": 25.00, "cached_input": 0.50},
+        "claude-opus-5-5": {"input": 4.00, "output": 20.00, "cached_input": 0.20},
+        "claude-fable-5": {"input": 10.00, "output": 50.00, "cached_input": 1.00},
+        "claude-fable-5-1": {"input": 10.00, "output": 50.00, "cached_input": 1.00},
     },
 }
 
-# Mapping from model name to provider (derived from MODEL_CATALOG)
+# Mapping from model name to provider and pricing (derived from MODEL_CATALOG)
 MODEL_TO_PROVIDER: dict[str, str] = {model: provider for provider, models in MODEL_CATALOG.items() for model in models}
+MODEL_PRICING: dict[str, dict[str, float]] = {
+    model: price for models in MODEL_CATALOG.values() for model, price in models.items() if price is not None
+}
 
 # Maximum number of tokens for LLM completion responses.
-MAX_TOKENS: int = 32768
+MAX_TOKENS: int = int(os.environ.get("RADMATCH_MAX_TOKENS") or 32768)
 
 # Maximum number of retry attempts for failed LLM API calls.
 MAX_RETRIES: int = 5
 
-# Bounds a single attempt (tenacity owns retries). Without it the SDKs default to
-# ~600s, so one hung socket holds a worker thread for ten minutes.
-LLM_REQUEST_TIMEOUT_S: float = 180.0
+# Default per-request timeout (seconds) for one LLM attempt; Stage 2 and Stage 3b derive
+# theirs from it. Tenacity, not the SDK, owns retries.
+LLM_REQUEST_TIMEOUT_S: float = float(os.environ.get("RADMATCH_REQUEST_TIMEOUT_S") or 180.0)
 
 
 # ============================================================================
@@ -120,14 +136,6 @@ EXAMPLE_FILE_PREFIX: str = "example_"
 # Stage 3 tags matched pairs COR / PAR / INC, then reclassifies any PAR holding a
 # major error to INC. Surviving PAR = matched but imprecise, still a safety hit.
 MUC_CATEGORIES: tuple[str, ...] = ("COR", "PAR", "INC", "MIS", "SPU")
-
-# Stage 2 scope label, gating safety-recall credit. 1:1 matches are `direct` only
-# (a 1:1 too vague for that must be left unmatched). Multi-bind matches are
-# `aggregate` when they name the pathology ("Bilateral pleural effusions") or
-# `generic` when they merely absorb it ("Study unremarkable"). Required on every
-# row — credit iff scope is direct/aggregate, or the GT finding is routine.
-MATCH_SCOPE_VALUES: tuple[str, ...] = ("direct", "aggregate", "generic")
-MATCH_SCOPE_CREDITED: frozenset[str] = frozenset({"direct", "aggregate"})
 
 ATTRIBUTE_ERROR_SEVERITIES: tuple[str, ...] = ("major", "minor")
 

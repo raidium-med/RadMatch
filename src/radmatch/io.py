@@ -11,6 +11,7 @@ Holds:
 from __future__ import annotations
 
 import concurrent.futures
+import hashlib
 import json
 import logging
 import os
@@ -37,6 +38,11 @@ def read_text_file(file_path: Path) -> str | None:
     except (FileNotFoundError, PermissionError, UnicodeDecodeError, OSError) as exc:
         logger.error("Failed to read %s: %s", file_path.name, exc)
         return None
+
+
+def fingerprint(obj: object) -> str:
+    """Short, stable content hash of a JSON-serializable object, for cache stamps."""
+    return hashlib.sha256(json.dumps(obj, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()[:16]
 
 
 def load_json(path: Path, default: T | None = None, raise_on_error: bool = True) -> object | T:

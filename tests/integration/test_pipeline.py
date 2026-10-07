@@ -8,16 +8,24 @@ from typing import TYPE_CHECKING
 import pytest
 
 from radmatch.finding_extraction.extract_utils import validate_and_normalize_finding
-from radmatch.llm_utils import prompts
+from radmatch.finding_extraction.inference import _stamp_findings_dir
+from radmatch.matching import inference as matching_inference
 from radmatch.matching.inference import MatchingContext, match_dataset, match_findings
-from radmatch.scoring.pipeline import ScoringContext, _fingerprint_matched_findings, score_dataset, score_pair
+from radmatch.scoring import inference
+from radmatch.scoring.pipeline import (
+    ScoringContext,
+    _fingerprint_matched_findings,
+    _stage3b_config,
+    score_dataset,
+    score_pair,
+)
 
 if TYPE_CHECKING:
     from pathlib import Path
 
 
-def _match(p: str, g: str, match_scope: str = "direct") -> dict:
-    return {"pred_id": p, "gt_id": g, "reasoning": "same", "match_scope": match_scope}
+def _match(p: str, g: str) -> dict:
+    return {"pred_id": p, "gt_id": g, "reasoning": "same"}
 
 
 def _write(path: Path, findings: list[dict]) -> None:
@@ -245,18 +253,17 @@ def test_template_predictor_fails_safety_gate(tmp_path, fake_client, ok, make_fi
 # ============================================================================
 
 
-def test_stage_3b_failure_does_not_crash_pipeline(fake_client, ok, make_finding):
-    """A persistent Stage 3b LLM failure must not propagate; the pair still scores via Stage 3a."""
+def test_stage_3b_failure_surfaces(fake_client, ok, make_finding):
+    """A Stage 3b LLM failure must surface so the report is recorded as failed. Degrading to
+    empty text errors is indistinguishable from a clean pair and is cached as such."""
     gt = [make_finding("g1", clinical_significance="critical", text="left nodule")]
     pred = [make_finding("p1", clinical_significance="critical", text="right nodule")]
     client = fake_client(
         ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),
         RuntimeError("Stage 3b LLM call failed"),
     )
-    out = _run_pair(gt, pred, "s", client)
-    # No structured-error dimensions trigger here (same status, same significance, no measurements);
-    # Stage 3b is empty due to the swallowed failure → record classifies as COR.
-    assert out["muc_records"][0]["muc_category"] == "COR"
+    with pytest.raises(RuntimeError):
+        _run_pair(gt, pred, "s", client)
 
 
 @pytest.mark.parametrize(
@@ -265,21 +272,31 @@ def test_stage_3b_failure_does_not_crash_pipeline(fake_client, ok, make_finding)
         pytest.param("[]", id="top-level-list"),
         pytest.param('{"errors_per_match": "not-a-list"}', id="errors_per_match-string"),
         pytest.param('{"errors_per_match": {"oops": []}}', id="errors_per_match-object"),
-        pytest.param('{"errors_per_match": ["not-a-list-of-lists"]}', id="inner-entry-not-a-list"),
     ],
 )
-def test_stage_3b_malformed_shape_degrades_to_empty(malformed_payload, fake_client, ok, make_finding):
-    """If Stage 3b returns valid JSON of the wrong shape, the pair still scores via Stage 3a's
-    deterministic comparators — no AttributeError / TypeError leaks up."""
+def test_stage_3b_malformed_shape_surfaces(malformed_payload, fake_client, ok, make_finding):
+    """Valid JSON of the wrong shape is unusable; after retries it must raise rather than
+    silently score the report as having no attribute errors."""
     gt = [make_finding("g1", clinical_significance="critical", text="nodule")]
     pred = [make_finding("p1", clinical_significance="critical", text="nodule")]
     client = fake_client(
         ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),
-        malformed_payload,
+        *[malformed_payload] * (inference.DEFAULT_MAX_RETRIES + 1),
+    )
+    with pytest.raises(ValueError):
+        _run_pair(gt, pred, "s", client)
+
+
+def test_stage_3b_valid_shape_with_unusable_entries_normalises_to_empty(fake_client, ok, make_finding):
+    """A correctly-shaped payload whose entries are not error objects is not a parse failure:
+    the entries are dropped by normalisation and the pair scores via Stage 3a."""
+    gt = [make_finding("g1", clinical_significance="critical", text="nodule")]
+    pred = [make_finding("p1", clinical_significance="critical", text="nodule")]
+    client = fake_client(
+        ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),
+        '{"errors_per_match": ["not-a-list-of-lists"]}',
     )
     out = _run_pair(gt, pred, "s", client)
-    # Pair matched on identical text — Stage 3a finds nothing, malformed Stage 3b degrades to []
-    # → record classifies as COR.
     assert out["muc_records"][0]["muc_category"] == "COR"
     assert out["muc_records"][0]["text_errors"] == []
 
@@ -291,20 +308,18 @@ def test_match_dataset_skips_series_with_cached_output(tmp_path, fake_client, ma
     out_dir = tmp_path / "out"
     _write(gt_dir / "s1.json", [make_finding("g1")])
     _write(pred_dir / "s1.json", [make_finding("p1")])
-    # `matching_config` must mirror the current run's config (judge / fewshot /
-    # reasoning / prompt hash) — otherwise the cache invalidates and the LLM is re-called.
     cached = {
         "matches": [_match("p1", "g1")],
         "unmatched_pred": [],
         "unmatched_gt": [],
         "validation_fallback": False,
         "retries": 0,
-        "matching_config": {
-            "judge": "fake",
-            "fewshot": None,
-            "reasoning": "none",
-            "prompt_hash": prompts.prompt_fingerprint(prompts.PROMPT_MATCHING),
-        },
+        "matching_config": matching_inference._matching_config("fake", None, "none"),
+        "findings_fingerprint": matching_inference._findings_fingerprint(
+            [validate_and_normalize_finding(make_finding("g1"))],
+            [validate_and_normalize_finding(make_finding("p1"))],
+            "",
+        ),
     }
     _write(out_dir / "matching" / "s1.json", cached)
 
@@ -320,15 +335,16 @@ def test_match_dataset_skips_series_with_cached_output(tmp_path, fake_client, ma
     assert client.calls == []  # no LLM call issued; cache was reused
 
 
-def test_match_dataset_invalidates_cache_on_config_change(tmp_path, fake_client, ok, make_finding):
-    """A cached matching/<series>.json built under a different judge/fewshot is
-    re-matched rather than silently reused."""
+@pytest.mark.parametrize("stale", ["config", "findings"])
+def test_match_dataset_invalidates_stale_cache(stale, tmp_path, fake_client, ok, make_finding):
+    """A cached matching/<series>.json built under another config, or from other findings
+    under the same IDs, is re-matched rather than silently reused."""
     gt_dir = tmp_path / "findings_gt"
     pred_dir = tmp_path / "findings_pred"
     out_dir = tmp_path / "out"
-    _write(gt_dir / "s1.json", [make_finding("g1")])
+    _write(gt_dir / "s1.json", [make_finding("g1", text="left nodule")])
     _write(pred_dir / "s1.json", [make_finding("p1")])
-    stale = {
+    stale_record = {
         "matches": [_match("p1", "g1")],
         "unmatched_pred": [],
         "unmatched_gt": [],
@@ -336,7 +352,13 @@ def test_match_dataset_invalidates_cache_on_config_change(tmp_path, fake_client,
         "retries": 0,
         "matching_config": {"judge": "old-model", "fewshot": "old-bundle", "reasoning": "none"},
     }
-    _write(out_dir / "matching" / "s1.json", stale)
+    if stale == "findings":
+        other = [validate_and_normalize_finding(make_finding("g1", text="right nodule"))]
+        stale_record["matching_config"] = matching_inference._matching_config("fake", None, "none")
+        stale_record["findings_fingerprint"] = matching_inference._findings_fingerprint(
+            other, [validate_and_normalize_finding(make_finding("p1"))], ""
+        )
+    _write(out_dir / "matching" / "s1.json", stale_record)
 
     client = fake_client(ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}))
     match_dataset(
@@ -347,9 +369,18 @@ def test_match_dataset_invalidates_cache_on_config_change(tmp_path, fake_client,
         workers=1,
         client_factory=lambda *_a, **_kw: client,
     )
-    assert len(client.calls) == 1  # re-matched because judge changed
+    assert len(client.calls) == 1
     written = json.loads((out_dir / "matching" / "s1.json").read_text())
     assert written["matching_config"]["judge"] == "fake"
+
+
+def test_stamp_findings_dir_discards_findings_from_another_config(tmp_path):
+    findings_dir = tmp_path / "findings_pred"
+    _write(findings_dir / "s1.json", [])
+    _write(tmp_path / "findings_pred_config.json", {"extractor": "old"})
+    _stamp_findings_dir(findings_dir, {"extractor": "new"})
+    assert not any(findings_dir.glob("*.json"))
+    assert json.loads((tmp_path / "findings_pred_config.json").read_text()) == {"extractor": "new"}
 
 
 def test_score_pair_reuses_cached_text_errors(tmp_path, fake_client, make_finding):
@@ -358,19 +389,12 @@ def test_score_pair_reuses_cached_text_errors(tmp_path, fake_client, make_findin
     pred = [make_finding("p1", text="right nodule")]
     out_dir = tmp_path
     matches = [_match("p1", "g1")]
-    # Must mirror score_pair's `stage3b_config` (judge/reasoning come from the
-    # fake client; fewshot comes from ScoringContext default None) so the
-    # fingerprint matches and the cache is reused.
+    # Judge/reasoning come from the fake client; fewshot is the ScoringContext default.
     fingerprint = _fingerprint_matched_findings(
         matches,
         {f["finding_id"]: f for f in pred},
         {f["finding_id"]: f for f in gt},
-        stage3b_config={
-            "judge": "fake",
-            "reasoning": "none",
-            "fewshot": None,
-            "prompt_hash": prompts.prompt_fingerprint(prompts.PROMPT_ATTRIBUTE_ERRORS),
-        },
+        stage3b_config=_stage3b_config("fake", "none", None),
     )
     cached = {
         "matches": matches,
@@ -378,7 +402,6 @@ def test_score_pair_reuses_cached_text_errors(tmp_path, fake_client, make_findin
         "structured_errors_per_pair": [[]],
         "text_errors_per_pair": [[{"dimension": "location", "severity": "major", "reasoning": "cached"}]],
         "muc_records": [],
-        "stage3b_degraded": True,
     }
     _write(out_dir / "attribute_errors" / "s.json", cached)
 
@@ -393,10 +416,6 @@ def test_score_pair_reuses_cached_text_errors(tmp_path, fake_client, make_findin
     )
     assert client.calls == []
     assert result["muc_records"][0]["text_errors"][0]["reasoning"] == "cached"
-    # Reusing a degraded result must not erase the record that it was degraded, or
-    # `--retry-degraded` would find nothing to revisit after any plain re-run.
-    rewritten = json.loads((out_dir / "attribute_errors" / "s.json").read_text())
-    assert rewritten["stage3b_degraded"] is True
 
 
 def test_score_pair_writes_per_report_metrics(tmp_path, fake_client, ok, make_finding):

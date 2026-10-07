@@ -1,6 +1,6 @@
 {
-  "scenario": "1:N aggregate — pred parent-anatomy negative covering several GT rule-out atoms",
-  "description": "Pred 'Cerebellum unremarkable.' names the parent anatomy AND is the radiologist's conventional aggregation of multiple cerebellar rule-outs (no tumor, no hemorrhage, no infarct, no traumatic lesion). Each multi-bind row → `aggregate`. The 1:1 rows are `direct`.",
+  "scenario": "1:N umbrella — pred parent-anatomy negative covering several GT rule-out atoms",
+  "description": "Pred 'Cerebellum unremarkable.' names the parent anatomy AND is the radiologist's conventional aggregation of multiple cerebellar rule-outs (no tumor, no hemorrhage, no infarct, no traumatic lesion).",
   "user": {
     "pred_findings": [
       {
@@ -68,32 +68,27 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Pred names cerebellum + 'unremarkable' = no abnormal entities; covers the no-tumor atom by clinical convention.",
-        "match_scope": "aggregate"
+        "reasoning": "Pred names cerebellum + 'unremarkable' = no abnormal entities; covers the no-tumor atom by clinical convention."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_2",
-        "reasoning": "Same cerebellum-unremarkable claim covers the no-hemorrhage atom.",
-        "match_scope": "aggregate"
+        "reasoning": "Same cerebellum-unremarkable claim covers the no-hemorrhage atom."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_3",
-        "reasoning": "Same claim covers the no-ischemic-lesion atom.",
-        "match_scope": "aggregate"
+        "reasoning": "Same claim covers the no-ischemic-lesion atom."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_4",
-        "reasoning": "Identical ventricles + cisterns normal statement.",
-        "match_scope": "direct"
+        "reasoning": "Identical ventricles + cisterns normal statement."
       },
       {
         "pred_id": "p_3",
         "gt_id": "gt_5",
-        "reasoning": "Same anatomic + pathologic finding (right basal ganglia lacunar infarct).",
-        "match_scope": "direct"
+        "reasoning": "Same anatomic + pathologic finding (right basal ganglia lacunar infarct)."
       }
     ],
     "unmatched_pred": [],

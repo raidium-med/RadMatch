@@ -25,12 +25,10 @@ def _muc_record(
     pred_sig: str | None = None,
     gt_id: str | None = None,
     pred_id: str | None = None,
-    match_scope: str = "direct",
 ) -> dict:
     """Build a synthetic MUC record. By default each call generates fresh
     `gt_id` + `pred_id` so per-GT aggregations treat records as 1:1; pass
-    explicit ids + `match_scope` to simulate aggregate / generic / multi-bind
-    cases."""
+    explicit ids to simulate multi-bind cases."""
     if gt_id is None:
         _RECORD_COUNTER[0] += 1
         gt_id = f"g_{_RECORD_COUNTER[0]}"
@@ -46,7 +44,6 @@ def _muc_record(
         "inc_triggered": category == "INC",
         "gt_significance": gt_sig,
         "pred_significance": pred_sig or gt_sig,
-        "match_scope": match_scope,
     }
 
 
@@ -128,7 +125,7 @@ def test_build_muc_record_drops_llm_measurement_when_deterministic_fired():
     verdict is dropped so the pair is not double-counted; other text errors stay."""
     finding = {"clinical_significance": "notable"}
     rec = metrics.build_muc_record(
-        match={"pred_id": "p1", "gt_id": "g1", "match_scope": "direct"},
+        match={"pred_id": "p1", "gt_id": "g1"},
         pred_finding=finding,
         gt_finding=finding,
         structured_errors=[_meas("major")],
@@ -143,7 +140,7 @@ def test_build_muc_record_keeps_llm_measurement_when_deterministic_silent():
     retained (the gap it fills) and drives the PAR→INC reclassification."""
     finding = {"clinical_significance": "notable"}
     rec = metrics.build_muc_record(
-        match={"pred_id": "p1", "gt_id": "g1", "match_scope": "direct"},
+        match={"pred_id": "p1", "gt_id": "g1"},
         pred_finding=finding,
         gt_finding=finding,
         structured_errors=[],
@@ -180,37 +177,15 @@ def test_effective_muc_counts_dedupes_under_NN_per_gt():
     no-credit shows as INC."""
     records = [
         # GT g1: bound by 3 preds, 2 COR + 1 INC → best-of-credited = COR → 1 GT
-        _muc_record("COR", gt_id="g1", pred_id="p1", match_scope="aggregate"),
-        _muc_record("COR", gt_id="g1", pred_id="p2", match_scope="aggregate"),
-        _muc_record("INC", gt_id="g1", pred_id="p3", match_scope="aggregate"),
+        _muc_record("COR", gt_id="g1", pred_id="p1"),
+        _muc_record("COR", gt_id="g1", pred_id="p2"),
+        _muc_record("INC", gt_id="g1", pred_id="p3"),
         # GT g2: bound by 2 preds, both INC → INC → 1 GT
-        _muc_record("INC", gt_id="g2", pred_id="p4", match_scope="aggregate"),
-        _muc_record("INC", gt_id="g2", pred_id="p5", match_scope="aggregate"),
+        _muc_record("INC", gt_id="g2", pred_id="p4"),
+        _muc_record("INC", gt_id="g2", pred_id="p5"),
     ]
     counts = metrics.effective_muc_counts(records, n_spu=0, n_mis=0)
     assert counts == {"COR": 1, "PAR": 0, "INC": 1, "MIS": 0, "SPU": 0}
-
-
-def test_effective_muc_counts_generic_on_actionable_gt_counts_inc():
-    """Under N:N, a GT covered only by generic boilerplate on an actionable
-    tier doesn't credit any match → counts as INC (matches `actionable_errors`
-    semantics)."""
-    records = [
-        _muc_record("COR", gt_id="g1", pred_id="p1", gt_sig="critical", match_scope="generic"),
-        _muc_record("COR", gt_id="g1", pred_id="p2", gt_sig="critical", match_scope="generic"),
-    ]
-    counts = metrics.effective_muc_counts(records, n_spu=0, n_mis=0)
-    assert counts == {"COR": 0, "PAR": 0, "INC": 1, "MIS": 0, "SPU": 0}
-
-
-def test_effective_muc_counts_generic_on_routine_gt_credits():
-    """Generic scope on a routine GT still credits (routine accepts any scope)."""
-    records = [
-        _muc_record("COR", gt_id="g1", pred_id="p1", gt_sig="routine", match_scope="generic"),
-        _muc_record("COR", gt_id="g1", pred_id="p2", gt_sig="routine", match_scope="generic"),
-    ]
-    counts = metrics.effective_muc_counts(records, n_spu=0, n_mis=0)
-    assert counts == {"COR": 1, "PAR": 0, "INC": 0, "MIS": 0, "SPU": 0}
 
 
 # ============================================================================
@@ -293,51 +268,8 @@ def test_safety_recall_vacuous_when_no_gt_in_pool():
 
 
 # ============================================================================
-# Umbrella safety credit gating — pred fanout > 1
+# Multi-bind safety credit
 # ============================================================================
-
-
-def test_generic_scope_does_not_credit_triage_recall():
-    """A `match_scope: "generic"` match (vague boilerplate cover) doesn't
-    credit safety recall on triage-tier GTs — preserves the README's
-    "safe-sounding normals" safety floor."""
-    records = [
-        _muc_record("COR", gt_sig="critical", match_scope="generic"),
-        _muc_record("COR", gt_sig="critical", match_scope="generic"),
-        _muc_record("COR", gt_sig="urgent", match_scope="generic"),
-    ]
-    assert metrics.compute_safety_recall(records, [], ("critical", "urgent")) == 0.0
-
-
-def test_generic_scope_credits_routine_recall():
-    """Routine GTs still credit even under `generic` scope — gating applies
-    only to non-routine (actionable) tiers."""
-    records = [
-        _muc_record("COR", gt_sig="routine", match_scope="generic"),
-        _muc_record("COR", gt_sig="routine", match_scope="generic"),
-    ]
-    assert metrics.compute_safety_recall(records, [], ("routine",)) == 1.0
-
-
-def test_aggregate_scope_credits_actionable_recall():
-    """A `match_scope: "aggregate"` match (legitimate enumeration / parent-
-    anatomy claim) credits safety recall — the model demonstrably addressed
-    the GT via a clinically meaningful aggregation."""
-    records = [
-        _muc_record("COR", gt_sig="critical", pred_id="p_agg", match_scope="aggregate"),
-        _muc_record("COR", gt_sig="critical", pred_id="p_agg", match_scope="aggregate"),
-    ]
-    assert metrics.compute_safety_recall(records, [], ("critical",)) == 1.0
-
-
-def test_specific_pred_credits_triage_recall_with_umbrella_gt_sibling():
-    """N:1 (umbrella GT, several specific preds) still credits — each pred
-    row is `direct`. The legitimate verbose-prediction case."""
-    records = [
-        _muc_record("COR", gt_sig="critical", gt_id="g_umbrella", pred_id="p_left"),
-        _muc_record("COR", gt_sig="critical", gt_id="g_umbrella", pred_id="p_right"),
-    ]
-    assert metrics.compute_safety_recall(records, [], ("critical",)) == 1.0
 
 
 def test_actionable_errors_per_gt_all_inc():
@@ -349,26 +281,6 @@ def test_actionable_errors_per_gt_all_inc():
         _muc_record("INC", gt_sig="notable", pred_id="p_umbrella"),
     ]
     assert metrics.compute_actionable_errors(records, [], []) == 3
-
-
-def test_generic_scope_on_actionable_gt_counts_as_error():
-    """A critical GT covered only by `generic` boilerplate (no `direct` /
-    `aggregate` sibling) must register as an actionable error — the model
-    didn't actually identify the pathology, so it's a functional miss even
-    though there's a matched COR record."""
-    records = [_muc_record("COR", gt_sig="critical", match_scope="generic")]
-    assert metrics.compute_actionable_errors(records, [], []) == 1
-
-
-def test_generic_scope_with_credited_sibling_does_not_double_count():
-    """A GT correctly identified by a `direct` pred AND additionally absorbed
-    by a `generic` boilerplate pred contributes 0 errors — the direct row
-    rescues the GT (same per-GT semantic as the self-contradiction case)."""
-    records = [
-        _muc_record("COR", gt_sig="critical", gt_id="g_x", pred_id="p_direct", match_scope="direct"),
-        _muc_record("COR", gt_sig="critical", gt_id="g_x", pred_id="p_generic", match_scope="generic"),
-    ]
-    assert metrics.compute_actionable_errors(records, [], []) == 0
 
 
 def test_actionable_opportunities_aligns_with_errors_pred_side_actionable():

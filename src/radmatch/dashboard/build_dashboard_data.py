@@ -68,20 +68,6 @@ def _per_finding_attributes(*finding_sets: list[dict]) -> dict[str, list[str]]:
     }
 
 
-def _match_scopes(matching: dict | None) -> list[str]:
-    """Distinct `match_scope` values across the report's matches (drives the
-    Match Scope filter). Empty list when the report has no matches."""
-    if not isinstance(matching, dict):
-        return []
-    scopes: set[str] = set()
-    for m in matching.get("matches", []) or []:
-        if isinstance(m, dict):
-            s = m.get("match_scope")
-            if isinstance(s, str) and s:
-                scopes.add(s)
-    return sorted(scopes)
-
-
 def build_report_index(radmatch_dir: Path) -> pd.DataFrame:
     """Walk `per_report_metrics/*.json` (+ matching `findings_gt/*.json`) and
     produce one row per series. Includes filter columns derived from per-finding
@@ -89,7 +75,6 @@ def build_report_index(radmatch_dir: Path) -> pd.DataFrame:
     per_report_dir = radmatch_dir / "per_report_metrics"
     findings_gt_dir = radmatch_dir / "findings_gt"
     findings_pred_dir = radmatch_dir / "findings_pred"
-    matching_dir = radmatch_dir / "matching"
     if not per_report_dir.exists():
         return pd.DataFrame()
 
@@ -104,13 +89,11 @@ def build_report_index(radmatch_dir: Path) -> pd.DataFrame:
             continue
         gt_findings = _load_findings_list(findings_gt_dir, path.stem)
         pred_findings = _load_findings_list(findings_pred_dir, path.stem)
-        matching_data = io.load_json(matching_dir / f"{path.stem}.json", raise_on_error=False)
         rows.append(
             {
                 "report_id": path.stem,
                 **_flatten(data),
                 **_per_finding_attributes(gt_findings, pred_findings),
-                "match_scopes": _match_scopes(matching_data),
             }
         )
     return pd.DataFrame(rows)
