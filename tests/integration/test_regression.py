@@ -29,7 +29,7 @@ SNAPSHOTS = Path(__file__).resolve().parents[1] / "snapshots"
 EXPECTED_PATH = SNAPSHOTS / "expected_summary.json"
 
 # Non-deterministic fields stripped before comparison.
-_NONDETERMINISTIC_FIELDS = ("timestamp", "runtime", "token_usage", "token_cost")
+_NONDETERMINISTIC_FIELDS = ("timestamp", "radmatch_version", "runtime", "token_usage", "token_cost")
 
 
 def _normalize(summary: dict, places: int = 6) -> dict:

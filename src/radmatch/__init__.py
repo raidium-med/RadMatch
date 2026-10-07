@@ -7,12 +7,16 @@ See README.md.
 
 from __future__ import annotations
 
+from importlib.metadata import version as _version
+
 from radmatch.finding_extraction.inference import ExtractionStats, extract_findings
 from radmatch.indication_extraction.inference import extract_indications
 from radmatch.llm_utils.llm_clients import assert_credentials_for
 from radmatch.matching.inference import MatchingContext, match_dataset, match_findings
 from radmatch.pipeline_runner import run_all
 from radmatch.scoring.pipeline import ScoringContext, score_dataset, score_pair
+
+__version__ = _version("radmatch")
 
 __all__ = [
     "ExtractionStats",

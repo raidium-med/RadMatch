@@ -246,6 +246,7 @@ Examples:
   radmatch score --results-dir /path/to/output/radmatch_results --llm-judge local:google/gemma-4-31B-it
         """,
     )
+    parser.add_argument("--version", action="version", version=f"%(prog)s {radmatch.__version__}")
     sub = parser.add_subparsers(dest="command", required=True, help="Command to execute")
 
     parser_extract = sub.add_parser("extract_findings", help="Stage 1 — extract findings from reports")

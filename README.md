@@ -1,5 +1,6 @@
 # RadMatch: Auditable Radiology Report Evaluation via Finding-Level Matching
 
+[![PyPI](https://img.shields.io/pypi/v/radmatch)](https://pypi.org/project/radmatch/)
 [![CI](https://img.shields.io/github/actions/workflow/status/raidium-med/RadMatch/ci.yaml?branch=main&label=CI)](https://github.com/raidium-med/RadMatch/actions/workflows/ci.yaml)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/downloads/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -275,6 +276,7 @@ Anchored to the ACR Actionable Findings Framework and the RSNA communication col
 ```json
 {
   "metadata": {
+    "radmatch_version": "0.2.2",
     "llm_judge": "local:google/gemma-4-31B-it",
     "fewshot": "chest-ct",
     "n_reports": 100,
