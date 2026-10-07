@@ -11,6 +11,7 @@ import logging
 import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from importlib.metadata import version
 from typing import TYPE_CHECKING, Mapping, Sequence
 
 from radmatch import constants, io
@@ -448,6 +449,7 @@ def score_dataset(
     summary = {
         "metadata": {
             "timestamp": datetime.now(timezone.utc).isoformat(),
+            "radmatch_version": version("radmatch"),
             "llm_judge": llm_judge,
             "fewshot": fewshot,
             "n_reports": len(per_report),
