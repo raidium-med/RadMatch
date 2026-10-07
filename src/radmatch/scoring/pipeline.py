@@ -37,13 +37,24 @@ class ScoringContext:
     fewshot: str | None = None
     output_dir: Path | None = None
     max_score_retries: int = inference.DEFAULT_MAX_RETRIES
-    retry_degraded: bool = False
 
 
 # Fields whose value changes should invalidate the Stage 3b cache. Mirrors the
 # inputs Stage 3b actually consumes (text + structured attributes referenced by
 # comparators). Keep in sync with `inference.detect_attribute_errors`.
 _FINGERPRINTED_FIELDS: tuple[str, ...] = ("text", "clinical_status", "comparison", "measurements")
+
+
+def _stage3b_config(judge: str | None, reasoning: str | None, fewshot: str | None) -> dict[str, object]:
+    """The judge config folded into the Stage 3b cache fingerprint."""
+    return {
+        "judge": judge,
+        "reasoning": reasoning,
+        "fewshot": fewshot,
+        "prompt_hash": prompts.prompt_fingerprint(prompts.PROMPT_ATTRIBUTE_ERRORS),
+        "schema_hash": io.fingerprint(inference._ATTRIBUTE_ERRORS_SCHEMA),
+        "chunk_size": inference._STAGE3B_CHUNK_SIZE,
+    }
 
 
 def _fingerprint_matched_findings(
@@ -77,8 +88,7 @@ def _load_cached_text_errors(
     series_uuid: str,
     matches: list[dict],
     findings_fingerprint: str,
-    retry_degraded: bool = False,
-) -> tuple[list[list[dict]], bool] | None:
+) -> list[list[dict]] | None:
     """Return cached Stage 3b text errors if the on-disk match list still aligns.
 
     Returns None when there's no cache, the cache can't be read, the cached
@@ -94,9 +104,6 @@ def _load_cached_text_errors(
     cached = io.load_json(cached_path, raise_on_error=False)
     if not isinstance(cached, dict):
         return None
-    if retry_degraded and cached.get("stage3b_degraded"):
-        logger.info("[Report %s] Cached attribute_errors is degraded; recomputing", series_uuid)
-        return None
     cached_matches = cached.get("matches") or []
     if [(m.get("pred_id"), m.get("gt_id")) for m in cached_matches] != [(m["pred_id"], m["gt_id"]) for m in matches]:
         logger.info("[Report %s] Cached attribute_errors no longer aligns with matches; recomputing", series_uuid)
@@ -109,9 +116,7 @@ def _load_cached_text_errors(
     text_errors = cached.get("text_errors_per_pair")
     if not isinstance(text_errors, list) or len(text_errors) != len(matches):
         return None
-    # Carry the marker forward: rewriting it as False on a cache hit would erase the
-    # record that these text errors came from a degraded call.
-    return text_errors, bool(cached.get("stage3b_degraded"))
+    return text_errors
 
 
 def build_per_report_summary(
@@ -165,27 +170,19 @@ def score_pair(
     structured_per_pair: list[list[dict]] = [
         comparators.compute_structured_errors(pred_by_id[m["pred_id"]], gt_by_id[m["gt_id"]]) for m in matches
     ]
-    stage3b_config = {
-        "judge": getattr(ctx.client, "model", None),
-        "reasoning": getattr(ctx.client, "reasoning", None),
-        "fewshot": ctx.fewshot,
-        "prompt_hash": prompts.prompt_fingerprint(prompts.PROMPT_ATTRIBUTE_ERRORS),
-    }
+    stage3b_config = _stage3b_config(
+        getattr(ctx.client, "model", None), getattr(ctx.client, "reasoning", None), ctx.fewshot
+    )
     findings_fingerprint = _fingerprint_matched_findings(
         matches, pred_by_id, gt_by_id, indication, stage3b_config=stage3b_config
     )
     # Stage 3b — resume from cache when the on-disk matches AND the matched-finding payloads still align.
-    cached_text = _load_cached_text_errors(
-        ctx.output_dir, series_uuid, matches, findings_fingerprint, ctx.retry_degraded
-    )
-    if cached_text is not None:
-        text_per_pair, stage3b_degraded = cached_text
-    else:
-        text_per_pair, stage3b_degraded = inference.detect_attribute_errors(
+    text_per_pair = _load_cached_text_errors(ctx.output_dir, series_uuid, matches, findings_fingerprint)
+    if text_per_pair is None:
+        text_per_pair = inference.detect_attribute_errors(
             matches=matches,
             findings_pred=pred_by_id,
             findings_gt=gt_by_id,
-            structured_errors_per_pair=structured_per_pair,
             series_uuid=series_uuid,
             client=ctx.client,
             fewshot=ctx.fewshot,
@@ -226,7 +223,6 @@ def score_pair(
                 "findings_fingerprint": findings_fingerprint,
                 "structured_errors_per_pair": structured_per_pair,
                 "text_errors_per_pair": text_per_pair,
-                "stage3b_degraded": stage3b_degraded,
                 "muc_records": muc_records,
             },
             attr_dir / f"{series_uuid}.json",
@@ -323,7 +319,6 @@ def score_dataset(
     indications_dir: Path | None = None,
     runtime_start_s: float | None = None,
     max_score_retries: int = inference.DEFAULT_MAX_RETRIES,
-    retry_degraded: bool = False,
 ) -> dict:
     """Score every series with a matching output, aggregate, write
     `metrics_summary.json`. A failing pair is logged and counted, not fatal.
@@ -331,7 +326,7 @@ def score_dataset(
     `series_allowlist` restricts the run to the given stems, so `--limit` against a
     directory holding a larger prior run does not silently aggregate stale files.
     `indications_dir` defaults to `output_dir/indications/` when present.
-    `client_factory(model, max_tokens, reasoning) -> Client` overrides construction
+    `client_factory(model, reasoning) -> Client` overrides construction
     for testing.
     """
     if client_factory is None:
@@ -369,16 +364,15 @@ def score_dataset(
         ],
     )
     logger.info("Reports to score:  %6d  (gt ∩ pred ∩ matching)", len(shared))
-    logger.info("  • Stage 3b cached: %6d  (text errors reused from prior run)", cached_reports)
+    logger.info("  • Stage 3b on disk: %6d  (reused only if still valid)", cached_reports)
 
     if client_factory is None:
         client_factory = llm_clients.build_client
     ctx = ScoringContext(
-        client=client_factory(model=llm_judge, max_tokens=constants.MAX_TOKENS, reasoning=reasoning),
+        client=client_factory(model=llm_judge, reasoning=reasoning),
         fewshot=fewshot,
         output_dir=output_dir,
         max_score_retries=max_score_retries,
-        retry_degraded=retry_degraded,
     )
 
     def _score_one(series_uuid: str) -> tuple[str, dict | None, dict[str, dict] | None, str | None]:
@@ -448,8 +442,9 @@ def score_dataset(
     # Distinct-finding totals keep the partition clean under N:N matching.
     distinct_matched_preds, distinct_matched_gts = metrics.count_distinct_findings(all_records)
 
-    # Token usage accumulated across every LLM stage in this process
+    # Token usage + USD cost accumulated across every LLM stage in this process
     # (the full extract→match→score pipeline for a `run_all` invocation).
+    token = llm_clients.token_report()
     summary = {
         "metadata": {
             "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -460,7 +455,8 @@ def score_dataset(
             "total_gt_findings": distinct_matched_gts + muc_counts["MIS"],
             "total_pred_findings": distinct_matched_preds + muc_counts["SPU"],
             "runtime": round(time.time() - (runtime_start_s if runtime_start_s is not None else start_time), 2),
-            "token_usage": llm_clients.token_report(),
+            "token_usage": token["token_usage"],
+            "token_cost": token["token_cost"],
         },
         "actionable_errors_per_report": actionable_errors_per_report,
         "actionable_errors_total": actionable_errors_total,

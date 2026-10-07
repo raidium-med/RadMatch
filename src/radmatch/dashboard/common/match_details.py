@@ -14,7 +14,6 @@ import streamlit as st
 
 from radmatch import constants as radmatch_constants
 from radmatch.dashboard.common import shared
-from radmatch.scoring import metrics as _scoring_metrics
 
 _TRIAGE_TIERS = frozenset(radmatch_constants.TRIAGE_SIGNIFICANCE_TIERS)
 _ACTIONABLE_TIERS = frozenset(radmatch_constants.ACTIONABLE_SIGNIFICANCE_TIERS)
@@ -209,7 +208,7 @@ def _render_findings_table(
     )
 
 
-def _conclusion_header(info: shared.PerPairMatchInfo, is_hit: bool, n_total: int) -> str:
+def _conclusion_header(info: shared.PerPairMatchInfo, n_total: int) -> str:
     category = info.category
     if category == "MIS":
         return "Not predicted → <b>MIS</b>"
@@ -222,11 +221,9 @@ def _conclusion_header(info: shared.PerPairMatchInfo, is_hit: bool, n_total: int
             return "Matched, only minor attribute errors → <b>PAR</b>"
         return "Matched but materially wrong → <b>INC</b>"
     # N:N
-    if is_hit:
+    if category != "INC":
         return f"Identified correctly by ≥1 of {n_total} matches → <b>{category}</b>"
-    if sum(1 for cp in info.counterparts if cp.category == "INC") == n_total:
-        return f"All {n_total} matches are INC → <b>INC</b>"
-    return f"All {n_total} matches use generic boilerplate → <b>miss</b>"
+    return f"All {n_total} matches are INC → <b>INC</b>"
 
 
 def _finding_level_conclusion(
@@ -248,22 +245,9 @@ def _finding_level_conclusion(
     pred_side_no_recall = not is_gt_side and info.category == "SPU"
     gt_side_no_precision = is_gt_side and info.category == "MIS"
 
-    counterparts = info.counterparts
-    if info.category in ("MIS", "SPU"):
-        is_hit = False
-    elif counterparts:
-        is_hit = any(
-            _scoring_metrics.is_credited_match(
-                category=cp.category, match_scope=cp.match_scope, gt_actionable=is_actionable
-            )
-            for cp in counterparts
-        )
-    else:
-        is_hit = False
-
-    headline = _conclusion_header(info, is_hit, len(counterparts))
-    credited = bool(counterparts and is_hit)
-    actionable_err = 1 if (is_actionable and not credited) else 0
+    is_hit = info.category in ("COR", "PAR")
+    headline = _conclusion_header(info, len(info.counterparts))
+    actionable_err = 1 if (is_actionable and not is_hit) else 0
 
     def _out_of_pool(reason: str | None = None) -> str:
         msg = reason or f"{sig or 'no significance'}, not in pool"
@@ -304,23 +288,19 @@ def _finding_level_conclusion(
     )
 
 
-def _match_body(cp: "shared.CounterpartMatchInfo", *, with_scope_in_header: bool) -> str:
+def _match_body(cp: "shared.CounterpartMatchInfo") -> str:
     """Reasoning + attribute table; shared between 1:1 inline and N:N <details>."""
-    scope_badge = shared.build_match_scope_badge(cp.match_scope) if with_scope_in_header else ""
     reasoning = html.escape(cp.match_reasoning or "(no reasoning recorded)")
     attribute_table = _attribute_errors_html_for_pair(cp)
     return (
-        f"<div style='display:flex;align-items:center;gap:0.4rem;font-weight:600;font-size:0.82rem;"
-        f"color:#92400e;margin-bottom:0.25rem;'>"
-        f"<span>Matching Reasoning</span>{scope_badge}"
-        f"</div>"
+        "<div style='font-weight:600;font-size:0.82rem;color:#92400e;margin-bottom:0.25rem;'>Matching Reasoning</div>"
         f"<div style='color:#1f2937;font-size:0.92rem;'>{reasoning}</div>"
         f"{attribute_table}"
     )
 
 
 def _render_match_inline(cp: "shared.CounterpartMatchInfo") -> str:
-    return f"<div style='margin-top:0.7rem;'>{_match_body(cp, with_scope_in_header=True)}</div>"
+    return f"<div style='margin-top:0.7rem;'>{_match_body(cp)}</div>"
 
 
 def _render_match_details(
@@ -331,7 +311,7 @@ def _render_match_details(
     total: int,
 ) -> str:
     """Collapsible <details> per N:N match.
-    Summary: `Match X of Y  [pill]  GT01 → Pred01  [scope]  ▾`."""
+    Summary: `Match X of Y  [pill]  GT01 → Pred01  ▾`."""
     summary = (
         "<summary style='cursor:pointer;list-style:none;padding:0.45rem 0.6rem;"
         "border:1px solid #fcd34d;border-radius:0.3rem;background:#fffbeb;"
@@ -339,11 +319,10 @@ def _render_match_details(
         f"<span style='font-weight:600;font-size:0.82rem;color:#92400e;'>Match {index} of {total}</span>"
         f"{shared.render_outcome_pill(cp.category)}"
         f"<span style='color:#374151;font-size:0.82rem;font-weight:600;'>{pair_text}</span>"
-        f"{shared.build_match_scope_badge(cp.match_scope)}"
         "<span style='margin-left:auto;color:#92400e;font-size:0.75rem;'>▾</span>"
         "</summary>"
     )
-    body = f"<div style='padding:0.5rem 0.6rem 0.3rem 0.6rem;'>{_match_body(cp, with_scope_in_header=False)}</div>"
+    body = f"<div style='padding:0.5rem 0.6rem 0.3rem 0.6rem;'>{_match_body(cp)}</div>"
     return f"<details style='margin-top:0.5rem;'>{summary}{body}</details>"
 
 

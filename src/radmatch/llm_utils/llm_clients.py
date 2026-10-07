@@ -14,7 +14,14 @@ from anthropic import AnthropicFoundry
 from mistralai import Mistral
 from mistralai.models import SDKError as MistralSDKError
 from openai import AzureOpenAI, OpenAI
-from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_random_exponential
+from tenacity import (
+    retry,
+    retry_if_exception_type,
+    retry_if_not_exception_type,
+    stop_after_attempt,
+    stop_after_delay,
+    wait_random_exponential,
+)
 
 from radmatch import constants
 
@@ -37,6 +44,11 @@ def reset_token_usage() -> None:
         _token_usage.clear()
 
 
+# A cache *write* is billed at 1.25x input (ephemeral 5-minute TTL, RadMatch's
+# default); a cache *read* at the model's `cached_input` rate (~0.1x input).
+_CACHE_WRITE_MULT = 1.25
+
+
 def _record_usage(model: str, uncached_input: int, cache_read: int, cache_write: int, output: int) -> None:
     with _usage_lock:
         entry = _token_usage.setdefault(
@@ -49,17 +61,30 @@ def _record_usage(model: str, uncached_input: int, cache_read: int, cache_write:
         entry["calls"] += 1
 
 
-def token_report() -> dict[str, int]:
-    """Token usage since the last reset: total input tokens (including cached),
-    completion tokens, and call count, summed across every model used."""
+def token_report() -> dict[str, object]:
+    """The two `metrics_summary` token fields for usage since the last reset:
+    `token_usage` (prompt = total input incl. cached, completion, calls) and
+    `token_cost` in USD (uncached input at the `input` rate, cache reads at
+    `cached_input`, cache writes at 1.25x input; models absent from
+    `constants.MODEL_PRICING` — e.g. any self-hosted `local:` model — contribute 0)."""
     with _usage_lock:
-        by_model = [dict(counts) for counts in _token_usage.values()]
+        by_model = [(model, dict(counts)) for model, counts in _token_usage.items()]
+    pricing = {name.lower(): price for name, price in constants.MODEL_PRICING.items()}
     usage = {"prompt_tokens": 0, "completion_tokens": 0, "calls": 0}
-    for c in by_model:
+    cost = 0.0
+    for model, c in by_model:
         usage["prompt_tokens"] += c["uncached_input"] + c["cache_read"] + c["cache_write"]
         usage["completion_tokens"] += c["output"]
         usage["calls"] += c["calls"]
-    return usage
+        price = pricing.get(model.strip().lower())
+        if price is not None:
+            cost += (
+                c["uncached_input"] * price["input"]
+                + c["cache_read"] * price.get("cached_input", price["input"])
+                + c["cache_write"] * price["input"] * _CACHE_WRITE_MULT
+                + c["output"] * price["output"]
+            ) / 1e6
+    return {"token_usage": usage, "token_cost": round(cost, 4)}
 
 
 def _usage_counts(usage: object, *, anthropic: bool = False) -> tuple[int, int, int, int]:
@@ -101,6 +126,7 @@ class Client:
         messages: Sequence[Mapping[str, object]],
         response_format: Mapping[str, object] | None = None,
         max_tokens: int | None = None,
+        timeout: float | None = None,
     ) -> str:
         """Perform a chat completion request."""
         raise NotImplementedError
@@ -141,12 +167,14 @@ class OpenAIClient(Client):
         messages: Sequence[Mapping[str, object]],
         response_format: Mapping[str, object] | None = None,
         max_tokens: int | None = None,
+        timeout: float | None = None,
     ) -> str:
         kwargs: dict[str, object] = {
             "model": self.model,
             "messages": messages,
             "response_format": response_format,
             "max_completion_tokens": max_tokens if max_tokens is not None else self.max_tokens,
+            "timeout": timeout if timeout is not None else openai.NOT_GIVEN,
         }
         # Some Azure GPT-5 endpoints reject reasoning_effort="none"; omit it unless set.
         if self.reasoning != "none":
@@ -154,6 +182,13 @@ class OpenAIClient(Client):
         response = self._client.chat.completions.create(**kwargs)
         _record_usage(self.model, *_usage_counts(getattr(response, "usage", None)))
         return response.choices[0].message.content or ""
+
+
+# Self-hosted servers accept both knobs, so a local judge can be made reproducible; the
+# hosted APIs offer neither a determinism guarantee nor a usable seed. vLLM falls back to
+# temperature 1.0 when the field is omitted, which made repeat runs sample independently.
+_LOCAL_TEMPERATURE: float = float(os.environ.get("RADMATCH_LOCAL_TEMPERATURE") or 0.0)
+_LOCAL_SEED: int = int(os.environ.get("RADMATCH_LOCAL_SEED") or 42)
 
 
 class LocalOpenAIClient(Client):
@@ -179,12 +214,16 @@ class LocalOpenAIClient(Client):
         messages: Sequence[Mapping[str, object]],
         response_format: Mapping[str, object] | None = None,
         max_tokens: int | None = None,
+        timeout: float | None = None,
     ) -> str:
         response = self._client.chat.completions.create(
             model=self.model,
             messages=messages,
             response_format=response_format,
             max_tokens=max_tokens if max_tokens is not None else self.max_tokens,
+            temperature=_LOCAL_TEMPERATURE,
+            seed=_LOCAL_SEED,
+            timeout=timeout if timeout is not None else openai.NOT_GIVEN,
         )
         # Record under a `local:`-namespaced key so a served name that happens to
         # match a hosted model (e.g. `deepseek-v4-pro`) is never priced as hosted.
@@ -211,6 +250,7 @@ class MistralClient(Client):
         messages: Sequence[Mapping[str, object]],
         response_format: Mapping[str, object] | None = None,
         max_tokens: int | None = None,
+        timeout: float | None = None,
     ) -> str:
         # Mistral's chat.complete has no `reasoning_effort` param (magistral
         # reasons inherently), so the `reasoning` knob is not applied here.
@@ -220,6 +260,8 @@ class MistralClient(Client):
             "response_format": response_format,
             "max_tokens": max_tokens if max_tokens is not None else self.max_tokens,
         }
+        if timeout is not None:
+            kwargs["timeout_ms"] = int(timeout * 1000)
         response = self._client.chat.complete(**kwargs)
         _record_usage(self.model, *_usage_counts(getattr(response, "usage", None)))
         content = response.choices[0].message.content
@@ -250,45 +292,16 @@ def _ephemeral_cache_block(text: str) -> dict[str, object]:
     return {"type": "text", "text": text, "cache_control": {"type": "ephemeral"}}
 
 
-def _coerce_structured_tool_input(obj: object) -> object:
-    """Undo double-encoded tool input from the Anthropic forced-tool path.
-
-    Claude (esp. Opus on Foundry) sometimes emits the structured answer as a JSON
-    *string* rather than the object the `input_schema` asks for — either the whole
-    object stuffed under the single schema key (`{"findings": "{\\"findings\\": [...]}"}`)
-    or individual fields stringified (`{"matches": "[...]"}`). The OpenAI `json_schema`
-    path can't express this so the other providers never hit it. Unwrap here so every
-    downstream stage (`json.loads`) sees the real object. Only strings that fully parse
-    to a list/dict are unwrapped; free-text fields (which never parse as JSON) are left
-    untouched.
-    """
-    if not isinstance(obj, dict):
-        return obj
-    # Whole structured object stringified under a single key.
-    if len(obj) == 1:
-        ((key, value),) = obj.items()
-        if isinstance(value, str):
-            try:
-                inner = json.loads(value)
-            except (json.JSONDecodeError, ValueError):
-                inner = None
-            if isinstance(inner, dict):
-                return inner
-            if isinstance(inner, list):
-                return {key: inner}
-    # Individual field values stringified.
-    coerced: dict[object, object] = {}
-    for key, value in obj.items():
-        if isinstance(value, str):
-            try:
-                parsed = json.loads(value)
-            except (json.JSONDecodeError, ValueError):
-                parsed = None
-            if isinstance(parsed, (list, dict)):
-                coerced[key] = parsed
-                continue
-        coerced[key] = value
-    return coerced
+def _closed_schema(schema: object) -> object:
+    """Recursively set `additionalProperties: false`, which `output_config.format` requires."""
+    if isinstance(schema, dict):
+        out = {k: _closed_schema(v) for k, v in schema.items()}
+        if out.get("type") == "object":
+            out["additionalProperties"] = False
+        return out
+    if isinstance(schema, list):
+        return [_closed_schema(v) for v in schema]
+    return schema
 
 
 class AnthropicClient(Client):
@@ -297,11 +310,9 @@ class AnthropicClient(Client):
     Claude on Foundry answers only `/anthropic/v1/messages`, not the OpenAI
     surface, so it uses the Anthropic SDK. Three shape differences from the
     OpenAI clients are absorbed here so the rest of the pipeline is unchanged:
-    the system prompt moves to a top-level field; `response_format` json_schema
-    (which Anthropic lacks) is emulated with a single tool whose `input_schema` is
-    the requested schema (forced via tool_choice), returning its `input` as a JSON
-    string; and the response is a list of content
-    blocks.
+    the system prompt moves to a top-level field; `response_format` json_schema maps
+    to Anthropic's native `output_config.format`, which returns the object as a text
+    block; and the response is a list of content blocks.
 
     Two endpoints: Azure Foundry's Messages API when `ANTHROPIC_FOUNDRY_BASE_URL` is
     set (via the SDK's `AnthropicFoundry` class, which carries the Foundry auth
@@ -312,8 +323,6 @@ class AnthropicClient(Client):
     mirrors the OpenAI clients' `reasoning_effort` so `--reasoning` controls all
     providers uniformly.
     """
-
-    _STRUCTURED_TOOL = "emit_structured_output"
 
     def __init__(self, model: str, max_tokens: int, reasoning: str = "none"):
         super().__init__(model=model, max_tokens=max_tokens, reasoning=reasoning)
@@ -342,9 +351,10 @@ class AnthropicClient(Client):
         messages: Sequence[Mapping[str, object]],
         response_format: Mapping[str, object] | None = None,
         max_tokens: int | None = None,
+        timeout: float | None = None,
     ) -> str:
         system, chat = _split_system_messages(messages)
-        # Mark the stable prefix (tools + system + few-shot) for prompt caching. The
+        # Mark the stable prefix (system + few-shot) for prompt caching. The
         # last chat entry is the varying query, so the one before it ends the prefix.
         if len(chat) >= 2 and isinstance(chat[-2].get("content"), str):
             chat[-2] = {"role": chat[-2].get("role"), "content": [_ephemeral_cache_block(chat[-2]["content"])]}
@@ -352,33 +362,24 @@ class AnthropicClient(Client):
             "model": self.model,
             "max_tokens": max_tokens if max_tokens is not None else self.max_tokens,
             "messages": chat,
+            "timeout": timeout if timeout is not None else anthropic.NOT_GIVEN,
         }
         if system:
             kwargs["system"] = [_ephemeral_cache_block(system)]
+        output_config: dict[str, object] = {}
         if self.reasoning != "none":
-            kwargs["output_config"] = {"effort": self.reasoning}
+            output_config["effort"] = self.reasoning
         if response_format is not None:
-            schema = response_format["json_schema"]["schema"]
-            kwargs["tools"] = [
-                {
-                    "name": self._STRUCTURED_TOOL,
-                    "description": "Emit the result as a single structured object matching the schema.",
-                    "input_schema": schema,
-                }
-            ]
-            # Forced, not "auto" — Opus otherwise answers in prose with no tool_use.
-            kwargs["tool_choice"] = {"type": "tool", "name": self._STRUCTURED_TOOL}
+            output_config["format"] = {
+                "type": "json_schema",
+                "schema": _closed_schema(response_format["json_schema"]["schema"]),
+            }
+        if output_config:
+            kwargs["output_config"] = output_config
 
         message = self._client.messages.create(**kwargs)
         _record_usage(self.model, *_usage_counts(getattr(message, "usage", None), anthropic=True))
         blocks = message.content or []
-        if response_format is not None:
-            # Return the tool_use input as a JSON string so downstream `json.loads`
-            # works exactly as for the OpenAI/Mistral clients.
-            for block in blocks:
-                if getattr(block, "type", None) == "tool_use":
-                    return json.dumps(_coerce_structured_tool_input(block.input), ensure_ascii=False)
-            return ""
         return "".join(b.text for b in blocks if getattr(b, "type", None) == "text")
 
 
@@ -461,7 +462,7 @@ def describe_model_endpoint(model: str) -> str:
     return "api.mistral.ai"
 
 
-def build_client(model: str, max_tokens: int, reasoning: str = "none") -> Client:
+def build_client(model: str, max_tokens: int = constants.MAX_TOKENS, reasoning: str = "none") -> Client:
     """Build a inference client for the given model."""
     provider = _provider_for(model)
     logger.info("Model %s → provider %s (%s)", model, provider, describe_model_endpoint(model))
@@ -497,9 +498,12 @@ _RETRYABLE_LLM_ERRORS = (
 )
 
 
+# Subclasses of the connection errors above, so retried by default.
+LLM_TIMEOUT_ERRORS = (openai.APITimeoutError, anthropic.APITimeoutError)
+
 _llm_retry = retry(
     wait=wait_random_exponential(min=1, max=60),
-    stop=stop_after_attempt(constants.MAX_RETRIES),
+    stop=stop_after_attempt(constants.MAX_RETRIES) | stop_after_delay(3 * constants.LLM_REQUEST_TIMEOUT_S),
     retry=retry_if_exception_type(_RETRYABLE_LLM_ERRORS),
     reraise=True,
 )
@@ -510,14 +514,21 @@ def call_llm(
     messages: Sequence[Mapping[str, object]],
     response_format: Mapping[str, object] | None = None,
     max_tokens: int | None = None,
+    timeout: float | None = None,
 ) -> str:
-    """Call `client.complete` with retry on transient errors and empty responses."""
+    """Call `client.complete` with retry on transient errors and empty responses.
+
+    A per-call `timeout` is raised, not retried."""
 
     @_llm_retry
     def _call() -> str:
-        content = client.complete(messages=messages, response_format=response_format, max_tokens=max_tokens)
+        content = client.complete(
+            messages=messages, response_format=response_format, max_tokens=max_tokens, timeout=timeout
+        )
         if not content:
             raise _EmptyLLMResponseError("Empty API response")
         return content
 
+    if timeout is not None:
+        _call = _call.retry_with(retry=_call.retry.retry & retry_if_not_exception_type(LLM_TIMEOUT_ERRORS))
     return _call()

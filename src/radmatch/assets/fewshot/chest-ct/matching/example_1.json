@@ -94,32 +94,27 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Same finding entity (minimal cylindrical bronchiectasis at the lung apex). Pred says left apex, gt says right apex — laterality flip on a paired lung.",
-        "match_scope": "direct"
+        "reasoning": "Same finding entity (minimal cylindrical bronchiectasis at the lung apex). Pred says left apex, gt says right apex — laterality flip on a paired lung."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_2",
-        "reasoning": "Same finding entity (heart size). Pred says mildly enlarged (abnormal), gt says not enlarged (normal) — status flip kept in matches so Stage 3 can classify INC.",
-        "match_scope": "direct"
+        "reasoning": "Same finding entity (heart size). Pred says mildly enlarged (abnormal), gt says not enlarged (normal) — status flip kept in matches so Stage 3 can classify INC."
       },
       {
         "pred_id": "p_3",
         "gt_id": "gt_3",
-        "reasoning": "Same finding entity (coronary artery calcifications); severity descriptors differ (moderate vs severe).",
-        "match_scope": "direct"
+        "reasoning": "Same finding entity (coronary artery calcifications); severity descriptors differ (moderate vs severe)."
       },
       {
         "pred_id": "p_4",
         "gt_id": "gt_4",
-        "reasoning": "Same finding entity (mild widening of the anterior aortic arch); measurements differ (4.1 cm vs 3.6 cm).",
-        "match_scope": "direct"
+        "reasoning": "Same finding entity (mild widening of the anterior aortic arch); measurements differ (4.1 cm vs 3.6 cm)."
       },
       {
         "pred_id": "p_5",
         "gt_id": "gt_5",
-        "reasoning": "Identical description of the small stable benign hepatic hypodense lesion.",
-        "match_scope": "direct"
+        "reasoning": "Identical description of the small stable benign hepatic hypodense lesion."
       }
     ],
     "unmatched_pred": [],

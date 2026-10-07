@@ -86,7 +86,7 @@ def validate_and_normalize_finding(finding: dict) -> dict:
             "finding %r missing clinical_status; filling with default %r", label, constants.DEFAULT_CLINICAL_STATUS
         )
         out["clinical_status"] = constants.DEFAULT_CLINICAL_STATUS
-    elif status not in constants.CLINICAL_STATUS_VALUES:
+    elif not isinstance(status, str) or status not in constants.CLINICAL_STATUS_VALUES:
         logger.warning(
             "finding %r has invalid clinical_status %r; falling back to default %r",
             label,
@@ -103,7 +103,7 @@ def validate_and_normalize_finding(finding: dict) -> dict:
             constants.DEFAULT_CLINICAL_SIGNIFICANCE,
         )
         out["clinical_significance"] = constants.DEFAULT_CLINICAL_SIGNIFICANCE
-    elif sig not in constants.CLINICAL_SIGNIFICANCE_VALUES:
+    elif not isinstance(sig, str) or sig not in constants.CLINICAL_SIGNIFICANCE_VALUES:
         logger.warning(
             "finding %r has invalid clinical_significance %r; falling back to default %r",
             label,
@@ -113,7 +113,7 @@ def validate_and_normalize_finding(finding: dict) -> dict:
         out["clinical_significance"] = constants.DEFAULT_CLINICAL_SIGNIFICANCE
 
     comparison = out.get("comparison")
-    if comparison is not None and comparison not in constants.COMPARISON_VALUES:
+    if comparison is not None and (not isinstance(comparison, str) or comparison not in constants.COMPARISON_VALUES):
         logger.warning("finding %r has invalid comparison %r; falling back to None", label, comparison)
         out["comparison"] = None
 

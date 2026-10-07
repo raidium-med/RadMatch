@@ -68,6 +68,29 @@ def test_call_llm_gives_up_after_max_retries(_sleep):
     assert client.complete.call_count == constants.MAX_RETRIES
 
 
+_TIMEOUT_ERRORS = pytest.mark.parametrize(
+    "timeout_error", llm_clients.LLM_TIMEOUT_ERRORS, ids=lambda cls: cls.__module__.split(".")[0]
+)
+
+
+@_TIMEOUT_ERRORS
+@patch("tenacity.nap.time.sleep")
+def test_call_llm_retries_timeouts_by_default(_sleep, timeout_error):
+    client = _client(side_effect=[timeout_error(request=httpx.Request("POST", "https://example.test")), "ok"])
+    assert llm_clients.call_llm(client, messages=[]) == "ok"
+    assert client.complete.call_count == 2
+
+
+@_TIMEOUT_ERRORS
+@patch("tenacity.nap.time.sleep")
+def test_call_llm_raises_a_per_call_timeout(_sleep, timeout_error):
+    """A per-call timeout is raised at once; other transient errors are still retried."""
+    client = _client(side_effect=[_rate_limit(), timeout_error(request=httpx.Request("POST", "https://example.test"))])
+    with pytest.raises(timeout_error):
+        llm_clients.call_llm(client, messages=[], timeout=1)
+    assert client.complete.call_count == 2
+
+
 def test_call_llm_does_not_retry_non_retryable_errors():
     client = _client(side_effect=ValueError("non-retryable"))
     with pytest.raises(ValueError):
@@ -237,27 +260,33 @@ def test_assert_credentials_for_claude_requires_dedicated_vars():
 
 
 # ============================================================================
-# _coerce_structured_tool_input — undo Claude's double-encoded tool input
+# _closed_schema / output_config.format — Anthropic native structured output
 # ============================================================================
 
 
 @pytest.mark.parametrize(
-    "raw,expected",
+    "schema,expected",
     [
-        # whole object stringified under the single schema key
-        ({"findings": '{"findings": [{"text": "a"}]}'}, {"findings": [{"text": "a"}]}),
-        # just the array stringified under its key
-        ({"findings": '[{"text": "a"}]'}, {"findings": [{"text": "a"}]}),
-        # individual field stringified in a multi-key object
-        ({"matches": "[1, 2]", "note": "plain"}, {"matches": [1, 2], "note": "plain"}),
-        # already-clean object is untouched
-        ({"findings": [{"text": "a"}]}, {"findings": [{"text": "a"}]}),
-        # free-text that isn't JSON stays a string
-        ({"text": "Stable cardiomegaly."}, {"text": "Stable cardiomegaly."}),
+        # every object level gets closed, including nested ones
+        (
+            {"type": "object", "properties": {"f": {"type": "object", "properties": {}}}},
+            {
+                "type": "object",
+                "additionalProperties": False,
+                "properties": {"f": {"type": "object", "additionalProperties": False, "properties": {}}},
+            },
+        ),
+        # objects inside array items are closed too
+        (
+            {"type": "array", "items": {"type": "object", "properties": {}}},
+            {"type": "array", "items": {"type": "object", "additionalProperties": False, "properties": {}}},
+        ),
+        # non-object nodes are untouched
+        ({"type": "string"}, {"type": "string"}),
     ],
 )
-def test_coerce_structured_tool_input(raw, expected):
-    assert llm_clients._coerce_structured_tool_input(raw) == expected
+def test_closed_schema(schema, expected):
+    assert llm_clients._closed_schema(schema) == expected
 
 
 @patch.dict(
@@ -266,12 +295,12 @@ def test_coerce_structured_tool_input(raw, expected):
     clear=True,
 )
 @patch("radmatch.llm_utils.llm_clients.AnthropicFoundry")
-def test_anthropic_structured_output_unwraps_double_encoding(mock_cls):
-    """A tool_use block whose input double-encodes the answer is unwrapped to clean JSON."""
+def test_anthropic_structured_output_uses_output_config(mock_cls):
+    """`response_format` maps to output_config.format with a closed schema; text blocks are returned."""
     inst = mock_cls.return_value
     block = MagicMock()
-    block.type = "tool_use"
-    block.input = {"findings": '{"findings": [{"text": "pneumothorax"}]}'}
+    block.type = "text"
+    block.text = '{"findings": [{"text": "pneumothorax"}]}'
     inst.messages.create.return_value = MagicMock(content=[block])
 
     client = llm_clients.build_client(model="claude-opus-4-8", max_tokens=100)
@@ -279,4 +308,8 @@ def test_anthropic_structured_output_unwraps_double_encoding(mock_cls):
         [{"role": "user", "content": "hi"}],
         response_format={"json_schema": {"schema": {"type": "object", "properties": {"findings": {}}}}},
     )
+
     assert json.loads(out) == {"findings": [{"text": "pneumothorax"}]}
+    fmt = inst.messages.create.call_args.kwargs["output_config"]["format"]
+    assert fmt["type"] == "json_schema"
+    assert fmt["schema"]["additionalProperties"] is False

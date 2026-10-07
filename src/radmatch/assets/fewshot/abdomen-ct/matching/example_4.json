@@ -40,8 +40,7 @@
       {
         "pred_id": "p_2",
         "gt_id": "gt_1",
-        "reasoning": "Both state the liver is unremarkable; same anatomy, same status.",
-        "match_scope": "direct"
+        "reasoning": "Both state the liver is unremarkable; same anatomy, same status."
       }
     ],
     "unmatched_pred": [

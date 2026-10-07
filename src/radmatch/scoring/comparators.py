@@ -83,17 +83,20 @@ def classify_comparison_conflict(
 
     BENIGN={stable, improving, resolved}, ACTIVE={worsening, new}.
     Cross-bucket → major; same-bucket → minor; identical → no error;
-    one-sided mention (one side None) → minor.
+    one-sided mention (one side None) → minor, except a pred that drops an
+    ACTIVE gt comparison, which misleads about disease activity exactly as
+    much as contradicting it → major.
     """
     if pred_comparison == gt_comparison:
         return None
     if pred_comparison is None or gt_comparison is None:
+        dropped_active = pred_comparison is None and gt_comparison in constants.ACTIVE_COMPARISONS
         return _error(
             dimension="comparison",
-            severity="minor",
+            severity="major" if dropped_active else "minor",
             pred_value=pred_comparison,
             gt_value=gt_comparison,
-            reasoning="one-sided comparison mention",
+            reasoning="pred drops an active gt comparison" if dropped_active else "one-sided comparison mention",
         )
     pred_active = pred_comparison in constants.ACTIVE_COMPARISONS
     gt_active = gt_comparison in constants.ACTIVE_COMPARISONS
@@ -161,7 +164,7 @@ def classify_measurement_asymmetry(
 ) -> list[dict]:
     """Per-category measurement comparison.
 
-    An addition (pred-only) is minor, an omission (gt-only) or category mismatch is
+    An addition (pred-only) or omission (gt-only) is minor, a category mismatch is
     major; same-category pairs are compared against the thresholds above.
     """
     if not pred_measurements and not gt_measurements:
@@ -181,11 +184,11 @@ def classify_measurement_asymmetry(
         ]
 
     if not pred_measurements:
-        # Pred omits measurements gt recorded → major each
+        # Pred omits measurements gt recorded → minor each
         return [
             _error(
                 "measurement",
-                "major",
+                "minor",
                 pred_value=None,
                 gt_value=m,
                 reasoning=f"pred omits a {m.get('category', 'other')} measurement gt records",
@@ -229,7 +232,7 @@ def classify_measurement_asymmetry(
             errors.append(
                 _error(
                     "measurement",
-                    "major",
+                    "minor",
                     pred_value=None,
                     gt_value=m,
                     reasoning=f"pred omits a {cat} measurement gt records",
@@ -260,7 +263,7 @@ def classify_measurement_asymmetry(
             errors.append(
                 _error(
                     "measurement",
-                    "major",
+                    "minor",
                     pred_value=None,
                     gt_value=gm,
                     reasoning=f"pred omits an extra {cat} measurement gt records",

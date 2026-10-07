@@ -75,20 +75,17 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Pred merges medulla/pons/mesencephalon with cerebellum into a single completeness statement; aligned with the gt's medulla/pons/mesencephalon entry. The unmatched gt cerebellum statement is the split/merge artifact.",
-        "match_scope": "direct"
+        "reasoning": "Pred merges medulla/pons/mesencephalon with cerebellum into a single completeness statement; aligned with the gt's medulla/pons/mesencephalon entry. The unmatched gt cerebellum statement is the split/merge artifact."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_3",
-        "reasoning": "Same anatomy (hemispheric cortical sulci). Pred says 'mildly prominent for age' (abnormal), gt says 'compatible with age' (normal) — status flip kept in matches so Stage 3 can classify INC.",
-        "match_scope": "direct"
+        "reasoning": "Same anatomy (hemispheric cortical sulci). Pred says 'mildly prominent for age' (abnormal), gt says 'compatible with age' (normal) — status flip kept in matches so Stage 3 can classify INC."
       },
       {
         "pred_id": "p_3",
         "gt_id": "gt_5",
-        "reasoning": "Pred merges orbits + paranasal sinuses into a single completeness statement; the closer gt counterpart is the paranasal sinuses statement.",
-        "match_scope": "direct"
+        "reasoning": "Pred merges orbits + paranasal sinuses into a single completeness statement; the closer gt counterpart is the paranasal sinuses statement."
       }
     ],
     "unmatched_pred": [

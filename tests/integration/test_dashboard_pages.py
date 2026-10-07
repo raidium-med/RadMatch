@@ -68,9 +68,7 @@ def results_dir(tmp_path: Path) -> Path:
     _write(
         radmatch_dir / "matching" / "s1.json",
         {
-            "matches": [
-                {"pred_id": "pred_001", "gt_id": "gt_001", "match_scope": "direct", "reasoning": "same finding"}
-            ],
+            "matches": [{"pred_id": "pred_001", "gt_id": "gt_001", "reasoning": "same finding"}],
             "unmatched_pred": [],
             "unmatched_gt": [],
         },
@@ -78,7 +76,7 @@ def results_dir(tmp_path: Path) -> Path:
     _write(
         radmatch_dir / "attribute_errors" / "s1.json",
         {
-            "matches": [{"pred_id": "pred_001", "gt_id": "gt_001", "match_scope": "direct"}],
+            "matches": [{"pred_id": "pred_001", "gt_id": "gt_001"}],
             "structured_errors_per_pair": [[]],
             "text_errors_per_pair": [[]],
             "muc_records": [{"pred_id": "pred_001", "gt_id": "gt_001", "category": "COR", "errors": []}],

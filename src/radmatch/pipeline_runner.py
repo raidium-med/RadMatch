@@ -50,20 +50,20 @@ def run_all(
     results directory for the dashboard. `auto_extract_indications` runs that
     preprocessor first instead — the two are mutually exclusive.
 
-    `max_match_retries` / `max_score_retries` are the extra attempts Stage 2 and
-    Stage 3b make on a malformed LLM reply before falling back. They are outside both
-    cache fingerprints, so raising them does not invalidate existing results.
+    `max_match_retries` is the extra attempts Stage 2 makes on a malformed reply before
+    falling back to its valid subset; `max_score_retries` the extra attempts per Stage 3b
+    chunk before splitting it. Both are outside the cache fingerprints, so raising them
+    does not invalidate existing results.
 
     `retry_passes` runs the whole chain up to that many times (1 = a single pass, the
     default). Because every stage caches on success, a later pass only revisits reports
     that dropped. It stops early once nothing is missing, or once a pass recovers
     nothing.
 
-    `retry_degraded` additionally revisits reports that *fell back* rather than failed —
-    a Stage 2 validation fallback or a degraded Stage 3b payload. Those write valid
-    cached output, so without this they are never retried.
+    `retry_degraded` additionally revisits reports whose Stage 2 *fell back* rather than
+    failed. A fallback writes valid cached output, so without this it is never retried.
 
-    `client_factory(model, max_tokens, reasoning) -> Client` overrides construction in
+    `client_factory(model, reasoning) -> Client` overrides construction in
     every stage and skips the up-front credential check.
     """
     if indications_dir and auto_extract_indications:
@@ -154,7 +154,6 @@ def run_all(
             indications_dir=indications_path,
             runtime_start_s=pipeline_start,
             max_score_retries=max_score_retries,
-            retry_degraded=retry_degraded,
             client_factory=client_factory,
         )
 

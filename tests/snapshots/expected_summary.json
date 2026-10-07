@@ -26,10 +26,10 @@
       "clean": 2,
       "clean_pct": 0.666667,
       "evaluated": 3,
-      "major": 0,
-      "major_pct": 0.0,
-      "minor": 1,
-      "minor_pct": 0.333333
+      "major": 1,
+      "major_pct": 0.333333,
+      "minor": 0,
+      "minor_pct": 0.0
     },
     "location": {
       "clean": 2,

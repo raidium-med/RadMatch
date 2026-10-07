@@ -252,6 +252,17 @@ def _adapt_gt_findings(findings_gt_dir: Path, output_dir: Path, series_uuids: li
     )
 
 
+def _stamp_findings_dir(findings_dir: Path, config: dict[str, object]) -> None:
+    """Keep `findings_dir` single-config: if another config stamped it, discard its findings
+    so they are re-extracted. An unstamped directory is adopted as-is."""
+    stamp_path = findings_dir.parent / f"{findings_dir.name}_config.json"
+    if stamp_path.exists() and io.load_json(stamp_path, raise_on_error=False) != config:
+        logger.info("%s was extracted with a different config; discarding it", findings_dir.name)
+        for stale in findings_dir.glob("*.json"):
+            stale.unlink()
+    io.save_json(config, stamp_path)
+
+
 def _extract_gt_findings(
     reports_gt_dir: Path,
     output_dir: Path,
@@ -312,7 +323,7 @@ def extract_findings(
     extracted) is required; predicted reports are always extracted.
     `indications_dir` is injected as context and copied into the results directory so
     later stages find it without the flag.
-    `client_factory(model, max_tokens, reasoning) -> Client` overrides construction
+    `client_factory(model, reasoning) -> Client` overrides construction
     for testing.
     """
     if not reports_gt_dir and not findings_gt_dir:
@@ -351,12 +362,20 @@ def extract_findings(
         nonempty = sum(1 for v in indications.values() if v)
         logger.info("Loaded %d indications (%d non-empty) from %s", len(indications), nonempty, indications_dir)
     # One client serves both sides — same model, same provider.
-    client = client_factory(model=llm_extractor, max_tokens=constants.MAX_TOKENS, reasoning=reasoning)
+    client = client_factory(model=llm_extractor, reasoning=reasoning)
+    extraction_config = {
+        "extractor": llm_extractor,
+        "fewshot": fewshot,
+        "reasoning": reasoning,
+        "prompt_hash": prompts.prompt_fingerprint(prompts.PROMPT_FINDING_EXTRACTION),
+        "schema_hash": io.fingerprint(_FINDINGS_SCHEMA),
+    }
 
     stats_gt: ExtractionStats | None = None
     if findings_gt_dir:
         stats_gt = _adapt_gt_findings(Path(findings_gt_dir), output_gt_dir, series_uuids)
     elif reports_gt_dir:
+        _stamp_findings_dir(output_gt_dir, extraction_config)
         stats_gt = _extract_gt_findings(
             reports_gt_dir, output_gt_dir, series_uuids, client, fewshot_messages, workers, indications
         )
@@ -375,6 +394,7 @@ def extract_findings(
     logger.info("")
     logger.info("-" * 90)
     logger.info("(2) Processing predicted reports...")
+    _stamp_findings_dir(output_pred_dir, extraction_config)
     stats_pred = run_extraction(report_files_pred, output_pred_dir, client, fewshot_messages, workers, indications)
 
     if reports_pred_dir.exists():

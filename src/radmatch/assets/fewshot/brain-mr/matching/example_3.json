@@ -1,6 +1,6 @@
 {
-  "scenario": "N:1 aggregate — atomic pred WMH findings covering one umbrella GT",
-  "description": "GT 'Bilateral periventricular white matter T2 hyperintensities, age-related.' is a real clinical aggregation. The predictor described each side separately; both pred rows → `aggregate`.",
+  "scenario": "N:1 umbrella — atomic pred WMH findings covering one umbrella GT",
+  "description": "GT 'Bilateral periventricular white matter T2 hyperintensities, age-related.' is a real clinical aggregation. The predictor described each side separately; both pred rows bind to it.",
   "user": {
     "pred_findings": [
       {
@@ -47,20 +47,17 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "GT names pathology (T2 hyperintensity) + parent anatomy (bilateral periventricular WM); covers the right-side atom.",
-        "match_scope": "aggregate"
+        "reasoning": "GT names pathology (T2 hyperintensity) + parent anatomy (bilateral periventricular WM); covers the right-side atom."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_1",
-        "reasoning": "Same umbrella covers the left-side atom — second row, same gt_id.",
-        "match_scope": "aggregate"
+        "reasoning": "Same umbrella covers the left-side atom — second row, same gt_id."
       },
       {
         "pred_id": "p_3",
         "gt_id": "gt_2",
-        "reasoning": "Identical pituitary-normal statement.",
-        "match_scope": "direct"
+        "reasoning": "Identical pituitary-normal statement."
       }
     ],
     "unmatched_pred": [],

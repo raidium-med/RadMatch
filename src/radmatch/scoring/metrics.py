@@ -95,16 +95,20 @@ def build_muc_record(
 
     `measurement` is judged on both sides — deterministically (Stage 3a) and,
     for clinical-boundary crossings the thresholds miss, by the LLM (Stage 3b).
-    To avoid double-counting, *any* deterministic measurement error (value diff,
-    omission, addition, or category mismatch) suppresses *all* of the pair's LLM
-    measurement verdicts. This is deliberately coarse: it can drop a genuine LLM
-    boundary catch when an unrelated deterministic measurement error also fired,
-    but that pair is already flagged on `measurement`, so the category outcome is
-    unchanged. The LLM verdict only survives when Stage 3a was silent on
-    measurement — the gap it exists to fill.
+    A deterministic measurement error suppresses the pair's LLM measurement
+    verdicts to avoid double-counting, *unless* the LLM graded it `major` and
+    the deterministic side did not: suppressing on presence alone let a `minor`
+    deterministic error discard a `major` boundary crossing, silently keeping
+    the pair at PAR when it should be INC.
     """
-    if any(e.get("dimension") == "measurement" for e in structured_errors):
-        text_errors = [e for e in text_errors if e.get("dimension") != "measurement"]
+    structured_measurement = [e for e in structured_errors if e.get("dimension") == "measurement"]
+    if structured_measurement:
+        deterministic_major = any(e.get("severity") == "major" for e in structured_measurement)
+        text_errors = [
+            e
+            for e in text_errors
+            if e.get("dimension") != "measurement" or (e.get("severity") == "major" and not deterministic_major)
+        ]
     category, inc_triggered = classify_muc(structured_errors, text_errors)
     return {
         "pred_id": match["pred_id"],
@@ -115,54 +119,12 @@ def build_muc_record(
         "inc_triggered": inc_triggered,
         "gt_significance": gt_finding.get("clinical_significance", constants.DEFAULT_CLINICAL_SIGNIFICANCE),
         "pred_significance": pred_finding.get("clinical_significance", constants.DEFAULT_CLINICAL_SIGNIFICANCE),
-        "match_scope": match["match_scope"],
     }
 
 
 # ============================================================================
 # Effective MUC counts + actionable errors
 # ============================================================================
-
-
-def _aggregate_per_finding_categories(records: Sequence[dict], key_fn) -> dict[tuple[str, str], str]:
-    """Map each distinct finding (keyed by `key_fn`) to its aggregate effective
-    category — `_best_category` across all the matches the finding participates in.
-
-    Mirrors `_per_gt_safety_outcomes`'s "any credited match rescues the GT"
-    semantic at the category level: a finding correctly identified by at least
-    one match shows up as COR/PAR even if other matches were INC. A finding
-    matched only via INC (or only via uncredited-generic on an actionable tier)
-    shows up as INC.
-    """
-    actionable = set(constants.ACTIONABLE_SIGNIFICANCE_TIERS)
-    per_finding: dict[tuple[str, str], dict[str, object]] = {}
-    for r in records:
-        cat = reclassify_to_effective_category(r)
-        bucket = per_finding.setdefault(
-            key_fn(r),
-            {"any_credited_cor": False, "any_credited_par": False},
-        )
-        if cat == "INC":
-            continue
-        credited = is_credited_match(
-            category=cat,
-            match_scope=r["match_scope"],
-            gt_actionable=r.get("gt_significance") in actionable,
-        )
-        if credited:
-            if cat == "COR":
-                bucket["any_credited_cor"] = True
-            elif cat == "PAR":
-                bucket["any_credited_par"] = True
-
-    def _resolve(bucket: dict[str, object]) -> str:
-        if bucket["any_credited_cor"]:
-            return "COR"
-        if bucket["any_credited_par"]:
-            return "PAR"
-        return "INC"  # all matches are INC or uncredited generic
-
-    return {key: _resolve(bucket) for key, bucket in per_finding.items()}
 
 
 def effective_muc_counts(
@@ -179,10 +141,12 @@ def effective_muc_counts(
     side and rely on `n_spu` / `n_mis` for the orphans. This keeps
     `COR + PAR + INC + MIS == total_gt_findings` reconcilable.
     """
-    gt_categories = _aggregate_per_finding_categories(records, key_fn=_gt_key)
+    per_gt: dict[tuple[str, str], set[str]] = {}
+    for r in records:
+        per_gt.setdefault(_gt_key(r), set()).add(reclassify_to_effective_category(r))
     counts = {cat: 0 for cat in constants.MUC_CATEGORIES}
-    for cat in gt_categories.values():
-        counts[cat] += 1
+    for cats in per_gt.values():
+        counts[next((cat for cat in ("COR", "PAR") if cat in cats), "INC")] += 1
     counts["MIS"] = n_mis
     counts["SPU"] = n_spu
     return counts
@@ -318,37 +282,17 @@ def count_distinct_findings(records: Sequence[dict]) -> tuple[int, int]:
     )
 
 
-def is_credited_match(*, category: str, match_scope: str | None, gt_actionable: bool) -> bool:
-    """Whether a match record credits its GT for recall + actionable-error rescue.
-
-    A record credits iff it reclassifies to COR/PAR AND (scope ∈
-    {direct, aggregate} OR GT is non-actionable). A critical GT covered
-    only by `generic` boilerplate gets no credit; routine GTs accept
-    any scope.
-    """
-    if category == "INC":
-        return False
-    if match_scope in constants.MATCH_SCOPE_CREDITED:
-        return True
-    return not gt_actionable
-
-
 def _per_gt_safety_outcomes(records: Sequence[dict]) -> dict[tuple[str, str], dict[str, object]]:
-    """Aggregate matched records per unique GT; a credited record flips
-    both `is_hit` and `all_inc=False` for the GT's bucket."""
+    """Aggregate matched records per unique GT; a credited (non-INC) record
+    flips both `is_hit` and `all_inc=False` for the GT's bucket."""
     per_gt: dict[tuple[str, str], dict[str, object]] = {}
-    actionable = set(constants.ACTIONABLE_SIGNIFICANCE_TIERS)
     for r in records:
         bucket = per_gt.setdefault(
             _gt_key(r),
             {"is_hit": False, "all_inc": True, "gt_sig": r.get("gt_significance"), "pred_sigs": []},
         )
         bucket["pred_sigs"].append(r.get("pred_significance"))
-        if is_credited_match(
-            category=reclassify_to_effective_category(r),
-            match_scope=r["match_scope"],
-            gt_actionable=r.get("gt_significance") in actionable,
-        ):
+        if reclassify_to_effective_category(r) != "INC":
             bucket["all_inc"] = False
             bucket["is_hit"] = True
     return per_gt
@@ -358,17 +302,12 @@ def _per_pred_safety_outcomes(records: Sequence[dict]) -> dict[tuple[str, str], 
     """Pred-side mirror of `_per_gt_safety_outcomes`: aggregate matched records
     per unique pred so a pred matched to ≥1 credited GT counts as one hit."""
     per_pred: dict[tuple[str, str], dict[str, object]] = {}
-    actionable = set(constants.ACTIONABLE_SIGNIFICANCE_TIERS)
     for r in records:
         bucket = per_pred.setdefault(
             _pred_key(r),
             {"is_hit": False, "pred_sig": r.get("pred_significance")},
         )
-        if is_credited_match(
-            category=reclassify_to_effective_category(r),
-            match_scope=r["match_scope"],
-            gt_actionable=r.get("gt_significance") in actionable,
-        ):
+        if reclassify_to_effective_category(r) != "INC":
             bucket["is_hit"] = True
     return per_pred
 

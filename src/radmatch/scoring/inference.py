@@ -1,5 +1,5 @@
-"""Stage 3b — one batched LLM call per report, asking whether the free-text
-attribute dimensions differ between pred and gt.
+"""Stage 3b — LLM calls asking whether the free-text attribute dimensions differ
+between pred and gt, in chunks of `_STAGE3B_CHUNK_SIZE` matched pairs per call.
 
 INC pairs are evaluated like any other, for diagnostics — their category is already
 settled by Stage 3a's status inversion.
@@ -18,12 +18,13 @@ logger = logging.getLogger(__name__)
 
 # Sized for reasoning models: the budget covers hidden reasoning tokens plus the
 # answer, and a heavy reasoner can burn >8k thinking before returning anything.
-_MAX_TOKENS_ATTRIBUTE_ERRORS: int = 32768
+_MAX_TOKENS_ATTRIBUTE_ERRORS: int = min(constants.MAX_TOKENS, 16384)
 
-# Extra attempts on a malformed or misaligned payload. Output is non-deterministic,
-# so a re-call usually recovers; once spent, the pair degrades to empty text errors
-# and still scores via Stage 3a.
-DEFAULT_MAX_RETRIES: int = 1
+# Extra attempts per chunk on a malformed or misaligned payload, each told what was
+# wrong. Once spent, or on a timeout, the chunk is split in half.
+DEFAULT_MAX_RETRIES: int = 3
+_STAGE3B_CHUNK_SIZE: int = 10
+_STAGE3B_TIMEOUT_S: float = constants.LLM_REQUEST_TIMEOUT_S / 3
 
 
 _ATTRIBUTE_ERRORS_SCHEMA = {
@@ -94,6 +95,8 @@ def _parse_aligned_error_lists(content: str, n_matches: int, series_uuid: str) -
             type(raw_errors_per_match).__name__,
         )
         return None
+    while len(raw_errors_per_match) > n_matches and raw_errors_per_match[-1] == []:
+        raw_errors_per_match.pop()
     if len(raw_errors_per_match) != n_matches:
         logger.warning(
             "[Report %s] Stage 3b returned %d error lists for %d matches",
@@ -105,44 +108,26 @@ def _parse_aligned_error_lists(content: str, n_matches: int, series_uuid: str) -
     return raw_errors_per_match
 
 
-def detect_attribute_errors(
+def _detect_attribute_errors_chunk(
     matches: Sequence[dict],
     findings_pred: dict[str, dict],
     findings_gt: dict[str, dict],
-    structured_errors_per_pair: Sequence[Sequence[dict]],
     series_uuid: str,
     client: llm_clients.Client,
     fewshot: str | None = None,
     indication: str = "",
     max_retries: int = DEFAULT_MAX_RETRIES,
-) -> tuple[list[list[dict]], bool]:
-    """One schema-constrained LLM call, returning one error list per input match in
-    input order, plus whether the call degraded.
-
-    `max_retries` extra attempts are made on a malformed or misaligned payload. Once
-    spent, the errors come back empty and `degraded` is True — the pair still scores on
-    Stage 3a, but its free-text dimensions are recorded as clean rather than unknown.
+) -> list[list[dict]]:
+    """One schema-constrained LLM call over a chunk of matches, returning one error list
+    per match in input order. Raises `ValueError` on a timeout, or when the payload is
+    still malformed after `max_retries` corrected re-calls.
     """
-    if not matches:
-        return [], False
-
-    if len(structured_errors_per_pair) != len(matches):
-        raise ValueError(
-            f"structured_errors_per_pair length {len(structured_errors_per_pair)} "
-            f"does not match matches length {len(matches)}"
-        )
-
-    # All matches are shipped to the LLM. We still track `(orig_idx, match)`
-    # tuples so the alignment / re-ordering / truncation logic below stays
-    # identical to the previous filtered version.
-    eligible: list[tuple[int, dict]] = list(enumerate(matches))
-
     pairs_payload = [
         {
             "pred_finding": findings_pred[m["pred_id"]],
             "gt_finding": findings_gt[m["gt_id"]],
         }
-        for _, m in eligible
+        for m in matches
     ]
     user_payload: dict[str, object] = {"series_uuid": series_uuid}
     if indication:
@@ -154,24 +139,31 @@ def detect_attribute_errors(
         *prompts.attribute_errors_fewshot_messages(fewshot),
         {"role": "user", "content": json.dumps(user_payload, ensure_ascii=False)},
     ]
+    correction = {
+        "role": "user",
+        "content": f"Your previous reply was rejected. Return `errors_per_match` as exactly "
+        f"{len(matches)} lists, one per pair, in the order given.",
+    }
 
-    # Retry a malformed response before giving up; failure degrades to empty text
-    # errors rather than losing the pair.
     raw_errors_per_match: list | None = None
     for attempt in range(max_retries + 1):
         try:
             content = llm_clients.call_llm(
                 client,
-                messages=messages,
+                messages=messages if attempt == 0 else [*messages, correction],
                 response_format=_ATTRIBUTE_ERRORS_SCHEMA,
                 max_tokens=_MAX_TOKENS_ATTRIBUTE_ERRORS,
+                timeout=_STAGE3B_TIMEOUT_S,
             )
-        except Exception as exc:
-            # call_llm already retried transient API errors; don't kill the dataset for one bad pair.
-            logger.error("[Report %s] Stage 3b attribute-errors call failed; skipping pair: %s", series_uuid, exc)
-            return [[] for _ in matches], True
+        except llm_clients.LLM_TIMEOUT_ERRORS as exc:
+            raise ValueError(f"[Report {series_uuid}] Stage 3b call timed out") from exc
+        except Exception:
+            # Must not degrade to "no attribute errors": that is indistinguishable from a
+            # clean pair, is cached as such, and silently scores the report as correct.
+            logger.error("[Report %s] Stage 3b attribute-errors call failed", series_uuid)
+            raise
 
-        raw_errors_per_match = _parse_aligned_error_lists(content, len(eligible), series_uuid)
+        raw_errors_per_match = _parse_aligned_error_lists(content, len(matches), series_uuid)
         if raw_errors_per_match is not None:
             break
         if attempt < max_retries:
@@ -183,33 +175,60 @@ def detect_attribute_errors(
             )
 
     if raw_errors_per_match is None:
-        logger.error(
-            "[Report %s] Stage 3b output malformed after %d attempts; dropping text errors for the report",
-            series_uuid,
-            max_retries + 1,
-        )
-        return [[] for _ in matches], True
+        raise ValueError(f"[Report {series_uuid}] Stage 3b output malformed after {max_retries + 1} attempts")
 
-    normalised_per_eligible: list[list[dict]] = []
-    for raw_list in raw_errors_per_match[: len(eligible)]:
-        normalised: list[dict] = []
+    output: list[list[dict]] = []
+    for raw_list in raw_errors_per_match:
         # Skip non-list items (e.g. the LLM returned a string or dict instead of a list)
-        # rather than iterating their characters/keys.
+        # rather than iterating their characters/keys; likewise non-dict inner items.
         if not isinstance(raw_list, list):
-            normalised_per_eligible.append([])
+            output.append([])
             continue
-        for err in raw_list:
-            if not isinstance(err, dict):
-                # Nested malformed item (e.g. inner string in `[["location differs"]]`).
-                # Drop silently — the per-pair lookup would AttributeError otherwise.
-                continue
-            n = _normalize_llm_error(err)
-            if n is not None:
-                normalised.append(n)
-        normalised_per_eligible.append(normalised)
+        normalised = (_normalize_llm_error(err) for err in raw_list if isinstance(err, dict))
+        output.append([e for e in normalised if e is not None])
+    return output
 
-    # Re-align to the input matches order: eligible[i] → original index, INC pairs → [].
-    output: list[list[dict]] = [[] for _ in matches]
-    for (orig_idx, _), errs in zip(eligible, normalised_per_eligible):
-        output[orig_idx] = errs
-    return output, False
+
+def detect_attribute_errors(
+    matches: Sequence[dict],
+    findings_pred: dict[str, dict],
+    findings_gt: dict[str, dict],
+    series_uuid: str,
+    client: llm_clients.Client,
+    fewshot: str | None = None,
+    indication: str = "",
+    max_retries: int = DEFAULT_MAX_RETRIES,
+) -> list[list[dict]]:
+    """Stage 3b over all matched pairs, in chunks of `_STAGE3B_CHUNK_SIZE`, returning one
+    error list per match in input order.
+
+    A chunk that times out or stays malformed is split in half and retried, down to a
+    single pair; a pair that still fails raises, so the report is recorded as failed
+    rather than scored as if the judge had found no attribute errors.
+    """
+    if not matches:
+        return []
+
+    def run(lo: int, hi: int) -> list[list[dict]]:
+        try:
+            return _detect_attribute_errors_chunk(
+                matches=matches[lo:hi],
+                findings_pred=findings_pred,
+                findings_gt=findings_gt,
+                series_uuid=series_uuid,
+                client=client,
+                fewshot=fewshot,
+                indication=indication,
+                max_retries=max_retries,
+            )
+        except ValueError as exc:
+            if hi - lo <= 1:
+                raise
+            mid = lo + (hi - lo) // 2
+            logger.warning("[Report %s] Stage 3b chunk [%d:%d] failed (%s); splitting", series_uuid, lo, hi, exc)
+            return run(lo, mid) + run(mid, hi)
+
+    out: list[list[dict]] = []
+    for start in range(0, len(matches), _STAGE3B_CHUNK_SIZE):
+        out.extend(run(start, min(start + _STAGE3B_CHUNK_SIZE, len(matches))))
+    return out

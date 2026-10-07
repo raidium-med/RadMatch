@@ -1,6 +1,6 @@
 {
-  "scenario": "Direct matches + comparison flip on actionable nodes",
-  "description": "Real subset of abdomen-ct/findings_{gt,pred}/example_1. Demonstrates clean alignment on near-synonymous descriptions of renal cysts and hepatic veins, a comparison flip on the mesenteric lymph node cluster (gt 'unchanged compared to prior' vs pred 'worsening compared to prior') that flows to Stage 3a deterministic, and a direct match on portal vein narrowing.",
+  "scenario": "1:1 matches + comparison flip on actionable nodes",
+  "description": "Real subset of abdomen-ct/findings_{gt,pred}/example_1. Demonstrates clean alignment on near-synonymous descriptions of renal cysts and hepatic veins, a comparison flip on the mesenteric lymph node cluster (gt 'unchanged compared to prior' vs pred 'worsening compared to prior') that flows to Stage 3a deterministic, and a 1:1 match on portal vein narrowing.",
   "user": {
     "pred_findings": [
       {
@@ -121,32 +121,27 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Both completeness statements about patent hepatic veins.",
-        "match_scope": "direct"
+        "reasoning": "Both completeness statements about patent hepatic veins."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_2",
-        "reasoning": "Same finding (bilateral renal hypodense lesions, characterized as cysts); descriptors differ slightly but anatomy + pathology entity match.",
-        "match_scope": "direct"
+        "reasoning": "Same finding (bilateral renal hypodense lesions, characterized as cysts); descriptors differ slightly but anatomy + pathology entity match."
       },
       {
         "pred_id": "p_3",
         "gt_id": "gt_3",
-        "reasoning": "Identical negative finding for hydronephrosis.",
-        "match_scope": "direct"
+        "reasoning": "Identical negative finding for hydronephrosis."
       },
       {
         "pred_id": "p_4",
         "gt_id": "gt_4",
-        "reasoning": "Same finding (three 12 mm mesenteric lymph nodes); comparison differs (worsening vs stable) but anatomy + count + size match — Stage 3a will flag the comparison disagreement.",
-        "match_scope": "direct"
+        "reasoning": "Same finding (three 12 mm mesenteric lymph nodes); comparison differs (worsening vs stable) but anatomy + count + size match — Stage 3a will flag the comparison disagreement."
       },
       {
         "pred_id": "p_5",
         "gt_id": "gt_5",
-        "reasoning": "Same finding (portal vein luminal narrowing at the porta hepatis); pred reports a range, gt reports a single value.",
-        "match_scope": "direct"
+        "reasoning": "Same finding (portal vein luminal narrowing at the porta hepatis); pred reports a range, gt reports a single value."
       }
     ],
     "unmatched_pred": [],

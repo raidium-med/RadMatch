@@ -5,8 +5,8 @@ Three worked examples of the alignment patterns Stage 2 has to get right. Findin
 | File | Scenario |
 |------|----------|
 | `example_1.json` | Laterality flip + status flip + severity flip + measurement diff |
-| `example_2.json` | 1:N aggregate — pred enumerates spinal levels covering multiple GT atoms |
-| `example_3.json` | N:1 aggregate — atomic pred pulmonary nodules covering one umbrella GT |
+| `example_2.json` | 1:N umbrella — pred enumerates spinal levels covering multiple GT atoms |
+| `example_3.json` | N:1 umbrella — atomic pred pulmonary nodules covering one umbrella GT |
 
 ## Format
 
