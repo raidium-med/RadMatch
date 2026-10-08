@@ -341,7 +341,7 @@ has one entry per dimension.
 
 The optional **RadMatch Evaluation Dashboard** explores results report by report — findings side by side, coloured by match outcome, with the attribute errors and judge reasoning behind each pair.
 
-A sidebar selector switches every page between the actionable (default), triage and critical tiers: errors per report split into false negatives and false positives, recall and precision.
+A selector above the metric cards switches between the actionable (default), triage and critical tiers: errors per report split into false negatives and false positives, recall and precision.
 
 ```bash
 pip install "radmatch[dashboard]"

@@ -551,20 +551,26 @@ def render_metric_card(
     )
 
 
-def select_tier() -> str:
-    """Sidebar radio choosing the error tier every page reports; actionable by default."""
-    stored = st.session_state.get(dashboard_constants.CONFIG_TIER, dashboard_constants.DEFAULT_TIER)
+def current_tier(key: str) -> str:
+    """The error tier before its radio renders: the radio's own state (`key`), else the
+    tier last chosen on any page, else actionable."""
+    return st.session_state.get(key) or st.session_state.get(
+        dashboard_constants.CONFIG_TIER, dashboard_constants.DEFAULT_TIER
+    )
+
+
+def select_tier(key: str) -> str:
+    """Horizontal error-tier radio (actionable by default); the choice carries across pages."""
     options = list(dashboard_constants.TIER_NAMES)
-    with st.sidebar:
-        st.markdown("### Error tier")
-        tier = st.radio(
-            "Error tier",
-            options=options,
-            index=options.index(stored),
-            format_func=dashboard_constants.TIER_NAMES.get,
-            label_visibility="collapsed",
-            key="tier_radio",
-        )
+    tier = st.radio(
+        "Error tier",
+        options=options,
+        index=options.index(current_tier(key)),
+        format_func=dashboard_constants.TIER_NAMES.get,
+        horizontal=True,
+        label_visibility="collapsed",
+        key=key,
+    )
     st.session_state[dashboard_constants.CONFIG_TIER] = tier
     return tier
 

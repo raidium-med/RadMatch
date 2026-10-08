@@ -381,7 +381,8 @@ def main() -> None:
     shared.set_base_page_config("Results Explorer")
     shared.inject_styles()
     sidebar = shared.configure_sidebar(default_results="")
-    tier = shared.select_tier()
+    # The tier radio renders above the per-report cards; the filters above it read its state.
+    tier = shared.current_tier(key="tier_radio_explorer")
     state = shared.build_state(sidebar.raw_results, sidebar.raw_reports_gt, sidebar.raw_reports_pred)
     if state is None:
         st.stop()
@@ -422,6 +423,7 @@ def main() -> None:
 
     per_report = shared.load_per_report_metrics(str(state.results_dir), report_id)
     if per_report:
+        tier = shared.select_tier(key="tier_radio_explorer")
         _per_report_metric_cards(per_report, tier)
     else:
         st.info("No per_report_metrics for this series. Re-run scoring to populate per_report_metrics/<series>.json.")

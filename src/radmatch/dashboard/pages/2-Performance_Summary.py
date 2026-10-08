@@ -223,7 +223,6 @@ def main() -> None:
     shared.set_base_page_config("Performance Summary")
     shared.inject_styles()
     sidebar = shared.configure_sidebar(default_results="")
-    tier = shared.select_tier()
     state = shared.build_state(sidebar.raw_results, sidebar.raw_reports_gt, sidebar.raw_reports_pred)
     if state is None:
         st.stop()
@@ -241,6 +240,7 @@ def main() -> None:
 
     _hdr(metadata)
     st.subheader("Main Metrics")
+    tier = shared.select_tier(key="tier_radio_summary")
     st.caption(f"{dashboard_constants.TIER_NAMES[tier]} tier: {' + '.join(constants.ERROR_TIERS[tier])} findings.")
     _headline_metric_cards(shared.tier_block(summary, tier), tier)
     st.markdown("---")
