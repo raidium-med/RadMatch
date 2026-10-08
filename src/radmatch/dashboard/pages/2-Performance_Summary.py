@@ -243,7 +243,6 @@ def main() -> None:
     tier = shared.select_tier(key="tier_radio_summary")
     _headline_metric_cards(shared.tier_block(summary, tier), tier)
     st.caption(f"{dashboard_constants.TIER_NAMES[tier]} tier: {' + '.join(constants.ERROR_TIERS[tier])} findings.")
-    st.markdown("---")
 
     st.subheader("Match Outcomes", help=shared.MATCH_OUTCOMES_HELP)
     is_pct = shared.render_match_outcomes_toggle(key="match_outcomes_mode_summary")
