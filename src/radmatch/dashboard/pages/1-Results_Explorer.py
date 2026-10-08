@@ -177,7 +177,7 @@ def _per_report_metric_cards(per_report: dict[str, object], tier: str) -> None:
     for col, (metric, key) in zip(row1, [("ER", "errors_total"), ("FN", "fn_total"), ("FP", "fp_total")]):
         col.markdown(
             shared.render_metric_card(
-                shared.tier_metric_label(tier, metric),
+                shared.tier_metric_label(tier, metric, suffix=" per Report", with_abbrev=False),
                 shared.format_int(int(block.get(key) or 0)),
                 card_class="f1-metric-card" if metric == "ER" else "grey-metric-card",
             ),
@@ -187,7 +187,7 @@ def _per_report_metric_cards(per_report: dict[str, object], tier: str) -> None:
     for col, (abbr, metric) in zip(row2, [("Rec", "recall"), ("Prec", "precision")]):
         col.markdown(
             shared.render_metric_card(
-                shared.tier_metric_label(tier, abbr),
+                shared.tier_metric_label(tier, abbr, with_abbrev=False),
                 shared.format_tier_rate(block, metric),
                 card_class="grey-metric-card",
                 subtitle=shared.format_tier_rate_subtitle(block, metric),

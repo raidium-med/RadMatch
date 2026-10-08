@@ -45,7 +45,7 @@ def _headline_metric_cards(block: dict[str, object], tier: str) -> None:
             ("FP", "fp", f"Per report. {FP_HELP}"),
         ],
     ):
-        label = shared.tier_metric_label(tier, metric, suffix=" per Report")
+        label = shared.tier_metric_label(tier, metric, suffix=" per Report", with_abbrev=False)
         card_class = "f1-metric-card" if metric == "ER" else "grey-metric-card"
         col.markdown(
             shared.render_metric_card(
@@ -62,7 +62,7 @@ def _headline_metric_cards(block: dict[str, object], tier: str) -> None:
     for col, (abbr, metric) in zip(row2, [("Rec", "recall"), ("Prec", "precision")]):
         col.markdown(
             shared.render_metric_card(
-                shared.tier_metric_label(tier, abbr),
+                shared.tier_metric_label(tier, abbr, with_abbrev=False),
                 shared.format_tier_rate(block, metric),
                 card_class="grey-metric-card",
                 subtitle=shared.format_tier_rate_subtitle(block, metric),

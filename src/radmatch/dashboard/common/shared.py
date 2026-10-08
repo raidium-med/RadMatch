@@ -569,13 +569,16 @@ def select_tier() -> str:
     return tier
 
 
-def tier_metric_label(tier: str, metric: str, *, suffix: str = "", with_tier: bool = True) -> str:
-    """Full metric name with its abbreviation in parentheses, e.g.
+def tier_metric_label(
+    tier: str, metric: str, *, suffix: str = "", with_tier: bool = True, with_abbrev: bool = True
+) -> str:
+    """Full metric name, optionally with its abbreviation in parentheses, e.g.
     "Actionable Errors per Report (aER)" for `("actionable", "ER", suffix=" per Report")`."""
     name = dashboard_constants.METRIC_NAMES[metric]
     if with_tier:
         name = f"{dashboard_constants.TIER_NAMES[tier]} {name}"
-    return f"{name}{suffix} ({dashboard_constants.TIER_PREFIX[tier]}{metric})"
+    abbrev = f" ({dashboard_constants.TIER_PREFIX[tier]}{metric})" if with_abbrev else ""
+    return f"{name}{suffix}{abbrev}"
 
 
 def tier_block(payload: dict[str, object], tier: str) -> dict[str, object]:
