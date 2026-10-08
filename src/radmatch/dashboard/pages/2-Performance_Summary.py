@@ -8,6 +8,7 @@ import plotly.express as px
 import streamlit as st
 
 from radmatch import constants
+from radmatch.dashboard.common import constants as dashboard_constants
 from radmatch.dashboard.common import shared
 
 
@@ -23,55 +24,43 @@ def _hdr(metadata: dict[str, object]) -> None:
     cols[2].markdown(shared.render_metric_card("Total Pred findings", f"{pred_total:,}"), unsafe_allow_html=True)
 
 
-def _headline_metric_cards(summary: dict[str, object], safety: dict[str, object]) -> None:
-    """Safety cards: average actionable errors, then actionable and triage
-    precision/recall with `(hits / total)` subtitles. The opportunity-normalized
-    `actionable_errors_per_finding` lives in the subset table instead.
-    """
+FN_HELP = "Reference findings of the tier missed or contradicted (MIS + INC on the tier's GT findings)."
+FP_HELP = (
+    "Claims of the tier the reference lacks: SPU in the tier, plus INC where only the "
+    "prediction is in the tier (e.g. an abnormality where the reference says normal)."
+)
+
+
+def _headline_metric_cards(block: dict[str, object], tier: str) -> None:
+    """Cards for the selected tier: errors per report split into FN + FP, then
+    recall / precision with `(hits / total)` subtitles and errors per finding."""
     row1 = st.columns(3)
-    row1[0].markdown(
-        shared.render_metric_card(
-            "Avg. Actionable Errors",
-            shared.format_numeric_metric(summary.get("actionable_errors_per_report"), decimals=2),
-            card_class="f1-metric-card",
-        ),
-        unsafe_allow_html=True,
-    )
-    row1[1].markdown(
-        shared.render_metric_card(
-            "Actionable Precision",
-            shared.format_precision_metric(safety, "actionable"),
-            card_class="safety-metric-card",
-            subtitle=shared.format_precision_subtitle(safety, "actionable"),
-        ),
-        unsafe_allow_html=True,
-    )
-    row1[2].markdown(
-        shared.render_metric_card(
-            "Actionable Recall",
-            shared.format_recall_metric(safety, "actionable"),
-            card_class="safety-metric-card",
-            subtitle=shared.format_recall_subtitle(safety, "actionable"),
-        ),
-        unsafe_allow_html=True,
-    )
+    for col, (metric, key) in zip(row1, [("ER", "errors"), ("FN", "fn"), ("FP", "fp")]):
+        col.markdown(
+            shared.render_metric_card(
+                shared.tier_metric_label(tier, metric, suffix=" per Report", with_abbrev=False),
+                shared.format_numeric_metric(block.get(f"{key}_per_report"), decimals=2),
+                card_class="f1-metric-card" if metric == "ER" else "grey-metric-card",
+            ),
+            unsafe_allow_html=True,
+        )
 
     row2 = st.columns(3)
-    row2[0].markdown(
+    for col, (abbr, metric) in zip(row2, [("Rec", "recall"), ("Prec", "precision")]):
+        col.markdown(
+            shared.render_metric_card(
+                shared.tier_metric_label(tier, abbr, with_abbrev=False),
+                shared.format_tier_rate(block, metric),
+                card_class="grey-metric-card",
+                subtitle=shared.format_tier_rate_subtitle(block, metric),
+            ),
+            unsafe_allow_html=True,
+        )
+    row2[2].markdown(
         shared.render_metric_card(
-            "Triage Precision",
-            shared.format_precision_metric(safety, "triage"),
-            card_class="safety-metric-card",
-            subtitle=shared.format_precision_subtitle(safety, "triage"),
-        ),
-        unsafe_allow_html=True,
-    )
-    row2[1].markdown(
-        shared.render_metric_card(
-            "Triage Recall",
-            shared.format_recall_metric(safety, "triage"),
-            card_class="safety-metric-card",
-            subtitle=shared.format_recall_subtitle(safety, "triage"),
+            f"{dashboard_constants.TIER_NAMES[tier]} Errors per Finding",
+            shared.format_numeric_metric(block.get("errors_per_finding"), decimals=3),
+            card_class="grey-metric-card",
         ),
         unsafe_allow_html=True,
     )
@@ -102,7 +91,7 @@ _SEVERITY_COLORS = {"clean": "#22c55e", "minor error": "#f59e0b", "major error":
 ATTRIBUTE_ERRORS_HELP = (
     "Per-attribute distribution of clean / minor / major across all matched "
     "pairs (COR + INC + the internal PAR records before reclassification). "
-    "Diagnostic only — does not feed `actionable_errors`."
+    "Diagnostic only — does not feed the tier errors (aER, tER, cER)."
 )
 
 
@@ -182,35 +171,35 @@ def _attribute_breakdown(breakdown: dict[str, dict[str, float]]) -> None:
     st.plotly_chart(fig, width="stretch")
 
 
-def _subsets_table(subsets: dict[str, dict]) -> None:
+def _subsets_table(subsets: dict[str, dict], tier: str) -> None:
     # Unlisted subsets trail at the end, so the table never drops rows. Each row is
     # an independent slice — columns do not sum across rows.
     ordered_names = [s for s in _SUBSET_DISPLAY_ORDER if s in subsets] + [
         s for s in subsets if s not in _SUBSET_DISPLAY_ORDER
     ]
+    fn, fp, prec, rec = (shared.tier_metric_label(tier, m, with_tier=False) for m in ("FN", "FP", "Prec", "Rec"))
 
-    def _safety_pct_or_nan(safety: dict, tier: str, metric: str) -> float:
+    def _pct_or_nan(block: dict, metric: str) -> float:
         # Vacuous pool → NaN, so the cell renders empty rather than "100 %".
-        total_key = f"{tier}_pred_total" if metric == "precision" else f"{tier}_gt_total"
-        if int(safety.get(total_key) or 0) == 0:
+        total_key = "gt_total" if metric == "recall" else "pred_total"
+        if int(block.get(total_key) or 0) == 0:
             return float("nan")
-        return float(safety.get(f"{tier}_{metric}", 0.0)) * 100.0
+        return float(block.get(metric) or 0.0) * 100.0
 
     rows: list[dict[str, object]] = []
     for name in ordered_names:
         payload = subsets[name]
+        block = shared.tier_block(payload, tier)
         muc = payload.get("muc_counts", {})
-        safety = payload.get("clinical_safety_summary") or {}
-        actionable_findings = int(payload.get("actionable_findings_total", 0) or 0)
         rows.append(
             {
                 "Subset": name,
-                "Avg. actionable errors / finding": float(payload.get("actionable_errors_per_finding", 0.0) or 0.0),
-                "Actionable findings": actionable_findings,
-                "Actionable precision": _safety_pct_or_nan(safety, "actionable", "precision"),
-                "Actionable recall": _safety_pct_or_nan(safety, "actionable", "recall"),
-                "Triage precision": _safety_pct_or_nan(safety, "triage", "precision"),
-                "Triage recall": _safety_pct_or_nan(safety, "triage", "recall"),
+                "Errors per Finding": float(block.get("errors_per_finding") or 0.0),
+                fn: int(block.get("fn_total") or 0),
+                fp: int(block.get("fp_total") or 0),
+                "Findings at Stake": int(block.get("findings_total") or 0),
+                prec: _pct_or_nan(block, "precision"),
+                rec: _pct_or_nan(block, "recall"),
                 **{cat: muc.get(cat, 0) for cat in constants.MUC_CATEGORIES},
             }
         )
@@ -219,12 +208,12 @@ def _subsets_table(subsets: dict[str, dict]) -> None:
     # left. Narrow widths so 1-4 digit cells don't get dwarfed.
     column_config = {
         "Subset": st.column_config.TextColumn(width="small"),
-        "Avg. actionable errors / finding": st.column_config.NumberColumn(width="small", format="%.3f"),
-        "Actionable findings": st.column_config.NumberColumn(width="small"),
-        "Actionable precision": st.column_config.NumberColumn(width="small", format="%.1f%%"),
-        "Actionable recall": st.column_config.NumberColumn(width="small", format="%.1f%%"),
-        "Triage precision": st.column_config.NumberColumn(width="small", format="%.1f%%"),
-        "Triage recall": st.column_config.NumberColumn(width="small", format="%.1f%%"),
+        "Errors per Finding": st.column_config.NumberColumn(width="small", format="%.3f"),
+        fn: st.column_config.NumberColumn(width="small", help=FN_HELP),
+        fp: st.column_config.NumberColumn(width="small", help=FP_HELP),
+        "Findings at Stake": st.column_config.NumberColumn(width="small"),
+        prec: st.column_config.NumberColumn(width="small", format="%.1f%%"),
+        rec: st.column_config.NumberColumn(width="small", format="%.1f%%"),
         **{cat: st.column_config.NumberColumn(width="small") for cat in constants.MUC_CATEGORIES},
     }
     st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch", column_config=column_config)
@@ -246,13 +235,14 @@ def main() -> None:
 
     metadata = summary.get("metadata") or {}
     muc_counts = summary.get("muc_counts") or {}
-    safety = summary.get("clinical_safety_summary") or {}
     attribute_breakdown = summary.get("attribute_breakdown") or {}
     subsets = summary.get("subsets") or {}
 
     _hdr(metadata)
-    _headline_metric_cards(summary, safety)
-    st.markdown("---")
+    st.subheader("Main Metrics")
+    tier = shared.select_tier(key="tier_radio_summary")
+    _headline_metric_cards(shared.tier_block(summary, tier), tier)
+    st.caption(f"{dashboard_constants.TIER_NAMES[tier]} tier: {' + '.join(constants.ERROR_TIERS[tier])} findings.")
 
     st.subheader("Match Outcomes", help=shared.MATCH_OUTCOMES_HELP)
     is_pct = shared.render_match_outcomes_toggle(key="match_outcomes_mode_summary")
@@ -262,16 +252,9 @@ def main() -> None:
     _attribute_breakdown(attribute_breakdown)
 
     # Prepend a whole-dataset "overall" row so the per-subset rates have a
-    # baseline to compare against, shaped like a subset payload.
-    overall = {
-        "muc_counts": muc_counts,
-        "actionable_errors_total": summary.get("actionable_errors_total", 0),
-        "actionable_findings_total": summary.get("actionable_findings_total", 0),
-        "actionable_errors_per_finding": summary.get("actionable_errors_per_finding", 0.0),
-        "clinical_safety_summary": safety,
-    }
+    # baseline to compare against; the summary carries the same `tiers` block.
     st.subheader("Subset Results", help=SUBSET_RESULTS_HELP)
-    _subsets_table({_OVERALL_ROW: overall, **subsets})
+    _subsets_table({_OVERALL_ROW: summary, **subsets}, tier)
 
 
 if __name__ == "__main__":

@@ -37,6 +37,32 @@ def _write(path: Path, payload) -> None:
     path.write_text(json.dumps(payload), encoding="utf-8")
 
 
+def _tier_block(errors=0, fn=0, recall=1.0, precision=1.0, gt_total=1, pred_total=1, n_reports=None) -> dict:
+    """A `tiers.<name>` block; MIS-only FN and SPU-only FP keep the sub-splits consistent."""
+    block = {
+        "significance": ["critical"],
+        "errors_total": errors,
+        "fn_total": fn,
+        "fp_total": errors - fn,
+        "fn_mis_total": fn,
+        "fn_inc_total": 0,
+        "fp_spu_total": errors - fn,
+        "fp_inc_total": 0,
+        "findings_total": max(errors, gt_total),
+        "errors_per_finding": errors / max(errors, gt_total),
+        "recall": recall,
+        "recall_hits": round(recall * gt_total),
+        "gt_total": gt_total,
+        "precision": precision,
+        "precision_hits": round(precision * pred_total),
+        "pred_total": pred_total,
+    }
+    if n_reports:
+        per_report = {f"{k}_per_report": block[f"{k}_total"] / n_reports for k in ("errors", "fn", "fp")}
+        block = {**per_report, **block}
+    return block
+
+
 @pytest.fixture
 def results_dir(tmp_path: Path) -> Path:
     """A one-report results directory in the layout the dashboard expects."""
@@ -87,21 +113,7 @@ def results_dir(tmp_path: Path) -> Path:
         {
             "metadata": {"series_uuid": "s1", "total_gt_findings": 1, "total_pred_findings": 1},
             "muc_counts": {"COR": 1, "PAR": 0, "INC": 0, "MIS": 0, "SPU": 0},
-            "actionable_errors_total": 0,
-            "clinical_safety_summary": {
-                "triage_recall": 1.0,
-                "actionable_recall": 1.0,
-                "triage_precision": 1.0,
-                "actionable_precision": 1.0,
-                "triage_gt_total": 1,
-                "actionable_gt_total": 1,
-                "triage_pred_total": 1,
-                "actionable_pred_total": 1,
-                "triage_mis_count": 0,
-                "triage_inc_count": 0,
-                "actionable_mis_count": 0,
-                "actionable_inc_count": 0,
-            },
+            "tiers": {tier: _tier_block() for tier in ("actionable", "triage", "critical")},
             "attribute_breakdown": {},
         },
     )
@@ -109,25 +121,8 @@ def results_dir(tmp_path: Path) -> Path:
         radmatch_dir / "metrics_summary.json",
         {
             "metadata": {"n_reports": 1, "total_gt_findings": 1, "total_pred_findings": 1},
-            "actionable_errors_per_report": 0.0,
-            "actionable_errors_total": 0,
-            "actionable_errors_per_finding": 0.0,
-            "actionable_findings_total": 1,
+            "tiers": {tier: _tier_block(n_reports=1) for tier in ("actionable", "triage", "critical")},
             "muc_counts": {"COR": 1, "PAR": 0, "INC": 0, "MIS": 0, "SPU": 0},
-            "clinical_safety_summary": {
-                "triage_recall": 1.0,
-                "actionable_recall": 1.0,
-                "triage_precision": 1.0,
-                "actionable_precision": 1.0,
-                "triage_gt_total": 1,
-                "actionable_gt_total": 1,
-                "triage_pred_total": 1,
-                "actionable_pred_total": 1,
-                "triage_mis_count": 0,
-                "triage_inc_count": 0,
-                "actionable_mis_count": 0,
-                "actionable_inc_count": 0,
-            },
             "attribute_breakdown": {},
             "subsets": {},
         },

@@ -218,8 +218,9 @@ def inject_styles() -> None:
             font-variant-numeric: tabular-nums; margin-left: 0.35rem;
         }
         .volume-metric-card { background: linear-gradient(135deg,#eef4ff,#dfe8ff); border-color:#c7d2fe; }
-        .safety-metric-card { background: linear-gradient(135deg,#fff1f2,#ffe4e6); border-color:#fecdd3; }
         .f1-metric-card     { background: linear-gradient(135deg,#fffbeb,#fde68a); border-color:#fcd34d; }
+        /* Everything but the headline errors-per-report card (gold) is grey. */
+        .grey-metric-card   { background: linear-gradient(135deg,#f9fafb,#e5e7eb); border-color:#d1d5db; }
         .report-card {
             border-radius: 0.75rem; padding: 1rem 1.1rem;
             font-family: 'IBM Plex Mono', monospace; font-size: 0.9rem; color: #1f2933;
@@ -550,40 +551,65 @@ def render_metric_card(
     )
 
 
-def format_recall_metric(safety: dict[str, object], tier: str) -> str:
-    """Safety recall as a percentage, or "—" on an empty GT pool — distinct from the
-    "N/A" that means missing data.
-    """
-    if int(safety.get(f"{tier}_gt_total") or 0) == 0:
+def current_tier(key: str) -> str:
+    """The error tier before its radio renders: the radio's own state (`key`), else the
+    tier last chosen on any page, else actionable."""
+    return st.session_state.get(key) or st.session_state.get(
+        dashboard_constants.CONFIG_TIER, dashboard_constants.DEFAULT_TIER
+    )
+
+
+def select_tier(key: str) -> str:
+    """Horizontal error-tier radio (actionable by default); the choice carries across pages."""
+    options = list(dashboard_constants.TIER_NAMES)
+    tier = st.radio(
+        "Error tier",
+        options=options,
+        index=options.index(current_tier(key)),
+        format_func=dashboard_constants.TIER_NAMES.get,
+        horizontal=True,
+        label_visibility="collapsed",
+        key=key,
+    )
+    st.session_state[dashboard_constants.CONFIG_TIER] = tier
+    return tier
+
+
+def tier_metric_label(
+    tier: str, metric: str, *, suffix: str = "", with_tier: bool = True, with_abbrev: bool = True
+) -> str:
+    """Full metric name, optionally with its abbreviation in parentheses, e.g.
+    "Actionable Errors per Report (aER)" for `("actionable", "ER", suffix=" per Report")`."""
+    name = dashboard_constants.METRIC_NAMES[metric]
+    if with_tier:
+        name = f"{dashboard_constants.TIER_NAMES[tier]} {name}"
+    abbrev = f" ({dashboard_constants.TIER_PREFIX[tier]}{metric})" if with_abbrev else ""
+    return f"{name}{suffix}{abbrev}"
+
+
+def tier_block(payload: dict[str, object], tier: str) -> dict[str, object]:
+    """`tiers.<tier>` of a summary / subset / per-report payload; stops the page on
+    outputs scored before radmatch 0.3, which lack it."""
+    block = (payload.get("tiers") or {}).get(tier)
+    if block is None:
+        st.warning("These results predate the per-tier metrics: re-run `radmatch score` on them (no LLM calls).")
+        st.stop()
+    return block
+
+
+def format_tier_rate(block: dict[str, object], metric: str) -> str:
+    """A tier's `recall` / `precision` as a percentage, "—" on an empty pool."""
+    total_key = "gt_total" if metric == "recall" else "pred_total"
+    if int(block.get(total_key) or 0) == 0:
         return "—"
-    return format_percent_metric(safety.get(f"{tier}_recall"))
+    return format_percent_metric(block.get(metric))
 
 
-def format_recall_subtitle(safety: dict[str, object], tier: str) -> str | None:
-    """`(hit_count / gt_total)` subtitle, so a percentage's sample size is visible
-    without back-computing it.
-    """
-    hits = safety.get(f"{tier}_hit_count")
-    total = int(safety.get(f"{tier}_gt_total") or 0)
-    if hits is None or total <= 0:
-        return None
-    return f"({int(hits)} / {total})"
-
-
-def format_precision_metric(safety: dict[str, object], tier: str) -> str:
-    """Precision counterpart of `format_recall_metric` — '—' when the pred pool is empty."""
-    if int(safety.get(f"{tier}_pred_total") or 0) == 0:
-        return "—"
-    return format_percent_metric(safety.get(f"{tier}_precision"))
-
-
-def format_precision_subtitle(safety: dict[str, object], tier: str) -> str | None:
-    """`(pred_hit_count / pred_total)` subtitle string for a safety-precision card."""
-    hits = safety.get(f"{tier}_pred_hit_count")
-    total = int(safety.get(f"{tier}_pred_total") or 0)
-    if hits is None or total <= 0:
-        return None
-    return f"({int(hits)} / {total})"
+def format_tier_rate_subtitle(block: dict[str, object], metric: str) -> str | None:
+    """`(hits / total)` subtitle of a tier's recall / precision card."""
+    hits_key, total_key = ("recall_hits", "gt_total") if metric == "recall" else ("precision_hits", "pred_total")
+    total = int(block.get(total_key) or 0)
+    return f"({int(block.get(hits_key) or 0)} / {total})" if total > 0 else None
 
 
 MATCH_OUTCOMES_HELP = (

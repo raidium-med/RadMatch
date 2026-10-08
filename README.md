@@ -5,9 +5,9 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/downloads/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-**RadMatch** is an LLM-based evaluation framework for radiology report generation. It extracts atomic findings from each report, matches predictions to ground truth on **clinical equivalence**, and characterizes every error across **seven clinical attribute dimensions** — so a discrepancy is reported as a laterality flip, a severity change or a missed measurement rather than an undifferentiated penalty. From these it reports the **count of errors on clinically relevant findings**, alongside **safety recall and precision** for life-threatening findings.
+**RadMatch** is an LLM-based evaluation framework for radiology report generation. It extracts atomic findings from each report, matches predictions to ground truth on **clinical equivalence**, and characterizes every error across **seven clinical attribute dimensions** — so a discrepancy is reported as a laterality flip, a severity change or a missed measurement rather than an undifferentiated penalty. From these it reports the **count of errors on clinically relevant findings**, split into missed and unsupported findings, alongside **safety recall and precision**, at three significance tiers.
 
-The headline score is `actionable_errors_per_report`: the mean per-report count of errors involving non-routine findings. **Lower is better.**
+The headline score is **aER**, the actionable errors per report (`tiers.actionable.errors_per_report`): the mean per-report count of errors involving non-routine findings, split as aER = aFN + aFP into reference findings missed or contradicted and claims the reference does not support. **Lower is better.**
 
 **Every step is written to disk:** the findings extracted from each report, which prediction matched which ground truth and why, and each attribute error with the judge's reasoning. So a score is **auditable**: it can always be traced back to the findings that produced it, and an optional [**dashboard**](#dashboard) reads those records back, taking you from a dataset-level number to the individual finding pair behind it.
 
@@ -152,7 +152,7 @@ Stage 1 (LLM x 2)           Extract atomic findings + clinical significance
 Stage 2 (LLM x 1)           Many-to-many matching on clinical equivalence
 Stage 3a (deterministic)    Comparators on structured attributes
 Stage 3b (LLM x ⌈N/10⌉)     LLM judgement of free-text attributes (N = matched pairs)
-Stage 3c (deterministic)    MUC classification + actionable-error count
+Stage 3c (deterministic)    MUC classification + per-tier error counts
 ```
 
 **Stage 1** breaks each report into atomic findings — single-sentence clinical observations — and tags each with its clinical significance (`critical` / `urgent` / `notable` / `routine`).
@@ -194,15 +194,26 @@ type.
 
 ### Metrics
 
-| Metric | Description |
-|---|---|
-| `actionable_errors_per_report` | Mean per-report count of `INC` + `MIS` + `SPU` where the finding involved is above `routine` significance. The headline number; lower is better. |
-| `triage_recall` | Fraction of life-threatening findings (`critical` + `urgent`) the model recalled, counting `COR` and `PAR` as hits. This is the safety floor: a model can look acceptable on average while missing most urgent findings. |
-| `actionable_recall` | Same, over `critical` + `urgent` + `notable`. A large gap from `triage_recall` means the model is differentially worse on the highest-stakes findings. |
-| `triage_precision` | Of the predicted findings flagged at the triage tier, the fraction crediting a real finding. Flags confident over-calling. `null` when the model predicted none. |
-| `actionable_precision` | Same, over the `critical` + `urgent` + `notable` prediction pool. |
+Every metric is computed on three significance tiers, each reported in its own `tiers.<tier>` block:
 
-Findings are also reported in `subsets` — `measurement`, `comparison`, `abnormal-regular`, `normal-regular` — each with its own MUC counts and an `actionable_errors_per_finding` rate, so a rare subset stays comparable to a common one.
+| Tier | Significance | Metrics |
+|---|---|---|
+| `actionable` | `critical` + `urgent` + `notable` | aER = aFN + aFP, aRec, aPrec |
+| `triage` | `critical` + `urgent` | tER = tFN + tFP, tRec, tPrec |
+| `critical` | `critical` | cER = cFN + cFP, cRec, cPrec |
+
+| Metric (key in `tiers.<tier>`) | Description |
+|---|---|
+| aER (`errors_per_report`) | Mean per-report count of `INC` + `MIS` + `SPU` involving a finding of the tier. The headline number on the actionable tier; lower is better. |
+| aFN (`fn_per_report`) | Reference side: findings of the tier missed (`MIS`, `fn_mis_total`) or contradicted (`INC`, `fn_inc_total`). Equals the tier's reference findings × (1 − aRec). |
+| aFP (`fp_per_report`) | Prediction side: claims of the tier with no reference counterpart (`SPU`, `fp_spu_total`), or contradicting a reference finding outside the tier, e.g. an abnormality where the reference says normal (`INC`, `fp_inc_total`). |
+| aRec (`recall`) | Fraction of the reference findings of the tier the model recalled, counting `COR` and `PAR` as hits. tRec is the safety floor: a model can look acceptable on average while missing most urgent findings, and a large gap from aRec means it is differentially worse on the highest-stakes findings. |
+| aPrec (`precision`) | Of the predicted findings of the tier, the fraction crediting a real finding. Flags confident over-calling. `null` when the model predicted none. |
+| errors per finding (`errors_per_finding`) | Errors over the findings at stake on the tier (`findings_total`): a rate that stays comparable between a rare subset and a common one. |
+
+An `INC` counts once per reference finding, on the reference side when that finding is in the tier, so aER = aFN + aFP holds exactly. Two consequences: aFP is close to, but not exactly, the complement of aPrec (which counts per predicted finding), and the side depends on the tier, e.g. a `notable` finding contradicted by an `urgent` claim is an aFN but a tFP.
+
+Findings are also reported in `subsets` — `measurement`, `comparison`, `abnormal-regular`, `normal-regular` — each with its own MUC counts and `tiers` block.
 
 ### Significance tiers
 
@@ -225,7 +236,7 @@ Anchored to the ACR Actionable Findings Framework and the RSNA communication col
 ├── findings_{gt,pred}_config.json   # Stage 1 — the extraction config the findings came from
 ├── matching/<series>.json           # Stage 2 — finding-pair alignment + reasoning
 ├── attribute_errors/<series>.json   # Stage 3 — raw errors + MUC records per matched pair
-├── per_report_metrics/<series>.json # per-report actionable errors, MUC counts, safety
+├── per_report_metrics/<series>.json # per-report `tiers` block (totals) and MUC counts
 └── indications/<series>.txt         # the indication used as context, when supplied
 ```
 
@@ -276,7 +287,7 @@ Anchored to the ACR Actionable Findings Framework and the RSNA communication col
 ```json
 {
   "metadata": {
-    "radmatch_version": "0.2.2",
+    "radmatch_version": "0.3.0",
     "llm_judge": "local:google/gemma-4-31B-it",
     "fewshot": "chest-ct",
     "n_reports": 100,
@@ -286,33 +297,51 @@ Anchored to the ACR Actionable Findings Framework and the RSNA communication col
     "token_usage": { "prompt_tokens": 4565000, "completion_tokens": 211000, "calls": 396 },
     "token_cost": 0.0
   },
-  "actionable_errors_per_report": 1.31,
-  "actionable_errors_total": 131,
-  "actionable_errors_per_finding": 0.42,
-  "actionable_findings_total": 312,
-  "clinical_safety_summary": {
-    "triage_recall": 0.85,
-    "actionable_recall": 0.79,
-    "triage_precision": 0.88,
-    "actionable_precision": 0.82
+  "tiers": {
+    "actionable": {
+      "significance": ["critical", "urgent", "notable"],
+      "errors_per_report": 1.31,
+      "fn_per_report": 0.98,
+      "fp_per_report": 0.33,
+      "errors_total": 131,
+      "fn_total": 98,
+      "fp_total": 33,
+      "fn_mis_total": 35,
+      "fn_inc_total": 63,
+      "fp_spu_total": 18,
+      "fp_inc_total": 15,
+      "findings_total": 313,
+      "errors_per_finding": 0.42,
+      "recall": 0.65,
+      "recall_hits": 182,
+      "gt_total": 280,
+      "precision": 0.83,
+      "precision_hits": 190,
+      "pred_total": 230
+    },
+    "triage": { "significance": ["critical", "urgent"], "errors_per_report": 0.52, "...": "..." },
+    "critical": { "significance": ["critical"], "errors_per_report": 0.17, "...": "..." }
   },
-  "muc_counts": { "COR": 215, "PAR": 72, "INC": 73, "MIS": 41, "SPU": 22 },
+  "muc_counts": { "COR": 215, "PAR": 72, "INC": 80, "MIS": 41, "SPU": 22 },
   "attribute_breakdown": {
     "location": { "evaluated": 287, "clean": 240, "minor": 31, "major": 16 },
     "severity": { "...": "..." }
   },
-  "subsets": { "measurement": { "...": "..." } }
+  "subsets": { "measurement": { "muc_counts": { "...": "..." }, "tiers": { "...": "..." } } }
 }
 ```
 
-`clinical_safety_summary` also carries the hit and total counts behind each rate, and
-`attribute_breakdown` has one entry per dimension.
+Each tier block carries the counts behind every rate (`fn_total = gt_total - recall_hits`),
+per-report files and subsets carry the same block with totals only, and `attribute_breakdown`
+has one entry per dimension.
 
 </details>
 
 ## Dashboard
 
 The optional **RadMatch Evaluation Dashboard** explores results report by report — findings side by side, coloured by match outcome, with the attribute errors and judge reasoning behind each pair.
+
+A selector above the metric cards switches between the actionable (default), triage and critical tiers: errors per report split into false negatives and false positives, recall and precision.
 
 ```bash
 pip install "radmatch[dashboard]"
