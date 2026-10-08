@@ -140,8 +140,7 @@ def build_per_report_summary(
         metadata = {"series_uuid": series_uuid, **metadata}
     return {
         "metadata": metadata,
-        "actionable_errors_total": metrics.compute_actionable_errors(muc_records, unmatched_pred, unmatched_gt),
-        "clinical_safety_summary": metrics.compute_safety_summary(muc_records, unmatched_gt, unmatched_pred),
+        "tiers": _tiers_block(muc_records, unmatched_pred, unmatched_gt),
         "muc_counts": counts,
         "attribute_breakdown": metrics.compute_attribute_breakdown(muc_records),
     }
@@ -244,14 +243,35 @@ def score_pair(
     }
 
 
-def _fmt_recall(value: float | None) -> str:
-    """Format a safety recall for the SCORING SUMMARY log line.
+def _fmt_rate(value: float | None) -> str:
+    """Format a recall / precision for the SCORING SUMMARY.
 
-    ``compute_safety_recall`` returns ``None`` on an empty pool; the formatter
-    must not apply ``:.4f`` to that (would raise ``TypeError`` after the
-    summary JSON is already on disk).
+    They are ``None`` on an empty pool; the formatter must not apply ``:.3f`` to
+    that (would raise ``TypeError`` after the summary JSON is already on disk).
     """
-    return f"{value:.4f}" if isinstance(value, (int, float)) else "n/a"
+    return f"{value:.3f}" if isinstance(value, (int, float)) else "n/a"
+
+
+# Acronym prefix per error tier: aER = aFN + aFP, aRec, aPrec; tER, ... ; cER, ...
+_TIER_PREFIX = {"actionable": "a", "triage": "t", "critical": "c"}
+
+
+def _tier_table_lines(tiers: dict[str, dict]) -> list[str]:
+    """One aligned row per tier for the SCORING SUMMARY, then a two-line legend."""
+    lines = [f"  {'tier':<16}{'ER':>7}{'FN':>8}{'FP':>8}{'errors/finding':>17}   {'Rec':<21}Prec"]
+    for name, t in tiers.items():
+        recall = f"{_fmt_rate(t['recall'])} ({t['recall_hits']}/{t['gt_total']})"
+        precision = f"{_fmt_rate(t['precision'])} ({t['precision_hits']}/{t['pred_total']})"
+        lines.append(
+            f"  {f'{name} ({_TIER_PREFIX[name]})':<16}{t['errors_per_report']:>7.3f}{t['fn_per_report']:>8.3f}"
+            f"{t['fp_per_report']:>8.3f}{t['errors_per_finding']:>17.3f}   {recall:<21}{precision}"
+        )
+    tier_defs = ", ".join(f"{_TIER_PREFIX[n]} = {'+'.join(t['significance'])}" for n, t in tiers.items())
+    lines += [
+        f"  {tier_defs}. ER = FN + FP: errors per report (aER = aFN + aFP, ...).",
+        "  FN: reference findings of the tier missed or contradicted. FP: claims of the tier the reference lacks.",
+    ]
+    return lines
 
 
 # ============================================================================
@@ -259,29 +279,44 @@ def _fmt_recall(value: float | None) -> str:
 # ============================================================================
 
 
-def _bucket_metrics(records: Sequence[dict], unmatched_pred: Sequence[dict], unmatched_gt: Sequence[dict]) -> dict:
-    """MUC counts + actionable errors + safety summary for one subset of records.
-
-    `actionable_errors_per_finding` normalises by the subset's actionable-finding
-    pool, not by report count — a per-report average understates a rare subset
-    purely by prevalence, so it would not compare across subsets.
+def _tiers_block(
+    records: Sequence[dict],
+    unmatched_pred: Sequence[dict],
+    unmatched_gt: Sequence[dict],
+    n_reports: int | None = None,
+) -> dict[str, dict]:
+    """The `tiers` output block: `compute_tier_metrics` for each of `constants.ERROR_TIERS`,
+    plus `errors` / `fn` / `fp` per report when `n_reports` is given (dataset level).
     """
-    counts = metrics.effective_muc_counts(records, n_spu=len(unmatched_pred), n_mis=len(unmatched_gt))
-    actionable_errors_total = metrics.compute_actionable_errors(records, unmatched_pred, unmatched_gt)
-    actionable_findings_total = metrics.compute_actionable_opportunities(records, unmatched_pred, unmatched_gt)
+    tiers = {}
+    for name, pool in constants.ERROR_TIERS.items():
+        tier = metrics.compute_tier_metrics(
+            records, unmatched_pred=unmatched_pred, unmatched_gt=unmatched_gt, significance_pool=pool
+        )
+        if n_reports is not None:
+            per_report = {
+                f"{k}_per_report": tier[f"{k}_total"] / n_reports if n_reports else 0.0 for k in ("errors", "fn", "fp")
+            }
+            tier = {"significance": tier.pop("significance"), **per_report, **tier}
+        tiers[name] = tier
+    return tiers
+
+
+def _bucket_metrics(records: Sequence[dict], unmatched_pred: Sequence[dict], unmatched_gt: Sequence[dict]) -> dict:
+    """MUC counts + per-tier metrics for one subset of records.
+
+    `errors_per_finding` normalises by the subset's tier-finding pool, not by report
+    count — a per-report average understates a rare subset purely by prevalence, so
+    it would not compare across subsets.
+    """
     return {
-        "muc_counts": counts,
-        "actionable_errors_total": actionable_errors_total,
-        "actionable_findings_total": actionable_findings_total,
-        "actionable_errors_per_finding": (
-            actionable_errors_total / actionable_findings_total if actionable_findings_total else 0.0
-        ),
-        "clinical_safety_summary": metrics.compute_safety_summary(records, unmatched_gt, unmatched_pred),
+        "muc_counts": metrics.effective_muc_counts(records, n_spu=len(unmatched_pred), n_mis=len(unmatched_gt)),
+        "tiers": _tiers_block(records, unmatched_pred, unmatched_gt),
     }
 
 
 def _compute_subset_metrics(per_report: list[dict]) -> dict[str, dict]:
-    """Compute effective MUC counts + actionable_errors on each subset.
+    """Compute effective MUC counts + per-tier metrics on each subset.
 
     Subset membership uses GT side for matched / MIS records; pred side for SPU.
     """
@@ -429,17 +464,11 @@ def score_dataset(
         all_u_gt.extend(report["unmatched_gt"])
 
     muc_counts = metrics.effective_muc_counts(all_records, n_spu=len(all_u_pred), n_mis=len(all_u_gt))
-    safety = metrics.compute_safety_summary(all_records, all_u_gt, all_u_pred)
     attribute_breakdown = metrics.compute_attribute_breakdown(all_records)
-    actionable_errors_total = metrics.compute_actionable_errors(all_records, all_u_pred, all_u_gt)
-    actionable_errors_per_report = actionable_errors_total / len(per_report) if per_report else 0.0
-    # Opportunity-normalized twin of the headline: errors per actionable finding.
-    # Report-count-independent, so it's the baseline the per-subset rates compare
-    # against and is robust to differing finding density across runs.
-    actionable_findings_total = metrics.compute_actionable_opportunities(all_records, all_u_pred, all_u_gt)
-    actionable_errors_per_finding = (
-        actionable_errors_total / actionable_findings_total if actionable_findings_total else 0.0
-    )
+    # Per tier: errors per report (headline aER / tER) split into FN + FP, and the
+    # opportunity-normalized errors per finding, which is report-count-independent so
+    # it's the baseline the per-subset rates compare against.
+    tiers = _tiers_block(all_records, all_u_pred, all_u_gt, n_reports=len(per_report))
     # Distinct-finding totals keep the partition clean under N:N matching.
     distinct_matched_preds, distinct_matched_gts = metrics.count_distinct_findings(all_records)
 
@@ -460,11 +489,7 @@ def score_dataset(
             "token_usage": token["token_usage"],
             "token_cost": token["token_cost"],
         },
-        "actionable_errors_per_report": actionable_errors_per_report,
-        "actionable_errors_total": actionable_errors_total,
-        "actionable_errors_per_finding": actionable_errors_per_finding,
-        "actionable_findings_total": actionable_findings_total,
-        "clinical_safety_summary": safety,
+        "tiers": tiers,
         "muc_counts": muc_counts,
         "attribute_breakdown": attribute_breakdown,
         "subsets": _compute_subset_metrics(per_report),
@@ -472,29 +497,17 @@ def score_dataset(
 
     io.save_json(summary, output_dir / constants.SUMMARY_FILE)
 
+    failed = f", {len(failures)} failed (see logs above)" if failures else ""
     summary_lines = [
-        f"  Reports scored:                {len(per_report):6d}",
+        f"  Reports     {len(per_report)} scored{failed}",
+        f"  Findings    {summary['metadata']['total_gt_findings']} GT, "
+        f"{summary['metadata']['total_pred_findings']} pred",
+        "  MUC counts  " + "  ".join(f"{c} {muc_counts[c]}" for c in constants.MUC_CATEGORIES),
+        "",
+        *_tier_table_lines(tiers),
+        "",
+        f"  Summary written to: {output_dir / constants.SUMMARY_FILE}",
+        f"RadMatch score complete in {time.time() - start_time:.1f}s",
     ]
-    if failures:
-        summary_lines.append(f"  Reports failed:                {len(failures):6d}  (see logs above)")
-    summary_lines.extend(
-        [
-            f"  MUC counts:                  COR={muc_counts['COR']}  INC={muc_counts['INC']}  "
-            f"MIS={muc_counts['MIS']}  SPU={muc_counts['SPU']}",
-            f"  Actionable errors per report:  {actionable_errors_per_report:.3f}  "
-            f"(total {actionable_errors_total} across {len(per_report)} reports)",
-            "  Clinical safety:",
-            f"    • triage_recall:        {_fmt_recall(safety['triage_recall'])}  "
-            f"({safety['triage_gt_total']} triage GT findings — critical+urgent)",
-            f"    • triage_precision:     {_fmt_recall(safety['triage_precision'])}  "
-            f"({safety['triage_pred_total']} triage pred findings)",
-            f"    • actionable_recall:    {_fmt_recall(safety['actionable_recall'])}  "
-            f"({safety['actionable_gt_total']} actionable GT findings — critical+urgent+notable)",
-            f"    • actionable_precision: {_fmt_recall(safety['actionable_precision'])}  "
-            f"({safety['actionable_pred_total']} actionable pred findings)",
-            f"  Summary written to: {output_dir / constants.SUMMARY_FILE}",
-            f"RadMatch score complete in {time.time() - start_time:.1f}s",
-        ]
-    )
     io.log_stage_summary("SCORING SUMMARY", summary_lines)
     return summary

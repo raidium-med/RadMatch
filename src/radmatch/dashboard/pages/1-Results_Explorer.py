@@ -56,6 +56,7 @@ _COMPARISON_OPTIONS = ["stable", "improving", "worsening", "new", "resolved"]
 
 
 def _filter_panel(
+    tier: str,
     index_df: pd.DataFrame | None,
 ) -> tuple[pd.DataFrame | None, str, DeltaGenerator, int]:
     """Filters expander.
@@ -98,7 +99,7 @@ def _filter_panel(
                 key="filter_comparison",
             )
 
-        # Row 3: match outcomes / actionable errors.
+        # Row 3: match outcomes / errors of the selected tier.
         col_outcome, col_err = st.columns(2)
         with col_outcome:
             outcome_filters = st.multiselect(
@@ -107,14 +108,14 @@ def _filter_panel(
                 key="filter_has_outcome",
             )
         with col_err:
-            max_err = int(index_df["actionable_errors"].max()) if "actionable_errors" in index_df.columns else 0
+            max_err = int(index_df[f"{tier}_errors"].max())
             err_range = st.slider(
-                "Actionable errors",
+                shared.tier_metric_label(tier, "ER", suffix=" in Report"),
                 0,
                 max(max_err, 1),
                 (0, max(max_err, 1)),
                 step=1,
-                key="actionable_err_range",
+                key=f"err_range_{tier}",
             )
 
     df = index_df.copy()
@@ -129,7 +130,7 @@ def _filter_panel(
     if outcome_filters:
         outcome_cols = [f"muc_{cat.lower()}" for cat in outcome_filters]
         df = df[df[outcome_cols].gt(0).all(axis=1)]
-    df = df[(df["actionable_errors"] >= err_range[0]) & (df["actionable_errors"] <= err_range[1])]
+    df = df[(df[f"{tier}_errors"] >= err_range[0]) & (df[f"{tier}_errors"] <= err_range[1])]
     df = df.sort_values("report_id")
 
     return df, search_query, count_placeholder, len(index_df)
@@ -168,60 +169,31 @@ def _filter_by_finding_text(state: shared.DashboardState, report_ids: list[str],
     ]
 
 
-def _per_report_metric_cards(per_report: dict[str, object]) -> None:
-    """Headline cards for the selected pair: actionable errors, then actionable and
-    triage precision/recall, each with a `numerator / denominator` subtitle.
-    """
-    safety = per_report.get("clinical_safety_summary") or {}
-    actionable_errors = per_report.get("actionable_errors_total")
-
+def _per_report_metric_cards(per_report: dict[str, object], tier: str) -> None:
+    """Headline cards for the selected pair on the selected tier: errors split into
+    FN + FP, then recall / precision with a `hits / total` subtitle."""
+    block = shared.tier_block(per_report, tier)
     row1 = st.columns(3)
-    row1[0].markdown(
-        shared.render_metric_card(
-            "Actionable errors",
-            shared.format_int(int(actionable_errors)) if actionable_errors is not None else "—",
-            card_class="f1-metric-card",
-        ),
-        unsafe_allow_html=True,
-    )
-    row1[1].markdown(
-        shared.render_metric_card(
-            "Actionable Precision",
-            shared.format_precision_metric(safety, "actionable"),
-            card_class="safety-metric-card",
-            subtitle=shared.format_precision_subtitle(safety, "actionable"),
-        ),
-        unsafe_allow_html=True,
-    )
-    row1[2].markdown(
-        shared.render_metric_card(
-            "Actionable Recall",
-            shared.format_recall_metric(safety, "actionable"),
-            card_class="safety-metric-card",
-            subtitle=shared.format_recall_subtitle(safety, "actionable"),
-        ),
-        unsafe_allow_html=True,
-    )
-
+    for col, (metric, key) in zip(row1, [("ER", "errors_total"), ("FN", "fn_total"), ("FP", "fp_total")]):
+        col.markdown(
+            shared.render_metric_card(
+                shared.tier_metric_label(tier, metric),
+                shared.format_int(int(block.get(key) or 0)),
+                card_class={"ER": "f1-metric-card", "FN": "fn-metric-card", "FP": "fp-metric-card"}[metric],
+            ),
+            unsafe_allow_html=True,
+        )
     row2 = st.columns(3)
-    row2[0].markdown(
-        shared.render_metric_card(
-            "Triage Precision",
-            shared.format_precision_metric(safety, "triage"),
-            card_class="safety-metric-card",
-            subtitle=shared.format_precision_subtitle(safety, "triage"),
-        ),
-        unsafe_allow_html=True,
-    )
-    row2[1].markdown(
-        shared.render_metric_card(
-            "Triage Recall",
-            shared.format_recall_metric(safety, "triage"),
-            card_class="safety-metric-card",
-            subtitle=shared.format_recall_subtitle(safety, "triage"),
-        ),
-        unsafe_allow_html=True,
-    )
+    for col, (abbr, metric) in zip(row2, [("Rec", "recall"), ("Prec", "precision")]):
+        col.markdown(
+            shared.render_metric_card(
+                shared.tier_metric_label(tier, abbr),
+                shared.format_tier_rate(block, metric),
+                card_class=f"{metric}-metric-card",
+                subtitle=shared.format_tier_rate_subtitle(block, metric),
+            ),
+            unsafe_allow_html=True,
+        )
 
 
 _SELECT_KEY_ID = "selected_finding_id"
@@ -256,9 +228,7 @@ def _highlight_sets_for_selection(
 
 
 _SUBSET_FILTER_OPTIONS = ["all", "abnormal-regular", "normal-regular", "measurement", "comparison"]
-_ERRORS_FILTER_OPTIONS = ["all", "actionable", "triage"]
-_TRIAGE_TIERS = frozenset(radmatch_constants.TRIAGE_SIGNIFICANCE_TIERS)
-_ACTIONABLE_TIERS = frozenset(radmatch_constants.ACTIONABLE_SIGNIFICANCE_TIERS)
+_ERRORS_FILTER_OPTIONS = ["all", *radmatch_constants.ERROR_TIERS]
 
 
 def _matches_subset(finding: dict[str, object], subset: str) -> bool:
@@ -278,14 +248,14 @@ def _matches_errors(
     """Keep findings whose effective match is an error at the chosen tier.
 
     Matched INC needs *either* side's significance to align with
-    `compute_actionable_errors` — a status inversion is actionable whichever side
-    carries the higher tier. Without `counterpart_findings` only this side is
+    `compute_tier_errors` — a status inversion is an error of the tier whichever
+    side carries it. Without `counterpart_findings` only this side is
     checked, which is enough for MIS and SPU but can hide half of an INC pair.
     """
     if errors_filter == "all":
         return True
-    pool = _ACTIONABLE_TIERS if errors_filter == "actionable" else _TRIAGE_TIERS
-    # MIS / SPU contribute to actionable_errors via the orphan side; the finding
+    pool = frozenset(radmatch_constants.ERROR_TIERS[errors_filter])
+    # MIS / SPU contribute to the tier's errors via the orphan side; the finding
     # itself has the significance to check.
     if info.category in ("MIS", "SPU"):
         return finding.get("clinical_significance") in pool
@@ -411,6 +381,7 @@ def main() -> None:
     shared.set_base_page_config("Results Explorer")
     shared.inject_styles()
     sidebar = shared.configure_sidebar(default_results="")
+    tier = shared.select_tier()
     state = shared.build_state(sidebar.raw_results, sidebar.raw_reports_gt, sidebar.raw_reports_pred)
     if state is None:
         st.stop()
@@ -420,7 +391,7 @@ def main() -> None:
     # Prefer the parquet index, falling back to a plain list only when none exists.
     # An empty filter result means zero matches — never the unfiltered listing.
     index_df = shared.load_report_index(str(state.results_dir))
-    filtered, search_query, count_placeholder, total = _filter_panel(index_df)
+    filtered, search_query, count_placeholder, total = _filter_panel(tier, index_df)
     if filtered is None:
         report_ids = shared.get_report_ids(str(state.results_dir))
         if total == 0:
@@ -439,7 +410,7 @@ def main() -> None:
     if not report_ids:
         st.warning(
             "No reports match the active filters. Clear the search box or relax the "
-            "actionable-errors slider to see results."
+            "errors slider to see results."
         )
         st.stop()
 
@@ -451,7 +422,7 @@ def main() -> None:
 
     per_report = shared.load_per_report_metrics(str(state.results_dir), report_id)
     if per_report:
-        _per_report_metric_cards(per_report)
+        _per_report_metric_cards(per_report, tier)
     else:
         st.info("No per_report_metrics for this series. Re-run scoring to populate per_report_metrics/<series>.json.")
 
@@ -490,11 +461,11 @@ def main() -> None:
                     label_visibility="collapsed",
                     key="errors_filter",
                     help=(
-                        "Fade out findings to the chosen error tier. A finding passes only "
-                        "if its match is INC / MIS / SPU (i.e. an error) AND its clinical "
-                        "significance is in the tier. "
-                        "`actionable` = critical + urgent + notable. "
-                        "`triage` = critical + urgent."
+                        "Fade out findings to the chosen error tier. "
+                        "A finding passes only if its match is INC / MIS / SPU (i.e. an error) AND "
+                        "its clinical significance is in the tier. "
+                        "`actionable` = critical + urgent + notable, `triage` = critical + urgent, "
+                        "`critical` = critical."
                     ),
                 )
             with col_subset:
@@ -537,6 +508,7 @@ def main() -> None:
                     pred_idx=pred_idx,
                     gt_findings_by_id=gt_by_id,
                     pred_findings_by_id=pred_by_id,
+                    tier=tier,
                 )
 
         col_gt, col_pred = st.columns(2)

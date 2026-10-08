@@ -22,25 +22,41 @@ def _write(path: Path, payload) -> None:
     path.write_text(json.dumps(payload), encoding="utf-8")
 
 
+def _tier_block(errors=0, fn=0, recall=1.0, precision=1.0, gt_total=1, pred_total=1, n_reports=None) -> dict:
+    """A `tiers.<name>` block; MIS-only FN and SPU-only FP keep the sub-splits consistent."""
+    block = {
+        "significance": ["critical"],
+        "errors_total": errors,
+        "fn_total": fn,
+        "fp_total": errors - fn,
+        "fn_mis_total": fn,
+        "fn_inc_total": 0,
+        "fp_spu_total": errors - fn,
+        "fp_inc_total": 0,
+        "findings_total": max(errors, gt_total),
+        "errors_per_finding": errors / max(errors, gt_total),
+        "recall": recall,
+        "recall_hits": round(recall * gt_total),
+        "gt_total": gt_total,
+        "precision": precision,
+        "precision_hits": round(precision * pred_total),
+        "pred_total": pred_total,
+    }
+    if n_reports:
+        per_report = {f"{k}_per_report": block[f"{k}_total"] / n_reports for k in ("errors", "fn", "fp")}
+        block = {**per_report, **block}
+    return block
+
+
 @pytest.fixture
 def fake_per_report_metrics() -> dict:
     return {
         "metadata": {"series_uuid": "s1", "total_gt_findings": 4, "total_pred_findings": 3},
         "muc_counts": {"COR": 2, "PAR": 0, "INC": 1, "MIS": 1, "SPU": 0},
-        "actionable_errors_total": 2,
-        "clinical_safety_summary": {
-            "triage_recall": 0.5,
-            "actionable_recall": 0.7,
-            "triage_precision": 0.6,
-            "actionable_precision": 0.8,
-            "triage_gt_total": 2,
-            "actionable_gt_total": 5,
-            "triage_pred_total": 3,
-            "actionable_pred_total": 4,
-            "triage_mis_count": 1,
-            "triage_inc_count": 0,
-            "actionable_mis_count": 1,
-            "actionable_inc_count": 0,
+        "tiers": {
+            "actionable": _tier_block(errors=2, fn=1, recall=0.6, precision=0.75, gt_total=5, pred_total=4),
+            "triage": _tier_block(errors=1, fn=1, recall=0.5, precision=2 / 3, gt_total=2, pred_total=3),
+            "critical": _tier_block(),
         },
         "attribute_breakdown": {},
     }
@@ -48,11 +64,12 @@ def fake_per_report_metrics() -> dict:
 
 def test_flatten_extracts_dashboard_columns(fake_per_report_metrics):
     row = _flatten(fake_per_report_metrics)
-    assert row["actionable_errors"] == 2
+    assert (row["actionable_errors"], row["actionable_fn"], row["actionable_fp"]) == (2, 1, 1)
+    assert (row["triage_errors"], row["critical_errors"]) == (1, 0)
     assert row["triage_recall"] == 0.5
-    assert row["actionable_recall"] == 0.7
-    assert row["triage_precision"] == 0.6
-    assert row["actionable_precision"] == 0.8
+    assert row["actionable_recall"] == 0.6
+    assert row["triage_precision"] == pytest.approx(2 / 3)
+    assert row["actionable_precision"] == 0.75
     assert row["muc_cor"] == 2
     assert row["muc_inc"] == 1
 
@@ -84,7 +101,7 @@ def test_build_report_index_writes_one_row_per_series(tmp_path, fake_per_report_
     assert isinstance(df, pd.DataFrame)
     assert len(df) == 2
     assert set(df["report_id"]) == {"s1", "s2"}
-    assert {"actionable_errors", "muc_cor", "triage_recall", "actionable_recall"}.issubset(df.columns)
+    assert {"actionable_errors", "triage_fp", "critical_fn", "muc_cor", "triage_recall"}.issubset(df.columns)
     assert {"clinical_significances", "measurement_types", "comparisons"}.issubset(df.columns)
     assert df.loc[df["report_id"] == "s1", "measurement_types"].iloc[0] == ["size"]
 
