@@ -34,25 +34,13 @@ FP_HELP = (
 def _headline_metric_cards(block: dict[str, object], tier: str) -> None:
     """Cards for the selected tier: errors per report split into FN + FP, then
     recall / precision with `(hits / total)` subtitles and errors per finding."""
-    p = dashboard_constants.TIER_PREFIX[tier]
     row1 = st.columns(3)
-    for col, (metric, key, help_text) in zip(
-        row1,
-        [
-            ("ER", "errors", f"{p}ER = {p}FN + {p}FP: errors involving a finding of the tier, per report."),
-            ("FN", "fn", f"Per report. {FN_HELP}"),
-            ("FP", "fp", f"Per report. {FP_HELP}"),
-        ],
-    ):
-        label = shared.tier_metric_label(tier, metric, suffix=" per Report", with_abbrev=False)
-        card_class = "f1-metric-card" if metric == "ER" else "grey-metric-card"
+    for col, (metric, key) in zip(row1, [("ER", "errors"), ("FN", "fn"), ("FP", "fp")]):
         col.markdown(
             shared.render_metric_card(
-                label,
+                shared.tier_metric_label(tier, metric, suffix=" per Report", with_abbrev=False),
                 shared.format_numeric_metric(block.get(f"{key}_per_report"), decimals=2),
-                card_class=card_class,
-                help_text=help_text,
-                subtitle=f"({int(block.get(f'{key}_total') or 0):,})",
+                card_class="f1-metric-card" if metric == "ER" else "grey-metric-card",
             ),
             unsafe_allow_html=True,
         )
@@ -73,8 +61,6 @@ def _headline_metric_cards(block: dict[str, object], tier: str) -> None:
             f"{dashboard_constants.TIER_NAMES[tier]} Errors per Finding",
             shared.format_numeric_metric(block.get("errors_per_finding"), decimals=3),
             card_class="grey-metric-card",
-            help_text="Fraction of the tier's findings at stake that ended in an error (prevalence-independent).",
-            subtitle=f"({int(block.get('errors_total') or 0):,} / {int(block.get('findings_total') or 0):,})",
         ),
         unsafe_allow_html=True,
     )
