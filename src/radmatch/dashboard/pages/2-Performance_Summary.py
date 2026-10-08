@@ -29,7 +29,6 @@ FP_HELP = (
     "Claims of the tier the reference lacks: SPU in the tier, plus INC where only the "
     "prediction is in the tier (e.g. an abnormality where the reference says normal)."
 )
-_SIDE_COLORS = {"FN": "#6b7280", "FP": "#9ca3af"}
 
 
 def _headline_metric_cards(block: dict[str, object], tier: str) -> None:
@@ -79,30 +78,6 @@ def _headline_metric_cards(block: dict[str, object], tier: str) -> None:
         ),
         unsafe_allow_html=True,
     )
-
-
-def _error_split_bar(block: dict[str, object], tier: str) -> None:
-    """One stacked bar: errors per report = FN + FP."""
-    labels = {side: shared.tier_metric_label(tier, side, with_tier=False) for side in ("FN", "FP")}
-    rows = [{"Side": labels[side], "Value": float(block.get(f"{side.lower()}_per_report") or 0.0)} for side in labels]
-    fig = px.bar(
-        pd.DataFrame(rows),
-        x="Value",
-        y=[""] * len(rows),
-        color="Side",
-        orientation="h",
-        color_discrete_map={labels[side]: color for side, color in _SIDE_COLORS.items()},
-        text="Value",
-    )
-    fig.update_traces(texttemplate="%{text:.2f}", textposition="inside", insidetextanchor="middle")
-    fig.update_layout(
-        height=120,
-        margin={"t": 10, "b": 10, "l": 10, "r": 10},
-        xaxis_title=shared.tier_metric_label(tier, "ER", suffix=" per Report"),
-        yaxis_title="",
-        legend={"orientation": "h", "yanchor": "bottom", "y": 1.02, "xanchor": "left", "x": 0, "title_text": ""},
-    )
-    st.plotly_chart(fig, width="stretch")
 
 
 _OVERALL_ROW = "overall"
@@ -279,10 +254,9 @@ def main() -> None:
     subsets = summary.get("subsets") or {}
 
     _hdr(metadata)
+    st.subheader(f"{dashboard_constants.TIER_NAMES[tier]} Tier Metrics")
     st.caption(f"{dashboard_constants.TIER_NAMES[tier]} tier: {' + '.join(constants.ERROR_TIERS[tier])} findings.")
-    block = shared.tier_block(summary, tier)
-    _headline_metric_cards(block, tier)
-    _error_split_bar(block, tier)
+    _headline_metric_cards(shared.tier_block(summary, tier), tier)
     st.markdown("---")
 
     st.subheader("Match Outcomes", help=shared.MATCH_OUTCOMES_HELP)
