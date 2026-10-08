@@ -78,7 +78,10 @@ def _filter_panel(
         if index_df is None or index_df.empty:
             return index_df, search_query, count_placeholder, 0
         if f"{tier}_errors" not in index_df.columns:
-            st.warning("The report index predates the per-tier metrics: rebuild it with `python -m radmatch.dashboard.build_dashboard_data`.")
+            st.warning(
+                "The report index predates the per-tier metrics: rebuild it with "
+                "`python -m radmatch.dashboard.build_dashboard_data`."
+            )
             st.stop()
 
         # Row 2: clinical_significance / measurement_type / comparison.
