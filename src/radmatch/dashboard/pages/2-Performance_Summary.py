@@ -241,8 +241,8 @@ def main() -> None:
     _hdr(metadata)
     st.subheader("Main Metrics")
     tier = shared.select_tier(key="tier_radio_summary")
-    st.caption(f"{dashboard_constants.TIER_NAMES[tier]} tier: {' + '.join(constants.ERROR_TIERS[tier])} findings.")
     _headline_metric_cards(shared.tier_block(summary, tier), tier)
+    st.caption(f"{dashboard_constants.TIER_NAMES[tier]} tier: {' + '.join(constants.ERROR_TIERS[tier])} findings.")
     st.markdown("---")
 
     st.subheader("Match Outcomes", help=shared.MATCH_OUTCOMES_HELP)
