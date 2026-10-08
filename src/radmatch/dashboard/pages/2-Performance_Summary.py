@@ -254,7 +254,7 @@ def main() -> None:
     subsets = summary.get("subsets") or {}
 
     _hdr(metadata)
-    st.subheader(f"{dashboard_constants.TIER_NAMES[tier]} Tier Metrics")
+    st.subheader("Main Metrics")
     st.caption(f"{dashboard_constants.TIER_NAMES[tier]} tier: {' + '.join(constants.ERROR_TIERS[tier])} findings.")
     _headline_metric_cards(shared.tier_block(summary, tier), tier)
     st.markdown("---")
