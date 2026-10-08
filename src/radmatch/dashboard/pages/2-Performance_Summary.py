@@ -29,7 +29,7 @@ FP_HELP = (
     "Claims of the tier the reference lacks: SPU in the tier, plus INC where only the "
     "prediction is in the tier (e.g. an abnormality where the reference says normal)."
 )
-_SIDE_COLORS = {"FN": "#7c3aed", "FP": "#0d9488"}  # violet / teal, as the FN / FP cards
+_SIDE_COLORS = {"FN": "#6b7280", "FP": "#9ca3af"}
 
 
 def _headline_metric_cards(block: dict[str, object], tier: str) -> None:
@@ -46,7 +46,7 @@ def _headline_metric_cards(block: dict[str, object], tier: str) -> None:
         ],
     ):
         label = shared.tier_metric_label(tier, metric, suffix=" per Report")
-        card_class = {"ER": "f1-metric-card", "FN": "fn-metric-card", "FP": "fp-metric-card"}[metric]
+        card_class = "f1-metric-card" if metric == "ER" else "grey-metric-card"
         col.markdown(
             shared.render_metric_card(
                 label,
@@ -64,7 +64,7 @@ def _headline_metric_cards(block: dict[str, object], tier: str) -> None:
             shared.render_metric_card(
                 shared.tier_metric_label(tier, abbr),
                 shared.format_tier_rate(block, metric),
-                card_class=f"{metric}-metric-card",
+                card_class="grey-metric-card",
                 subtitle=shared.format_tier_rate_subtitle(block, metric),
             ),
             unsafe_allow_html=True,
@@ -73,7 +73,7 @@ def _headline_metric_cards(block: dict[str, object], tier: str) -> None:
         shared.render_metric_card(
             f"{dashboard_constants.TIER_NAMES[tier]} Errors per Finding",
             shared.format_numeric_metric(block.get("errors_per_finding"), decimals=3),
-            card_class="f1-metric-card",
+            card_class="grey-metric-card",
             help_text="Fraction of the tier's findings at stake that ended in an error (prevalence-independent).",
             subtitle=f"({int(block.get('errors_total') or 0):,} / {int(block.get('findings_total') or 0):,})",
         ),

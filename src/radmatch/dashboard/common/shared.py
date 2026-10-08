@@ -219,11 +219,8 @@ def inject_styles() -> None:
         }
         .volume-metric-card { background: linear-gradient(135deg,#eef4ff,#dfe8ff); border-color:#c7d2fe; }
         .f1-metric-card     { background: linear-gradient(135deg,#fffbeb,#fde68a); border-color:#fcd34d; }
-        /* Reference side (false negatives, recall): violet; prediction side (false positives, precision): teal. */
-        .fn-metric-card        { background: linear-gradient(135deg,#f5f3ff,#ddd6fe); border-color:#c4b5fd; }
-        .recall-metric-card    { background: linear-gradient(135deg,#faf5ff,#ede9fe); border-color:#ddd6fe; }
-        .fp-metric-card        { background: linear-gradient(135deg,#f0fdfa,#99f6e4); border-color:#5eead4; }
-        .precision-metric-card { background: linear-gradient(135deg,#f0fdfa,#ccfbf1); border-color:#99f6e4; }
+        /* Everything but the headline errors-per-report card (gold) is grey. */
+        .grey-metric-card   { background: linear-gradient(135deg,#f9fafb,#e5e7eb); border-color:#d1d5db; }
         .report-card {
             border-radius: 0.75rem; padding: 1rem 1.1rem;
             font-family: 'IBM Plex Mono', monospace; font-size: 0.9rem; color: #1f2933;

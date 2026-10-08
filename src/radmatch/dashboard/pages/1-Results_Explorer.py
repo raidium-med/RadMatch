@@ -179,7 +179,7 @@ def _per_report_metric_cards(per_report: dict[str, object], tier: str) -> None:
             shared.render_metric_card(
                 shared.tier_metric_label(tier, metric),
                 shared.format_int(int(block.get(key) or 0)),
-                card_class={"ER": "f1-metric-card", "FN": "fn-metric-card", "FP": "fp-metric-card"}[metric],
+                card_class="f1-metric-card" if metric == "ER" else "grey-metric-card",
             ),
             unsafe_allow_html=True,
         )
@@ -189,7 +189,7 @@ def _per_report_metric_cards(per_report: dict[str, object], tier: str) -> None:
             shared.render_metric_card(
                 shared.tier_metric_label(tier, abbr),
                 shared.format_tier_rate(block, metric),
-                card_class=f"{metric}-metric-card",
+                card_class="grey-metric-card",
                 subtitle=shared.format_tier_rate_subtitle(block, metric),
             ),
             unsafe_allow_html=True,
