@@ -188,14 +188,22 @@ def test_dataset_five_pairs_one_per_muc_category(tmp_path, fake_client, ok, make
     # Effective counts: 1 COR (s1), 0 PAR, 2 INC (s2 reclassified + s3 original),
     # 1 MIS (s4), 1 SPU (s5).
     assert summary["muc_counts"] == {"COR": 1, "PAR": 0, "INC": 2, "MIS": 1, "SPU": 1}
-    safety = summary["clinical_safety_summary"]
+    tiers = summary["tiers"]
+    assert set(tiers) == {"actionable", "triage", "critical"}
     # Triage pool (critical+urgent) GT here: s1 (urgent, COR) + s2 (critical, reclassified INC)
     # + s3 (critical, INC) = 3. Hits (effective COR or PAR) = 1 (s1) → recall = 1/3.
-    assert safety["triage_recall"] == pytest.approx(1 / 3)
-    # actionable_errors: s2 reclassified INC (critical) + s3 INC (critical) + s4 MIS (notable) = 3
-    # (s5 SPU is routine, dropped)
-    assert summary["actionable_errors_total"] == 3
-    assert summary["actionable_errors_per_report"] == pytest.approx(3 / 5)
+    assert tiers["triage"]["recall"] == pytest.approx(1 / 3)
+    # Actionable errors: s2 reclassified INC (critical) + s3 INC (critical) + s4 MIS (notable) = 3,
+    # all on the reference side (s5 SPU is routine, dropped): aER = aFN + aFP = 3 + 0.
+    actionable = tiers["actionable"]
+    assert (actionable["errors_total"], actionable["fn_total"], actionable["fp_total"]) == (3, 3, 0)
+    assert (actionable["fn_mis_total"], actionable["fn_inc_total"]) == (1, 2)
+    assert actionable["errors_per_report"] == pytest.approx(3 / 5)
+    assert actionable["fn_per_report"] + actionable["fp_per_report"] == pytest.approx(3 / 5)
+    # Triage drops the notable MIS: tER = tFN = 2.
+    assert (tiers["triage"]["errors_total"], tiers["triage"]["fn_total"]) == (2, 2)
+    assert "actionable_errors_per_report" not in summary
+    assert "clinical_safety_summary" not in summary
     assert (out_dir / "metrics_summary.json").exists()
 
 
@@ -244,8 +252,8 @@ def test_template_predictor_fails_safety_gate(tmp_path, fake_client, ok, make_fi
     summary = _run_dataset(gt_dir, pred_dir, out_dir, client)
     # 5 reports × (1 critical MIS + 0 actionable SPU since pred is routine) = 5 actionable errors
     # Routine pred SPUs don't count; routine GT MISes don't count. Critical GT MIS counts.
-    assert summary["actionable_errors_per_report"] >= 1.0
-    assert summary["clinical_safety_summary"]["triage_recall"] < 0.2
+    assert summary["tiers"]["actionable"]["errors_per_report"] >= 1.0
+    assert summary["tiers"]["triage"]["recall"] < 0.2
 
 
 # ============================================================================
@@ -419,7 +427,7 @@ def test_score_pair_reuses_cached_text_errors(tmp_path, fake_client, make_findin
 
 
 def test_score_pair_writes_per_report_metrics(tmp_path, fake_client, ok, make_finding):
-    """A per_report_metrics/<series>.json with effective muc_counts + actionable_errors
+    """A per_report_metrics/<series>.json with effective muc_counts + per-tier errors
     is written alongside attribute_errors."""
     gt = [make_finding("g1", clinical_significance="critical", text="left nodule")]
     pred = [make_finding("p1", clinical_significance="critical", text="right nodule")]
@@ -435,9 +443,10 @@ def test_score_pair_writes_per_report_metrics(tmp_path, fake_client, ok, make_fi
     assert per_report["metadata"]["total_pred_findings"] == 1
     # PAR-with-major reclassifies to INC; output has 5 keys including PAR (=0 here).
     assert per_report["muc_counts"] == {"COR": 0, "PAR": 0, "INC": 1, "MIS": 0, "SPU": 0}
-    assert per_report["actionable_errors_total"] == 1
-    assert per_report["clinical_safety_summary"]["triage_gt_total"] == 1
-    assert per_report["clinical_safety_summary"]["triage_recall"] == 0.0  # major attr error → miss
+    triage = per_report["tiers"]["triage"]
+    assert per_report["tiers"]["actionable"]["errors_total"] == 1
+    assert (triage["gt_total"], triage["fn_inc_total"]) == (1, 1)
+    assert triage["recall"] == 0.0  # major attr error → miss
     # New per-pair fields: attribute_breakdown is included (dataset-symmetric).
     assert "attribute_breakdown" in per_report
 

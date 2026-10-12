@@ -16,10 +16,18 @@ MEASUREMENT_CATEGORY_VALUES: set[str] = {"size", "count", "attenuation", "ratio"
 CLINICAL_SIGNIFICANCE_VALUES: set[str] = {"critical", "urgent", "notable", "routine"}
 DEFAULT_CLINICAL_SIGNIFICANCE: str = "routine"
 
-# Safety-recall denominator pools. A finding is a hit iff its match survives
-# PAR-reclassification as COR or PAR; INC and MIS are misses.
+# Significance pools of the error tiers. A GT finding is a hit iff its match survives
+# PAR-reclassification as COR or PAR; INC and MIS are misses (FN).
+CRITICAL_SIGNIFICANCE_TIERS: tuple[str, ...] = ("critical",)
 TRIAGE_SIGNIFICANCE_TIERS: tuple[str, ...] = ("critical", "urgent")
 ACTIONABLE_SIGNIFICANCE_TIERS: tuple[str, ...] = ("critical", "urgent", "notable")
+# The `tiers.<name>` output blocks, reported as aER = aFN + aFP with aRec / aPrec
+# (actionable), and likewise tER, ... (triage) and cER, ... (critical).
+ERROR_TIERS: dict[str, tuple[str, ...]] = {
+    "actionable": ACTIONABLE_SIGNIFICANCE_TIERS,
+    "triage": TRIAGE_SIGNIFICANCE_TIERS,
+    "critical": CRITICAL_SIGNIFICANCE_TIERS,
+}
 
 # A cross-bucket comparison difference is `major` (misleads on whether action is
 # needed); same-bucket, or one side absent, is `minor`.

@@ -5,7 +5,9 @@ Pure functions over the Stages 3a/3b outputs, called by `scoring.pipeline`.
 Matched pairs are tagged COR (no errors), PAR (some errors) or INC (status
 inverted). `reclassify_to_effective_category` then promotes any PAR holding a major
 error to INC, and the five surviving categories (COR/PAR/INC/MIS/SPU) are what the
-output reports. See README.md for the metric definitions.
+output reports. Errors are then counted per significance tier (actionable, triage) and
+split by side: FN on the reference, FP on the prediction. See README.md for the metric
+definitions.
 """
 
 from __future__ import annotations
@@ -152,64 +154,91 @@ def effective_muc_counts(
     return counts
 
 
-def compute_actionable_errors(
+class TierErrors(TypedDict):
+    """Errors on one significance tier, split by side and source:
+    `total == fn + fp`, `fn == fn_mis + fn_inc`, `fp == fp_spu + fp_inc`."""
+
+    total: int
+    fn: int
+    fn_mis: int
+    fn_inc: int
+    fp: int
+    fp_spu: int
+    fp_inc: int
+
+
+def compute_tier_errors(
     records: Sequence[dict],
+    *,
     unmatched_pred: Sequence[dict],
     unmatched_gt: Sequence[dict],
-) -> int:
-    """Count of errors involving findings in the actionable pool
-    (`{critical, urgent, notable}`).
+    significance_pool: Sequence[str],
+) -> TierErrors:
+    """Errors involving findings in `significance_pool`, split by side.
 
-    INC contribution is per unique GT (`all_inc`): a GT counts as 1 error
-    iff every matched record fails to credit it AND the GT (or any
-    matched pred) is in the actionable pool. MIS / SPU stay per-orphan.
+    An error is an INC on a matched GT whose GT (or any matched pred) is in the
+    pool, a MIS in the pool, or a SPU in the pool. INC counts once per unique GT
+    (`all_inc`: every matched record fails to credit it); MIS / SPU per orphan.
+
+    - ``fn`` (reference side): GT findings in the pool not credited, i.e. MIS +
+      INC on a GT in the pool. Equals ``gt_total - recall_hits``.
+    - ``fp`` (prediction side): SPU in the pool + INC on a GT outside the pool
+      with a matched pred in the pool (e.g. an abnormality where the GT is normal).
+
+    The side is relative to the pool: a notable GT contradicted by an urgent pred
+    is an actionable FN but a triage FP.
     """
-    actionable = set(constants.ACTIONABLE_SIGNIFICANCE_TIERS)
-    per_gt = _per_gt_safety_outcomes(records)
-    total = sum(
-        1
-        for b in per_gt.values()
-        if b["all_inc"] and (b["gt_sig"] in actionable or any(s in actionable for s in b["pred_sigs"]))
-    )
-    total += sum(1 for f in unmatched_pred if f.get("clinical_significance") in actionable)
-    total += sum(1 for f in unmatched_gt if f.get("clinical_significance") in actionable)
-    return total
+    pool = set(significance_pool)
+    inc_gts = [b for b in _per_gt_safety_outcomes(records).values() if b["all_inc"]]
+    fn_mis = sum(1 for f in unmatched_gt if f.get("clinical_significance") in pool)
+    fn_inc = sum(1 for b in inc_gts if b["gt_sig"] in pool)
+    fp_spu = sum(1 for f in unmatched_pred if f.get("clinical_significance") in pool)
+    fp_inc = sum(1 for b in inc_gts if b["gt_sig"] not in pool and any(s in pool for s in b["pred_sigs"]))
+    fn, fp = fn_mis + fn_inc, fp_spu + fp_inc
+    return {
+        "total": fn + fp,
+        "fn": fn,
+        "fn_mis": fn_mis,
+        "fn_inc": fn_inc,
+        "fp": fp,
+        "fp_spu": fp_spu,
+        "fp_inc": fp_inc,
+    }
 
 
-def compute_actionable_opportunities(
+def compute_tier_opportunities(
     records: Sequence[dict],
+    *,
     unmatched_pred: Sequence[dict],
     unmatched_gt: Sequence[dict],
+    significance_pool: Sequence[str],
 ) -> int:
-    """Count of distinct actionable findings "at stake" — the denominator for a
-    prevalence-independent error *rate*.
+    """Count of distinct findings in `significance_pool` "at stake" — the
+    denominator for a prevalence-independent error *rate*.
 
-    An actionable error (see `compute_actionable_errors`) is an INC on an
-    actionable matched pair, an actionable MIS, or an actionable SPU. Each maps
-    to exactly one distinct finding, so the matching opportunity pool is:
+    An error (see `compute_tier_errors`) is an INC on a matched pair in the pool,
+    a MIS in the pool, or a SPU in the pool. Each maps to exactly one distinct
+    finding, so the matching opportunity pool is:
 
-        distinct actionable matched GT findings + actionable MIS gts + actionable SPU preds
+        distinct matched GT findings in the pool + MIS gts in the pool + SPU preds in the pool
 
-    A matched pair counts as actionable on the same condition the numerator uses
-    — the GT *or* any matched pred is actionable — so a routine GT matched to an
-    actionable pred (a false-positive INC the numerator counts) has a matching
-    opportunity here. Keeping the two definitions in lock-step guarantees
-    numerator ≤ denominator, so the resulting `actionable_errors_per_finding`
-    rate stays in [0, 1].
+    A matched pair is in the pool on the same condition the numerator uses — the
+    GT *or* any matched pred is in it — so a routine GT matched to an actionable
+    pred (a false-positive INC the numerator counts) has a matching opportunity
+    here. Keeping the two definitions in lock-step guarantees numerator ≤
+    denominator, so the resulting `*_errors_per_finding` rate stays in [0, 1].
 
-    Dividing `compute_actionable_errors` by this count yields the fraction of
-    actionable findings that ended in an error — comparable across subsets
-    regardless of how common each finding type is (unlike a per-report average,
-    which a rare subset deflates purely by prevalence).
+    Dividing the error count by this count yields the fraction of findings in the
+    pool that ended in an error — comparable across subsets regardless of how
+    common each finding type is (unlike a per-report average, which a rare subset
+    deflates purely by prevalence).
     """
-    actionable = set(constants.ACTIONABLE_SIGNIFICANCE_TIERS)
+    pool = set(significance_pool)
     per_gt = _per_gt_safety_outcomes(records)
-    distinct_actionable_gt = sum(
-        1 for b in per_gt.values() if b["gt_sig"] in actionable or any(s in actionable for s in b["pred_sigs"])
-    )
-    distinct_actionable_gt += sum(1 for f in unmatched_gt if f.get("clinical_significance") in actionable)
-    actionable_spu = sum(1 for f in unmatched_pred if f.get("clinical_significance") in actionable)
-    return distinct_actionable_gt + actionable_spu
+    distinct_gt = sum(1 for b in per_gt.values() if b["gt_sig"] in pool or any(s in pool for s in b["pred_sigs"]))
+    distinct_gt += sum(1 for f in unmatched_gt if f.get("clinical_significance") in pool)
+    spu = sum(1 for f in unmatched_pred if f.get("clinical_significance") in pool)
+    return distinct_gt + spu
 
 
 # ============================================================================
@@ -247,7 +276,7 @@ def assign_subsets(finding: dict) -> list[str]:
 
 
 # ============================================================================
-# Safety recalls
+# Per-tier errors and safety recall / precision
 # ============================================================================
 
 
@@ -312,96 +341,53 @@ def _per_pred_safety_outcomes(records: Sequence[dict]) -> dict[tuple[str, str], 
     return per_pred
 
 
-def _recall_from_per_gt(
-    per_gt: dict[tuple[str, str], dict[str, object]],
-    unmatched_gt: Sequence[dict],
-    pool: set[str],
-) -> float | None:
-    """Recall from a prebuilt `per_gt`. Returns None on empty denominator."""
-    numerator = sum(1 for b in per_gt.values() if b["gt_sig"] in pool and b["is_hit"])
-    denominator = sum(1 for b in per_gt.values() if b["gt_sig"] in pool)
-    denominator += sum(1 for f in unmatched_gt if f.get("clinical_significance") in pool)
-    return numerator / denominator if denominator else None
-
-
-def _precision_from_per_pred(
-    per_pred: dict[tuple[str, str], dict[str, object]],
-    unmatched_pred: Sequence[dict],
-    pool: set[str],
-) -> float | None:
-    """Precision from a prebuilt `per_pred`. Returns None on empty denominator.
-
-    Numerator   = unique matched preds in pool with ≥1 credited match.
-    Denominator = unique matched preds in pool + unmatched preds (SPU) in pool.
-    """
-    numerator = sum(1 for b in per_pred.values() if b["pred_sig"] in pool and b["is_hit"])
-    denominator = sum(1 for b in per_pred.values() if b["pred_sig"] in pool)
-    denominator += sum(1 for f in unmatched_pred if f.get("clinical_significance") in pool)
-    return numerator / denominator if denominator else None
-
-
-def compute_safety_recall(
+def compute_tier_metrics(
     records: Sequence[dict],
+    *,
+    unmatched_pred: Sequence[dict],
     unmatched_gt: Sequence[dict],
     significance_pool: Sequence[str],
-) -> float | None:
-    """Recall restricted to GT findings in `significance_pool`.
-
-    Numerator   = unique matched GTs on the pool with any effective COR/PAR.
-    Denominator = unique matched GTs on the pool + unmatched GTs on the pool.
-    Returns ``None`` when the denominator is empty (undefined, not "perfect" —
-    treating empty as 1.0 silently inflates downstream consumers).
-    """
-    return _recall_from_per_gt(_per_gt_safety_outcomes(records), unmatched_gt, set(significance_pool))
-
-
-def compute_safety_summary(
-    records: Sequence[dict],
-    unmatched_gt: Sequence[dict],
-    unmatched_pred: Sequence[dict],
 ) -> dict:
-    """Triage + actionable safety recall + precision plus numerator / denominator counts.
+    """One `tiers.<name>` output block on `significance_pool`: errors split by side
+    and source, errors per finding, and safety recall / precision with their counts.
 
-    Pools: triage = critical+urgent; actionable = critical+urgent+notable.
-    Recall hits are per-unique-GT, precision hits per-unique-pred (so N:N
-    doesn't double-count). PAR-with-major reclassifies to INC and counts as a
-    miss; vacuous pool → metric = None.
+    Recall hits are per unique GT and precision hits per unique pred (so N:N doesn't
+    double-count); PAR-with-major reclassifies to INC and counts as a miss.
+    Recall / precision are None on an empty pool (undefined, not "perfect").
+    ``fn_total == gt_total - recall_hits``.
     """
-    triage_pool = set(constants.TRIAGE_SIGNIFICANCE_TIERS)
-    actionable_pool = set(constants.ACTIONABLE_SIGNIFICANCE_TIERS)
+    pool = set(significance_pool)
+    errors = compute_tier_errors(
+        records, unmatched_pred=unmatched_pred, unmatched_gt=unmatched_gt, significance_pool=pool
+    )
+    findings_total = compute_tier_opportunities(
+        records, unmatched_pred=unmatched_pred, unmatched_gt=unmatched_gt, significance_pool=pool
+    )
     per_gt = _per_gt_safety_outcomes(records)
     per_pred = _per_pred_safety_outcomes(records)
-
-    def _gt_count(pool: set[str], predicate) -> int:
-        return sum(1 for b in per_gt.values() if b["gt_sig"] in pool and predicate(b))
-
-    def _pred_hit_count(pool: set[str]) -> int:
-        return sum(1 for b in per_pred.values() if b["pred_sig"] in pool and b["is_hit"])
-
-    def _pred_total(pool: set[str]) -> int:
-        return sum(1 for b in per_pred.values() if b["pred_sig"] in pool) + sum(
-            1 for f in unmatched_pred if f.get("clinical_significance") in pool
-        )
-
+    gt_total = sum(1 for b in per_gt.values() if b["gt_sig"] in pool)
+    gt_total += sum(1 for f in unmatched_gt if f.get("clinical_significance") in pool)
+    pred_total = sum(1 for b in per_pred.values() if b["pred_sig"] in pool)
+    pred_total += sum(1 for f in unmatched_pred if f.get("clinical_significance") in pool)
+    recall_hits = sum(1 for b in per_gt.values() if b["gt_sig"] in pool and b["is_hit"])
+    precision_hits = sum(1 for b in per_pred.values() if b["pred_sig"] in pool and b["is_hit"])
     return {
-        "triage_recall": _recall_from_per_gt(per_gt, unmatched_gt, triage_pool),
-        "actionable_recall": _recall_from_per_gt(per_gt, unmatched_gt, actionable_pool),
-        "triage_precision": _precision_from_per_pred(per_pred, unmatched_pred, triage_pool),
-        "actionable_precision": _precision_from_per_pred(per_pred, unmatched_pred, actionable_pool),
-        "triage_hit_count": _gt_count(triage_pool, lambda b: b["is_hit"]),
-        "actionable_hit_count": _gt_count(actionable_pool, lambda b: b["is_hit"]),
-        "triage_gt_total": _gt_count(triage_pool, lambda _: True)
-        + sum(1 for f in unmatched_gt if f.get("clinical_significance") in triage_pool),
-        "actionable_gt_total": _gt_count(actionable_pool, lambda _: True)
-        + sum(1 for f in unmatched_gt if f.get("clinical_significance") in actionable_pool),
-        "triage_pred_hit_count": _pred_hit_count(triage_pool),
-        "actionable_pred_hit_count": _pred_hit_count(actionable_pool),
-        "triage_pred_total": _pred_total(triage_pool),
-        "actionable_pred_total": _pred_total(actionable_pool),
-        "triage_mis_count": sum(1 for f in unmatched_gt if f.get("clinical_significance") in triage_pool),
-        "triage_inc_count": _gt_count(triage_pool, lambda b: b["all_inc"]),
-        "actionable_mis_count": sum(1 for f in unmatched_gt if f.get("clinical_significance") in actionable_pool),
-        "actionable_inc_count": _gt_count(actionable_pool, lambda b: b["all_inc"]),
+        "significance": list(significance_pool),
+        "errors_total": errors["total"],
+        "fn_total": errors["fn"],
+        "fp_total": errors["fp"],
+        "fn_mis_total": errors["fn_mis"],
+        "fn_inc_total": errors["fn_inc"],
+        "fp_spu_total": errors["fp_spu"],
+        "fp_inc_total": errors["fp_inc"],
+        "findings_total": findings_total,
+        "errors_per_finding": errors["total"] / findings_total if findings_total else 0.0,
+        "recall": recall_hits / gt_total if gt_total else None,
+        "recall_hits": recall_hits,
+        "gt_total": gt_total,
+        "precision": precision_hits / pred_total if pred_total else None,
+        "precision_hits": precision_hits,
+        "pred_total": pred_total,
     }
 
 
@@ -420,7 +406,7 @@ def compute_attribute_breakdown(records: Sequence[dict]) -> dict[str, dict[str, 
     At most one classification per (record, dimension): a record with both a
     major and a minor on the same dimension counts as major.
 
-    This is diagnostic data — it is not used by the headline `actionable_errors`
+    This is diagnostic data — it is not used by the per-tier errors (aER, ...)
     metric. Exposed on the dataset summary so the dashboard can render the
     "where did the attribute errors land" view.
     """
