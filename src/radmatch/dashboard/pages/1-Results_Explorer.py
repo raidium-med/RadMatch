@@ -264,7 +264,8 @@ def _matches_errors(
     # MIS / SPU contribute to the tier's errors via the orphan side; the finding
     # itself has the significance to check.
     if info.category in ("MIS", "SPU"):
-        return finding.get("clinical_significance") in pool
+        in_pool = finding.get("clinical_significance") in pool
+        return in_pool and (info.category == "MIS" or metrics.is_unsupported_claim(finding))
     # `info.category` is best-of-pairs, so a COR finding can still hold a per-pair
     # INC on an actionable counterpart. Check each pair individually.
     side_in_pool = finding.get("clinical_significance") in pool

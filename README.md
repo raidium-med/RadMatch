@@ -167,7 +167,7 @@ Stage 3c (deterministic)    MUC classification + per-tier error counts
 | `PAR` | Matched with only minor errors — finding identified, descriptors imprecise. Counts as a hit in safety recalls. |
 | `INC` | Matched but materially wrong: status inverted, or at least one major attribute error. Counts as a miss. |
 | `MIS` | Ground-truth finding unmatched — missed by the model. |
-| `SPU` | Predicted finding unmatched — hallucinated. |
+| `SPU` | Predicted finding unmatched. An error only when it asserts an abnormality: the reference's silence is read as absence, so a normal statement it does not mention ("no pneumothorax") agrees with it and is not scored. |
 
 ### Error characterization
 
@@ -206,7 +206,7 @@ Every metric is computed on three significance tiers, each reported in its own `
 |---|---|
 | aER (`errors_per_report`) | Mean per-report count of `INC` + `MIS` + `SPU` involving a finding of the tier. The headline number on the actionable tier; lower is better. |
 | aFN (`fn_per_report`) | Reference side: findings of the tier missed (`MIS`, `fn_mis_total`) or contradicted (`INC`, `fn_inc_total`). Equals the tier's reference findings × (1 − aRec). |
-| aFP (`fp_per_report`) | Prediction side: claims of the tier with no reference counterpart (`SPU`, `fp_spu_total`), or contradicting a reference finding outside the tier, e.g. an abnormality where the reference says normal (`INC`, `fp_inc_total`). |
+| aFP (`fp_per_report`) | Prediction side: abnormalities of the tier with no reference counterpart (`SPU`, `fp_spu_total`), or contradicting a reference finding outside the tier, e.g. an abnormality where the reference says normal (`INC`, `fp_inc_total`). |
 | aRec (`recall`) | Fraction of the reference findings of the tier the model recalled, counting `COR` and `PAR` as hits. tRec is the safety floor: a model can look acceptable on average while missing most urgent findings, and a large gap from aRec means it is differentially worse on the highest-stakes findings. |
 | aPrec (`precision`) | Of the predicted findings of the tier, the fraction crediting a real finding. Flags confident over-calling. `null` when the model predicted none. |
 | errors per finding (`errors_per_finding`) | Errors over the findings at stake on the tier (`findings_total`): a rate that stays comparable between a rare subset and a common one. |

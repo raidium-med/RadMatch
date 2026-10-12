@@ -154,6 +154,12 @@ def effective_muc_counts(
     return counts
 
 
+def is_unsupported_claim(finding: dict) -> bool:
+    """Whether an unmatched predicted finding (`SPU`) is an error. The reference's silence is read as
+    absence: it refutes an unreported abnormality but agrees with an unreported normal statement."""
+    return finding.get("clinical_status") != "normal"
+
+
 class TierErrors(TypedDict):
     """Errors on one significance tier, split by side and source:
     `total == fn + fp`, `fn == fn_mis + fn_inc`, `fp == fp_spu + fp_inc`."""
@@ -177,12 +183,13 @@ def compute_tier_errors(
     """Errors involving findings in `significance_pool`, split by side.
 
     An error is an INC on a matched GT whose GT (or any matched pred) is in the
-    pool, a MIS in the pool, or a SPU in the pool. INC counts once per unique GT
-    (`all_inc`: every matched record fails to credit it); MIS / SPU per orphan.
+    pool, a MIS in the pool, or a SPU in the pool asserting an abnormality
+    (`is_unsupported_claim`). INC counts once per unique GT (`all_inc`: every
+    matched record fails to credit it); MIS / SPU per orphan.
 
     - ``fn`` (reference side): GT findings in the pool not credited, i.e. MIS +
       INC on a GT in the pool. Equals ``gt_total - recall_hits``.
-    - ``fp`` (prediction side): SPU in the pool + INC on a GT outside the pool
+    - ``fp`` (prediction side): such SPU in the pool + INC on a GT outside the pool
       with a matched pred in the pool (e.g. an abnormality where the GT is normal).
 
     The side is relative to the pool: a notable GT contradicted by an urgent pred
@@ -192,7 +199,7 @@ def compute_tier_errors(
     inc_gts = [b for b in _per_gt_safety_outcomes(records).values() if b["all_inc"]]
     fn_mis = sum(1 for f in unmatched_gt if f.get("clinical_significance") in pool)
     fn_inc = sum(1 for b in inc_gts if b["gt_sig"] in pool)
-    fp_spu = sum(1 for f in unmatched_pred if f.get("clinical_significance") in pool)
+    fp_spu = sum(1 for f in unmatched_pred if f.get("clinical_significance") in pool and is_unsupported_claim(f))
     fp_inc = sum(1 for b in inc_gts if b["gt_sig"] not in pool and any(s in pool for s in b["pred_sigs"]))
     fn, fp = fn_mis + fn_inc, fp_spu + fp_inc
     return {
@@ -217,10 +224,10 @@ def compute_tier_opportunities(
     denominator for a prevalence-independent error *rate*.
 
     An error (see `compute_tier_errors`) is an INC on a matched pair in the pool,
-    a MIS in the pool, or a SPU in the pool. Each maps to exactly one distinct
-    finding, so the matching opportunity pool is:
+    a MIS in the pool, or a SPU in the pool asserting an abnormality. Each maps to
+    exactly one distinct finding, so the matching opportunity pool is:
 
-        distinct matched GT findings in the pool + MIS gts in the pool + SPU preds in the pool
+        distinct matched GT findings in the pool + MIS gts in the pool + such SPU preds in the pool
 
     A matched pair is in the pool on the same condition the numerator uses — the
     GT *or* any matched pred is in it — so a routine GT matched to an actionable
@@ -237,7 +244,7 @@ def compute_tier_opportunities(
     per_gt = _per_gt_safety_outcomes(records)
     distinct_gt = sum(1 for b in per_gt.values() if b["gt_sig"] in pool or any(s in pool for s in b["pred_sigs"]))
     distinct_gt += sum(1 for f in unmatched_gt if f.get("clinical_significance") in pool)
-    spu = sum(1 for f in unmatched_pred if f.get("clinical_significance") in pool)
+    spu = sum(1 for f in unmatched_pred if f.get("clinical_significance") in pool and is_unsupported_claim(f))
     return distinct_gt + spu
 
 
@@ -368,7 +375,7 @@ def compute_tier_metrics(
     gt_total = sum(1 for b in per_gt.values() if b["gt_sig"] in pool)
     gt_total += sum(1 for f in unmatched_gt if f.get("clinical_significance") in pool)
     pred_total = sum(1 for b in per_pred.values() if b["pred_sig"] in pool)
-    pred_total += sum(1 for f in unmatched_pred if f.get("clinical_significance") in pool)
+    pred_total += sum(1 for f in unmatched_pred if f.get("clinical_significance") in pool and is_unsupported_claim(f))
     recall_hits = sum(1 for b in per_gt.values() if b["gt_sig"] in pool and b["is_hit"])
     precision_hits = sum(1 for b in per_pred.values() if b["pred_sig"] in pool and b["is_hit"])
     return {
