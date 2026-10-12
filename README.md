@@ -84,7 +84,7 @@ Every stage caches on success, so re-running the same command against the same `
 
 A report that *fails* a stage drops out of the results and is listed in `failed_reports{,_matching,_scoring}.json`.
 
-A report can also *degrade* rather than fail: Stage 2 falling back to the valid subset of its matches. It still produces cached output and still counts in `n_reports`, flagged as `validation_fallback` in `matching/<series>.json` — so a plain re-run skips it. Use `--retry-degraded` to re-match it, or `--match-retries` to buy the judge more attempts up front. Stage 3b never degrades: a chunk of pairs the judge keeps answering malformed (`--score-retries` attempts) or that times out is split in half and retried, and a pair that still fails drops the report rather than scoring it as if no attribute errors were found.
+A report can also *degrade* rather than fail: Stage 2 falling back to the valid subset of its matches. It still produces cached output and still counts in `n_reports`, flagged as `validation_fallback` in `matching/<series>.json` — so a plain re-run skips it. Use `--retry-degraded` to re-match it, or `--match-retries` to buy the judge more attempts up front. Stage 3b never degrades: each pair is sent with an id and answered under it, so an error cannot land on the wrong pair, and a chunk of pairs the judge keeps answering malformed (`--score-retries` attempts) or that times out is split in half and retried, and a pair that still fails drops the report rather than scoring it as if no attribute errors were found.
 
 ### Few-shot examples
 

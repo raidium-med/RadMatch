@@ -77,7 +77,7 @@ def test_two_cor_pairs(fake_client, ok, make_finding):
     pred = [make_finding("p1", clinical_significance="critical"), make_finding("p2")]
     client = fake_client(
         ok({"matches": [_match("p1", "g1"), _match("p2", "g2")], "unmatched_pred": [], "unmatched_gt": []}),
-        ok({"errors_per_match": [[], []]}),
+        ok({"errors_per_pair": [{"pair_id": 1, "errors": []}, {"pair_id": 2, "errors": []}]}),
     )
     out = _run_pair(gt, pred, "s_cor", client)
     assert [r["muc_category"] for r in out["muc_records"]] == ["COR", "COR"]
@@ -91,7 +91,13 @@ def test_inc_pair_still_runs_stage_3b(fake_client, ok, make_finding):
     pred = [make_finding("p1", clinical_status="normal", clinical_significance="critical", text="No pneumothorax")]
     client = fake_client(
         ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),
-        ok({"errors_per_match": [[{"dimension": "location", "severity": "minor", "reasoning": "x"}]]}),
+        ok(
+            {
+                "errors_per_pair": [
+                    {"pair_id": 1, "errors": [{"dimension": "location", "severity": "minor", "reasoning": "x"}]}
+                ]
+            }
+        ),
     )
 
     out = _run_pair(gt, pred, "s_inc", client)
@@ -107,7 +113,13 @@ def test_par_with_major_error_internally_PAR(fake_client, ok, make_finding):
     pred = [make_finding("p1", clinical_significance="critical", text="right nodule")]
     client = fake_client(
         ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),
-        ok({"errors_per_match": [[{"dimension": "location", "severity": "major", "reasoning": "L vs R"}]]}),
+        ok(
+            {
+                "errors_per_pair": [
+                    {"pair_id": 1, "errors": [{"dimension": "location", "severity": "major", "reasoning": "L vs R"}]}
+                ]
+            }
+        ),
     )
     out = _run_pair(gt, pred, "s_par", client)
     assert out["muc_records"][0]["muc_category"] == "PAR"
@@ -123,7 +135,13 @@ def test_par_with_only_minor_errors_keeps_PAR(fake_client, ok, make_finding):
     pred = [make_finding("p1", clinical_significance="critical", text="lesion")]
     client = fake_client(
         ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),
-        ok({"errors_per_match": [[{"dimension": "location", "severity": "minor", "reasoning": "imprecise"}]]}),
+        ok(
+            {
+                "errors_per_pair": [
+                    {"pair_id": 1, "errors": [{"dimension": "location", "severity": "minor", "reasoning": "imprecise"}]}
+                ]
+            }
+        ),
     )
     out = _run_pair(gt, pred, "s_par_minor", client)
     assert out["muc_records"][0]["muc_category"] == "PAR"
@@ -177,9 +195,15 @@ def test_dataset_five_pairs_one_per_muc_category(tmp_path, fake_client, ok, make
         ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),  # s1
         ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),  # s2
         ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),  # s3
-        ok({"errors_per_match": [[]]}),  # s1 attr
-        ok({"errors_per_match": [[{"dimension": "location", "severity": "major", "reasoning": "..."}]]}),  # s2 attr
-        ok({"errors_per_match": [[]]}),  # s3 attr (INC pair — recorded for diagnostics)
+        ok({"errors_per_pair": [{"pair_id": 1, "errors": []}]}),  # s1 attr
+        ok(
+            {
+                "errors_per_pair": [
+                    {"pair_id": 1, "errors": [{"dimension": "location", "severity": "major", "reasoning": "..."}]}
+                ]
+            }
+        ),  # s2 attr
+        ok({"errors_per_pair": [{"pair_id": 1, "errors": []}]}),  # s3 attr (INC pair — recorded for diagnostics)
     )
 
     summary = _run_dataset(gt_dir, pred_dir, out_dir, client)
@@ -278,8 +302,9 @@ def test_stage_3b_failure_surfaces(fake_client, ok, make_finding):
     "malformed_payload",
     [
         pytest.param("[]", id="top-level-list"),
-        pytest.param('{"errors_per_match": "not-a-list"}', id="errors_per_match-string"),
-        pytest.param('{"errors_per_match": {"oops": []}}', id="errors_per_match-object"),
+        pytest.param('{"errors_per_pair": "not-a-list"}', id="errors_per_pair-string"),
+        pytest.param('{"errors_per_pair": {"oops": []}}', id="errors_per_pair-object"),
+        pytest.param('{"errors_per_pair": [{"pair_id": 2, "errors": []}]}', id="unknown-pair_id"),
     ],
 )
 def test_stage_3b_malformed_shape_surfaces(malformed_payload, fake_client, ok, make_finding):
@@ -302,7 +327,7 @@ def test_stage_3b_valid_shape_with_unusable_entries_normalises_to_empty(fake_cli
     pred = [make_finding("p1", clinical_significance="critical", text="nodule")]
     client = fake_client(
         ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),
-        '{"errors_per_match": ["not-a-list-of-lists"]}',
+        '{"errors_per_pair": [{"pair_id": 1, "errors": "not-a-list"}]}',
     )
     out = _run_pair(gt, pred, "s", client)
     assert out["muc_records"][0]["muc_category"] == "COR"
@@ -433,7 +458,13 @@ def test_score_pair_writes_per_report_metrics(tmp_path, fake_client, ok, make_fi
     pred = [make_finding("p1", clinical_significance="critical", text="right nodule")]
     client = fake_client(
         ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),
-        ok({"errors_per_match": [[{"dimension": "location", "severity": "major", "reasoning": "L vs R"}]]}),
+        ok(
+            {
+                "errors_per_pair": [
+                    {"pair_id": 1, "errors": [{"dimension": "location", "severity": "major", "reasoning": "L vs R"}]}
+                ]
+            }
+        ),
     )
     _run_pair(gt, pred, "s1", client, output_dir=tmp_path)
     per_report = json.loads((tmp_path / "per_report_metrics" / "s1.json").read_text())
@@ -465,7 +496,7 @@ def test_score_pair_invalidates_cache_when_matches_differ(tmp_path, fake_client,
     _write(out_dir / "attribute_errors" / "s.json", stale)
 
     matching_output = {"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}
-    client = fake_client(ok({"errors_per_match": [[]]}))
+    client = fake_client(ok({"errors_per_pair": [{"pair_id": 1, "errors": []}]}))
     result = score_pair(
         matching_output=matching_output,
         findings_gt=gt,
@@ -502,7 +533,7 @@ def test_score_pair_invalidates_cache_when_finding_text_differs(tmp_path, fake_c
     _write(out_dir / "attribute_errors" / "s.json", stale)
 
     matching_output = {"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}
-    client = fake_client(ok({"errors_per_match": [[]]}))
+    client = fake_client(ok({"errors_per_pair": [{"pair_id": 1, "errors": []}]}))
     result = score_pair(
         matching_output=matching_output,
         findings_gt=gt,

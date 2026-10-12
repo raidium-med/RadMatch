@@ -16,8 +16,8 @@ Each file is one example:
 {
   "scenario": "...",
   "description": "...",
-  "user":      { "series_uuid": "...", "pairs": [{"pred_finding": {...}, "gt_finding": {...}}, ...] },
-  "assistant": { "errors_per_match": [[...], [...], ...] }
+  "user":      { "series_uuid": "...", "pairs": [{"pair_id": 1, "pred_finding": {...}, "gt_finding": {...}}, ...] },
+  "assistant": { "errors_per_pair": [{"pair_id": 1, "errors": [...]}, ...] }
 }
 ```
 

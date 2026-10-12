@@ -207,7 +207,7 @@ def load_attribute_errors_fewshot(fewshot_name: str | None) -> Sequence[FewshotE
     """Load Stage 3b attribute-errors few-shot examples by bundle name.
 
     Files: ``assets/fewshot/<name>/attribute_errors/example_*.json`` shaped as
-    ``{user: {series_uuid, pairs}, assistant: {errors_per_match}}``.
+    ``{user: {series_uuid, pairs}, assistant: {errors_per_pair}}``.
     Returns raw dicts; the consuming builder JSON-serialises each side.
     Cached by ``fewshot_name``.
     """

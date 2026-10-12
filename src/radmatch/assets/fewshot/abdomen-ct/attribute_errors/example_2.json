@@ -5,24 +5,27 @@
     "series_uuid": "abdomen-ct_example_2",
     "pairs": [
       {
+        "pair_id": 1,
         "pred_finding": {"finding_id": "p_1", "text": "Gallbladder surgically absent.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []},
         "gt_finding":   {"finding_id": "gt_1", "text": "Gallbladder surgically absent.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []}
       },
       {
+        "pair_id": 2,
         "pred_finding": {"finding_id": "p_2", "text": "Left adductor intramuscular hematoma measuring 7 x 4.7 cm (decreased from 9 x 5 cm on prior exam) with a small 6 mm central focus of hyperdensity on early-phase imaging that did not persist on delayed imaging. Findings-section text initially described the lesion as 9 x 6 cm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "improving", "measurements": [{"value": 7, "unit": "cm", "category": "size"}, {"value": 4.7, "unit": "cm", "category": "size"}, {"value": 9, "unit": "cm", "category": "size"}, {"value": 5, "unit": "cm", "category": "size"}, {"value": 6, "unit": "mm", "category": "size"}]},
         "gt_finding":   {"finding_id": "gt_2", "text": "Left adductor intramuscular hematoma measuring 7 x 4.7 cm (decreased from 9 x 5 cm on prior exam) with a small 6 mm central focus of hyperdensity / contrast blush on early-phase imaging that did not persist on delayed imaging.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "improving", "measurements": [{"value": 7, "unit": "cm", "category": "size"}, {"value": 4.7, "unit": "cm", "category": "size"}, {"value": 9, "unit": "cm", "category": "size"}, {"value": 5, "unit": "cm", "category": "size"}, {"value": 6, "unit": "mm", "category": "size"}]}
       },
       {
+        "pair_id": 3,
         "pred_finding": {"finding_id": "p_3", "text": "Small focus of slow, active bleeding which did not continue on delays, versus pseudoaneurysm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": null, "measurements": []},
         "gt_finding":   {"finding_id": "gt_3", "text": "Small focus of slow, active bleeding which did not continue on delays, versus pseudoaneurysm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": null, "measurements": []}
       }
     ]
   },
   "assistant": {
-    "errors_per_match": [
-      [],
-      [],
-      []
+    "errors_per_pair": [
+      {"pair_id": 1, "errors": []},
+      {"pair_id": 2, "errors": []},
+      {"pair_id": 3, "errors": []}
     ]
   }
 }
