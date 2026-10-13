@@ -244,16 +244,8 @@ def score_pair(
 
 
 def _fmt_rate(value: float | None) -> str:
-    """Format a recall / precision for the SCORING SUMMARY.
-
-    They are ``None`` on an empty pool; the formatter must not apply ``:.3f`` to
-    that (would raise ``TypeError`` after the summary JSON is already on disk).
-    """
+    """Format a recall / precision (``None`` on an empty pool) for the SCORING SUMMARY."""
     return f"{value:.3f}" if isinstance(value, (int, float)) else "n/a"
-
-
-# Acronym prefix per error tier: aER = aFN + aFP, aRec, aPrec; tER, ... ; cER, ...
-_TIER_PREFIX = {"actionable": "a", "triage": "t", "critical": "c"}
 
 
 def _tier_table_lines(tiers: dict[str, dict]) -> list[str]:
@@ -262,11 +254,12 @@ def _tier_table_lines(tiers: dict[str, dict]) -> list[str]:
     for name, t in tiers.items():
         recall = f"{_fmt_rate(t['recall'])} ({t['recall_hits']}/{t['gt_total']})"
         precision = f"{_fmt_rate(t['precision'])} ({t['precision_hits']}/{t['pred_total']})"
+        label = f"{name} ({constants.ERROR_TIER_PREFIX[name]})"
         lines.append(
-            f"  {f'{name} ({_TIER_PREFIX[name]})':<16}{t['errors_per_report']:>7.3f}{t['fn_per_report']:>8.3f}"
+            f"  {label:<16}{t['errors_per_report']:>7.3f}{t['fn_per_report']:>8.3f}"
             f"{t['fp_per_report']:>8.3f}{t['errors_per_finding']:>17.3f}   {recall:<21}{precision}"
         )
-    tier_defs = ", ".join(f"{_TIER_PREFIX[n]} = {'+'.join(t['significance'])}" for n, t in tiers.items())
+    tier_defs = ", ".join(f"{constants.ERROR_TIER_PREFIX[n]} = {'+'.join(t['significance'])}" for n, t in tiers.items())
     lines += [
         f"  {tier_defs}. ER = FN + FP: errors per report (aER = aFN + aFP, ...).",
         "  FN: reference findings of the tier missed or contradicted. FP: claims of the tier the reference lacks.",
@@ -303,12 +296,7 @@ def _tiers_block(
 
 
 def _bucket_metrics(records: Sequence[dict], unmatched_pred: Sequence[dict], unmatched_gt: Sequence[dict]) -> dict:
-    """MUC counts + per-tier metrics for one subset of records.
-
-    `errors_per_finding` normalises by the subset's tier-finding pool, not by report
-    count — a per-report average understates a rare subset purely by prevalence, so
-    it would not compare across subsets.
-    """
+    """MUC counts + per-tier metrics for one subset of records."""
     return {
         "muc_counts": metrics.effective_muc_counts(records, n_spu=len(unmatched_pred), n_mis=len(unmatched_gt)),
         "tiers": _tiers_block(records, unmatched_pred, unmatched_gt),
@@ -455,9 +443,7 @@ def score_dataset(
         for r in report["muc_records"]:
             gt = gt_map.get(r["gt_id"])
             r["gt_subsets"] = metrics.assign_subsets(gt) if gt else []
-            # Series-tag records so per-GT dedup in safety / actionable-error aggregation
-            # doesn't collide across reports that reuse the same `gt_id` (e.g. both s1 and
-            # s2 having a "g1" finding).
+            # Series-tag records so the per-GT dedup does not merge reports that reuse a `gt_id`.
             r["series_uuid"] = report["series_uuid"]
         all_records.extend(report["muc_records"])
         all_u_pred.extend(report["unmatched_pred"])
@@ -465,9 +451,6 @@ def score_dataset(
 
     muc_counts = metrics.effective_muc_counts(all_records, n_spu=len(all_u_pred), n_mis=len(all_u_gt))
     attribute_breakdown = metrics.compute_attribute_breakdown(all_records)
-    # Per tier: errors per report (headline aER / tER) split into FN + FP, and the
-    # opportunity-normalized errors per finding, which is report-count-independent so
-    # it's the baseline the per-subset rates compare against.
     tiers = _tiers_block(all_records, all_u_pred, all_u_gt, n_reports=len(per_report))
     # Distinct-finding totals keep the partition clean under N:N matching.
     distinct_matched_preds, distinct_matched_gts = metrics.count_distinct_findings(all_records)

@@ -45,13 +45,11 @@ QUERY_PARAM_REPORTS_GT = "reports_gt_dir"
 QUERY_PARAM_REPORTS_PRED = "reports_pred_dir"
 
 # ============================================================================
-# Error tiers (sidebar selector; keys of `tiers.<name>` in the outputs)
+# Error tier selector (the tiers are radmatch.constants.ERROR_TIERS)
 # ============================================================================
 
 CONFIG_TIER = "eval_config_tier"
 DEFAULT_TIER = "actionable"
-TIER_PREFIX: dict[str, str] = {"actionable": "a", "triage": "t", "critical": "c"}
-TIER_NAMES: dict[str, str] = {"actionable": "Actionable", "triage": "Triage", "critical": "Critical"}
 # Metric abbreviations (after the tier prefix: aER, aFN, ...) and their full names.
 METRIC_NAMES: dict[str, str] = {
     "ER": "Errors",

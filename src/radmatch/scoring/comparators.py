@@ -191,7 +191,6 @@ def classify_measurement_asymmetry(
         ]
 
     if not pred_measurements:
-        # Pred omits measurements gt recorded → major for a size, minor otherwise
         return [
             _error(
                 "measurement",

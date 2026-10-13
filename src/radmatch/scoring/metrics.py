@@ -5,7 +5,7 @@ Pure functions over the Stages 3a/3b outputs, called by `scoring.pipeline`.
 Matched pairs are tagged COR (no errors), PAR (some errors) or INC (status
 inverted). `reclassify_to_effective_category` then promotes any PAR holding a major
 error to INC, and the five surviving categories (COR/PAR/INC/MIS/SPU) are what the
-output reports. Errors are then counted per significance tier (actionable, triage) and
+output reports. Errors are then counted per significance tier (actionable, triage, critical) and
 split by side: FN on the reference, FP on the prediction. See README.md for the metric
 definitions.
 """
@@ -220,25 +220,11 @@ def compute_tier_opportunities(
     unmatched_gt: Sequence[dict],
     significance_pool: Sequence[str],
 ) -> int:
-    """Count of distinct findings in `significance_pool` "at stake" — the
-    denominator for a prevalence-independent error *rate*.
+    """Distinct findings of `significance_pool` at stake, the denominator of `errors_per_finding`.
 
-    An error (see `compute_tier_errors`) is an INC on a matched pair in the pool,
-    a MIS in the pool, or a SPU in the pool asserting an abnormality. Each maps to
-    exactly one distinct finding, so the matching opportunity pool is:
-
-        distinct matched GT findings in the pool + MIS gts in the pool + such SPU preds in the pool
-
-    A matched pair is in the pool on the same condition the numerator uses — the
-    GT *or* any matched pred is in it — so a routine GT matched to an actionable
-    pred (a false-positive INC the numerator counts) has a matching opportunity
-    here. Keeping the two definitions in lock-step guarantees numerator ≤
-    denominator, so the resulting `*_errors_per_finding` rate stays in [0, 1].
-
-    Dividing the error count by this count yields the fraction of findings in the
-    pool that ended in an error — comparable across subsets regardless of how
-    common each finding type is (unlike a per-report average, which a rare subset
-    deflates purely by prevalence).
+    Matched GT findings whose GT or any matched pred is in the pool (the condition
+    `compute_tier_errors` uses, so errors never exceed findings), plus the MIS GTs and
+    the SPU preds asserting an abnormality in the pool.
     """
     pool = set(significance_pool)
     per_gt = _per_gt_safety_outcomes(records)

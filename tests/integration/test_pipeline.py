@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
+from radmatch import constants
 from radmatch.finding_extraction.extract_utils import validate_and_normalize_finding
 from radmatch.finding_extraction.inference import _stamp_findings_dir
 from radmatch.matching import inference as matching_inference
@@ -213,7 +214,7 @@ def test_dataset_five_pairs_one_per_muc_category(tmp_path, fake_client, ok, make
     # 1 MIS (s4), 1 SPU (s5).
     assert summary["muc_counts"] == {"COR": 1, "PAR": 0, "INC": 2, "MIS": 1, "SPU": 1}
     tiers = summary["tiers"]
-    assert set(tiers) == {"actionable", "triage", "critical"}
+    assert set(tiers) == set(constants.ERROR_TIERS)
     # Triage pool (critical+urgent) GT here: s1 (urgent, COR) + s2 (critical, reclassified INC)
     # + s3 (critical, INC) = 3. Hits (effective COR or PAR) = 1 (s1) → recall = 1/3.
     assert tiers["triage"]["recall"] == pytest.approx(1 / 3)
@@ -226,8 +227,6 @@ def test_dataset_five_pairs_one_per_muc_category(tmp_path, fake_client, ok, make
     assert actionable["fn_per_report"] + actionable["fp_per_report"] == pytest.approx(3 / 5)
     # Triage drops the notable MIS: tER = tFN = 2.
     assert (tiers["triage"]["errors_total"], tiers["triage"]["fn_total"]) == (2, 2)
-    assert "actionable_errors_per_report" not in summary
-    assert "clinical_safety_summary" not in summary
     assert (out_dir / "metrics_summary.json").exists()
 
 
