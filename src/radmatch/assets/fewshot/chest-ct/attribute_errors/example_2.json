@@ -5,19 +5,21 @@
     "series_uuid": "chest-ct_example_2",
     "pairs": [
       {
+        "pair_id": 1,
         "pred_finding": {"finding_id": "p_1", "text": "Slight interval enlargement of multiple pulmonary nodules, largest in the right lung base measuring 2.5 x 1.6 cm, previously 2.3 x 1.5 cm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "worsening", "measurements": [{"value": 2.5, "unit": "cm", "category": "size"}, {"value": 1.6, "unit": "cm", "category": "size"}, {"value": 2.3, "unit": "cm", "category": "size"}, {"value": 1.5, "unit": "cm", "category": "size"}]},
         "gt_finding":   {"finding_id": "gt_1", "text": "Slight interval enlargement of multiple pulmonary nodules, largest in the right lung base measuring 3.1 x 1.7 cm, previously 2.3 x 1.5 cm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "worsening", "measurements": [{"value": 3.1, "unit": "cm", "category": "size"}, {"value": 1.7, "unit": "cm", "category": "size"}, {"value": 2.3, "unit": "cm", "category": "size"}, {"value": 1.5, "unit": "cm", "category": "size"}]}
       },
       {
+        "pair_id": 2,
         "pred_finding": {"finding_id": "p_3", "text": "Interval enlargement of multiple retroperitoneal and aortocaval lymph nodes, largest left retroperitoneal node measuring 2.4 x 1.7 cm, previously 2.0 x 1.2 cm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "worsening", "measurements": [{"value": 2.4, "unit": "cm", "category": "size"}, {"value": 1.7, "unit": "cm", "category": "size"}, {"value": 2.0, "unit": "cm", "category": "size"}, {"value": 1.2, "unit": "cm", "category": "size"}]},
         "gt_finding":   {"finding_id": "gt_3", "text": "Interval enlargement of multiple retroperitoneal and aortocaval lymph nodes, largest left retroperitoneal node measuring 2.4 x 1.7 cm, previously 2.0 x 1.2 cm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "worsening", "measurements": [{"value": 2.4, "unit": "cm", "category": "size"}, {"value": 1.7, "unit": "cm", "category": "size"}, {"value": 2.0, "unit": "cm", "category": "size"}, {"value": 1.2, "unit": "cm", "category": "size"}]}
       }
     ]
   },
   "assistant": {
-    "errors_per_match": [
-      [],
-      []
+    "errors_per_pair": [
+      {"pair_id": 1, "errors": []},
+      {"pair_id": 2, "errors": []}
     ]
   }
 }

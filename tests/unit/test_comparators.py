@@ -77,7 +77,8 @@ def test_comparison_no_conflict(value):
         pytest.param([_m(2, "mm", "size")], [_m(3, "mm", "size")], 0, None, id="size-tiny-below-abs-floor"),
         pytest.param([_m(2, "mm", "size")], [_m(5, "mm", "size")], 1, "major", id="size-tiny-above-abs-floor"),
         pytest.param([_m(7, "mm", "size")], [], 1, "minor", id="pred-has-gt-omits"),
-        pytest.param([], [_m(7, "mm", "size")], 1, "minor", id="gt-has-pred-omits"),
+        pytest.param([], [_m(7, "mm", "size")], 1, "major", id="gt-has-pred-omits-size"),
+        pytest.param([], [_m(3, None, "count")], 1, "minor", id="gt-has-pred-omits-count"),
         pytest.param([_m(2, None, "count")], [_m(3, None, "count")], 1, "major", id="count-different"),
         pytest.param([_m(3, None, "count")], [_m(3, None, "count")], 0, None, id="count-same"),
         pytest.param(

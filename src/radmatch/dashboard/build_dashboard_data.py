@@ -23,17 +23,17 @@ logger = logging.getLogger(__name__)
 
 
 def _flatten(metrics: dict[str, object]) -> dict[str, float | int | bool]:
-    """One row per series, with the columns the dashboard needs for filtering / sort."""
+    """One row per series, with the columns the dashboard needs for filtering / sort:
+    `<tier>_errors` / `_fn` / `_fp` / `_recall` / `_precision` for each error tier."""
     muc = metrics.get("muc_counts") or {}
-    safety = metrics.get("clinical_safety_summary") or {}
-    return {
-        "actionable_errors": int(metrics.get("actionable_errors_total") or 0),
-        "triage_recall": safety.get("triage_recall") or 0.0,
-        "actionable_recall": safety.get("actionable_recall") or 0.0,
-        "triage_precision": safety.get("triage_precision") or 0.0,
-        "actionable_precision": safety.get("actionable_precision") or 0.0,
-        **{f"muc_{cat.lower()}": int(muc.get(cat, 0)) for cat in constants.MUC_CATEGORIES},
-    }
+    row: dict[str, float | int | bool] = {}
+    for tier, block in metrics["tiers"].items():
+        row[f"{tier}_errors"] = int(block["errors_total"])
+        row[f"{tier}_fn"] = int(block["fn_total"])
+        row[f"{tier}_fp"] = int(block["fp_total"])
+        row[f"{tier}_recall"] = block["recall"] or 0.0
+        row[f"{tier}_precision"] = block["precision"] or 0.0
+    return {**row, **{f"muc_{cat.lower()}": int(muc.get(cat, 0)) for cat in constants.MUC_CATEGORIES}}
 
 
 def _per_finding_attributes(*finding_sets: list[dict]) -> dict[str, list[str]]:

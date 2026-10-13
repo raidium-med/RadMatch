@@ -15,6 +15,7 @@ import pytest
 
 from radmatch.dashboard.build_dashboard_data import _flatten, build_report_index
 from radmatch.dashboard.common.shared import PerPairMatchInfo, build_match_index
+from tests.fakes.fake_outputs import tier_block
 
 
 def _write(path: Path, payload) -> None:
@@ -27,20 +28,10 @@ def fake_per_report_metrics() -> dict:
     return {
         "metadata": {"series_uuid": "s1", "total_gt_findings": 4, "total_pred_findings": 3},
         "muc_counts": {"COR": 2, "PAR": 0, "INC": 1, "MIS": 1, "SPU": 0},
-        "actionable_errors_total": 2,
-        "clinical_safety_summary": {
-            "triage_recall": 0.5,
-            "actionable_recall": 0.7,
-            "triage_precision": 0.6,
-            "actionable_precision": 0.8,
-            "triage_gt_total": 2,
-            "actionable_gt_total": 5,
-            "triage_pred_total": 3,
-            "actionable_pred_total": 4,
-            "triage_mis_count": 1,
-            "triage_inc_count": 0,
-            "actionable_mis_count": 1,
-            "actionable_inc_count": 0,
+        "tiers": {
+            "actionable": tier_block(errors=2, fn=1, recall=0.6, precision=0.75, gt_total=5, pred_total=4),
+            "triage": tier_block(errors=1, fn=1, recall=0.5, precision=2 / 3, gt_total=2, pred_total=3),
+            "critical": tier_block(),
         },
         "attribute_breakdown": {},
     }
@@ -48,11 +39,12 @@ def fake_per_report_metrics() -> dict:
 
 def test_flatten_extracts_dashboard_columns(fake_per_report_metrics):
     row = _flatten(fake_per_report_metrics)
-    assert row["actionable_errors"] == 2
+    assert (row["actionable_errors"], row["actionable_fn"], row["actionable_fp"]) == (2, 1, 1)
+    assert (row["triage_errors"], row["critical_errors"]) == (1, 0)
     assert row["triage_recall"] == 0.5
-    assert row["actionable_recall"] == 0.7
-    assert row["triage_precision"] == 0.6
-    assert row["actionable_precision"] == 0.8
+    assert row["actionable_recall"] == 0.6
+    assert row["triage_precision"] == pytest.approx(2 / 3)
+    assert row["actionable_precision"] == 0.75
     assert row["muc_cor"] == 2
     assert row["muc_inc"] == 1
 
@@ -84,7 +76,7 @@ def test_build_report_index_writes_one_row_per_series(tmp_path, fake_per_report_
     assert isinstance(df, pd.DataFrame)
     assert len(df) == 2
     assert set(df["report_id"]) == {"s1", "s2"}
-    assert {"actionable_errors", "muc_cor", "triage_recall", "actionable_recall"}.issubset(df.columns)
+    assert {"actionable_errors", "triage_fp", "critical_fn", "muc_cor", "triage_recall"}.issubset(df.columns)
     assert {"clinical_significances", "measurement_types", "comparisons"}.issubset(df.columns)
     assert df.loc[df["report_id"] == "s1", "measurement_types"].iloc[0] == ["size"]
 
