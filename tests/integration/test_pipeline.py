@@ -305,6 +305,8 @@ def test_stage_3b_failure_surfaces(fake_client, ok, make_finding):
         pytest.param('{"errors_per_pair": "not-a-list"}', id="errors_per_pair-string"),
         pytest.param('{"errors_per_pair": {"oops": []}}', id="errors_per_pair-object"),
         pytest.param('{"errors_per_pair": [{"pair_id": 2, "errors": []}]}', id="unknown-pair_id"),
+        pytest.param('{"errors_per_pair": [{"pair_id": 1, "errors": "not-a-list"}]}', id="errors-not-a-list"),
+        pytest.param('{"errors_per_pair": [{"pair_id": 1}]}', id="errors-missing"),
     ],
 )
 def test_stage_3b_malformed_shape_surfaces(malformed_payload, fake_client, ok, make_finding):
@@ -327,7 +329,7 @@ def test_stage_3b_valid_shape_with_unusable_entries_normalises_to_empty(fake_cli
     pred = [make_finding("p1", clinical_significance="critical", text="nodule")]
     client = fake_client(
         ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),
-        '{"errors_per_pair": [{"pair_id": 1, "errors": "not-a-list"}]}',
+        '{"errors_per_pair": [{"pair_id": 1, "errors": ["not-an-object", 3]}]}',
     )
     out = _run_pair(gt, pred, "s", client)
     assert out["muc_records"][0]["muc_category"] == "COR"

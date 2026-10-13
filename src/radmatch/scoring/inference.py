@@ -106,7 +106,10 @@ def _parse_error_lists_by_pair(content: str, n_pairs: int, series_uuid: str) -> 
         if type(pair_id) is not int or not 1 <= pair_id <= n_pairs or pair_id in by_id:
             logger.warning("[Report %s] Stage 3b returned an unknown or repeated pair_id %r", series_uuid, pair_id)
             return None
-        by_id[pair_id] = entry.get("errors")
+        if not isinstance(entry.get("errors"), list):
+            logger.warning("[Report %s] Stage 3b `errors` of pair_id %d must be a list", series_uuid, pair_id)
+            return None
+        by_id[pair_id] = entry["errors"]
     if len(by_id) != n_pairs:
         logger.warning("[Report %s] Stage 3b answered %d of %d pairs", series_uuid, len(by_id), n_pairs)
         return None
@@ -186,11 +189,6 @@ def _detect_attribute_errors_chunk(
 
     output: list[list[dict]] = []
     for raw_list in raw_error_lists:
-        # Skip non-list items (e.g. the LLM returned a string or dict instead of a list)
-        # rather than iterating their characters/keys; likewise non-dict inner items.
-        if not isinstance(raw_list, list):
-            output.append([])
-            continue
         normalised = (_normalize_llm_error(err) for err in raw_list if isinstance(err, dict))
         output.append([e for e in normalised if e is not None])
     return output
