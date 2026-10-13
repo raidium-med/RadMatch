@@ -158,14 +158,21 @@ def _crosses_cliff(pv: float, gv: float, boundaries: tuple[float, ...]) -> bool:
     return any((pv <= b) != (gv <= b) for b in boundaries)
 
 
+def _omission_severity(category: str) -> str:
+    """A reference size the pred does not give at all is major; any other omission is minor."""
+    return "major" if category == "size" else "minor"
+
+
 def classify_measurement_asymmetry(
     pred_measurements: Sequence[dict],
     gt_measurements: Sequence[dict],
 ) -> list[dict]:
     """Per-category measurement comparison.
 
-    An addition (pred-only) or omission (gt-only) is minor, a category mismatch is
-    major; same-category pairs are compared against the thresholds above.
+    An addition (pred-only) is minor. An omission (gt-only) is minor, except a size
+    when the pred gives no size at all, which is major; a missing extra dimension
+    stays minor. A category mismatch is major; same-category pairs are compared
+    against the thresholds above.
     """
     if not pred_measurements and not gt_measurements:
         return []
@@ -184,11 +191,11 @@ def classify_measurement_asymmetry(
         ]
 
     if not pred_measurements:
-        # Pred omits measurements gt recorded → minor each
+        # Pred omits measurements gt recorded → major for a size, minor otherwise
         return [
             _error(
                 "measurement",
-                "minor",
+                _omission_severity(m.get("category", "other")),
                 pred_value=None,
                 gt_value=m,
                 reasoning=f"pred omits a {m.get('category', 'other')} measurement gt records",
@@ -232,7 +239,7 @@ def classify_measurement_asymmetry(
             errors.append(
                 _error(
                     "measurement",
-                    "minor",
+                    _omission_severity(cat),
                     pred_value=None,
                     gt_value=m,
                     reasoning=f"pred omits a {cat} measurement gt records",
