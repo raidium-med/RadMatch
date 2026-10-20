@@ -1,0 +1,144 @@
+{
+  "scenario": "Constructed: translated report vocabulary and an indication-answering negative",
+  "description": "Constructed. Translated terms name standard entities: a 'light transmission area' is a lucency (bulla), a 'patchy high-density shadow' an airspace opacity, 'cord-like shadows' fibrous strands, a 'nodular shadow' a nodule; 'No obvious abnormal density shadow' denies an opacity; 'No intrathoracic metastatic disease' is denied by nodules suspicious for metastases; a negative about opacities does not deny a lucency.",
+  "user": {
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Light transmission area in the right upper lobe.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "Patchy high-density shadow in the left lower lobe.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_3",
+        "text": "Cord-like shadows in both lungs.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_4",
+        "text": "Nodular shadow in the right middle lobe, 5 mm.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 5,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_5",
+        "text": "Multiple pulmonary nodules suspicious for metastases.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_6",
+        "text": "No obvious abnormal density shadow in the lungs.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Right upper lobe bulla.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "Left lower lobe consolidation.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "Fibrous strands in both lungs.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "5 mm right middle lobe nodule.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 5,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_5",
+        "text": "No evidence of intrathoracic metastatic disease.",
+        "clinical_status": "normal",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_6",
+        "text": "Left lower lobe paraseptal emphysema.",
+        "clinical_status": "abnormal",
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "a light transmission area is a lucency: the same right upper lobe bulla"
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_2",
+        "reasoning": "patchy high-density shadow = airspace opacity in the same lobe"
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_3",
+        "reasoning": "cord-like shadows = fibrous strands"
+      },
+      {
+        "pred_id": "p_4",
+        "gt_id": "gt_4",
+        "reasoning": "nodular shadow = the same 5 mm nodule"
+      },
+      {
+        "pred_id": "p_5",
+        "gt_id": "gt_5",
+        "reasoning": "nodules suspicious for metastases deny 'no metastatic disease'"
+      },
+      {
+        "pred_id": "p_6",
+        "gt_id": "gt_2",
+        "reasoning": "denies the left lower lobe opacity"
+      }
+    ],
+    "unmatched_pred": [],
+    "unmatched_gt": [
+      "gt_6"
+    ]
+  }
+}
