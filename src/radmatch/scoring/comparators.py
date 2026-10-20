@@ -76,9 +76,16 @@ def classify_status_conflict(pred_status: str, gt_status: str) -> dict | None:
 # ============================================================================
 
 
+# Findings whose management depends on change over time: an invented active change is a major error on them.
+_CHANGE_MATTERS = re.compile(
+    r"aneurysm|aort\w* (?:dilat|ectasia)|ectatic|nodul|\bmass|lymph|\bnodes?\b|adenopath|effusion|metasta"
+)
+
+
 def classify_comparison_conflict(
     pred_comparison: str | None,
     gt_comparison: str | None,
+    change_matters: bool = False,
 ) -> dict | None:
     """Bucket-based comparison conflict severity.
 
@@ -86,18 +93,24 @@ def classify_comparison_conflict(
     Cross-bucket → major; same-bucket → minor; identical → no error;
     one-sided mention (one side None) → minor, except a pred that drops an
     ACTIVE gt comparison, which misleads about disease activity exactly as
-    much as contradicting it → major.
+    much as contradicting it, or invents one on a finding followed by size
+    (`change_matters`: aneurysm, nodule, mass, node, effusion) → major.
     """
     if pred_comparison == gt_comparison:
         return None
     if pred_comparison is None or gt_comparison is None:
         dropped_active = pred_comparison is None and gt_comparison in constants.ACTIVE_COMPARISONS
+        invented_active = gt_comparison is None and pred_comparison in constants.ACTIVE_COMPARISONS and change_matters
         return _error(
             dimension="comparison",
-            severity="major" if dropped_active else "minor",
+            severity="major" if dropped_active or invented_active else "minor",
             pred_value=pred_comparison,
             gt_value=gt_comparison,
-            reasoning="pred drops an active gt comparison" if dropped_active else "one-sided comparison mention",
+            reasoning="pred drops an active gt comparison"
+            if dropped_active
+            else "pred invents an active change on a finding followed by size"
+            if invented_active
+            else "one-sided comparison mention",
         )
     pred_active = pred_comparison in constants.ACTIVE_COMPARISONS
     gt_active = gt_comparison in constants.ACTIVE_COMPARISONS
@@ -613,6 +626,7 @@ def compute_structured_errors(pred: dict, gt: dict, size_given_elsewhere: bool =
     comparison_err = classify_comparison_conflict(
         pred.get("comparison"),
         gt.get("comparison"),
+        change_matters=bool(_CHANGE_MATTERS.search(f"{pred.get('text') or ''} {gt.get('text') or ''}".lower())),
     )
     if comparison_err is not None:
         errors.append(comparison_err)
