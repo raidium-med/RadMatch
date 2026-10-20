@@ -517,6 +517,65 @@ def _is_simple_cyst(finding: dict) -> bool:
     return all(_NEGATION.search(text[: m.start()]) for m in _COMPLEX_CYST.finditer(text))
 
 
+# Hedging lexicon (Panicek & Hricak 2016): level 0 definite / consistent with, 1 probably / suspicious for,
+# 2 possibly / may represent / cannot be excluded, 3 less likely, 4 unlikely. First match wins.
+_HEDGE_LEVELS: tuple[tuple[re.Pattern, int], ...] = (
+    (re.compile(r"\bunlikely\b"), 4),
+    (re.compile(r"\bless likely\b|\bdoubtful\b"), 3),
+    (
+        re.compile(
+            r"\bpossibl[ey]\b|\bperhaps\b|\bmay (?:represent|be|reflect|relate)\b|\bcould (?:represent|be|reflect)\b|"
+            r"\bcan be seen (?:with|in)\b|\braises? the possibility\b|"
+            r"\bcannot (?:be )?(?:excluded|exclude|ruled out|rule out)\b|\bnot excluded\b|\bquestionabl[ey]\b|"
+            r"\bequivocal\b|\b(?:versus|vs\.?) (?:motion |mixing |streak |beam[- ]hardening )?artifact"
+        ),
+        2,
+    ),
+    (
+        re.compile(
+            r"\bprobabl[ey]\b|\blikely\b|\bsuspicious for\b|\bsuspected\b|\bsuggest(?:s|ive|ing)?\b|"
+            r"\bconcerning for\b|\bfavou?r(?:s|ed)?\b|\bpresumed\b|\bworrisome for\b"
+        ),
+        1,
+    ),
+)
+# A hedge on the cause of a finding ("possibly secondary to A versus B") leaves the finding itself definite.
+_ETIOLOGY_HEDGE = re.compile(
+    r"\b(?:possibl[ey]|probabl[ey]|likely|perhaps|may be|could be|may)\s+"
+    r"(?:secondary to|due to|related to|relat(?:e|ing) to|from|because of|reflecting|attributable to)\b[^.;]*"
+    r"|\b(?:possibl[ey]|probabl[ey]|likely|perhaps)\s+(?:reactive|infectious|infective|inflammatory|"
+    r"post-?infectious|post-?inflammatory|degenerative|post-?operative|post-?surgical|post-?treatment|physiologic)"
+)
+_CERTAINTY_MAJOR_TIERS: set[str] | None = None  # None: any tier
+
+
+def _hedge_level(finding: dict, strip_etiology: bool = True) -> int:
+    text = str(finding.get("text") or "").lower()
+    if strip_etiology:
+        text = _ETIOLOGY_HEDGE.sub("", text)
+    return next((level for pattern, level in _HEDGE_LEVELS if pattern.search(text)), 0)
+
+
+def classify_certainty_gap(pred: dict, gt: dict) -> dict | None:
+    """Two or more steps apart on the hedging lexicon is a major certainty error ("possible fracture" vs a definite
+    fracture): it decides whether work-up is ordered. Closer steps are left to the Stage 3b judge. The gap must hold
+    with and without hedges on cause ("possibly related to"), which may hedge the finding or only its etiology."""
+    gap = min(abs(_hedge_level(pred, s) - _hedge_level(gt, s)) for s in (True, False))
+    if gap < 2:
+        return None
+    if _CERTAINTY_MAJOR_TIERS is not None and not (
+        {pred.get("clinical_significance"), gt.get("clinical_significance")} & _CERTAINTY_MAJOR_TIERS
+    ):
+        return None
+    return _error(
+        "certainty",
+        "major",
+        pred_value=_hedge_level(pred),
+        gt_value=_hedge_level(gt),
+        reasoning="hedging differs by two or more steps",
+    )
+
+
 def _normalized_text(finding: dict) -> str:
     return re.sub(r"\W+", " ", str(finding.get("text") or "").lower()).strip()
 
@@ -546,6 +605,10 @@ def compute_structured_errors(pred: dict, gt: dict, size_given_elsewhere: bool =
     )
     if status_err is not None and not same_text:
         errors.append(status_err)
+    elif status_err is None:
+        certainty_err = classify_certainty_gap(pred, gt)
+        if certainty_err is not None:
+            errors.append(certainty_err)
 
     comparison_err = classify_comparison_conflict(
         pred.get("comparison"),

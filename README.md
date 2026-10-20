@@ -159,7 +159,7 @@ Stage 3c (deterministic)    MUC classification + per-tier error counts
 
 **Stage 2** matches every predicted finding to one or more ground-truth findings, and vice versa: an umbrella claim on one side ("Bilateral pleural effusions", "Multilevel cervical spondylosis C2-C3 through C7-T1") binds each atom it covers on the other. Status conflicts ("pneumothorax present" vs "no pneumothorax") and laterality flips (same organ and pathology, wrong side) still match, so Stage 3 records them as one error on the right dimension rather than as a miss plus a hallucination. Stage 2 only links findings; whether a link is correct is judged in Stage 3, so boilerplate such as "Study unremarkable" bound to a real abnormality comes out `INC`. Each report pair is matched in a single call; a long report needs a long answer, so that call gets three times `RADMATCH_REQUEST_TIMEOUT_S` (540 s by default), and a timeout is not retried.
 
-**Stage 3** scores each matched pair on seven attribute dimensions: three structured (`clinical_status`, `comparison`, `measurement`) handled by deterministic comparators, and four free-text (`location`, `severity`, `morphology`, `certainty`) handled by an LLM. Every detected error is `major` or `minor`. Each pair then lands in one of five MUC categories:
+**Stage 3** scores each matched pair on seven attribute dimensions: three structured (`clinical_status`, `comparison`, `measurement`) handled by deterministic comparators, and four free-text (`location`, `severity`, `morphology`, `certainty`) handled by an LLM, with a lexicon rule for large certainty gaps. Every detected error is `major` or `minor`. Each pair then lands in one of five MUC categories:
 
 | Category | Meaning |
 |---|---|
@@ -182,7 +182,7 @@ Every difference within a matched pair is attributed to one of seven dimensions 
 | `location` | LLM | Anatomic placement, including laterality and sub-anatomic detail. A left/right flip on a paired structure is always major. |
 | `severity` | LLM | Qualitative magnitude — mild / moderate / severe, small / large. Major when it crosses an action threshold. |
 | `morphology` | LLM | Shape, margin, character — spiculated vs smooth, solid vs cystic. |
-| `certainty` | LLM | Diagnostic hedging — definite vs probable vs possible. |
+| `certainty` | comparator + LLM | Diagnostic hedging — definite vs probable vs possible. Two or more steps apart on the hedging lexicon ("possible fracture" vs a definite fracture) is major, unless the gap only comes from a hedge on the cause ("possibly secondary to"); closer steps are judged by the LLM. |
 
 `major` means the error would change management or the anatomy referred to; `minor` means
 the prediction is less precise but would not mislead a clinician. Only `major` errors push a
