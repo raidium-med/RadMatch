@@ -74,10 +74,10 @@ def _run_dataset(gt_dir, pred_dir, out_dir, client):
 
 
 def test_two_cor_pairs(fake_client, ok, make_finding):
-    gt = [make_finding("g1", clinical_significance="critical"), make_finding("g2")]
-    pred = [make_finding("p1", clinical_significance="critical"), make_finding("p2")]
+    gt = [make_finding("gt_1", clinical_significance="critical"), make_finding("gt_2")]
+    pred = [make_finding("p_1", clinical_significance="critical"), make_finding("p_2")]
     client = fake_client(
-        ok({"matches": [_match("p1", "g1"), _match("p2", "g2")], "unmatched_pred": [], "unmatched_gt": []}),
+        ok({"matches": [_match("p_1", "gt_1"), _match("p_2", "gt_2")], "unmatched_pred": [], "unmatched_gt": []}),
         ok({"errors_per_pair": [{"pair_id": 1, "errors": []}, {"pair_id": 2, "errors": []}]}),
     )
     out = _run_pair(gt, pred, "s_cor", client)
@@ -88,10 +88,10 @@ def test_inc_pair_still_runs_stage_3b(fake_client, ok, make_finding):
     """INC pairs are evaluated by Stage 3b so the recorded errors are available
     downstream for diagnostics. The Stage 3a status-inversion classification
     is what makes the pair INC."""
-    gt = [make_finding("g1", clinical_status="abnormal", clinical_significance="critical", text="Pneumothorax")]
-    pred = [make_finding("p1", clinical_status="normal", clinical_significance="critical", text="No pneumothorax")]
+    gt = [make_finding("gt_1", clinical_status="abnormal", clinical_significance="critical", text="Pneumothorax")]
+    pred = [make_finding("p_1", clinical_status="normal", clinical_significance="critical", text="No pneumothorax")]
     client = fake_client(
-        ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),
+        ok({"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}),
         ok(
             {
                 "errors_per_pair": [
@@ -110,10 +110,10 @@ def test_inc_pair_still_runs_stage_3b(fake_client, ok, make_finding):
 
 def test_par_with_major_error_internally_PAR(fake_client, ok, make_finding):
     """Internal classification is PAR until the summary reclassifies it."""
-    gt = [make_finding("g1", clinical_significance="critical", text="left nodule")]
-    pred = [make_finding("p1", clinical_significance="critical", text="right nodule")]
+    gt = [make_finding("gt_1", clinical_significance="critical", text="left nodule")]
+    pred = [make_finding("p_1", clinical_significance="critical", text="right nodule")]
     client = fake_client(
-        ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),
+        ok({"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}),
         ok(
             {
                 "errors_per_pair": [
@@ -132,10 +132,10 @@ def test_par_with_major_error_internally_PAR(fake_client, ok, make_finding):
 
 def test_par_with_only_minor_errors_keeps_PAR(fake_client, ok, make_finding):
     """A PAR with no major attribute errors keeps the PAR label in the output."""
-    gt = [make_finding("g1", clinical_significance="critical", text="lesion")]
-    pred = [make_finding("p1", clinical_significance="critical", text="lesion")]
+    gt = [make_finding("gt_1", clinical_significance="critical", text="lesion")]
+    pred = [make_finding("p_1", clinical_significance="critical", text="lesion")]
     client = fake_client(
-        ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),
+        ok({"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}),
         ok(
             {
                 "errors_per_pair": [
@@ -152,13 +152,13 @@ def test_par_with_only_minor_errors_keeps_PAR(fake_client, ok, make_finding):
 
 
 def test_unmatched_findings_go_to_spu_and_mis(fake_client, ok, make_finding):
-    gt = [make_finding("g1", clinical_significance="critical")]
-    pred = [make_finding("p1", clinical_significance="notable")]
-    client = fake_client(ok({"matches": [], "unmatched_pred": ["p1"], "unmatched_gt": ["g1"]}))
+    gt = [make_finding("gt_1", clinical_significance="critical")]
+    pred = [make_finding("p_1", clinical_significance="notable")]
+    client = fake_client(ok({"matches": [], "unmatched_pred": ["p_1"], "unmatched_gt": ["gt_1"]}))
     out = _run_pair(gt, pred, "s", client)
     assert out["muc_records"] == []
-    assert [f["finding_id"] for f in out["unmatched_pred"]] == ["p1"]
-    assert [f["finding_id"] for f in out["unmatched_gt"]] == ["g1"]
+    assert [f["finding_id"] for f in out["unmatched_pred"]] == ["p_1"]
+    assert [f["finding_id"] for f in out["unmatched_gt"]] == ["gt_1"]
 
 
 # ============================================================================
@@ -172,30 +172,30 @@ def test_dataset_five_pairs_one_per_muc_category(tmp_path, fake_client, ok, make
     pred_dir = tmp_path / "findings_pred"
     out_dir = tmp_path / "out"
 
-    _write(gt_dir / "s1.json", [make_finding("g1", clinical_significance="urgent")])
-    _write(pred_dir / "s1.json", [make_finding("p1", clinical_significance="urgent")])
-    _write(gt_dir / "s2.json", [make_finding("g1", clinical_significance="critical", text="left lobe pneumonia")])
-    _write(pred_dir / "s2.json", [make_finding("p1", clinical_significance="critical", text="right lobe pneumonia")])
+    _write(gt_dir / "s1.json", [make_finding("gt_1", clinical_significance="urgent")])
+    _write(pred_dir / "s1.json", [make_finding("p_1", clinical_significance="urgent")])
+    _write(gt_dir / "s2.json", [make_finding("gt_1", clinical_significance="critical", text="left lobe pneumonia")])
+    _write(pred_dir / "s2.json", [make_finding("p_1", clinical_significance="critical", text="right lobe pneumonia")])
     _write(
         gt_dir / "s3.json",
-        [make_finding("g1", clinical_status="abnormal", clinical_significance="critical", text="Pneumothorax")],
+        [make_finding("gt_1", clinical_status="abnormal", clinical_significance="critical", text="Pneumothorax")],
     )
     _write(
         pred_dir / "s3.json",
-        [make_finding("p1", clinical_status="normal", clinical_significance="critical", text="No pneumothorax")],
+        [make_finding("p_1", clinical_status="normal", clinical_significance="critical", text="No pneumothorax")],
     )
-    _write(gt_dir / "s4.json", [make_finding("g1", clinical_significance="notable")])
+    _write(gt_dir / "s4.json", [make_finding("gt_1", clinical_significance="notable")])
     _write(pred_dir / "s4.json", [])
     _write(gt_dir / "s5.json", [])
-    _write(pred_dir / "s5.json", [make_finding("p1", clinical_significance="routine")])
+    _write(pred_dir / "s5.json", [make_finding("p_1", clinical_significance="routine")])
 
     # Sorted-series order:
     # match_dataset → s1, s2, s3 matching calls (s4/s5 trivial-branch, no LLM call)
     # score_dataset → s1, s2, s3 attr calls (s3 INC still gets Stage 3b; s4/s5 no matches)
     client = fake_client(
-        ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),  # s1
-        ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),  # s2
-        ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),  # s3
+        ok({"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}),  # s1
+        ok({"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}),  # s2
+        ok({"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}),  # s3
         ok({"errors_per_pair": [{"pair_id": 1, "errors": []}]}),  # s1 attr
         ok(
             {
@@ -287,10 +287,10 @@ def test_template_predictor_fails_safety_gate(tmp_path, fake_client, ok, make_fi
 def test_stage_3b_failure_surfaces(fake_client, ok, make_finding):
     """A Stage 3b LLM failure must surface so the report is recorded as failed. Degrading to
     empty text errors is indistinguishable from a clean pair and is cached as such."""
-    gt = [make_finding("g1", clinical_significance="critical", text="left nodule")]
-    pred = [make_finding("p1", clinical_significance="critical", text="right nodule")]
+    gt = [make_finding("gt_1", clinical_significance="critical", text="left nodule")]
+    pred = [make_finding("p_1", clinical_significance="critical", text="right nodule")]
     client = fake_client(
-        ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),
+        ok({"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}),
         RuntimeError("Stage 3b LLM call failed"),
     )
     with pytest.raises(RuntimeError):
@@ -311,10 +311,10 @@ def test_stage_3b_failure_surfaces(fake_client, ok, make_finding):
 def test_stage_3b_malformed_shape_surfaces(malformed_payload, fake_client, ok, make_finding):
     """Valid JSON of the wrong shape is unusable; after retries it must raise rather than
     silently score the report as having no attribute errors."""
-    gt = [make_finding("g1", clinical_significance="critical", text="nodule")]
-    pred = [make_finding("p1", clinical_significance="critical", text="nodule")]
+    gt = [make_finding("gt_1", clinical_significance="critical", text="nodule")]
+    pred = [make_finding("p_1", clinical_significance="critical", text="nodule")]
     client = fake_client(
-        ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),
+        ok({"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}),
         *[malformed_payload] * (inference.DEFAULT_MAX_RETRIES + 1),
     )
     with pytest.raises(ValueError):
@@ -324,10 +324,10 @@ def test_stage_3b_malformed_shape_surfaces(malformed_payload, fake_client, ok, m
 def test_stage_3b_valid_shape_with_unusable_entries_normalises_to_empty(fake_client, ok, make_finding):
     """A correctly-shaped payload whose entries are not error objects is not a parse failure:
     the entries are dropped by normalisation and the pair scores via Stage 3a."""
-    gt = [make_finding("g1", clinical_significance="critical", text="nodule")]
-    pred = [make_finding("p1", clinical_significance="critical", text="nodule")]
+    gt = [make_finding("gt_1", clinical_significance="critical", text="nodule")]
+    pred = [make_finding("p_1", clinical_significance="critical", text="nodule")]
     client = fake_client(
-        ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),
+        ok({"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}),
         '{"errors_per_pair": [{"pair_id": 1, "errors": ["not-an-object", 3]}]}',
     )
     out = _run_pair(gt, pred, "s", client)
@@ -340,18 +340,18 @@ def test_match_dataset_skips_series_with_cached_output(tmp_path, fake_client, ma
     gt_dir = tmp_path / "findings_gt"
     pred_dir = tmp_path / "findings_pred"
     out_dir = tmp_path / "out"
-    _write(gt_dir / "s1.json", [make_finding("g1")])
-    _write(pred_dir / "s1.json", [make_finding("p1")])
+    _write(gt_dir / "s1.json", [make_finding("gt_1")])
+    _write(pred_dir / "s1.json", [make_finding("p_1")])
     cached = {
-        "matches": [_match("p1", "g1")],
+        "matches": [_match("p_1", "gt_1")],
         "unmatched_pred": [],
         "unmatched_gt": [],
         "validation_fallback": False,
         "retries": 0,
         "matching_config": matching_inference._matching_config("fake", None, "none"),
         "findings_fingerprint": matching_inference._findings_fingerprint(
-            [validate_and_normalize_finding(make_finding("g1"))],
-            [validate_and_normalize_finding(make_finding("p1"))],
+            [validate_and_normalize_finding(make_finding("gt_1"))],
+            [validate_and_normalize_finding(make_finding("p_1"))],
             "",
         ),
     }
@@ -376,10 +376,10 @@ def test_match_dataset_invalidates_stale_cache(stale, tmp_path, fake_client, ok,
     gt_dir = tmp_path / "findings_gt"
     pred_dir = tmp_path / "findings_pred"
     out_dir = tmp_path / "out"
-    _write(gt_dir / "s1.json", [make_finding("g1", text="left nodule")])
-    _write(pred_dir / "s1.json", [make_finding("p1")])
+    _write(gt_dir / "s1.json", [make_finding("gt_1", text="left nodule")])
+    _write(pred_dir / "s1.json", [make_finding("p_1")])
     stale_record = {
-        "matches": [_match("p1", "g1")],
+        "matches": [_match("p_1", "gt_1")],
         "unmatched_pred": [],
         "unmatched_gt": [],
         "validation_fallback": False,
@@ -387,14 +387,14 @@ def test_match_dataset_invalidates_stale_cache(stale, tmp_path, fake_client, ok,
         "matching_config": {"judge": "old-model", "fewshot": "old-bundle", "reasoning": "none"},
     }
     if stale == "findings":
-        other = [validate_and_normalize_finding(make_finding("g1", text="right nodule"))]
+        other = [validate_and_normalize_finding(make_finding("gt_1", text="right nodule"))]
         stale_record["matching_config"] = matching_inference._matching_config("fake", None, "none")
         stale_record["findings_fingerprint"] = matching_inference._findings_fingerprint(
-            other, [validate_and_normalize_finding(make_finding("p1"))], ""
+            other, [validate_and_normalize_finding(make_finding("p_1"))], ""
         )
     _write(out_dir / "matching" / "s1.json", stale_record)
 
-    client = fake_client(ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}))
+    client = fake_client(ok({"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}))
     match_dataset(
         findings_gt_dir=gt_dir,
         findings_pred_dir=pred_dir,
@@ -419,10 +419,10 @@ def test_stamp_findings_dir_discards_findings_from_another_config(tmp_path):
 
 def test_score_pair_reuses_cached_text_errors(tmp_path, fake_client, make_finding):
     """A pre-existing attribute_errors/<series>.json is reused for Stage 3b; no LLM call issued."""
-    gt = [make_finding("g1", text="left nodule")]
-    pred = [make_finding("p1", text="right nodule")]
+    gt = [make_finding("gt_1", text="left nodule")]
+    pred = [make_finding("p_1", text="right nodule")]
     out_dir = tmp_path
-    matches = [_match("p1", "g1")]
+    matches = [_match("p_1", "gt_1")]
     # Judge/reasoning come from the fake client; fewshot is the ScoringContext default.
     fingerprint = _fingerprint_matched_findings(
         matches,
@@ -439,7 +439,7 @@ def test_score_pair_reuses_cached_text_errors(tmp_path, fake_client, make_findin
     }
     _write(out_dir / "attribute_errors" / "s.json", cached)
 
-    matching_output = {"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}
+    matching_output = {"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}
     client = fake_client()  # empty — must not be called
     result = score_pair(
         matching_output=matching_output,
@@ -455,10 +455,10 @@ def test_score_pair_reuses_cached_text_errors(tmp_path, fake_client, make_findin
 def test_score_pair_writes_per_report_metrics(tmp_path, fake_client, ok, make_finding):
     """A per_report_metrics/<series>.json with effective muc_counts + per-tier errors
     is written alongside attribute_errors."""
-    gt = [make_finding("g1", clinical_significance="critical", text="left nodule")]
-    pred = [make_finding("p1", clinical_significance="critical", text="right nodule")]
+    gt = [make_finding("gt_1", clinical_significance="critical", text="left nodule")]
+    pred = [make_finding("p_1", clinical_significance="critical", text="right nodule")]
     client = fake_client(
-        ok({"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}),
+        ok({"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}),
         ok(
             {
                 "errors_per_pair": [
@@ -485,8 +485,8 @@ def test_score_pair_writes_per_report_metrics(tmp_path, fake_client, ok, make_fi
 
 def test_score_pair_invalidates_cache_when_matches_differ(tmp_path, fake_client, ok, make_finding):
     """If cached matches don't align with the current ones, Stage 3b is re-run from scratch."""
-    gt = [make_finding("g1")]
-    pred = [make_finding("p1")]
+    gt = [make_finding("gt_1")]
+    pred = [make_finding("p_1")]
     out_dir = tmp_path
     stale = {
         "matches": [_match("p_OLD", "g_OLD")],  # different pair → cache invalid
@@ -496,7 +496,7 @@ def test_score_pair_invalidates_cache_when_matches_differ(tmp_path, fake_client,
     }
     _write(out_dir / "attribute_errors" / "s.json", stale)
 
-    matching_output = {"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}
+    matching_output = {"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}
     client = fake_client(ok({"errors_per_pair": [{"pair_id": 1, "errors": []}]}))
     result = score_pair(
         matching_output=matching_output,
@@ -514,18 +514,18 @@ def test_score_pair_invalidates_cache_when_finding_text_differs(tmp_path, fake_c
     findings passed to `score_pair`: cache must invalidate so Stage 3b runs against
     the live finding text rather than reusing labels keyed off stale wording.
     """
-    gt = [make_finding("g1", text="left lower lobe nodule")]
-    pred = [make_finding("p1", text="right lower lobe nodule")]
+    gt = [make_finding("gt_1", text="left lower lobe nodule")]
+    pred = [make_finding("p_1", text="right lower lobe nodule")]
     out_dir = tmp_path
-    stale_pred = [make_finding("p1", text="OLD pred text — different from current")]
-    stale_gt = [make_finding("g1", text="OLD gt text — different from current")]
+    stale_pred = [make_finding("p_1", text="OLD pred text — different from current")]
+    stale_gt = [make_finding("gt_1", text="OLD gt text — different from current")]
     stale_fingerprint = _fingerprint_matched_findings(
-        [_match("p1", "g1")],
+        [_match("p_1", "gt_1")],
         {f["finding_id"]: f for f in stale_pred},
         {f["finding_id"]: f for f in stale_gt},
     )
     stale = {
-        "matches": [_match("p1", "g1")],
+        "matches": [_match("p_1", "gt_1")],
         "findings_fingerprint": stale_fingerprint,
         "structured_errors_per_pair": [[]],
         "text_errors_per_pair": [[{"dimension": "location", "severity": "minor", "reasoning": "stale"}]],
@@ -533,7 +533,7 @@ def test_score_pair_invalidates_cache_when_finding_text_differs(tmp_path, fake_c
     }
     _write(out_dir / "attribute_errors" / "s.json", stale)
 
-    matching_output = {"matches": [_match("p1", "g1")], "unmatched_pred": [], "unmatched_gt": []}
+    matching_output = {"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}
     client = fake_client(ok({"errors_per_pair": [{"pair_id": 1, "errors": []}]}))
     result = score_pair(
         matching_output=matching_output,

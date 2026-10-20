@@ -8,7 +8,7 @@ Input: `pred_findings` and `gt_findings`. Each finding has `finding_id` (an opaq
 
 ## 1. WHEN A pred FINDING AND A gt FINDING MATCH
 
-They match when they describe the same observation: the same organ or anatomic entity and the same pathology. Each match row carries a one-sentence `reasoning`; if that reasoning would say the pathology or the structure differs, do not match.
+They match when they describe the same observation: the same organ or anatomic entity and the same pathology. Each match row carries a short `reasoning` (one clause); if that reasoning would say the pathology or the structure differs, do not match.
 
 **Match despite these differences:**
 - **Status.** pred "No pneumothorax" vs gt "Moderate pneumothorax" → match (one pneumothorax assessment; scored downstream as a status inversion).
@@ -58,7 +58,7 @@ Return only a JSON object with exactly these three keys, no other text and no ma
 ```json
 {
   "matches": [
-    {"pred_id": "<pred finding_id>", "gt_id": "<gt finding_id>", "reasoning": "<one-sentence justification>"}
+    {"pred_id": "<pred finding_id>", "gt_id": "<gt finding_id>", "reasoning": "<one clause>"}
   ],
   "unmatched_pred": ["<pred finding_id>", ...],
   "unmatched_gt":   ["<gt finding_id>", ...]
