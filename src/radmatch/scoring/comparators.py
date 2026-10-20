@@ -158,24 +158,39 @@ def _crosses_cliff(pv: float, gv: float, boundaries: tuple[float, ...]) -> bool:
     return any((pv <= b) != (gv <= b) for b in boundaries)
 
 
-def _omission_severity(category: str) -> str:
+def _omission_severity(category: str, size_given_elsewhere: bool = False) -> str:
     """A reference size the pred does not give at all is major; any other omission is minor."""
-    return "major" if category == "size" else "minor"
+    return "major" if category == "size" and not size_given_elsewhere else "minor"
+
+
+def _align_categories(pred_measurements: Sequence[dict], gt_measurements: Sequence[dict]) -> list[dict]:
+    """Pred measurements, each relabelled with the category of a gt measurement carrying the same value and unit:
+    the two sides label categories independently, so a label disagreement on one quantity is not a difference."""
+    out = []
+    for m in pred_measurements:
+        same = next(
+            (g for g in gt_measurements if g.get("value") == m.get("value") and g.get("unit") == m.get("unit")), None
+        )
+        out.append({**m, "category": same.get("category", "other")} if same else m)
+    return out
 
 
 def classify_measurement_asymmetry(
     pred_measurements: Sequence[dict],
     gt_measurements: Sequence[dict],
+    size_given_elsewhere: bool = False,
 ) -> list[dict]:
     """Per-category measurement comparison.
 
     An addition (pred-only) is minor. An omission (gt-only) is minor, except a size
     when the pred gives no size at all, which is major; a missing extra dimension
-    stays minor. A category mismatch is major; same-category pairs are compared
-    against the thresholds above.
+    stays minor, and so does a size another pred of the same match group gives
+    (`size_given_elsewhere`). Same-category pairs are compared against the thresholds
+    above; a pred measurement with the value and unit of a gt one takes its category.
     """
     if not pred_measurements and not gt_measurements:
         return []
+    pred_measurements = _align_categories(pred_measurements, gt_measurements)
 
     if not gt_measurements:
         # Pred added measurements gt did not record → minor each
@@ -194,7 +209,7 @@ def classify_measurement_asymmetry(
         return [
             _error(
                 "measurement",
-                _omission_severity(m.get("category", "other")),
+                _omission_severity(m.get("category", "other"), size_given_elsewhere),
                 pred_value=None,
                 gt_value=m,
                 reasoning=f"pred omits a {m.get('category', 'other')} measurement gt records",
@@ -205,19 +220,6 @@ def classify_measurement_asymmetry(
     pred_by_cat = _by_category(pred_measurements)
     gt_by_cat = _by_category(gt_measurements)
     shared_cats = set(pred_by_cat) & set(gt_by_cat)
-
-    # If there is no category overlap, emit a single category-mismatch
-    # error rather than separate "added" + "omitted" entries.
-    if not shared_cats:
-        return [
-            _error(
-                "measurement",
-                "major",
-                pred_value=sorted(pred_by_cat.keys()),
-                gt_value=sorted(gt_by_cat.keys()),
-                reasoning="measurement categories differ between pred and gt",
-            )
-        ]
 
     errors: list[dict] = []
 
@@ -238,7 +240,7 @@ def classify_measurement_asymmetry(
             errors.append(
                 _error(
                     "measurement",
-                    _omission_severity(cat),
+                    _omission_severity(cat, size_given_elsewhere),
                     pred_value=None,
                     gt_value=m,
                     reasoning=f"pred omits a {cat} measurement gt records",
@@ -330,7 +332,20 @@ def _best_measurement_pairing(
 # ============================================================================
 
 
+def _size_unit_kind(measurement: dict) -> str | None:
+    """`length` / `volume` for a known unit, the unit itself for an unknown one, None when there is no unit."""
+    unit = measurement.get("unit")
+    if not isinstance(unit, str) or not unit:
+        return None
+    return constants.MEASUREMENT_SIZE_UNIT_KIND.get(unit.lower(), unit.lower())
+
+
 def _compare_size(pm: dict, gm: dict, _cat: str) -> dict | None:
+    pk, gk = _size_unit_kind(pm), _size_unit_kind(gm)
+    if pk and gk and pk != gk:
+        return _error(
+            "measurement", "minor", pred_value=pm, gt_value=gm, reasoning="sizes given in units that cannot be compared"
+        )
     if _size_or_ratio_rel_diff_major(pm, gm, _SIZE_REL_DIFF_MAJOR) and (
         abs(_canonical_value(pm) - _canonical_value(gm)) >= _SIZE_ABS_FLOOR_MM
     ):
@@ -387,8 +402,9 @@ _MEASUREMENT_COMPARATORS: dict[str, Callable[[dict, dict, str], "dict | None"]] 
 # ============================================================================
 
 
-def compute_structured_errors(pred: dict, gt: dict) -> list[dict]:
-    """Aggregate Stage 3a errors across status, comparison, measurement."""
+def compute_structured_errors(pred: dict, gt: dict, size_given_elsewhere: bool = False) -> list[dict]:
+    """Aggregate Stage 3a errors across status, comparison, measurement. `size_given_elsewhere`: another pred
+    matched to the same gt gives a size, so this pred omitting one is not an omission of the group."""
     errors: list[dict] = []
 
     status_err = classify_status_conflict(
@@ -408,6 +424,7 @@ def compute_structured_errors(pred: dict, gt: dict) -> list[dict]:
     measurement_errs = classify_measurement_asymmetry(
         pred.get("measurements", []),
         gt.get("measurements", []),
+        size_given_elsewhere=size_given_elsewhere,
     )
     errors.extend(measurement_errs)
 

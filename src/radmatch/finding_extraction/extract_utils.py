@@ -30,8 +30,8 @@ class Finding(TypedDict):
 # ============================================================================
 
 
-def _normalize_unit(unit_str: str, category: str) -> str | None:
-    """Normalize unit string to standard form."""
+def _normalize_unit(unit_str: str) -> str | None:
+    """Lower-cased unit, spelled-out and symbol forms mapped by exact match to their canonical unit."""
     if unit_str is None:
         return None
     if not isinstance(unit_str, str):
@@ -43,22 +43,7 @@ def _normalize_unit(unit_str: str, category: str) -> str | None:
     if not unit_lower:
         return None
 
-    # Handle percentage symbol - convert to "pct"
-    if unit_lower == "%":
-        return "pct"
-
-    # Check against known units for this category
-    category_units = constants.MEASUREMENT_UNIT_PATTERNS.get(category, [])
-    for known_unit in category_units:
-        if unit_lower == known_unit or unit_lower.startswith(known_unit):
-            return known_unit
-
-    # Check against all known units
-    for known_unit in constants.MEASUREMENT_UNIT_CONVERSION:
-        if unit_lower == known_unit or unit_lower.startswith(known_unit):
-            return known_unit
-
-    return unit_lower
+    return constants.MEASUREMENT_UNIT_ALIASES.get(unit_lower, unit_lower)
 
 
 # ============================================================================
@@ -198,7 +183,7 @@ def extract_findings_list(
                     continue
 
                 unit_raw = m.get("unit")
-                normalized_unit = _normalize_unit(unit_raw, normalized_category) if unit_raw else None
+                normalized_unit = _normalize_unit(unit_raw) if unit_raw else None
 
                 measurements.append({"value": numeric_value, "unit": normalized_unit, "category": normalized_category})
 

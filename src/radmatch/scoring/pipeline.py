@@ -168,8 +168,17 @@ def score_pair(
     gt_by_id = {f["finding_id"]: f for f in findings_gt}
     matches = matching_output["matches"]
 
+    sized_preds_per_gt: dict[str, set[str]] = {}
+    for m in matches:
+        if any(x.get("category") == "size" for x in pred_by_id[m["pred_id"]].get("measurements") or []):
+            sized_preds_per_gt.setdefault(m["gt_id"], set()).add(m["pred_id"])
     structured_per_pair: list[list[dict]] = [
-        comparators.compute_structured_errors(pred_by_id[m["pred_id"]], gt_by_id[m["gt_id"]]) for m in matches
+        comparators.compute_structured_errors(
+            pred_by_id[m["pred_id"]],
+            gt_by_id[m["gt_id"]],
+            size_given_elsewhere=bool(sized_preds_per_gt.get(m["gt_id"], set()) - {m["pred_id"]}),
+        )
+        for m in matches
     ]
     stage3b_config = _stage3b_config(
         getattr(ctx.client, "model", None), getattr(ctx.client, "reasoning", None), ctx.fewshot

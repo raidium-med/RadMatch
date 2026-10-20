@@ -112,7 +112,9 @@ def test_comparison_no_conflict(value):
             "major",
             id="attenuation-crosses-20hu-cliff",
         ),
-        pytest.param([_m(7, "mm", "size")], [_m(7, None, "count")], 1, "major", id="category-mismatch"),
+        pytest.param([_m(7, "mm", "size")], [_m(7, None, "count")], 2, "minor", id="category-mismatch"),
+        pytest.param([_m(12, "mm", "other")], [_m(12, "mm", "size")], 0, None, id="same-value-other-label"),
+        pytest.param([_m(498, "ml", "size")], [_m(14.4, "cm", "size")], 1, "minor", id="size-volume-vs-length"),
     ],
 )
 def test_measurement_asymmetry(pred_m, gt_m, expected_count, expected_severity):
@@ -123,11 +125,19 @@ def test_measurement_asymmetry(pred_m, gt_m, expected_count, expected_severity):
         assert errs[0]["dimension"] == "measurement"
 
 
+@pytest.mark.parametrize("elsewhere, expected", [(False, ["major", "minor"]), (True, ["minor", "minor"])])
+def test_measurement_omitted_size_is_major_unless_given_elsewhere_in_group(elsewhere, expected):
+    errs = comparators.classify_measurement_asymmetry(
+        [_m(3, None, "count")], [_m(12, "mm", "size")], size_given_elsewhere=elsewhere
+    )
+    assert sorted(e["severity"] for e in errs) == expected
+
+
 @pytest.mark.parametrize(
     "pred_m, gt_m, id_",
     [
         pytest.param([_m(1, "cm", "size")], [_m(10, "mm", "size")], "size-cm-vs-mm"),
-        pytest.param([_m(0.1, "m", "size")], [_m(100, "mm", "size")], "size-m-vs-mm"),
+        pytest.param([_m(500, "ml", "size")], [_m(0.5, "l", "size")], "size-ml-vs-l"),
         pytest.param([_m(1, "inch", "size")], [_m(25.4, "mm", "size")], "size-inch-vs-mm"),
     ],
 )
