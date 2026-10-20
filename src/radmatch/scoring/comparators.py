@@ -517,16 +517,34 @@ def _is_simple_cyst(finding: dict) -> bool:
     return all(_NEGATION.search(text[: m.start()]) for m in _COMPLEX_CYST.finditer(text))
 
 
+def _normalized_text(finding: dict) -> str:
+    return re.sub(r"\W+", " ", str(finding.get("text") or "").lower()).strip()
+
+
+_NEGATIONS = {"no", "not", "without", "absent", "negative", "free", "none", "resolved"}
+_FILLER = set("the a an of in is are and with to at on evidence discrete seen noted".split())
+
+
+def _near_identical(pred: dict, gt: dict) -> bool:
+    """The same sentence up to filler words (negations kept): >= 80% shared words. Such a pair cannot invert status;
+    a disagreeing status label is extraction noise."""
+    a = set(_normalized_text(pred).split()) - _FILLER
+    b = set(_normalized_text(gt).split()) - _FILLER
+    return bool(a and b) and a & _NEGATIONS == b & _NEGATIONS and len(a & b) / len(a | b) >= 0.8
+
+
 def compute_structured_errors(pred: dict, gt: dict, size_given_elsewhere: bool = False) -> list[dict]:
     """Aggregate Stage 3a errors across status, comparison, measurement. `size_given_elsewhere`: another pred
-    matched to the same gt gives a size, so this pred omitting one is not an omission of the group."""
+    matched to the same gt gives a size, so this pred omitting one is not an omission of the group. Two findings
+    with the same text cannot invert status: a label disagreement on one sentence is extraction noise."""
     errors: list[dict] = []
 
+    same_text = _near_identical(pred, gt)
     status_err = classify_status_conflict(
         pred.get("clinical_status", ""),
         gt.get("clinical_status", ""),
     )
-    if status_err is not None:
+    if status_err is not None and not same_text:
         errors.append(status_err)
 
     comparison_err = classify_comparison_conflict(

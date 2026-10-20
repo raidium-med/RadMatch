@@ -248,6 +248,13 @@ def test_compute_structured_errors_identical_pair_is_empty():
     assert comparators.compute_structured_errors(f, f) == []
 
 
+def test_identical_text_is_never_a_status_inversion():
+    pred = {"text": "Gallbladder distended, without inflammatory change.", "clinical_status": "normal"}
+    gt = {"text": "Gallbladder distended without inflammatory change", "clinical_status": "abnormal"}
+    assert comparators.compute_structured_errors(pred, gt) == []
+    assert comparators.compute_structured_errors({**pred, "text": "Gallbladder normal."}, gt)[0]["triggers_inc"]
+
+
 @pytest.mark.parametrize(
     "pred_text, gt_text, expected",
     [
