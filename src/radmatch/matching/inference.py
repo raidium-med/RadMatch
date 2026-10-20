@@ -222,6 +222,7 @@ def _matching_config(llm_judge: str, fewshot: str | None, reasoning: str) -> dic
         "fewshot": fewshot,
         "reasoning": reasoning,
         "prompt_hash": prompts.prompt_fingerprint(prompts.PROMPT_MATCHING),
+        "fewshot_hash": io.fingerprint(prompts.matching_fewshot_messages(fewshot)),
         "schema_hash": io.fingerprint(MATCHING_SCHEMA),
     }
 

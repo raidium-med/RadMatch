@@ -53,6 +53,7 @@ def _stage3b_config(judge: str | None, reasoning: str | None, fewshot: str | Non
         "reasoning": reasoning,
         "fewshot": fewshot,
         "prompt_hash": prompts.prompt_fingerprint(prompts.PROMPT_ATTRIBUTE_ERRORS),
+        "fewshot_hash": io.fingerprint(prompts.attribute_errors_fewshot_messages(fewshot)),
         "schema_hash": io.fingerprint(inference._ATTRIBUTE_ERRORS_SCHEMA),
         "chunk_size": inference._STAGE3B_CHUNK_SIZE,
     }
