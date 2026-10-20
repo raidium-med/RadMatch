@@ -178,7 +178,7 @@ Every difference within a matched pair is attributed to one of seven dimensions 
 |---|---|---|
 | `clinical_status` | comparator | Presence vs absence. Any disagreement is a status inversion, always major. |
 | `comparison` | comparator | Longitudinal trajectory. Major when it crosses between benign (`stable`, `improving`, `resolved`) and active (`worsening`, `new`), or when the prediction drops an active trajectory the ground truth records. |
-| `measurement` | comparator + LLM | Numeric values against per-category thresholds; adding a value is minor, and so is omitting one, except a size the candidate does not give at all, which is major. The LLM adds only differences that cross a clinical decision boundary. |
+| `measurement` | comparator + LLM | Numeric values against per-category thresholds; adding a value is minor, and so is omitting one, except a size the candidate does not give at all, which is major unless the candidate states a size class the reference value falls under ("tiny", "sub-6 mm") or the value is below the structure's first decision threshold (a 4 mm nodule, a 7 mm node). A size given only as an upper bound is satisfied by a smaller value, and any size difference on a simple renal, hepatic or splenic cyst is minor. The LLM adds only differences that cross a clinical decision boundary. |
 | `location` | LLM | Anatomic placement, including laterality and sub-anatomic detail. A left/right flip on a paired structure is always major. |
 | `severity` | LLM | Qualitative magnitude — mild / moderate / severe, small / large. Major when it crosses an action threshold. |
 | `morphology` | LLM | Shape, margin, character — spiculated vs smooth, solid vs cystic. |
