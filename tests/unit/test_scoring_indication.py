@@ -86,6 +86,25 @@ def test_detect_attribute_errors_places_answers_by_pair_id(fake_client, ok, make
     assert [p["pair_id"] for p in sent["pairs"]] == [1, 2]
 
 
+def test_detect_attribute_errors_sends_group_context(fake_client, ok, make_finding):
+    """A pair inside a 1:N group carries the texts of the group's other findings; a 1:1 pair carries none."""
+    findings_gt = {"g1": make_finding("g1"), "g2": make_finding("g2"), "g3": make_finding("g3")}
+    findings_pred = {"p1": make_finding("p1"), "p2": make_finding("p2")}
+    matches = [
+        {"pred_id": "p1", "gt_id": "g1", "reasoning": ""},
+        {"pred_id": "p1", "gt_id": "g2", "reasoning": ""},
+        {"pred_id": "p2", "gt_id": "g3", "reasoning": ""},
+    ]
+    client = fake_client(ok({"errors_per_pair": [{"pair_id": i, "errors": []} for i in (1, 2, 3)]}))
+    inference.detect_attribute_errors(
+        matches=matches, findings_pred=findings_pred, findings_gt=findings_gt, series_uuid="s1", client=client
+    )
+    pairs = json.loads(client.calls[0]["messages"][-1]["content"])["pairs"]
+    assert pairs[0]["same_group_gt"] == [findings_gt["g2"]["text"]]
+    assert pairs[1]["same_group_gt"] == [findings_gt["g1"]["text"]]
+    assert "same_group_gt" not in pairs[2] and "same_group_pred" not in pairs[2]
+
+
 def test_detect_attribute_errors_retries_malformed_then_recovers(fake_client, ok, make_finding):
     """A malformed Stage 3b response is retried; a well-formed retry is used
     instead of degrading the report to empty text errors."""

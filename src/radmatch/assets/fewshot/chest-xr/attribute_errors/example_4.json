@@ -1,0 +1,123 @@
+{
+  "scenario": "Constructed: certainty and added-diagnosis grading",
+  "description": "Constructed. A critical finding hedged ('possible pneumothorax' vs a definite one) is a major certainty error; a different diagnosis for the same opacity is a major morphology error; one certainty step ('probable' vs definite edema) is minor; synonyms carry no error.",
+  "user": {
+    "series_uuid": "chest-xr_example_4",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Possible small left apical pneumothorax.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "critical",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "Small left apical pneumothorax.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "critical",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "Left basilar opacity, likely pneumonia.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "Left basilar opacity, likely atelectasis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 3,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "Probable mild pulmonary edema.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "Mild pulmonary edema.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 4,
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "Mild cardiomegaly.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "Mild enlargement of the cardiac silhouette.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "certainty",
+            "severity": "major",
+            "reasoning": "pred hedges a definite pneumothorax as possible"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "morphology",
+            "severity": "major",
+            "reasoning": "pred reads the opacity as pneumonia, gt as atelectasis"
+          }
+        ]
+      },
+      {
+        "pair_id": 3,
+        "errors": [
+          {
+            "dimension": "certainty",
+            "severity": "minor",
+            "reasoning": "one step: probable vs definite"
+          }
+        ]
+      },
+      {
+        "pair_id": 4,
+        "errors": []
+      }
+    ]
+  }
+}

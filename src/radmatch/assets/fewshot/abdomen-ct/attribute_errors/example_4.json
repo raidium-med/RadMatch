@@ -1,0 +1,239 @@
+{
+  "scenario": "Clinical long tail: group context, attenuation vs composition, different diagnosis, two-step severity",
+  "description": "Constructed; pairs from abdomen-ct/matching/example_6.json. A stone stated with its consequence has no error against either gt; 'hypodense' vs 'cyst' is minor; diverticulosis vs diverticulitis is a major morphology error; small vs large ascites is a major severity error; 'no aneurysm' vs 'normal caliber' and the cholecystectomy pairs have none.",
+  "user": {
+    "series_uuid": "abdomen-ct_example_4",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Left UVJ stone causing mild hydroureteronephrosis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 4,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "4 mm left UVJ calculus.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 4,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "same_group_gt": [
+          "Mild left hydroureteronephrosis."
+        ]
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Left UVJ stone causing mild hydroureteronephrosis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 4,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "Mild left hydroureteronephrosis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": []
+        },
+        "same_group_gt": [
+          "4 mm left UVJ calculus."
+        ]
+      },
+      {
+        "pair_id": 3,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "Hypodense lesion in liver segment 4.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "Small segment 4 hepatic cyst.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 4,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "Sigmoid diverticulosis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "Sigmoid diverticulitis with pericolic fat stranding.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 5,
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "Aortic calcification.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_5",
+          "text": "Atherosclerotic calcification of the abdominal aorta.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 6,
+        "pred_finding": {
+          "finding_id": "p_5",
+          "text": "No aortic aneurysm.",
+          "clinical_status": "normal",
+          "clinical_significance": "routine",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_6",
+          "text": "Abdominal aorta normal in caliber.",
+          "clinical_status": "normal",
+          "clinical_significance": "routine",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 7,
+        "pred_finding": {
+          "finding_id": "p_7",
+          "text": "Status post cholecystectomy.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_8",
+          "text": "Cholecystectomy clips.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 8,
+        "pred_finding": {
+          "finding_id": "p_8",
+          "text": "Small amount of ascites.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_9",
+          "text": "Large-volume ascites.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": []
+      },
+      {
+        "pair_id": 2,
+        "errors": []
+      },
+      {
+        "pair_id": 3,
+        "errors": [
+          {
+            "dimension": "morphology",
+            "severity": "minor",
+            "reasoning": "pred gives the lesion's density (hypodense), gt calls it a cyst: an attenuation word is not a contradicting composition"
+          }
+        ]
+      },
+      {
+        "pair_id": 4,
+        "errors": [
+          {
+            "dimension": "morphology",
+            "severity": "major",
+            "reasoning": "pred reports uncomplicated diverticulosis, gt diverticulitis: a different diagnosis that misses the acute inflammation"
+          }
+        ]
+      },
+      {
+        "pair_id": 5,
+        "errors": []
+      },
+      {
+        "pair_id": 6,
+        "errors": []
+      },
+      {
+        "pair_id": 7,
+        "errors": []
+      },
+      {
+        "pair_id": 8,
+        "errors": [
+          {
+            "dimension": "severity",
+            "severity": "major",
+            "reasoning": "pred says a small amount, gt large-volume ascites: grades two steps apart (paracentesis)"
+          }
+        ]
+      }
+    ]
+  }
+}
