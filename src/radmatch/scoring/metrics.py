@@ -190,7 +190,9 @@ def compute_tier_errors(
     - ``fn`` (reference side): GT findings in the pool not credited, i.e. MIS +
       INC on a GT in the pool. Equals ``gt_total - recall_hits``.
     - ``fp`` (prediction side): such SPU in the pool + INC on a GT outside the pool
-      with a matched pred in the pool (e.g. an abnormality where the GT is normal).
+      with a matched pred in the pool (e.g. an abnormality where the GT is normal)
+      + a pred in the pool contradicted by every GT it matches while each of those GTs
+      is credited by another pred (`_contradicted_preds`).
 
     The side is relative to the pool: a notable GT contradicted by an urgent pred
     is an actionable FN but a triage FP.
@@ -201,6 +203,7 @@ def compute_tier_errors(
     fn_inc = sum(1 for b in inc_gts if b["gt_sig"] in pool)
     fp_spu = sum(1 for f in unmatched_pred if f.get("clinical_significance") in pool and is_unsupported_claim(f))
     fp_inc = sum(1 for b in inc_gts if b["gt_sig"] not in pool and any(s in pool for s in b["pred_sigs"]))
+    fp_inc += sum(1 for sig in _contradicted_preds(records) if sig in pool)
     fn, fp = fn_mis + fn_inc, fp_spu + fp_inc
     return {
         "total": fn + fp,
@@ -223,15 +226,16 @@ def compute_tier_opportunities(
     """Distinct findings of `significance_pool` at stake, the denominator of `errors_per_finding`.
 
     Matched GT findings whose GT or any matched pred is in the pool (the condition
-    `compute_tier_errors` uses, so errors never exceed findings), plus the MIS GTs and
-    the SPU preds asserting an abnormality in the pool.
+    `compute_tier_errors` uses, so errors never exceed findings), plus the MIS GTs,
+    the SPU preds asserting an abnormality and the contradicted preds in the pool.
     """
     pool = set(significance_pool)
     per_gt = _per_gt_safety_outcomes(records)
     distinct_gt = sum(1 for b in per_gt.values() if b["gt_sig"] in pool or any(s in pool for s in b["pred_sigs"]))
     distinct_gt += sum(1 for f in unmatched_gt if f.get("clinical_significance") in pool)
     spu = sum(1 for f in unmatched_pred if f.get("clinical_significance") in pool and is_unsupported_claim(f))
-    return distinct_gt + spu
+    contradicted = sum(1 for sig in _contradicted_preds(records) if sig in pool)
+    return distinct_gt + spu + contradicted
 
 
 # ============================================================================
@@ -332,6 +336,21 @@ def _per_pred_safety_outcomes(records: Sequence[dict]) -> dict[tuple[str, str], 
         if reclassify_to_effective_category(r) != "INC":
             bucket["is_hit"] = True
     return per_pred
+
+
+def _contradicted_preds(records: Sequence[dict]) -> list[str | None]:
+    """Significance of each pred that all its matches contradict (INC) while every GT it matches is credited by
+    another pred, so the credit does not absorb the contradiction (an invented dissection beside a correct
+    "no dissection"). A pred touching an all-INC GT is already counted through that GT."""
+    inc_gts = {k for k, b in _per_gt_safety_outcomes(records).items() if b["all_inc"]}
+    per_pred: dict[tuple[str, str], dict[str, object]] = {}
+    for r in records:
+        bucket = per_pred.setdefault(_pred_key(r), {"all_inc": True, "masked": True, "sig": r.get("pred_significance")})
+        if reclassify_to_effective_category(r) != "INC":
+            bucket["all_inc"] = False
+        if _gt_key(r) in inc_gts:
+            bucket["masked"] = False
+    return [b["sig"] for b in per_pred.values() if b["all_inc"] and b["masked"]]
 
 
 def compute_tier_metrics(

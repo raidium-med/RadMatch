@@ -206,12 +206,12 @@ Every metric is computed on three significance tiers, each reported in its own `
 |---|---|
 | aER (`errors_per_report`) | Mean per-report count of `INC` + `MIS` + `SPU` asserting an abnormality, involving a finding of the tier. The headline number on the actionable tier; lower is better. |
 | aFN (`fn_per_report`) | Reference side: findings of the tier missed (`MIS`, `fn_mis_total`) or contradicted (`INC`, `fn_inc_total`). In totals, `fn_total = gt_total − recall_hits`. |
-| aFP (`fp_per_report`) | Prediction side: abnormalities of the tier with no reference counterpart (`SPU`, `fp_spu_total`), or contradicting a reference finding outside the tier, e.g. an abnormality where the reference says normal (`INC`, `fp_inc_total`). |
+| aFP (`fp_per_report`) | Prediction side: abnormalities of the tier with no reference counterpart (`SPU`, `fp_spu_total`), or contradicting a reference finding outside the tier, e.g. an abnormality where the reference says normal, or contradicting a reference finding that another predicted finding gets right (`INC`, `fp_inc_total`). |
 | aRec (`recall`) | Fraction of the reference findings of the tier the model recalled, counting `COR` and `PAR` as hits. tRec is the safety floor: a model can look acceptable on average while missing most urgent findings, and a large gap from aRec means it is differentially worse on the highest-stakes findings. |
 | aPrec (`precision`) | Of the predicted findings of the tier, the fraction crediting a real finding. Flags confident over-calling. `null` when the model predicted none. |
 | errors per finding (`errors_per_finding`) | Errors over the findings at stake on the tier (`findings_total`): a rate that stays comparable between a rare subset and a common one. |
 
-An `INC` counts once per reference finding, on the reference side when that finding is in the tier, so aER = aFN + aFP holds exactly. Two consequences: `fp_total` differs from `pred_total − precision_hits` by the `INC` pairs with both sides in the tier, which count as aFN, and the side depends on the tier, e.g. a `notable` finding contradicted by an `urgent` claim is an aFN but a tFP.
+An `INC` counts once per reference finding, on the reference side when that finding is in the tier, so aER = aFN + aFP holds exactly. When another predicted finding gets that reference finding right, it is not missed, and the contradicting prediction counts once as an aFP instead. Two consequences: `fp_total` differs from `pred_total − precision_hits` by the `INC` pairs with both sides in the tier, which count as aFN, and the side depends on the tier, e.g. a `notable` finding contradicted by an `urgent` claim is an aFN but a tFP.
 
 Findings are also reported in `subsets` — `measurement`, `comparison`, `abnormal-regular`, `normal-regular` — each with its own MUC counts and `tiers` block.
 
