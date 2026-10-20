@@ -12,6 +12,7 @@ definitions.
 
 from __future__ import annotations
 
+import re
 from typing import Literal, Sequence, TypedDict
 
 from radmatch import constants
@@ -152,6 +153,24 @@ def effective_muc_counts(
     counts["MIS"] = n_mis
     counts["SPU"] = n_spu
     return counts
+
+
+_CORONARY_CALCIFICATION = re.compile(
+    r"coronar[^.;]{0,40}(?:calcif|atheroscl|atherom|plaque)|(?:calcif|atheroscl|atherom|plaque)[^.;]{0,40}coronar"
+)
+
+
+def with_tier_floor(finding: dict) -> dict:
+    """The fixed tier table applied where the extractor misses it: coronary artery calcification is notable, also
+    when folded into a routine aortic atherosclerosis sentence."""
+    text = str(finding.get("text") or "").lower()
+    if (
+        finding.get("clinical_significance") == "routine"
+        and finding.get("clinical_status") != "normal"
+        and _CORONARY_CALCIFICATION.search(text)
+    ):
+        return {**finding, "clinical_significance": "notable"}
+    return finding
 
 
 def is_unsupported_claim(finding: dict) -> bool:

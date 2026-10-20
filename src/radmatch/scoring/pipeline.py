@@ -200,6 +200,8 @@ def score_pair(
             max_retries=ctx.max_score_retries,
         )
 
+    pred_by_id = {k: metrics.with_tier_floor(f) for k, f in pred_by_id.items()}
+    gt_by_id = {k: metrics.with_tier_floor(f) for k, f in gt_by_id.items()}
     muc_records: list[dict] = [
         metrics.build_muc_record(
             match=m,
