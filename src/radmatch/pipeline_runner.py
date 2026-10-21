@@ -57,8 +57,8 @@ def run_all(
 
     `retry_passes` runs the whole chain up to that many times (1 = a single pass, the
     default). Because every stage caches on success, a later pass only revisits reports
-    that dropped. It stops early once nothing is missing, or once a pass recovers
-    nothing.
+    that are not scored yet, Stage 3 failures included. It stops early once nothing is
+    missing, or once a pass recovers nothing.
 
     `retry_degraded` additionally revisits reports whose Stage 2 *fell back* rather than
     failed. A fallback writes valid cached output, so without this it is never retried.
@@ -104,13 +104,14 @@ def run_all(
     )
 
     # Each stage caches on success only, so re-running the chain retries exactly the
-    # reports that dropped and skips the rest. Stop as soon as a pass recovers nothing:
-    # a report failing for a deterministic reason (unreadable file, a prompt the judge
-    # always mangles) would otherwise re-pay LLM cost on every remaining pass.
-    dropped = expected
+    # reports that are not scored yet (dropped before Stage 3 or failed in it) and skips
+    # the rest. Stop as soon as a pass recovers nothing: a report failing for a
+    # deterministic reason (unreadable file, a prompt the judge always mangles) would
+    # otherwise re-pay LLM cost on every remaining pass.
+    missing = expected
     for pass_index in range(1, max(1, retry_passes) + 1):
         if pass_index > 1:
-            logger.info("Retry pass %d/%d — %d report(s) still missing", pass_index, retry_passes, dropped)
+            logger.info("Retry pass %d/%d — %d report(s) still missing", pass_index, retry_passes, missing)
         else:
             logger.info("Running full pipeline: extract_findings → match → score")
 
@@ -160,27 +161,25 @@ def run_all(
         metadata = summary.get("metadata", {}) if isinstance(summary, dict) else {}
         n_reports = int(metadata.get("n_reports", 0))
         n_failed_in_score = int(metadata.get("n_failed_reports", 0))
-        still_dropped = max(0, expected - n_reports - n_failed_in_score)
-        if still_dropped == 0:
+        still_missing = max(0, expected - n_reports)
+        stalled = pass_index > 1 and still_missing >= missing
+        missing = still_missing
+        if not missing:
             break
-        if pass_index > 1 and still_dropped >= dropped:
-            logger.warning(
-                "Retry pass %d recovered nothing (%d still missing); stopping early.", pass_index, still_dropped
-            )
-            dropped = still_dropped
+        if stalled:
+            logger.warning("Retry pass %d recovered nothing (%d still missing); stopping early.", pass_index, missing)
             break
-        dropped = still_dropped
 
     # Cross-stage sum, so silent drops between stages are at least visible.
-    if dropped:
+    if missing:
         logger.warning(
             "Coverage: %d of %d input reports missing from the summary "
             "(%d scored, %d Stage-3 failures, %d dropped earlier — see Stage 1 / Stage 2 logs).",
-            dropped,
+            missing,
             expected,
             n_reports,
             n_failed_in_score,
-            dropped,
+            max(0, missing - n_failed_in_score),
         )
 
     return summary
