@@ -171,8 +171,9 @@ def test_attribute_errors_fewshot_examples_shape():
     assert len(examples) == len(sorted(bundle_dir.glob("example_*.json")))
     for ex in examples:
         assert {"series_uuid", "pairs"} <= ex["user"].keys()
-        assert "errors_per_match" in ex["assistant"]
-        assert len(ex["user"]["pairs"]) == len(ex["assistant"]["errors_per_match"])
+        pair_ids = [pair["pair_id"] for pair in ex["user"]["pairs"]]
+        assert pair_ids == list(range(1, len(pair_ids) + 1))
+        assert [entry["pair_id"] for entry in ex["assistant"]["errors_per_pair"]] == pair_ids
 
 
 # ============================================================================
@@ -210,4 +211,4 @@ def test_extraction_prompt_uses_study_indication_for_tier(extraction_prompt):
     # The prompt must reference the indication block AND tell the LLM that
     # rule-outs inherit the indication's tier.
     assert "study indication" in lower
-    assert "indication" in lower and ("inherit" in lower or "promote" in lower)
+    assert "tier of the indication" in lower

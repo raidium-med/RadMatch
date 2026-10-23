@@ -5,29 +5,33 @@
     "series_uuid": "chest-xr_example_3",
     "pairs": [
       {
+        "pair_id": 1,
         "pred_finding": {"finding_id": "p_1", "text": "Clear lungs without focal consolidation.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []},
         "gt_finding":   {"finding_id": "gt_1", "text": "Clear lungs without focal consolidation.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []}
       },
       {
+        "pair_id": 2,
         "pred_finding": {"finding_id": "p_2", "text": "No pneumothorax.", "clinical_status": "normal", "clinical_significance": "critical", "comparison": null, "measurements": []},
         "gt_finding":   {"finding_id": "gt_3", "text": "No pneumothorax.", "clinical_status": "normal", "clinical_significance": "critical", "comparison": null, "measurements": []}
       },
       {
+        "pair_id": 3,
         "pred_finding": {"finding_id": "p_3", "text": "A 6 mm pulmonary nodule in the peripheral right upper lobe has slightly increased compared to the preceding radiograph.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "worsening", "measurements": [{"value": 6, "unit": "mm", "category": "size"}]},
         "gt_finding":   {"finding_id": "gt_4", "text": "A 4 mm pulmonary nodule in the peripheral right upper lobe is unchanged from the preceding radiograph.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": [{"value": 4, "unit": "mm", "category": "size"}]}
       },
       {
+        "pair_id": 4,
         "pred_finding": {"finding_id": "p_4", "text": "Cardiac silhouette is normal in size.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []},
         "gt_finding":   {"finding_id": "gt_6", "text": "Cardiac silhouette is normal in size.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []}
       }
     ]
   },
   "assistant": {
-    "errors_per_match": [
-      [],
-      [],
-      [],
-      []
+    "errors_per_pair": [
+      {"pair_id": 1, "errors": []},
+      {"pair_id": 2, "errors": []},
+      {"pair_id": 3, "errors": []},
+      {"pair_id": 4, "errors": []}
     ]
   }
 }

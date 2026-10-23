@@ -5,19 +5,21 @@
     "series_uuid": "chest-ct_example_3",
     "pairs": [
       {
+        "pair_id": 1,
         "pred_finding": {"finding_id": "p_1", "text": "Left lower lobe nodule with smooth margins measuring 11 mm, noncalcified.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": null, "measurements": [{"value": 11, "unit": "mm", "category": "size"}]},
         "gt_finding":   {"finding_id": "gt_1", "text": "Left lower lobe nodule with smooth margins measuring 13 mm, noncalcified.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": null, "measurements": [{"value": 13, "unit": "mm", "category": "size"}]}
       },
       {
+        "pair_id": 2,
         "pred_finding": {"finding_id": "p_3", "text": "Right hilar lymph node enlargement measuring 14 mm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": null, "measurements": [{"value": 14, "unit": "mm", "category": "size"}]},
         "gt_finding":   {"finding_id": "gt_3", "text": "Right hilar lymph node enlargement measuring 14 mm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": null, "measurements": [{"value": 14, "unit": "mm", "category": "size"}]}
       }
     ]
   },
   "assistant": {
-    "errors_per_match": [
-      [],
-      []
+    "errors_per_pair": [
+      {"pair_id": 1, "errors": []},
+      {"pair_id": 2, "errors": []}
     ]
   }
 }

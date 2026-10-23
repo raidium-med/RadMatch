@@ -368,6 +368,7 @@ def extract_findings(
         "fewshot": fewshot,
         "reasoning": reasoning,
         "prompt_hash": prompts.prompt_fingerprint(prompts.PROMPT_FINDING_EXTRACTION),
+        "fewshot_hash": io.fingerprint(fewshot_messages),
         "schema_hash": io.fingerprint(_FINDINGS_SCHEMA),
     }
 

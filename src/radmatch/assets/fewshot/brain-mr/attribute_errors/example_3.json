@@ -5,26 +5,29 @@
     "series_uuid": "brain-mr_example_3",
     "pairs": [
       {
+        "pair_id": 1,
         "pred_finding": {"finding_id": "p_1", "text": "A 14 mm long diameter hypointense appearance on T2 sequence in the parietal region at the interhemispheric fissure location, consistent with falx calcification.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": [{"value": 14, "unit": "mm", "category": "size"}]},
         "gt_finding":   {"finding_id": "gt_1", "text": "An 11 mm long diameter hypointense appearance on T2 sequence in the frontal region at the interhemispheric fissure location, consistent with falx calcification.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": [{"value": 11, "unit": "mm", "category": "size"}]}
       },
       {
+        "pair_id": 2,
         "pred_finding": {"finding_id": "p_2", "text": "Paranasal sinuses are intact.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []},
         "gt_finding":   {"finding_id": "gt_2", "text": "Paranasal sinuses and mastoid air cell aeration are intact.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []}
       },
       {
+        "pair_id": 3,
         "pred_finding": {"finding_id": "p_4", "text": "Well-defined 12x10 mm mass lesion within the left suboccipital fatty tissue, hypointense on T1 and hyperintense on T2.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": [{"value": 12, "unit": "mm", "category": "size"}, {"value": 10, "unit": "mm", "category": "size"}]},
         "gt_finding":   {"finding_id": "gt_4", "text": "Well-defined 12x10 mm mass lesion within the left suboccipital fatty tissue, hypointense on T1 and hyperintense on T2.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": [{"value": 12, "unit": "mm", "category": "size"}, {"value": 10, "unit": "mm", "category": "size"}]}
       }
     ]
   },
   "assistant": {
-    "errors_per_match": [
-      [
+    "errors_per_pair": [
+      {"pair_id": 1, "errors": [
         {"dimension": "location", "severity": "major", "reasoning": "Pred places the falx calcification in the parietal region, gt in the frontal region — different sub-anatomic location for the same lesion at the same midline structure."}
-      ],
-      [],
-      []
+      ]},
+      {"pair_id": 2, "errors": []},
+      {"pair_id": 3, "errors": []}
     ]
   }
 }

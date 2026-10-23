@@ -75,6 +75,15 @@ def test_extract_findings_list_normalises_measurements():
     assert out[1]["measurements"] == []
 
 
+@pytest.mark.parametrize(
+    "raw_unit, expected",
+    [("mL", "ml"), ("cm3", "ml"), ("minutes", "minutes"), ("Centimeters", "cm"), ("%", "pct"), ("mm", "mm")],
+)
+def test_extract_findings_list_normalises_units_by_exact_match(raw_unit, expected):
+    raw = [{"text": "ok", "measurements": [{"value": 5, "unit": raw_unit, "category": "size"}]}]
+    assert extract_utils.extract_findings_list(raw, "s")[0]["measurements"][0]["unit"] == expected
+
+
 def test_extract_findings_list_skips_non_dict_items():
     raw = [{"text": "ok"}, "garbage", None, 42, {"text": "also ok"}]
     out = extract_utils.extract_findings_list(raw, "s")

@@ -16,10 +16,19 @@ MEASUREMENT_CATEGORY_VALUES: set[str] = {"size", "count", "attenuation", "ratio"
 CLINICAL_SIGNIFICANCE_VALUES: set[str] = {"critical", "urgent", "notable", "routine"}
 DEFAULT_CLINICAL_SIGNIFICANCE: str = "routine"
 
-# Safety-recall denominator pools. A finding is a hit iff its match survives
-# PAR-reclassification as COR or PAR; INC and MIS are misses.
+# Significance pools of the error tiers. A GT finding is a hit iff its match survives
+# PAR-reclassification as COR or PAR; INC and MIS are misses (FN).
+CRITICAL_SIGNIFICANCE_TIERS: tuple[str, ...] = ("critical",)
 TRIAGE_SIGNIFICANCE_TIERS: tuple[str, ...] = ("critical", "urgent")
 ACTIONABLE_SIGNIFICANCE_TIERS: tuple[str, ...] = ("critical", "urgent", "notable")
+# The `tiers.<name>` output blocks, reported as aER = aFN + aFP with aRec / aPrec
+# (actionable), and likewise tER, ... (triage) and cER, ... (critical).
+ERROR_TIERS: dict[str, tuple[str, ...]] = {
+    "actionable": ACTIONABLE_SIGNIFICANCE_TIERS,
+    "triage": TRIAGE_SIGNIFICANCE_TIERS,
+    "critical": CRITICAL_SIGNIFICANCE_TIERS,
+}
+ERROR_TIER_PREFIX: dict[str, str] = {"actionable": "a", "triage": "t", "critical": "c"}
 
 # A cross-bucket comparison difference is `major` (misleads on whether action is
 # needed); same-bucket, or one side absent, is `minor`.
@@ -158,25 +167,40 @@ SUBSETS: tuple[str, ...] = ("measurement", "comparison", "abnormal-regular", "no
 # Measurement Parsing Constants
 # ============================================================================
 
-# Common unit patterns for different measurement categories
-MEASUREMENT_UNIT_PATTERNS: dict[str, list[str]] = {
-    "size": ["mm", "cm", "m", "inch", "in", "inches"],
-    "attenuation": ["hu", "hounsfield", "units"],
-    "ratio": ["pct", "percent", "ratio", ":"],
-    "count": [],
-    "other": [],
+# Spelled-out or symbol units mapped to their canonical form. Matching is exact: a prefix match
+# read "mL" and "minutes" as "m" and "cm3" as "cm".
+MEASUREMENT_UNIT_ALIASES: dict[str, str] = {
+    "%": "pct",
+    "millimeter": "mm",
+    "millimeters": "mm",
+    "millimetre": "mm",
+    "millimetres": "mm",
+    "centimeter": "cm",
+    "centimeters": "cm",
+    "centimetre": "cm",
+    "centimetres": "cm",
+    "milliliter": "ml",
+    "milliliters": "ml",
+    "millilitre": "ml",
+    "millilitres": "ml",
+    "cc": "ml",
+    "cm3": "ml",
+    "cm^3": "ml",
+    "cm³": "ml",
 }
 
 # Unit conversion factors to base unit (for normalization)
-# Base units: mm for size, HU for attenuation
+# Base units: mm for length, mL for volume, HU for attenuation
 MEASUREMENT_UNIT_CONVERSION: dict[str, float] = {
-    # Size (to mm)
+    # Length (to mm)
     "mm": 1.0,
     "cm": 10.0,
-    "m": 1000.0,
     "inch": 25.4,
     "in": 25.4,
     "inches": 25.4,
+    # Volume (to mL)
+    "ml": 1.0,
+    "l": 1000.0,
     # Attenuation (HU is already base)
     "hu": 1.0,
     "hounsfield": 1.0,
@@ -184,4 +208,15 @@ MEASUREMENT_UNIT_CONVERSION: dict[str, float] = {
     # Ratio/Percentage
     "pct": 1.0,
     "percent": 1.0,
+}
+
+# Sizes are compared only within one kind: a length is never compared with a volume
+MEASUREMENT_SIZE_UNIT_KIND: dict[str, str] = {
+    "mm": "length",
+    "cm": "length",
+    "inch": "length",
+    "in": "length",
+    "inches": "length",
+    "ml": "volume",
+    "l": "volume",
 }

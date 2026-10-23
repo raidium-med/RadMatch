@@ -5,19 +5,21 @@
     "series_uuid": "brain-mr_example_1",
     "pairs": [
       {
+        "pair_id": 1,
         "pred_finding": {"finding_id": "p_1", "text": "Medulla oblongata, pons, mesencephalon, both cerebellar hemispheres, and vermis parenchyma are normal.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []},
         "gt_finding":   {"finding_id": "gt_1", "text": "Medulla oblongata, pons, mesencephalon are normal.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []}
       },
       {
+        "pair_id": 2,
         "pred_finding": {"finding_id": "p_3", "text": "Bilateral orbits and paranasal sinuses are normal.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []},
         "gt_finding":   {"finding_id": "gt_5", "text": "Paranasal sinuses are normal.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []}
       }
     ]
   },
   "assistant": {
-    "errors_per_match": [
-      [],
-      []
+    "errors_per_pair": [
+      {"pair_id": 1, "errors": []},
+      {"pair_id": 2, "errors": []}
     ]
   }
 }
