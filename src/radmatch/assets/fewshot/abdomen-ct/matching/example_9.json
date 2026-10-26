@@ -1,0 +1,139 @@
+{
+ "scenario": "Constructed: negatives matched only to what they deny (abdomen CT)",
+ "description": "Constructed. 'No hydronephrosis' does not deny a nonobstructing stone, 'no aggressive osseous lesion' does not deny degenerative change, 'vasculature patent' does not deny wall plaque but does deny a venous thrombosis, a patent portal vein says nothing about the splenic vein, 'no peritoneal disease' does not deny pneumatosis of the bowel wall; ascites contradicts 'no free fluid' and free air contradicts 'no pneumoperitoneum'.",
+ "user": {
+  "pred_findings": [
+   {
+    "finding_id": "p_1",
+    "text": "Punctate nonobstructing left renal calculus.",
+    "clinical_status": "abnormal",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_2",
+    "text": "Mild degenerative change of the lumbar spine.",
+    "clinical_status": "abnormal",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_3",
+    "text": "Mild atherosclerotic calcification of the abdominal aorta.",
+    "clinical_status": "abnormal",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_4",
+    "text": "Pneumatosis of the cecal wall.",
+    "clinical_status": "abnormal",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_5",
+    "text": "Splenic vein thrombosis.",
+    "clinical_status": "abnormal",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_6",
+    "text": "Small volume ascites.",
+    "clinical_status": "abnormal",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_7",
+    "text": "Free intraperitoneal air under the right hemidiaphragm.",
+    "clinical_status": "abnormal",
+    "comparison": null,
+    "measurements": []
+   }
+  ],
+  "gt_findings": [
+   {
+    "finding_id": "gt_1",
+    "text": "No hydronephrosis.",
+    "clinical_status": "normal",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_2",
+    "text": "No aggressive osseous lesion.",
+    "clinical_status": "normal",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_3",
+    "text": "Abdominal vasculature patent.",
+    "clinical_status": "normal",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_4",
+    "text": "No peritoneal disease.",
+    "clinical_status": "normal",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_5",
+    "text": "Portal vein patent.",
+    "clinical_status": "normal",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_6",
+    "text": "No free fluid.",
+    "clinical_status": "normal",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_7",
+    "text": "No pneumoperitoneum.",
+    "clinical_status": "normal",
+    "comparison": null,
+    "measurements": []
+   }
+  ]
+ },
+ "assistant": {
+  "matches": [
+   {
+    "pred_id": "p_5",
+    "gt_id": "gt_3",
+    "reasoning": "a venous thrombosis that patent vasculature denies"
+   },
+   {
+    "pred_id": "p_6",
+    "gt_id": "gt_6",
+    "reasoning": "ascites = free fluid, denied by gt"
+   },
+   {
+    "pred_id": "p_7",
+    "gt_id": "gt_7",
+    "reasoning": "free air = pneumoperitoneum, denied by gt"
+   }
+  ],
+  "unmatched_pred": [
+   "p_1",
+   "p_2",
+   "p_3",
+   "p_4"
+  ],
+  "unmatched_gt": [
+   "gt_1",
+   "gt_2",
+   "gt_4",
+   "gt_5"
+  ]
+ }
+}

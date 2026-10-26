@@ -211,4 +211,4 @@ def test_extraction_prompt_uses_study_indication_for_tier(extraction_prompt):
     # The prompt must reference the indication block AND tell the LLM that
     # rule-outs inherit the indication's tier.
     assert "study indication" in lower
-    assert "indication" in lower and ("inherit" in lower or "promote" in lower)
+    assert "tier of the indication" in lower

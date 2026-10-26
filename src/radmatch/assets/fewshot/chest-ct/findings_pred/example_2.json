@@ -116,14 +116,14 @@
     "measurements": [],
     "comparison": "new",
     "clinical_status": "abnormal",
-    "clinical_significance": "urgent"
+    "clinical_significance": "notable"
   },
   {
     "text": "No pneumothorax.",
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "critical"
+    "clinical_significance": "routine"
   },
   {
     "text": "No chest wall mass or suspicious bone lesions.",
