@@ -1,4 +1,4 @@
-"""Stage 3c — MUC classification, PAR reclassification, actionable errors, safety recalls."""
+"""Stage 3c — MUC classification, PAR reclassification, per-tier errors (FN / FP) and safety recall / precision."""
 
 from __future__ import annotations
 
@@ -49,6 +49,28 @@ def _muc_record(
 
 def _unmatched(sig: str) -> dict:
     return {"finding_id": "f", "clinical_significance": sig}
+
+
+_ACTIONABLE = constants.ACTIONABLE_SIGNIFICANCE_TIERS
+_TRIAGE = constants.TRIAGE_SIGNIFICANCE_TIERS
+
+
+def _errors(records, unmatched_pred=(), unmatched_gt=(), pool=_ACTIONABLE) -> metrics.TierErrors:
+    return metrics.compute_tier_errors(
+        records, unmatched_pred=list(unmatched_pred), unmatched_gt=list(unmatched_gt), significance_pool=pool
+    )
+
+
+def _tier(records, unmatched_pred=(), unmatched_gt=(), pool=_ACTIONABLE) -> dict:
+    return metrics.compute_tier_metrics(
+        records, unmatched_pred=list(unmatched_pred), unmatched_gt=list(unmatched_gt), significance_pool=pool
+    )
+
+
+def _opportunities(records, unmatched_pred=(), unmatched_gt=(), pool=_ACTIONABLE) -> int:
+    return metrics.compute_tier_opportunities(
+        records, unmatched_pred=list(unmatched_pred), unmatched_gt=list(unmatched_gt), significance_pool=pool
+    )
 
 
 # ============================================================================
@@ -189,20 +211,20 @@ def test_effective_muc_counts_dedupes_under_NN_per_gt():
 
 
 # ============================================================================
-# compute_actionable_errors — count on non-routine findings
+# compute_tier_errors — count on the actionable tier
 # ============================================================================
 
 
 def test_actionable_errors_zero_for_clean_run():
     records = [_record_with_errors("COR", gt_sig="critical")]
-    assert metrics.compute_actionable_errors(records, [], []) == 0
+    assert _errors(records)["total"] == 0
 
 
 def test_actionable_errors_routine_findings_dropped():
     records = [_record_with_errors("INC", gt_sig="routine")]
     unmatched_pred = [_unmatched("routine")]
     unmatched_gt = [_unmatched("routine")]
-    assert metrics.compute_actionable_errors(records, unmatched_pred, unmatched_gt) == 0
+    assert _errors(records, unmatched_pred, unmatched_gt)["total"] == 0
 
 
 def test_actionable_errors_counts_INC_plus_MIS_plus_SPU():
@@ -214,7 +236,7 @@ def test_actionable_errors_counts_INC_plus_MIS_plus_SPU():
     ]
     unmatched_pred = [_unmatched("urgent")]  # +1
     unmatched_gt = [_unmatched("notable"), _unmatched("routine")]  # +1, routine dropped
-    assert metrics.compute_actionable_errors(records, unmatched_pred, unmatched_gt) == 4
+    assert _errors(records, unmatched_pred, unmatched_gt)["total"] == 4
 
 
 def test_actionable_errors_uses_gt_side_for_INC_significance():
@@ -222,15 +244,15 @@ def test_actionable_errors_uses_gt_side_for_INC_significance():
     records = [_record_with_errors("INC", gt_sig="critical")]
     # Pred says routine, but GT is critical → counts
     records[0]["pred_significance"] = "routine"
-    assert metrics.compute_actionable_errors(records, [], []) == 1
+    assert _errors(records)["total"] == 1
 
 
 def test_actionable_errors_uses_pred_side_for_SPU_significance():
     """SPU has no GT counterpart — pred's significance decides."""
     unmatched_pred = [_unmatched("critical")]  # +1
-    assert metrics.compute_actionable_errors([], unmatched_pred, []) == 1
+    assert _errors([], unmatched_pred)["total"] == 1
     unmatched_pred = [_unmatched("routine")]  # routine → 0
-    assert metrics.compute_actionable_errors([], unmatched_pred, []) == 0
+    assert _errors([], unmatched_pred)["total"] == 0
 
 
 # ============================================================================
@@ -257,14 +279,14 @@ def test_safety_recall_on_critical_pool(
     records.extend(_record_with_errors("PAR", text=[_err("minor")], gt_sig="critical") for _ in range(par_minor_count))
     records.extend(_record_with_errors("PAR", text=[_err("major")], gt_sig="critical") for _ in range(par_major_count))
     unmatched = [_unmatched("critical")] * unmatched_critical_gt
-    result = metrics.compute_safety_recall(records, unmatched, ("critical",))
+    result = _tier(records, unmatched_gt=unmatched, pool=("critical",))["recall"]
     assert result == pytest.approx(expected, rel=1e-6)
 
 
 def test_safety_recall_vacuous_when_no_gt_in_pool():
     """An empty significance pool yields recall = None (undefined, not "perfect")."""
     records = [_muc_record("COR", gt_sig="notable")]
-    assert metrics.compute_safety_recall(records, [], ("critical",)) is None
+    assert _tier(records, pool=("critical",))["recall"] is None
 
 
 # ============================================================================
@@ -280,7 +302,7 @@ def test_actionable_errors_per_gt_all_inc():
         _muc_record("INC", gt_sig="urgent", pred_id="p_umbrella"),
         _muc_record("INC", gt_sig="notable", pred_id="p_umbrella"),
     ]
-    assert metrics.compute_actionable_errors(records, [], []) == 3
+    assert _errors(records)["total"] == 3
 
 
 def test_actionable_opportunities_aligns_with_errors_pred_side_actionable():
@@ -289,8 +311,8 @@ def test_actionable_opportunities_aligns_with_errors_pred_side_actionable():
     too (on the same GT-or-pred condition) so the per-finding rate stays ≤ 1 and
     never divides by zero on the matched-only case."""
     records = [_muc_record("INC", gt_sig="routine", pred_sig="critical")]
-    errors = metrics.compute_actionable_errors(records, [], [])
-    opportunities = metrics.compute_actionable_opportunities(records, [], [])
+    errors = _errors(records)["total"]
+    opportunities = _opportunities(records)
     assert errors == 1
     assert opportunities == 1
 
@@ -305,8 +327,8 @@ def test_actionable_opportunities_ge_errors_across_muc_mix():
     ]
     unmatched_pred = [_unmatched("critical")]  # SPU: opp + error
     unmatched_gt = [_unmatched("notable")]  # MIS: opp + error
-    errors = metrics.compute_actionable_errors(records, unmatched_pred, unmatched_gt)
-    opportunities = metrics.compute_actionable_opportunities(records, unmatched_pred, unmatched_gt)
+    errors = _errors(records, unmatched_pred, unmatched_gt)["total"]
+    opportunities = _opportunities(records, unmatched_pred, unmatched_gt)
     assert errors <= opportunities
     assert (errors, opportunities) == (4, 5)
 
@@ -320,7 +342,7 @@ def test_actionable_errors_self_contradiction_not_counted():
         _muc_record("COR", gt_sig="critical", gt_id="g_x", pred_id="p_correct"),
         _muc_record("INC", gt_sig="critical", gt_id="g_x", pred_id="p_wrong"),
     ]
-    assert metrics.compute_actionable_errors(records, [], []) == 0
+    assert _errors(records)["total"] == 0
 
 
 def test_par_with_certainty_on_critical_gt_reclassifies_to_inc():
@@ -355,7 +377,7 @@ def test_actionable_recall_excludes_routine():
         _record_with_errors("PAR", text=[_err("minor")], gt_sig="notable"),  # → COR → hit
     ]
     unmatched = [_unmatched("urgent"), _unmatched("routine")]  # routine ignored
-    result = metrics.compute_safety_recall(records, unmatched, constants.ACTIONABLE_SIGNIFICANCE_TIERS)
+    result = _tier(records, unmatched_gt=unmatched)["recall"]
     # 3 hits (COR + COR + PAR-no-major) / 4 (3 matched actionable + 1 unmatched urgent)
     assert result == pytest.approx(0.75)
 
@@ -395,60 +417,41 @@ def test_assign_subsets(finding, expected):
 
 
 # ============================================================================
-# compute_safety_summary
+# compute_tier_metrics — recall / precision with their counts
 # ============================================================================
 
 
-def test_safety_summary_bundles_all_recalls_with_denominators():
+def test_tier_metrics_recalls_with_denominators():
     records = [
         _muc_record("COR", gt_sig="critical"),
         _record_with_errors("PAR", text=[_err("minor")], gt_sig="urgent"),  # PAR-minor → COR → hit
         _muc_record("INC", gt_sig="critical"),
     ]
     unmatched = [_unmatched("notable")]
-    summary = metrics.compute_safety_summary(records, unmatched, [])
+    triage = _tier(records, unmatched_gt=unmatched, pool=_TRIAGE)
+    actionable = _tier(records, unmatched_gt=unmatched)
     # Triage pool (critical+urgent) GT → 3 matched records on the pool
-    assert summary["triage_gt_total"] == 3
+    assert triage["gt_total"] == 3
     # Actionable pool: 3 matched + 1 unmatched notable
-    assert summary["actionable_gt_total"] == 4
+    assert actionable["gt_total"] == 4
     # Triage hits = 2 effective COR (COR-critical + PAR-minor → COR)
-    assert summary["triage_hit_count"] == 2
-    assert summary["triage_recall"] == pytest.approx(2 / 3)
-    assert summary["actionable_hit_count"] == 2
-    assert summary["actionable_recall"] == pytest.approx(2 / 4)
-    assert summary["triage_inc_count"] == 1
-    assert summary["triage_mis_count"] == 0
+    assert triage["recall_hits"] == 2
+    assert triage["recall"] == pytest.approx(2 / 3)
+    assert actionable["recall_hits"] == 2
+    assert actionable["recall"] == pytest.approx(2 / 4)
+    assert (triage["fn_inc_total"], triage["fn_mis_total"]) == (1, 0)
 
 
-def test_safety_summary_PAR_with_major_counts_as_miss():
-    """A critical finding matched but with a major attribute error is a recall miss."""
+def test_tier_metrics_PAR_with_major_counts_as_miss():
+    """A critical finding matched but with a major attribute error is a recall miss and a FN."""
     records = [_record_with_errors("PAR", text=[_err("major")], gt_sig="critical")]
-    summary = metrics.compute_safety_summary(records, [], [])
-    assert summary["triage_gt_total"] == 1
-    assert summary["triage_hit_count"] == 0
-    assert summary["triage_recall"] == pytest.approx(0.0)
-    assert summary["triage_inc_count"] == 1
+    triage = _tier(records, pool=_TRIAGE)
+    assert (triage["gt_total"], triage["recall_hits"]) == (1, 0)
+    assert triage["recall"] == pytest.approx(0.0)
+    assert (triage["fn_total"], triage["fn_inc_total"]) == (1, 1)
 
 
-def test_safety_summary_hit_count_matches_recall_identity():
-    """Schema integrity: `hit_count / gt_total == recall` for both pools."""
-    records = [
-        _muc_record("COR", gt_sig="critical"),
-        _record_with_errors("PAR", text=[_err("minor")], gt_sig="urgent"),  # PAR-minor → COR
-        _muc_record("INC", gt_sig="critical"),
-        _muc_record("COR", gt_sig="notable"),
-        _muc_record("COR", gt_sig="routine"),  # routine excluded from both pools
-    ]
-    unmatched = [_unmatched("urgent"), _unmatched("notable")]
-    summary = metrics.compute_safety_summary(records, unmatched, [])
-    for tier in ("triage", "actionable"):
-        hits = summary[f"{tier}_hit_count"]
-        total = summary[f"{tier}_gt_total"]
-        assert total > 0, f"{tier} pool unexpectedly empty"
-        assert hits / total == pytest.approx(summary[f"{tier}_recall"])
-
-
-def test_safety_summary_precision_credits_unique_preds_and_penalises_spu():
+def test_tier_metrics_precision_credits_unique_preds_and_penalises_spu():
     """Precision denominator = matched preds in pool + SPU in pool; numerator = credited preds."""
     records = [
         _muc_record("COR", gt_sig="critical", pred_sig="critical"),
@@ -456,38 +459,90 @@ def test_safety_summary_precision_credits_unique_preds_and_penalises_spu():
         _muc_record("COR", gt_sig="notable", pred_sig="notable"),
     ]
     unmatched_pred = [_unmatched("critical")]  # SPU on actionable pool
-    summary = metrics.compute_safety_summary(records, [], unmatched_pred)
+    triage = _tier(records, unmatched_pred=unmatched_pred, pool=_TRIAGE)
+    actionable = _tier(records, unmatched_pred=unmatched_pred)
     # Triage preds: 1 COR-critical + 1 INC-urgent + 1 SPU-critical = 3 total, 1 credited
-    assert summary["triage_pred_total"] == 3
-    assert summary["triage_pred_hit_count"] == 1
-    assert summary["triage_precision"] == pytest.approx(1 / 3)
+    assert (triage["pred_total"], triage["precision_hits"]) == (3, 1)
+    assert triage["precision"] == pytest.approx(1 / 3)
     # Actionable preds: triage + 1 COR-notable = 4 total, 2 credited
-    assert summary["actionable_pred_total"] == 4
-    assert summary["actionable_pred_hit_count"] == 2
-    assert summary["actionable_precision"] == pytest.approx(2 / 4)
+    assert (actionable["pred_total"], actionable["precision_hits"]) == (4, 2)
+    assert actionable["precision"] == pytest.approx(2 / 4)
 
 
-def test_safety_summary_precision_vacuous_when_no_pred_in_pool():
+def test_tier_metrics_precision_vacuous_when_no_pred_in_pool():
     """No actionable preds (matched or SPU) → precision = None (not 1.0)."""
     records = [_muc_record("COR", gt_sig="routine", pred_sig="routine")]
-    summary = metrics.compute_safety_summary(records, [], [])
-    assert summary["triage_pred_total"] == 0
-    assert summary["triage_precision"] is None
-    assert summary["actionable_pred_total"] == 0
-    assert summary["actionable_precision"] is None
+    for pool in (_TRIAGE, _ACTIONABLE):
+        tier = _tier(records, pool=pool)
+        assert tier["pred_total"] == 0
+        assert tier["precision"] is None
 
 
-def test_safety_summary_precision_identity_holds():
-    """Schema integrity: `pred_hit_count / pred_total == precision` for both pools."""
+# ============================================================================
+# FN / FP split
+# ============================================================================
+
+
+def _mixed_case() -> tuple[list[dict], list[dict], list[dict]]:
     records = [
-        _muc_record("COR", gt_sig="critical", pred_sig="critical"),
-        _muc_record("INC", gt_sig="critical", pred_sig="urgent"),
-        _muc_record("COR", gt_sig="notable", pred_sig="notable"),
+        _muc_record("COR", gt_sig="critical"),
+        _muc_record("INC", gt_sig="critical"),
+        _record_with_errors("PAR", text=[_err("major")], gt_sig="urgent"),  # → INC
+        _muc_record("INC", gt_sig="routine", pred_sig="critical"),
+        _muc_record("INC", gt_sig="notable", pred_sig="urgent"),
+        _muc_record("COR", gt_sig="urgent", gt_id="g_shared", pred_id="p_ok"),
+        _muc_record("INC", gt_sig="urgent", gt_id="g_shared", pred_id="p_wrong"),  # credited by p_ok
+        _muc_record("INC", gt_sig="routine", pred_sig="notable", gt_id="g_r2", pred_id="p_umbrella"),
+        _muc_record("INC", gt_sig="routine", pred_sig="notable", gt_id="g_r3", pred_id="p_umbrella"),
     ]
-    unmatched_pred = [_unmatched("urgent"), _unmatched("notable")]
-    summary = metrics.compute_safety_summary(records, [], unmatched_pred)
-    for tier in ("triage", "actionable"):
-        hits = summary[f"{tier}_pred_hit_count"]
-        total = summary[f"{tier}_pred_total"]
-        assert total > 0, f"{tier} pred pool unexpectedly empty"
-        assert hits / total == pytest.approx(summary[f"{tier}_precision"])
+    unmatched_pred = [_unmatched("critical"), _unmatched("notable"), _unmatched("routine")]
+    unmatched_gt = [_unmatched("urgent"), _unmatched("notable"), _unmatched("routine")]
+    return records, unmatched_pred, unmatched_gt
+
+
+@pytest.mark.parametrize("tier", list(constants.ERROR_TIERS))
+def test_tier_split_identities(tier):
+    """errors == FN + FP, FN == MIS + INC on the tier's GT == gt_total - recall_hits,
+    FP == SPU + INC claimed by the tier on a GT outside it; errors <= findings at stake."""
+    records, unmatched_pred, unmatched_gt = _mixed_case()
+    t = _tier(records, unmatched_pred, unmatched_gt, pool=constants.ERROR_TIERS[tier])
+    assert t["errors_total"] == t["fn_total"] + t["fp_total"]
+    assert t["fn_total"] == t["fn_mis_total"] + t["fn_inc_total"] == t["gt_total"] - t["recall_hits"]
+    assert t["fp_total"] == t["fp_spu_total"] + t["fp_inc_total"]
+    assert t["errors_total"] <= t["findings_total"]
+
+
+@pytest.mark.parametrize(
+    "records, expected",
+    [
+        pytest.param([_muc_record("INC", gt_sig="routine", pred_sig="critical")], (0, 1), id="claim-on-routine-GT"),
+        pytest.param([_muc_record("INC", gt_sig="critical", pred_sig="urgent")], (1, 0), id="both-actionable-once"),
+        pytest.param([_muc_record("INC", gt_sig="urgent", pred_sig="routine")], (1, 0), id="routine-claim-on-GT"),
+        pytest.param(
+            [
+                _muc_record("INC", gt_sig="routine", pred_sig="notable", pred_id="p_u"),
+                _muc_record("INC", gt_sig="routine", pred_sig="notable", pred_id="p_u"),
+            ],
+            (0, 2),
+            id="one-claim-on-two-GTs-counts-per-GT",
+        ),
+    ],
+)
+def test_actionable_fn_fp_edge_cases(records, expected):
+    errors = _errors(records)
+    assert (errors["fn"], errors["fp"]) == expected
+
+
+def test_fn_fp_side_is_relative_to_tier():
+    """A notable GT contradicted by an urgent claim is an actionable FN but a triage FP."""
+    records = [_muc_record("INC", gt_sig="notable", pred_sig="urgent")]
+    actionable, triage = _errors(records), _errors(records, pool=_TRIAGE)
+    assert (actionable["fn"], actionable["fp"]) == (1, 0)
+    assert (triage["fn"], triage["fp"]) == (0, 1)
+
+
+def test_orphans_split_by_side():
+    """MIS in the tier is a FN, SPU in the tier a FP; routine orphans are neither."""
+    unmatched_pred = [_unmatched("critical"), _unmatched("routine")]
+    errors = _errors([], unmatched_pred, [_unmatched("notable"), _unmatched("routine")])
+    assert errors == {"total": 2, "fn": 1, "fn_mis": 1, "fn_inc": 0, "fp": 1, "fp_spu": 1, "fp_inc": 0}

@@ -13,10 +13,8 @@ from typing import Sequence
 import streamlit as st
 
 from radmatch import constants as radmatch_constants
+from radmatch.dashboard.common import constants as dashboard_constants
 from radmatch.dashboard.common import shared
-
-_TRIAGE_TIERS = frozenset(radmatch_constants.TRIAGE_SIGNIFICANCE_TIERS)
-_ACTIONABLE_TIERS = frozenset(radmatch_constants.ACTIONABLE_SIGNIFICANCE_TIERS)
 
 _CELL_STYLE = (
     "padding:0.5rem 0.6rem;vertical-align:top;border:1px solid #fcd34d;"
@@ -39,6 +37,7 @@ def render_selected_finding_panel(
     pred_idx: dict[str, shared.PerPairMatchInfo],
     gt_findings_by_id: dict[str, dict[str, object]],
     pred_findings_by_id: dict[str, dict[str, object]],
+    tier: str = dashboard_constants.DEFAULT_TIER,
 ) -> None:
     """Inline yellow card showing the selection's connected component (tuplet).
 
@@ -84,7 +83,13 @@ def render_selected_finding_panel(
             sections.append(_render_match_details(m["cp"], pair_text=pair_text, index=i, total=n))
         match_sections = "".join(sections)
 
-    conclusion = _finding_level_conclusion(info, selected_finding or {}, is_gt_side=is_gt)
+    conclusion = _finding_level_conclusion(
+        info,
+        selected_finding or {},
+        is_gt_side=is_gt,
+        tier=tier,
+        counterpart_findings_by_id=pred_findings_by_id if is_gt else gt_findings_by_id,
+    )
 
     st.markdown(
         f"<div class='selected-panel'>"
@@ -231,54 +236,55 @@ def _finding_level_conclusion(
     finding: dict[str, object],
     *,
     is_gt_side: bool,
+    tier: str,
+    counterpart_findings_by_id: dict[str, dict[str, object]],
 ) -> str:
-    """Outcome header + bullets showing ±impact on actionable_errors,
-    triage / actionable recall + precision — computed from the finding's
-    tier AND the side it sits on (recall is GT-only, precision is pred-only,
-    so a pred-side SPU never enters recall and a GT-side MIS never enters
-    precision)."""
+    """Outcome header + bullets showing the finding's impact on the selected tier:
+    FN / FP (mirroring `metrics.compute_tier_errors`), recall (GT side only) and
+    precision (pred side only)."""
+    pool = frozenset(radmatch_constants.ERROR_TIERS[tier])
     sig = str(finding.get("clinical_significance") or "")
-    is_triage = sig in _TRIAGE_TIERS
-    is_actionable = sig in _ACTIONABLE_TIERS
-    # Recall lives on the GT side, precision on the pred side: a pred SPU only moves
-    # actionable_errors / precision, and a GT MIS says nothing about precision.
-    pred_side_no_recall = not is_gt_side and info.category == "SPU"
-    gt_side_no_precision = is_gt_side and info.category == "MIS"
-
+    in_pool = sig in pool
     is_hit = info.category in ("COR", "PAR")
     headline = _conclusion_header(info, len(info.counterparts))
-    actionable_err = 1 if (is_actionable and not is_hit) else 0
 
-    def _out_of_pool(reason: str | None = None) -> str:
-        msg = reason or f"{sig or 'no significance'}, not in pool"
+    def _note(msg: str) -> str:
         return f"— <span style='color:#6b7280;'>({msg})</span>"
 
-    def _recall_cell(in_pool: bool) -> str:
-        if pred_side_no_recall:
-            return _out_of_pool("pred-side, no GT recall impact")
-        if not in_pool:
-            return _out_of_pool()
-        if is_hit:
-            return "+1 hit"
-        return "+0 hit <span style='color:#6b7280;'>(recall miss)</span>"
+    out_of_pool = _note(f"{sig or 'no significance'}, not in the {tier} tier")
+    if is_gt_side:
+        # A GT finding in the tier is a FN unless credited; one outside it is a FP when
+        # every match is INC and a contradicting pred is in the tier.
+        counterpart_in_pool = any(
+            counterpart_findings_by_id.get(c.counterpart_id, {}).get("clinical_significance") in pool
+            for c in info.counterparts
+        )
+        grey = "<span style='color:#6b7280;'>"
+        fn_cell = (f"+0 {grey}(credited)</span>" if is_hit else "+1") if in_pool else out_of_pool
+        if in_pool:
+            fp_cell = _note("reference finding of the tier: an error here is a FN")
+        elif info.category == "INC" and counterpart_in_pool:
+            fp_cell = f"+1 {grey}(contradicted by a claim of the tier)</span>"
+        else:
+            fp_cell = "+0"
+        recall_cell = (("+1 hit" if is_hit else f"+0 hit {grey}(recall miss)</span>") if in_pool else out_of_pool)
+        precision_cell = _note("GT side, no precision impact")
+    else:
+        fn_cell = _note("pred side, no FN impact")
+        if info.category == "SPU":
+            fp_cell = "+1" if in_pool else out_of_pool
+        else:
+            fp_cell = _note("a matched claim's error is counted once, on its reference finding")
+        recall_cell = _note("pred side, no recall impact")
+        precision_cell = (
+            ("+1 hit" if is_hit else "+0 hit <span style='color:#6b7280;'>(precision miss)</span>")
+            if in_pool
+            else out_of_pool
+        )
 
-    def _precision_cell(in_pool: bool) -> str:
-        if gt_side_no_precision:
-            return _out_of_pool("GT-side, no pred precision impact")
-        if not in_pool:
-            return _out_of_pool()
-        if is_hit:
-            return "+1 hit"
-        return "+0 hit <span style='color:#6b7280;'>(precision miss)</span>"
-
-    actionable_errors_cell = _out_of_pool() if not is_actionable else f"+{actionable_err}"
-
-    bullets = (
-        f"<li><code>actionable_errors</code> {actionable_errors_cell}</li>"
-        f"<li><code>triage_precision</code>: {_precision_cell(is_triage)}</li>"
-        f"<li><code>triage_recall</code>: {_recall_cell(is_triage)}</li>"
-        f"<li><code>actionable_precision</code>: {_precision_cell(is_actionable)}</li>"
-        f"<li><code>actionable_recall</code>: {_recall_cell(is_actionable)}</li>"
+    bullets = "".join(
+        f"<li>{shared.tier_metric_label(tier, metric)}: {cell}</li>"
+        for metric, cell in (("FN", fn_cell), ("FP", fp_cell), ("Rec", recall_cell), ("Prec", precision_cell))
     )
     return (
         "<div style='font-weight:600;font-size:0.85rem;color:#92400e;"

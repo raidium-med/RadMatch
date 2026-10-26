@@ -63,8 +63,8 @@ def main() -> None:
     shared.render_hero_row(
         "📊",
         "Performance Summary",
-        "Dataset-level view: actionable errors, safety precision and recall, the match-outcome "
-        "breakdown, and the same metrics per finding subset.",
+        "Dataset-level view on the sidebar's error tier: errors per report split into FN + FP, "
+        "safety precision and recall, the match-outcome breakdown, and the same metrics per finding subset.",
         "pages/2-Performance_Summary.py",
         "open_ss",
     )

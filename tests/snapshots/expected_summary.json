@@ -1,8 +1,4 @@
 {
-  "actionable_errors_per_finding": 0.75,
-  "actionable_errors_per_report": 0.6,
-  "actionable_errors_total": 3,
-  "actionable_findings_total": 4,
   "attribute_breakdown": {
     "certainty": {
       "clean": 3,
@@ -68,24 +64,6 @@
       "minor_pct": 0.0
     }
   },
-  "clinical_safety_summary": {
-    "actionable_gt_total": 4,
-    "actionable_hit_count": 1,
-    "actionable_inc_count": 2,
-    "actionable_mis_count": 1,
-    "actionable_precision": 0.333333,
-    "actionable_pred_hit_count": 1,
-    "actionable_pred_total": 3,
-    "actionable_recall": 0.25,
-    "triage_gt_total": 3,
-    "triage_hit_count": 1,
-    "triage_inc_count": 2,
-    "triage_mis_count": 0,
-    "triage_precision": 0.333333,
-    "triage_pred_hit_count": 1,
-    "triage_pred_total": 3,
-    "triage_recall": 0.333333
-  },
   "metadata": {
     "fewshot": null,
     "llm_judge": "fake",
@@ -103,124 +81,374 @@
   },
   "subsets": {
     "abnormal-regular": {
-      "actionable_errors_per_finding": 0.5,
-      "actionable_errors_total": 1,
-      "actionable_findings_total": 2,
-      "clinical_safety_summary": {
-        "actionable_gt_total": 2,
-        "actionable_hit_count": 1,
-        "actionable_inc_count": 1,
-        "actionable_mis_count": 0,
-        "actionable_precision": 0.5,
-        "actionable_pred_hit_count": 1,
-        "actionable_pred_total": 2,
-        "actionable_recall": 0.5,
-        "triage_gt_total": 2,
-        "triage_hit_count": 1,
-        "triage_inc_count": 1,
-        "triage_mis_count": 0,
-        "triage_precision": 0.5,
-        "triage_pred_hit_count": 1,
-        "triage_pred_total": 2,
-        "triage_recall": 0.5
-      },
       "muc_counts": {
         "COR": 1,
         "INC": 1,
         "MIS": 0,
         "PAR": 0,
         "SPU": 0
+      },
+      "tiers": {
+        "actionable": {
+          "errors_per_finding": 0.5,
+          "errors_total": 1,
+          "findings_total": 2,
+          "fn_inc_total": 1,
+          "fn_mis_total": 0,
+          "fn_total": 1,
+          "fp_inc_total": 0,
+          "fp_spu_total": 0,
+          "fp_total": 0,
+          "gt_total": 2,
+          "precision": 0.5,
+          "precision_hits": 1,
+          "pred_total": 2,
+          "recall": 0.5,
+          "recall_hits": 1,
+          "significance": [
+            "critical",
+            "urgent",
+            "notable"
+          ]
+        },
+        "critical": {
+          "errors_per_finding": 1.0,
+          "errors_total": 1,
+          "findings_total": 1,
+          "fn_inc_total": 1,
+          "fn_mis_total": 0,
+          "fn_total": 1,
+          "fp_inc_total": 0,
+          "fp_spu_total": 0,
+          "fp_total": 0,
+          "gt_total": 1,
+          "precision": 0.0,
+          "precision_hits": 0,
+          "pred_total": 1,
+          "recall": 0.0,
+          "recall_hits": 0,
+          "significance": [
+            "critical"
+          ]
+        },
+        "triage": {
+          "errors_per_finding": 0.5,
+          "errors_total": 1,
+          "findings_total": 2,
+          "fn_inc_total": 1,
+          "fn_mis_total": 0,
+          "fn_total": 1,
+          "fp_inc_total": 0,
+          "fp_spu_total": 0,
+          "fp_total": 0,
+          "gt_total": 2,
+          "precision": 0.5,
+          "precision_hits": 1,
+          "pred_total": 2,
+          "recall": 0.5,
+          "recall_hits": 1,
+          "significance": [
+            "critical",
+            "urgent"
+          ]
+        }
       }
     },
     "comparison": {
-      "actionable_errors_per_finding": 1.0,
-      "actionable_errors_total": 2,
-      "actionable_findings_total": 2,
-      "clinical_safety_summary": {
-        "actionable_gt_total": 2,
-        "actionable_hit_count": 0,
-        "actionable_inc_count": 1,
-        "actionable_mis_count": 1,
-        "actionable_precision": 0.0,
-        "actionable_pred_hit_count": 0,
-        "actionable_pred_total": 1,
-        "actionable_recall": 0.0,
-        "triage_gt_total": 1,
-        "triage_hit_count": 0,
-        "triage_inc_count": 1,
-        "triage_mis_count": 0,
-        "triage_precision": 0.0,
-        "triage_pred_hit_count": 0,
-        "triage_pred_total": 1,
-        "triage_recall": 0.0
-      },
       "muc_counts": {
         "COR": 0,
         "INC": 1,
         "MIS": 1,
         "PAR": 0,
         "SPU": 0
+      },
+      "tiers": {
+        "actionable": {
+          "errors_per_finding": 1.0,
+          "errors_total": 2,
+          "findings_total": 2,
+          "fn_inc_total": 1,
+          "fn_mis_total": 1,
+          "fn_total": 2,
+          "fp_inc_total": 0,
+          "fp_spu_total": 0,
+          "fp_total": 0,
+          "gt_total": 2,
+          "precision": 0.0,
+          "precision_hits": 0,
+          "pred_total": 1,
+          "recall": 0.0,
+          "recall_hits": 0,
+          "significance": [
+            "critical",
+            "urgent",
+            "notable"
+          ]
+        },
+        "critical": {
+          "errors_per_finding": 1.0,
+          "errors_total": 1,
+          "findings_total": 1,
+          "fn_inc_total": 1,
+          "fn_mis_total": 0,
+          "fn_total": 1,
+          "fp_inc_total": 0,
+          "fp_spu_total": 0,
+          "fp_total": 0,
+          "gt_total": 1,
+          "precision": 0.0,
+          "precision_hits": 0,
+          "pred_total": 1,
+          "recall": 0.0,
+          "recall_hits": 0,
+          "significance": [
+            "critical"
+          ]
+        },
+        "triage": {
+          "errors_per_finding": 1.0,
+          "errors_total": 1,
+          "findings_total": 1,
+          "fn_inc_total": 1,
+          "fn_mis_total": 0,
+          "fn_total": 1,
+          "fp_inc_total": 0,
+          "fp_spu_total": 0,
+          "fp_total": 0,
+          "gt_total": 1,
+          "precision": 0.0,
+          "precision_hits": 0,
+          "pred_total": 1,
+          "recall": 0.0,
+          "recall_hits": 0,
+          "significance": [
+            "critical",
+            "urgent"
+          ]
+        }
       }
     },
     "measurement": {
-      "actionable_errors_per_finding": 1.0,
-      "actionable_errors_total": 1,
-      "actionable_findings_total": 1,
-      "clinical_safety_summary": {
-        "actionable_gt_total": 1,
-        "actionable_hit_count": 0,
-        "actionable_inc_count": 0,
-        "actionable_mis_count": 1,
-        "actionable_precision": null,
-        "actionable_pred_hit_count": 0,
-        "actionable_pred_total": 0,
-        "actionable_recall": 0.0,
-        "triage_gt_total": 0,
-        "triage_hit_count": 0,
-        "triage_inc_count": 0,
-        "triage_mis_count": 0,
-        "triage_precision": null,
-        "triage_pred_hit_count": 0,
-        "triage_pred_total": 0,
-        "triage_recall": null
-      },
       "muc_counts": {
         "COR": 0,
         "INC": 0,
         "MIS": 1,
         "PAR": 0,
         "SPU": 0
+      },
+      "tiers": {
+        "actionable": {
+          "errors_per_finding": 1.0,
+          "errors_total": 1,
+          "findings_total": 1,
+          "fn_inc_total": 0,
+          "fn_mis_total": 1,
+          "fn_total": 1,
+          "fp_inc_total": 0,
+          "fp_spu_total": 0,
+          "fp_total": 0,
+          "gt_total": 1,
+          "precision": null,
+          "precision_hits": 0,
+          "pred_total": 0,
+          "recall": 0.0,
+          "recall_hits": 0,
+          "significance": [
+            "critical",
+            "urgent",
+            "notable"
+          ]
+        },
+        "critical": {
+          "errors_per_finding": 0.0,
+          "errors_total": 0,
+          "findings_total": 0,
+          "fn_inc_total": 0,
+          "fn_mis_total": 0,
+          "fn_total": 0,
+          "fp_inc_total": 0,
+          "fp_spu_total": 0,
+          "fp_total": 0,
+          "gt_total": 0,
+          "precision": null,
+          "precision_hits": 0,
+          "pred_total": 0,
+          "recall": null,
+          "recall_hits": 0,
+          "significance": [
+            "critical"
+          ]
+        },
+        "triage": {
+          "errors_per_finding": 0.0,
+          "errors_total": 0,
+          "findings_total": 0,
+          "fn_inc_total": 0,
+          "fn_mis_total": 0,
+          "fn_total": 0,
+          "fp_inc_total": 0,
+          "fp_spu_total": 0,
+          "fp_total": 0,
+          "gt_total": 0,
+          "precision": null,
+          "precision_hits": 0,
+          "pred_total": 0,
+          "recall": null,
+          "recall_hits": 0,
+          "significance": [
+            "critical",
+            "urgent"
+          ]
+        }
       }
     },
     "normal-regular": {
-      "actionable_errors_per_finding": 0.0,
-      "actionable_errors_total": 0,
-      "actionable_findings_total": 0,
-      "clinical_safety_summary": {
-        "actionable_gt_total": 0,
-        "actionable_hit_count": 0,
-        "actionable_inc_count": 0,
-        "actionable_mis_count": 0,
-        "actionable_precision": null,
-        "actionable_pred_hit_count": 0,
-        "actionable_pred_total": 0,
-        "actionable_recall": null,
-        "triage_gt_total": 0,
-        "triage_hit_count": 0,
-        "triage_inc_count": 0,
-        "triage_mis_count": 0,
-        "triage_precision": null,
-        "triage_pred_hit_count": 0,
-        "triage_pred_total": 0,
-        "triage_recall": null
-      },
       "muc_counts": {
         "COR": 0,
         "INC": 0,
         "MIS": 0,
         "PAR": 0,
         "SPU": 1
+      },
+      "tiers": {
+        "actionable": {
+          "errors_per_finding": 0.0,
+          "errors_total": 0,
+          "findings_total": 0,
+          "fn_inc_total": 0,
+          "fn_mis_total": 0,
+          "fn_total": 0,
+          "fp_inc_total": 0,
+          "fp_spu_total": 0,
+          "fp_total": 0,
+          "gt_total": 0,
+          "precision": null,
+          "precision_hits": 0,
+          "pred_total": 0,
+          "recall": null,
+          "recall_hits": 0,
+          "significance": [
+            "critical",
+            "urgent",
+            "notable"
+          ]
+        },
+        "critical": {
+          "errors_per_finding": 0.0,
+          "errors_total": 0,
+          "findings_total": 0,
+          "fn_inc_total": 0,
+          "fn_mis_total": 0,
+          "fn_total": 0,
+          "fp_inc_total": 0,
+          "fp_spu_total": 0,
+          "fp_total": 0,
+          "gt_total": 0,
+          "precision": null,
+          "precision_hits": 0,
+          "pred_total": 0,
+          "recall": null,
+          "recall_hits": 0,
+          "significance": [
+            "critical"
+          ]
+        },
+        "triage": {
+          "errors_per_finding": 0.0,
+          "errors_total": 0,
+          "findings_total": 0,
+          "fn_inc_total": 0,
+          "fn_mis_total": 0,
+          "fn_total": 0,
+          "fp_inc_total": 0,
+          "fp_spu_total": 0,
+          "fp_total": 0,
+          "gt_total": 0,
+          "precision": null,
+          "precision_hits": 0,
+          "pred_total": 0,
+          "recall": null,
+          "recall_hits": 0,
+          "significance": [
+            "critical",
+            "urgent"
+          ]
+        }
       }
+    }
+  },
+  "tiers": {
+    "actionable": {
+      "errors_per_finding": 0.75,
+      "errors_per_report": 0.6,
+      "errors_total": 3,
+      "findings_total": 4,
+      "fn_inc_total": 2,
+      "fn_mis_total": 1,
+      "fn_per_report": 0.6,
+      "fn_total": 3,
+      "fp_inc_total": 0,
+      "fp_per_report": 0.0,
+      "fp_spu_total": 0,
+      "fp_total": 0,
+      "gt_total": 4,
+      "precision": 0.333333,
+      "precision_hits": 1,
+      "pred_total": 3,
+      "recall": 0.25,
+      "recall_hits": 1,
+      "significance": [
+        "critical",
+        "urgent",
+        "notable"
+      ]
+    },
+    "critical": {
+      "errors_per_finding": 1.0,
+      "errors_per_report": 0.4,
+      "errors_total": 2,
+      "findings_total": 2,
+      "fn_inc_total": 2,
+      "fn_mis_total": 0,
+      "fn_per_report": 0.4,
+      "fn_total": 2,
+      "fp_inc_total": 0,
+      "fp_per_report": 0.0,
+      "fp_spu_total": 0,
+      "fp_total": 0,
+      "gt_total": 2,
+      "precision": 0.0,
+      "precision_hits": 0,
+      "pred_total": 2,
+      "recall": 0.0,
+      "recall_hits": 0,
+      "significance": [
+        "critical"
+      ]
+    },
+    "triage": {
+      "errors_per_finding": 0.666667,
+      "errors_per_report": 0.4,
+      "errors_total": 2,
+      "findings_total": 3,
+      "fn_inc_total": 2,
+      "fn_mis_total": 0,
+      "fn_per_report": 0.4,
+      "fn_total": 2,
+      "fp_inc_total": 0,
+      "fp_per_report": 0.0,
+      "fp_spu_total": 0,
+      "fp_total": 0,
+      "gt_total": 3,
+      "precision": 0.333333,
+      "precision_hits": 1,
+      "pred_total": 3,
+      "recall": 0.333333,
+      "recall_hits": 1,
+      "significance": [
+        "critical",
+        "urgent"
+      ]
     }
   }
 }
