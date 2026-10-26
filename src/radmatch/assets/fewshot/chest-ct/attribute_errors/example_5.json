@@ -1,0 +1,205 @@
+{
+  "scenario": "Constructed: certainty, added diagnosis, structured category",
+  "description": "Constructed. Hedging a definite fracture, or a negative that answers the work-up ('possibly no pulmonary embolism'), is a major certainty error; turning nodes called reactive into nodes suspicious for metastases is a major morphology error (an added diagnosis); a Lung-RADS class change across management buckets is a major severity error; one certainty step is minor; an omitted subtype is no error.",
+  "user": {
+    "series_uuid": "chest-ct_example_5",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Possible minimally displaced right 6th rib fracture.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "Minimally displaced right 6th rib fracture.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "Possibly no pulmonary embolism.",
+          "clinical_status": "normal",
+          "clinical_significance": "critical",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "No pulmonary embolism.",
+          "clinical_status": "normal",
+          "clinical_significance": "critical",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 3,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "Enlarged mediastinal lymph nodes, suspicious for metastatic disease.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 14,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "Mildly enlarged mediastinal lymph nodes, likely reactive.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 14,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 4,
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "7 mm solid right upper lobe nodule, Lung-RADS 4A.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 7,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "7 mm solid right upper lobe nodule, Lung-RADS 3.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 7,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 5,
+        "pred_finding": {
+          "finding_id": "p_5",
+          "text": "Probable right lower lobe pneumonia.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_5",
+          "text": "Right lower lobe pneumonia.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 6,
+        "pred_finding": {
+          "finding_id": "p_6",
+          "text": "Mild emphysema.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_6",
+          "text": "Mild centrilobular emphysema.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "certainty",
+            "severity": "major",
+            "reasoning": "pred hedges a definite fracture as possible"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "certainty",
+            "severity": "major",
+            "reasoning": "pred hedges the negative that answers the PE work-up"
+          }
+        ]
+      },
+      {
+        "pair_id": 3,
+        "errors": [
+          {
+            "dimension": "morphology",
+            "severity": "major",
+            "reasoning": "pred adds a malignant interpretation to nodes gt calls reactive"
+          }
+        ]
+      },
+      {
+        "pair_id": 4,
+        "errors": [
+          {
+            "dimension": "severity",
+            "severity": "major",
+            "reasoning": "Lung-RADS 4A (3-month low-dose CT) vs 3 (6-month low-dose CT)"
+          }
+        ]
+      },
+      {
+        "pair_id": 5,
+        "errors": [
+          {
+            "dimension": "certainty",
+            "severity": "minor",
+            "reasoning": "one step: probable vs definite"
+          }
+        ]
+      },
+      {
+        "pair_id": 6,
+        "errors": []
+      }
+    ]
+  }
+}

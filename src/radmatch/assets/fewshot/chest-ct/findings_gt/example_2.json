@@ -11,7 +11,7 @@
     "measurements": [],
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Left coronary artery calcifications.",
@@ -295,7 +295,7 @@
     "measurements": [],
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Numerous new subcutaneous nodules about the low abdomen, largest measuring 3.9 x 1.9 cm.",

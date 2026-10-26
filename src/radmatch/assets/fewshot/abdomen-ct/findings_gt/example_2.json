@@ -32,7 +32,7 @@
     "measurements": [],
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Common bile duct measures up to 7 mm in diameter but tapers distally, likely secondary to postcholecystectomy state.",
@@ -174,7 +174,7 @@
     "measurements": [],
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "No aneurysm.",

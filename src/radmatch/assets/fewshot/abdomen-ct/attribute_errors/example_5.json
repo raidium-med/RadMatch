@@ -1,0 +1,205 @@
+{
+  "scenario": "Constructed: certainty, added diagnosis, structured category, expected post-surgical state",
+  "description": "Constructed. A sign turned into a diagnosis gt does not make (dilated loops 'compatible with obstruction') and a hedged fracture are major; 'possibly malignant' vs 'consistent with renal cell carcinoma' is two certainty steps (major); a Bosniak class change across follow-up buckets is a major severity error; a hedged negative for an incidental entity is minor; a bile duct size gt explains by cholecystectomy carries no error.",
+  "user": {
+    "series_uuid": "abdomen-ct_example_5",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Small bowel dilatation compatible with developing small bowel obstruction.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 3.8,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "Mild small bowel dilatation up to 3.8 cm with air-fluid levels.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 3.8,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "Possible minimally displaced right inferior pubic ramus fracture.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "Minimally displaced right inferior pubic ramus fracture.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 3,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "Right renal mass, possibly malignant.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "Right renal mass consistent with renal cell carcinoma.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 4,
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "Bosniak IIF left renal cyst.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "Bosniak II left renal cyst.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 5,
+        "pred_finding": {
+          "finding_id": "p_5",
+          "text": "Gallbladder normal, possibly without gallstones.",
+          "clinical_status": "normal",
+          "clinical_significance": "routine",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_5",
+          "text": "Gallbladder normal without gallstones.",
+          "clinical_status": "normal",
+          "clinical_significance": "routine",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 6,
+        "pred_finding": {
+          "finding_id": "p_6",
+          "text": "Common bile duct 9 mm.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 9,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_6",
+          "text": "Common bile duct 9 mm, expected after cholecystectomy.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 9,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "morphology",
+            "severity": "major",
+            "reasoning": "pred adds a small bowel obstruction gt does not diagnose"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "certainty",
+            "severity": "major",
+            "reasoning": "pred hedges a definite fracture as possible"
+          }
+        ]
+      },
+      {
+        "pair_id": 3,
+        "errors": [
+          {
+            "dimension": "certainty",
+            "severity": "major",
+            "reasoning": "two steps: possibly vs consistent with"
+          }
+        ]
+      },
+      {
+        "pair_id": 4,
+        "errors": [
+          {
+            "dimension": "severity",
+            "severity": "major",
+            "reasoning": "Bosniak IIF needs follow-up, II does not"
+          }
+        ]
+      },
+      {
+        "pair_id": 5,
+        "errors": [
+          {
+            "dimension": "certainty",
+            "severity": "minor",
+            "reasoning": "hedged negative for an incidental entity"
+          }
+        ]
+      },
+      {
+        "pair_id": 6,
+        "errors": []
+      }
+    ]
+  }
+}

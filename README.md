@@ -223,8 +223,10 @@ Anchored to the ACR Actionable Findings Framework and the RSNA communication col
 |---|---|---|
 | `critical` | red | Pneumothorax (present *or* ruled out in trauma), aortic dissection, massive PE, acute stroke, ICH |
 | `urgent` | orange | Pulmonary edema, new suspicious mass, subsegmental PE, large effusion, abscess |
-| `notable` | yellow | Stable granuloma, simple cyst, chronic atelectasis, minor scarring |
-| `routine` | green | "Liver unremarkable", "no effusion" in general screening, anatomic variants |
+| `notable` | yellow | Stable granuloma, simple cyst, chronic atelectasis, minor scarring, coronary artery calcification, support devices (tubes, lines, catheters) |
+| `routine` | green | "Liver unremarkable", "no effusion" in general screening, anatomic variants, mild degenerative change, uncomplicated aortic atherosclerosis, remote uncomplicated post-surgical states |
+
+Scoring keeps coronary artery calcification `notable` even when Stage 1 folds it into a `routine` aortic atherosclerosis finding.
 
 ### Output files
 
