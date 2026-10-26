@@ -22,17 +22,11 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
-def _flatten(metrics: dict[str, object]) -> dict[str, float | int | bool]:
-    """One row per series, with the columns the dashboard needs for filtering / sort:
-    `<tier>_errors` / `_fn` / `_fp` / `_recall` / `_precision` for each error tier."""
+def _flatten(metrics: dict[str, object]) -> dict[str, int]:
+    """One row per series, with the columns the dashboard filters and sorts on:
+    `<tier>_errors` for each error tier and `muc_<category>`."""
     muc = metrics.get("muc_counts") or {}
-    row: dict[str, float | int | bool] = {}
-    for tier, block in metrics["tiers"].items():
-        row[f"{tier}_errors"] = int(block["errors_total"])
-        row[f"{tier}_fn"] = int(block["fn_total"])
-        row[f"{tier}_fp"] = int(block["fp_total"])
-        row[f"{tier}_recall"] = block["recall"] or 0.0
-        row[f"{tier}_precision"] = block["precision"] or 0.0
+    row = {f"{tier}_errors": int(block["errors_total"]) for tier, block in metrics["tiers"].items()}
     return {**row, **{f"muc_{cat.lower()}": int(muc.get(cat, 0)) for cat in constants.MUC_CATEGORIES}}
 
 

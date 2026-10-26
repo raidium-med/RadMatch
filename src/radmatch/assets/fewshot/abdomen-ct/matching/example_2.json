@@ -7,6 +7,7 @@
         "finding_id": "p_1",
         "text": "No biliary ductal dilatation.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -14,6 +15,7 @@
         "finding_id": "p_2",
         "text": "Simple cyst in right hepatic lobe, 12 mm.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": [
           {
@@ -27,6 +29,7 @@
         "finding_id": "p_3",
         "text": "Spleen normal.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }
@@ -36,6 +39,7 @@
         "finding_id": "gt_1",
         "text": "No intrahepatic biliary dilation.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -43,6 +47,7 @@
         "finding_id": "gt_2",
         "text": "No extrahepatic biliary dilation.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -50,6 +55,7 @@
         "finding_id": "gt_3",
         "text": "Simple cyst in right hepatic lobe measuring 12 mm.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": [
           {
@@ -63,6 +69,7 @@
         "finding_id": "gt_4",
         "text": "Spleen normal.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }

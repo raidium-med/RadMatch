@@ -1,6 +1,6 @@
 {
-  "scenario": "Constructed: umbrella that leaves out sites, left-out lobe and subtype, bilateral vs one side, more detail",
-  "description": "Constructed. An umbrella pred that names no station has a major location error on each located gt node it was matched to; a lobe and a subtype the pred leaves out are major; a pred more detailed than the gt has no error; bilateral vs one side is major; a bilateral pred matched to a left and a right gt has no location error. A size the pred leaves out is not an error when a size class covers the gt value ('enlarged' for the 12 and 15 mm nodes, 'subcentimeter' for 7 mm). A hedge on the cause ('likely reactive') leaves the finding definite and adds detail: no error. Growth the pred invents on a mass is a major comparison error. Naming the diagnosis of what the gt describes ('bronchiectasis' for dilated bronchi) is more detail: no error. A side only the gt gives is a major location error.",
+  "scenario": "Constructed: umbrella that leaves out sites, left-out lobe and subtype, side differences left upstream, more detail",
+  "description": "Constructed. An umbrella pred that names no station has a major site error on each located gt node it was matched to; a lobe the pred leaves out is a major site error and a subtype it leaves out a minor diagnosis error (not actionable); a pred more detailed than the gt has no error; bilateral vs one side: the side is scored upstream (Stage 3a `laterality`), so it carries no site error; a bilateral pred matched to a left and a right gt has no site error. A size the pred leaves out is not an error when a size class covers the gt value ('enlarged' for the 12 and 15 mm nodes, 'subcentimeter' for 7 mm). A hedge on the cause ('likely reactive') leaves the finding definite and adds detail: no error. Growth the pred invents on a mass is a major comparison error. Naming the diagnosis of what the gt describes ('bronchiectasis' for dilated bronchi) is more detail: no error. A side only the gt gives: the side is scored upstream (Stage 3a `laterality`), so it carries no site error.",
   "user": {
     "series_uuid": "chest-ct_example_7",
     "pairs": [
@@ -11,6 +11,7 @@
           "text": "Enlarged mediastinal lymph nodes.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
@@ -19,6 +20,7 @@
           "text": "12 mm right paratracheal lymph node.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "right",
           "comparison": null,
           "measurements": [
             {
@@ -39,6 +41,7 @@
           "text": "Enlarged mediastinal lymph nodes.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
@@ -47,6 +50,7 @@
           "text": "15 mm subcarinal lymph node.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": null,
           "comparison": null,
           "measurements": [
             {
@@ -67,6 +71,7 @@
           "text": "Bronchiectasis in the left lung.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "left",
           "comparison": null,
           "measurements": []
         },
@@ -75,6 +80,7 @@
           "text": "Cylindrical bronchiectasis in the left lower lobe.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "left",
           "comparison": null,
           "measurements": []
         }
@@ -86,6 +92,7 @@
           "text": "Consolidation in the posterior basal segment of the right lower lobe.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         },
@@ -94,6 +101,7 @@
           "text": "Right lower lobe consolidation.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         }
@@ -105,6 +113,7 @@
           "text": "Bronchial wall thickening in both lower lobes.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "bilateral",
           "comparison": null,
           "measurements": []
         },
@@ -113,6 +122,7 @@
           "text": "Bronchial wall thickening in the right lower lobe.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         }
@@ -124,6 +134,7 @@
           "text": "Bilateral apical pleural thickening.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "bilateral",
           "comparison": null,
           "measurements": []
         },
@@ -132,6 +143,7 @@
           "text": "Left apical pleural thickening.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "left",
           "comparison": null,
           "measurements": []
         },
@@ -144,16 +156,18 @@
         "pred_finding": {
           "finding_id": "p_6",
           "text": "Subcentimeter right hilar lymph node.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "notable",
+          "clinical_status": "normal",
+          "clinical_significance": "routine",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         },
         "gt_finding": {
           "finding_id": "gt_7",
           "text": "7 mm right hilar lymph node.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "notable",
+          "clinical_status": "normal",
+          "clinical_significance": "routine",
+          "laterality": "right",
           "comparison": null,
           "measurements": [
             {
@@ -171,6 +185,7 @@
           "text": "Mediastinal lymph nodes, likely reactive.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
@@ -179,6 +194,7 @@
           "text": "Mediastinal lymph nodes.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         }
@@ -190,6 +206,7 @@
           "text": "Enlarging right upper lobe mass.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "right",
           "comparison": "worsening",
           "measurements": []
         },
@@ -198,6 +215,7 @@
           "text": "Right upper lobe mass.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         }
@@ -209,6 +227,7 @@
           "text": "Bronchiectasis in the right lower lobe.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         },
@@ -217,6 +236,7 @@
           "text": "Dilated bronchi in the right lower lobe.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         }
@@ -228,6 +248,7 @@
           "text": "Apical pleural thickening.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
@@ -236,6 +257,7 @@
           "text": "Right apical pleural thickening.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         }
@@ -248,9 +270,9 @@
         "pair_id": 1,
         "errors": [
           {
-            "dimension": "location",
+            "dimension": "site",
             "severity": "major",
-            "reasoning": "pred names no station; gt gives the right paratracheal station"
+            "reasoning": "pred names no station; gt gives the paratracheal station"
           }
         ]
       },
@@ -258,7 +280,7 @@
         "pair_id": 2,
         "errors": [
           {
-            "dimension": "location",
+            "dimension": "site",
             "severity": "major",
             "reasoning": "pred names no station; gt gives the subcarinal station"
           }
@@ -268,14 +290,14 @@
         "pair_id": 3,
         "errors": [
           {
-            "dimension": "location",
+            "dimension": "site",
             "severity": "major",
             "reasoning": "pred leaves out the left lower lobe gt gives"
           },
           {
-            "dimension": "morphology",
-            "severity": "major",
-            "reasoning": "pred leaves out the cylindrical type gt gives"
+            "dimension": "diagnosis",
+            "severity": "minor",
+            "reasoning": "pred leaves out the cylindrical subtype: not actionable"
           }
         ]
       },
@@ -285,13 +307,7 @@
       },
       {
         "pair_id": 5,
-        "errors": [
-          {
-            "dimension": "location",
-            "severity": "major",
-            "reasoning": "pred claims both lower lobes, gt only the right lower lobe"
-          }
-        ]
+        "errors": []
       },
       {
         "pair_id": 6,
@@ -321,13 +337,7 @@
       },
       {
         "pair_id": 11,
-        "errors": [
-          {
-            "dimension": "location",
-            "severity": "major",
-            "reasoning": "pred leaves out the right side gt gives"
-          }
-        ]
+        "errors": []
       }
     ]
   }

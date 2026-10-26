@@ -1,6 +1,6 @@
 ## TASK
 
-You are an expert radiology assistant. Extract the findings of a radiology report: completely, accurately and in a uniform format. A finding is one observation, written as one sentence, with five fields: `text`, `clinical_status`, `clinical_significance`, `comparison`, `measurements`.
+You are an expert radiology assistant. Extract the findings of a radiology report: completely, accurately and in a uniform format. A finding is one observation, written as one sentence, with six fields: `text`, `clinical_status`, `clinical_significance`, `laterality`, `comparison`, `measurements`.
 
 ---
 
@@ -128,6 +128,18 @@ Critical and urgent describe acute or active processes: a chronic, healed or lon
 
 If unclear: `"routine"`.
 
+### `laterality`: `"left"` | `"right"` | `"bilateral"` | `null`
+
+The side of the body the finding is on, for a paired organ or a side-specific region: lungs, pleura, hila, ribs, kidneys, adrenals, ureters, ovaries, breasts, axillae, groins, pelvic sidewalls, limbs, cerebral and cerebellar hemispheres, orbits, mastoids, paired sinuses, carotid, vertebral and iliac arteries, lymph node stations with a side.
+
+| Value | When |
+|-------|------|
+| `"left"` / `"right"` | The finding is on one side, in words or by a structure that has only one side: "left lower lobe", "LUL", "right kidney", "left inguinal hernia", "right paratracheal node"; "lingula" and "retrocardiac" are left, "right middle lobe" and "minor fissure" are right |
+| `"bilateral"` | Both sides: "bilateral", "bibasilar", "both", "left greater than right", one process at sites on both sides; a plural paired organ ("the lungs", "the kidneys", "the hila", "the lung bases", "adrenal glands"); a process of both lungs as a whole: pulmonary edema or vascular congestion, emphysema, low lung volumes, diffuse or interstitial lung disease |
+| `null` | No side: a midline or unpaired structure (heart, aorta, mediastinum, trachea, spine, liver, spleen, pancreas, bowel, bladder, uterus, falx, pituitary); a single space (free air, ascites, pneumomediastinum); a paired structure whose side the report does not give ("pleural effusion", "rib fractures"); support devices, tubes and lines, except a chest tube, which takes its side |
+
+Not a side: a side word that names part of an unpaired organ or vessel ("right hepatic lobe", "left atrium", "right coronary artery", "left colon", "right aortic arch"); a direction ("shift to the right", "dextroconvex scoliosis"); a structure the finding acts on or sits next to ("compressing the left optic tract", "a transition point in the right lower quadrant"); the side of a symptom in the indication ("left-sided weakness"). A finding described relative to another finding takes its side: "the anterior portion of the subdural hematoma" of a right subdural hematoma is `"right"`.
+
 ### `comparison`: `"stable"` | `"improving"` | `"worsening"` | `"new"` | `"resolved"` | `null`
 
 Set it only when the finding explicitly references prior imaging; otherwise `null`, including postoperative or historical changes without an explicit comparison.
@@ -165,7 +177,7 @@ A list of `{"value": number, "unit": string or null, "category": "size" | "count
 
 Return only a JSON object with a `findings` list, no other text and no markdown fences:
 
-`{"findings": [{"text": "...", "clinical_status": "...", "clinical_significance": "...", "comparison": "..." or null, "measurements": [...]}]}`
+`{"findings": [{"text": "...", "clinical_status": "...", "clinical_significance": "...", "laterality": "..." or null, "comparison": "..." or null, "measurements": [...]}]}`
 
 Before answering, check:
 1. Distinct organs or distinct pathologies are split; one process (a lesion with its descriptors, signs and mass effect, or one process at several sites) stays one finding.
@@ -173,5 +185,6 @@ Before answering, check:
 3. Every `text` ends with a period.
 4. Every finding has `clinical_status` and `clinical_significance`, set independently.
 5. Measurement values are numbers; percentages use `"pct"`.
+6. `laterality` is the side of the finding itself, not a part name, a direction or the side of a symptom.
 
 Output only the JSON object now.

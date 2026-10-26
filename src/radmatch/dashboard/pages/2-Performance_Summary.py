@@ -26,7 +26,8 @@ def _hdr(metadata: dict[str, object]) -> None:
 FN_HELP = "Reference findings of the tier missed or contradicted (MIS + INC on the tier's GT findings)."
 FP_HELP = (
     "Claims of the tier the reference lacks: SPU in the tier, plus INC where only the "
-    "prediction is in the tier (e.g. an abnormality where the reference says normal)."
+    "prediction is in the tier (e.g. an abnormality where the reference says normal) or where "
+    "another predicted finding gets the reference finding right."
 )
 
 
@@ -39,7 +40,7 @@ def _headline_metric_cards(block: dict[str, object], tier: str) -> None:
             shared.render_metric_card(
                 shared.tier_metric_label(tier, metric, suffix=" per Report", with_abbrev=False),
                 shared.format_numeric_metric(block.get(f"{key}_per_report"), decimals=2),
-                card_class="f1-metric-card" if metric == "ER" else "grey-metric-card",
+                card_class="headline-metric-card" if metric == "ER" else "grey-metric-card",
             ),
             unsafe_allow_html=True,
         )
@@ -90,7 +91,11 @@ _SEVERITY_COLORS = {"clean": "#22c55e", "minor error": "#f59e0b", "major error":
 ATTRIBUTE_ERRORS_HELP = (
     "Per-attribute distribution of clean / minor / major across all matched "
     "pairs (COR + INC + the internal PAR records before reclassification). "
-    "Diagnostic only — does not feed the tier errors (aER, tER, cER)."
+    "Diagnostic only — does not feed the tier errors (aER, tER, cER).\n\n"
+    "clinical_status: normal vs abnormal. laterality: the side. comparison: change over time. "
+    "measurement: sizes, counts, attenuation. site: where within the side. extent: how far and how many. "
+    "severity: the grade. character: what it looks like. diagnosis: what it is, its age and cause. "
+    "certainty: the hedging."
 )
 
 
@@ -100,11 +105,7 @@ def _attribute_breakdown(breakdown: dict[str, dict[str, float]]) -> None:
     A toggle switches the x-axis between absolute counts and per-dimension
     percentages (clean_pct / minor_pct / major_pct).
     """
-    if not breakdown:
-        st.info("No `attribute_breakdown` in this metrics_summary.json. Re-run scoring.")
-        return
-
-    ordered_dims = [d for d in shared.DIMENSION_DISPLAY_ORDER if d in breakdown]
+    ordered_dims = shared.DIMENSION_DISPLAY_ORDER
 
     mode = st.radio(
         "Display",
@@ -154,7 +155,7 @@ def _attribute_breakdown(breakdown: dict[str, dict[str, float]]) -> None:
     upper = 100.0 if is_pct else evaluated_total
     tick_text = "100%" if is_pct else f"{evaluated_total:,}"
     fig.update_layout(
-        height=320,
+        height=max(320, 32 * len(ordered_dims) + 80),
         margin={"t": 40, "b": 10, "l": 10, "r": 10},
         xaxis={
             "title": "%" if is_pct else "Count",
@@ -171,11 +172,7 @@ def _attribute_breakdown(breakdown: dict[str, dict[str, float]]) -> None:
 
 
 def _subsets_table(subsets: dict[str, dict], tier: str) -> None:
-    # Unlisted subsets trail at the end, so the table never drops rows. Each row is
-    # an independent slice — columns do not sum across rows.
-    ordered_names = [s for s in _SUBSET_DISPLAY_ORDER if s in subsets] + [
-        s for s in subsets if s not in _SUBSET_DISPLAY_ORDER
-    ]
+    # Each row is an independent slice — columns do not sum across rows.
     fn, fp, prec, rec = (shared.tier_metric_label(tier, m, with_tier=False) for m in ("FN", "FP", "Prec", "Rec"))
 
     def _pct_or_nan(block: dict, metric: str) -> float:
@@ -186,7 +183,7 @@ def _subsets_table(subsets: dict[str, dict], tier: str) -> None:
         return float(block.get(metric) or 0.0) * 100.0
 
     rows: list[dict[str, object]] = []
-    for name in ordered_names:
+    for name in _SUBSET_DISPLAY_ORDER:
         payload = subsets[name]
         block = shared.tier_block(payload, tier)
         muc = payload.get("muc_counts", {})

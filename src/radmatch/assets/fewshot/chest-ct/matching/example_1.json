@@ -1,12 +1,13 @@
 {
   "scenario": "Laterality flip + status flip + severity flip + measurement diff",
-  "description": "Real subset of chest-ct/findings_{gt,pred}/example_1 (elderly patient). Demonstrates a laterality flip on bronchiectasis (gt right lung apex vs pred left lung apex, a paired-lung error), a status flip on heart size (gt 'not enlarged' = normal vs pred 'mildly enlarged' = abnormal — INC downstream), a severity flip on coronary calcifications (severe vs moderate), and a measurement diff on aortic arch (3.6 vs 4.1 cm).",
+  "description": "Real subset of chest-ct/findings_{gt,pred}/example_1 (elderly patient). Demonstrates a laterality flip on bronchiectasis (gt right lung apex vs pred left lung apex, a side error scored from the findings' laterality), a status flip on heart size (gt 'not enlarged' = normal vs pred 'mildly enlarged' = abnormal — INC downstream), a severity flip on coronary calcifications (severe vs moderate), and a measurement diff on aortic arch (3.6 vs 4.1 cm).",
   "user": {
     "pred_findings": [
       {
         "finding_id": "p_1",
         "text": "Minimal cylindrical bronchiectasis most apparent in the left lung apex.",
         "clinical_status": "abnormal",
+        "laterality": "left",
         "comparison": null,
         "measurements": []
       },
@@ -14,6 +15,7 @@
         "finding_id": "p_2",
         "text": "Heart is mildly enlarged.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -21,6 +23,7 @@
         "finding_id": "p_3",
         "text": "Moderate coronary artery calcifications.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -28,6 +31,7 @@
         "finding_id": "p_4",
         "text": "Mild widening of the anterior aortic arch diameter to 4.1 cm.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": [
           {
@@ -41,6 +45,7 @@
         "finding_id": "p_5",
         "text": "Small stable hypodense lesion in the right lobe of the liver consistent with incidental benign pathology.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": "stable",
         "measurements": []
       }
@@ -50,6 +55,7 @@
         "finding_id": "gt_1",
         "text": "Minimal cylindrical bronchiectasis most apparent in the right lung apex.",
         "clinical_status": "abnormal",
+        "laterality": "right",
         "comparison": null,
         "measurements": []
       },
@@ -57,6 +63,7 @@
         "finding_id": "gt_2",
         "text": "Heart is not enlarged.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -64,6 +71,7 @@
         "finding_id": "gt_3",
         "text": "Severe coronary artery calcifications.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -71,6 +79,7 @@
         "finding_id": "gt_4",
         "text": "Mild widening of the anterior aortic arch diameter to 3.6 cm.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": [
           {
@@ -84,6 +93,7 @@
         "finding_id": "gt_5",
         "text": "Small stable hypodense lesion in the right lobe of the liver consistent with incidental benign pathology.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": "stable",
         "measurements": []
       }
@@ -94,12 +104,12 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Same finding entity (minimal cylindrical bronchiectasis at the lung apex). Pred says left apex, gt says right apex — laterality flip on a paired lung."
+        "reasoning": "Same finding entity (minimal cylindrical bronchiectasis at the lung apex). Pred says left apex, gt says right apex: a side error, scored from the findings' laterality."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_2",
-        "reasoning": "Same finding entity (heart size). Pred says mildly enlarged (abnormal), gt says not enlarged (normal) — status flip kept in matches so Stage 3 can classify INC."
+        "reasoning": "Same entity (heart size), stated enlarged vs not enlarged."
       },
       {
         "pred_id": "p_3",

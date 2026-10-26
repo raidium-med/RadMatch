@@ -95,7 +95,7 @@ def test_inc_pair_still_runs_stage_3b(fake_client, ok, make_finding):
         ok(
             {
                 "errors_per_pair": [
-                    {"pair_id": 1, "errors": [{"dimension": "location", "severity": "minor", "reasoning": "x"}]}
+                    {"pair_id": 1, "errors": [{"dimension": "site", "severity": "minor", "reasoning": "x"}]}
                 ]
             }
         ),
@@ -105,19 +105,22 @@ def test_inc_pair_still_runs_stage_3b(fake_client, ok, make_finding):
     record = out["muc_records"][0]
     assert record["muc_category"] == "INC"
     assert len(client.calls) == 2  # Stage 2 match + Stage 3b attribute errors
-    assert any(e["dimension"] == "location" for e in record["text_errors"])
+    assert any(e["dimension"] == "site" for e in record["text_errors"])
 
 
 def test_par_with_major_error_internally_PAR(fake_client, ok, make_finding):
     """Internal classification is PAR until the summary reclassifies it."""
-    gt = [make_finding("gt_1", clinical_significance="critical", text="left nodule")]
-    pred = [make_finding("p_1", clinical_significance="critical", text="right nodule")]
+    gt = [make_finding("gt_1", clinical_significance="critical", text="right upper lobe nodule")]
+    pred = [make_finding("p_1", clinical_significance="critical", text="right lower lobe nodule")]
     client = fake_client(
         ok({"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}),
         ok(
             {
                 "errors_per_pair": [
-                    {"pair_id": 1, "errors": [{"dimension": "location", "severity": "major", "reasoning": "L vs R"}]}
+                    {
+                        "pair_id": 1,
+                        "errors": [{"dimension": "site", "severity": "major", "reasoning": "upper vs lower lobe"}],
+                    }
                 ]
             }
         ),
@@ -139,7 +142,7 @@ def test_par_with_only_minor_errors_keeps_PAR(fake_client, ok, make_finding):
         ok(
             {
                 "errors_per_pair": [
-                    {"pair_id": 1, "errors": [{"dimension": "location", "severity": "minor", "reasoning": "imprecise"}]}
+                    {"pair_id": 1, "errors": [{"dimension": "site", "severity": "minor", "reasoning": "imprecise"}]}
                 ]
             }
         ),
@@ -200,7 +203,7 @@ def test_dataset_five_pairs_one_per_muc_category(tmp_path, fake_client, ok, make
         ok(
             {
                 "errors_per_pair": [
-                    {"pair_id": 1, "errors": [{"dimension": "location", "severity": "major", "reasoning": "..."}]}
+                    {"pair_id": 1, "errors": [{"dimension": "site", "severity": "major", "reasoning": "..."}]}
                 ]
             }
         ),  # s2 attr
@@ -209,7 +212,7 @@ def test_dataset_five_pairs_one_per_muc_category(tmp_path, fake_client, ok, make
 
     summary = _run_dataset(gt_dir, pred_dir, out_dir, client)
 
-    # PAR (s2, major location error on critical GT) reclassifies to INC.
+    # PAR (s2, major site error on critical GT) reclassifies to INC.
     # Effective counts: 1 COR (s1), 0 PAR, 2 INC (s2 reclassified + s3 original),
     # 1 MIS (s4), 1 SPU (s5).
     assert summary["muc_counts"] == {"COR": 1, "PAR": 0, "INC": 2, "MIS": 1, "SPU": 1}
@@ -287,8 +290,8 @@ def test_template_predictor_fails_safety_gate(tmp_path, fake_client, ok, make_fi
 def test_stage_3b_failure_surfaces(fake_client, ok, make_finding):
     """A Stage 3b LLM failure must surface so the report is recorded as failed. Degrading to
     empty text errors is indistinguishable from a clean pair and is cached as such."""
-    gt = [make_finding("gt_1", clinical_significance="critical", text="left nodule")]
-    pred = [make_finding("p_1", clinical_significance="critical", text="right nodule")]
+    gt = [make_finding("gt_1", clinical_significance="critical", text="right upper lobe nodule")]
+    pred = [make_finding("p_1", clinical_significance="critical", text="right lower lobe nodule")]
     client = fake_client(
         ok({"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}),
         RuntimeError("Stage 3b LLM call failed"),
@@ -434,7 +437,7 @@ def test_score_pair_reuses_cached_text_errors(tmp_path, fake_client, make_findin
         "matches": matches,
         "findings_fingerprint": fingerprint,
         "structured_errors_per_pair": [[]],
-        "text_errors_per_pair": [[{"dimension": "location", "severity": "major", "reasoning": "cached"}]],
+        "text_errors_per_pair": [[{"dimension": "site", "severity": "major", "reasoning": "cached"}]],
         "muc_records": [],
     }
     _write(out_dir / "attribute_errors" / "s.json", cached)
@@ -455,14 +458,17 @@ def test_score_pair_reuses_cached_text_errors(tmp_path, fake_client, make_findin
 def test_score_pair_writes_per_report_metrics(tmp_path, fake_client, ok, make_finding):
     """A per_report_metrics/<series>.json with effective muc_counts + per-tier errors
     is written alongside attribute_errors."""
-    gt = [make_finding("gt_1", clinical_significance="critical", text="left nodule")]
-    pred = [make_finding("p_1", clinical_significance="critical", text="right nodule")]
+    gt = [make_finding("gt_1", clinical_significance="critical", text="right upper lobe nodule")]
+    pred = [make_finding("p_1", clinical_significance="critical", text="right lower lobe nodule")]
     client = fake_client(
         ok({"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}),
         ok(
             {
                 "errors_per_pair": [
-                    {"pair_id": 1, "errors": [{"dimension": "location", "severity": "major", "reasoning": "L vs R"}]}
+                    {
+                        "pair_id": 1,
+                        "errors": [{"dimension": "site", "severity": "major", "reasoning": "upper vs lower lobe"}],
+                    }
                 ]
             }
         ),
@@ -491,7 +497,7 @@ def test_score_pair_invalidates_cache_when_matches_differ(tmp_path, fake_client,
     stale = {
         "matches": [_match("p_OLD", "g_OLD")],  # different pair → cache invalid
         "structured_errors_per_pair": [[]],
-        "text_errors_per_pair": [[{"dimension": "location", "severity": "minor", "reasoning": "stale"}]],
+        "text_errors_per_pair": [[{"dimension": "site", "severity": "minor", "reasoning": "stale"}]],
         "muc_records": [],
     }
     _write(out_dir / "attribute_errors" / "s.json", stale)
@@ -523,12 +529,13 @@ def test_score_pair_invalidates_cache_when_finding_text_differs(tmp_path, fake_c
         [_match("p_1", "gt_1")],
         {f["finding_id"]: f for f in stale_pred},
         {f["finding_id"]: f for f in stale_gt},
+        stage3b_config=_stage3b_config("fake", "none", None),
     )
     stale = {
         "matches": [_match("p_1", "gt_1")],
         "findings_fingerprint": stale_fingerprint,
         "structured_errors_per_pair": [[]],
-        "text_errors_per_pair": [[{"dimension": "location", "severity": "minor", "reasoning": "stale"}]],
+        "text_errors_per_pair": [[{"dimension": "site", "severity": "minor", "reasoning": "stale"}]],
         "muc_records": [],
     }
     _write(out_dir / "attribute_errors" / "s.json", stale)
@@ -544,3 +551,34 @@ def test_score_pair_invalidates_cache_when_finding_text_differs(tmp_path, fake_c
     )
     assert len(client.calls) == 1  # fingerprint mismatch → LLM called
     assert result["muc_records"][0]["text_errors"] == []
+
+
+@pytest.mark.parametrize(
+    "preds, gts, side_errors",
+    [
+        pytest.param(
+            [("p_1", "bilateral", "abnormal")],
+            [("gt_1", "left", "abnormal"), ("gt_2", "right", "abnormal")],
+            0,
+            id="bilateral-covers-left-and-right",
+        ),
+        pytest.param([("p_1", "left", "abnormal")], [("gt_1", "right", "abnormal")], 1, id="flip"),
+        pytest.param(
+            [("p_1", "left", "abnormal"), ("p_2", "right", "normal")],
+            [("gt_1", "bilateral", "abnormal")],
+            1,
+            id="normal-finding-gives-no-side",
+        ),
+    ],
+)
+def test_score_pair_compares_sides_across_the_match_group(preds, gts, side_errors, fake_client, ok, make_finding):
+    pred = [make_finding(i, laterality=side, clinical_status=status) for i, side, status in preds]
+    gt = [make_finding(i, laterality=side, clinical_status=status) for i, side, status in gts]
+    matches = [_match(p, g) for p, _, _ in preds for g, _, _ in gts]
+    client = fake_client(
+        ok({"matches": matches, "unmatched_pred": [], "unmatched_gt": []}),
+        ok({"errors_per_pair": [{"pair_id": i, "errors": []} for i in range(1, len(matches) + 1)]}),
+    )
+    out = _run_pair(gt, pred, "s_side", client)
+    found = sum(e["dimension"] == "laterality" for r in out["muc_records"] for e in r["structured_errors"])
+    assert found == side_errors

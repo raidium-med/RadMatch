@@ -1,7 +1,8 @@
 [
   {
-    "text": "Numerous bilateral pleural plaques are similar to the prior study.",
+    "text": "Numerous bilateral pleural plaques related to asbestos exposure, similar to the prior study.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": "stable",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -9,6 +10,7 @@
   {
     "text": "Right pleural thickening is chronic.",
     "measurements": [],
+    "laterality": "right",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -16,6 +18,7 @@
   {
     "text": "Mild cardiomegaly, unchanged.",
     "measurements": [],
+    "laterality": null,
     "comparison": "stable",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -23,20 +26,15 @@
   {
     "text": "Elevation of the right hemidiaphragm is chronic.",
     "measurements": [],
+    "laterality": "right",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
   },
   {
-    "text": "No concerning focal airspace opacities.",
-    "measurements": [],
-    "comparison": null,
-    "clinical_status": "normal",
-    "clinical_significance": "urgent"
-  },
-  {
     "text": "No pulmonary edema.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -44,6 +42,7 @@
   {
     "text": "No pleural effusion.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -51,13 +50,15 @@
   {
     "text": "No pneumothorax.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "critical"
   },
   {
-    "text": "No evidence of pneumonia.",
+    "text": "No concerning focal airspace opacities; no evidence of pneumonia.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "urgent"

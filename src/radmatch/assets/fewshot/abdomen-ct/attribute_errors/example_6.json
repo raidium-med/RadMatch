@@ -1,6 +1,6 @@
 {
- "scenario": "Constructed: invented SBO detail, single vs multiple metastases, vascular encasement, acute vs chronic fracture, variant vs node, gas in a collection",
- "description": "Constructed. A transition point or closed loop the reference does not give, a solitary vs multiple liver metastases, abutment vs encasement, an acute vs chronic fracture, a splenule vs a lymph node and gas in a collection each change management and are major; the predominant segment of uncomplicated diverticulosis is minor; fluid the pred adds to a fat-containing umbilical hernia is no error (added detail).",
+ "scenario": "Constructed: invented SBO complication, single vs multiple metastases, vascular encasement, acute vs chronic fracture, a variant vs a node, gas in a collection",
+ "description": "Constructed. A transition point or closed loop the reference does not give, solitary vs multiple liver metastases and SMA abutment vs encasement are major extent errors; an acute vs chronic fracture is a major diagnosis error (the age); gas in a collection is a major character error. A splenule (an anatomic variant, normal) vs a lymph node (abnormal) is a status inversion scored upstream: no Stage 3b error. The predominant segment of uncomplicated diverticulosis is a minor extent error; fluid the pred adds to a fat-containing umbilical hernia is no error (added detail).",
  "user": {
   "series_uuid": "abdomen-ct_example_6",
   "pairs": [
@@ -10,6 +10,7 @@
      "finding_id": "p_1",
      "text": "Closed-loop small bowel obstruction with a transition point in the right lower quadrant.",
      "measurements": [],
+     "laterality": null,
      "comparison": null,
      "clinical_status": "abnormal",
      "clinical_significance": "critical"
@@ -18,6 +19,7 @@
      "finding_id": "gt_1",
      "text": "Small bowel obstruction; no discrete transition point identified.",
      "measurements": [],
+     "laterality": null,
      "comparison": null,
      "clinical_status": "abnormal",
      "clinical_significance": "urgent"
@@ -35,6 +37,7 @@
        "category": "size"
       }
      ],
+     "laterality": null,
      "comparison": null,
      "clinical_status": "abnormal",
      "clinical_significance": "urgent"
@@ -49,6 +52,7 @@
        "category": "size"
       }
      ],
+     "laterality": null,
      "comparison": null,
      "clinical_status": "abnormal",
      "clinical_significance": "urgent"
@@ -58,8 +62,9 @@
     "pair_id": 3,
     "pred_finding": {
      "finding_id": "p_3",
-     "text": "Pancreatic head mass abutting the superior mesenteric vein.",
+     "text": "Pancreatic head mass abutting the superior mesenteric artery.",
      "measurements": [],
+     "laterality": null,
      "comparison": null,
      "clinical_status": "abnormal",
      "clinical_significance": "urgent"
@@ -68,6 +73,7 @@
      "finding_id": "gt_3",
      "text": "Pancreatic head mass encasing the superior mesenteric artery.",
      "measurements": [],
+     "laterality": null,
      "comparison": null,
      "clinical_status": "abnormal",
      "clinical_significance": "urgent"
@@ -79,6 +85,7 @@
      "finding_id": "p_4",
      "text": "Acute L1 compression fracture.",
      "measurements": [],
+     "laterality": null,
      "comparison": null,
      "clinical_status": "abnormal",
      "clinical_significance": "urgent"
@@ -87,6 +94,7 @@
      "finding_id": "gt_4",
      "text": "Chronic L1 compression deformity.",
      "measurements": [],
+     "laterality": null,
      "comparison": null,
      "clinical_status": "abnormal",
      "clinical_significance": "notable"
@@ -104,8 +112,9 @@
        "category": "size"
       }
      ],
+     "laterality": null,
      "comparison": null,
-     "clinical_status": "abnormal",
+     "clinical_status": "normal",
      "clinical_significance": "routine"
     },
     "gt_finding": {
@@ -118,6 +127,7 @@
        "category": "size"
       }
      ],
+     "laterality": null,
      "comparison": null,
      "clinical_status": "abnormal",
      "clinical_significance": "notable"
@@ -129,6 +139,7 @@
      "finding_id": "p_6",
      "text": "Fluid collection in the gallbladder fossa with gas locules.",
      "measurements": [],
+     "laterality": null,
      "comparison": null,
      "clinical_status": "abnormal",
      "clinical_significance": "urgent"
@@ -137,6 +148,7 @@
      "finding_id": "gt_6",
      "text": "Fluid collection in the gallbladder fossa without gas.",
      "measurements": [],
+     "laterality": null,
      "comparison": null,
      "clinical_status": "abnormal",
      "clinical_significance": "notable"
@@ -148,6 +160,7 @@
      "finding_id": "p_7",
      "text": "Sigmoid-predominant diverticulosis.",
      "measurements": [],
+     "laterality": null,
      "comparison": null,
      "clinical_status": "abnormal",
      "clinical_significance": "routine"
@@ -156,6 +169,7 @@
      "finding_id": "gt_7",
      "text": "Diverticulosis, most pronounced in the descending colon.",
      "measurements": [],
+     "laterality": null,
      "comparison": null,
      "clinical_status": "abnormal",
      "clinical_significance": "routine"
@@ -167,6 +181,7 @@
      "finding_id": "p_8",
      "text": "Small umbilical hernia containing fat and a little fluid.",
      "measurements": [],
+     "laterality": null,
      "comparison": null,
      "clinical_status": "abnormal",
      "clinical_significance": "notable"
@@ -175,6 +190,7 @@
      "finding_id": "gt_8",
      "text": "Small fat-containing umbilical hernia.",
      "measurements": [],
+     "laterality": null,
      "comparison": null,
      "clinical_status": "abnormal",
      "clinical_significance": "notable"
@@ -188,7 +204,7 @@
     "pair_id": 1,
     "errors": [
      {
-      "dimension": "morphology",
+      "dimension": "extent",
       "severity": "major",
       "reasoning": "pred invents a closed loop and transition point: surgical urgency"
      }
@@ -198,7 +214,7 @@
     "pair_id": 2,
     "errors": [
      {
-      "dimension": "morphology",
+      "dimension": "extent",
       "severity": "major",
       "reasoning": "solitary vs multiple metastases: resection or ablation candidacy"
      }
@@ -208,9 +224,9 @@
     "pair_id": 3,
     "errors": [
      {
-      "dimension": "location",
+      "dimension": "extent",
       "severity": "major",
-      "reasoning": "SMV abutment vs SMA encasement: resectable vs locally advanced"
+      "reasoning": "SMA abutment vs encasement: resectable vs locally advanced"
      }
     ]
    },
@@ -218,7 +234,7 @@
     "pair_id": 4,
     "errors": [
      {
-      "dimension": "morphology",
+      "dimension": "diagnosis",
       "severity": "major",
       "reasoning": "acute vs chronic fracture"
      }
@@ -226,19 +242,13 @@
    },
    {
     "pair_id": 5,
-    "errors": [
-     {
-      "dimension": "morphology",
-      "severity": "major",
-      "reasoning": "a normal variant vs a possibly pathological node"
-     }
-    ]
+    "errors": []
    },
    {
     "pair_id": 6,
     "errors": [
      {
-      "dimension": "morphology",
+      "dimension": "character",
       "severity": "major",
       "reasoning": "gas in a collection raises infection or leak"
      }
@@ -248,7 +258,7 @@
     "pair_id": 7,
     "errors": [
      {
-      "dimension": "location",
+      "dimension": "extent",
       "severity": "minor",
       "reasoning": "predominant segment of uncomplicated diverticulosis"
      }

@@ -10,6 +10,7 @@ import os
 
 CLINICAL_STATUS_VALUES: set[str] = {"normal", "abnormal"}
 COMPARISON_VALUES: set[str] = {"stable", "improving", "worsening", "new", "resolved"}
+LATERALITY_VALUES: set[str] = {"left", "right", "bilateral"}
 MEASUREMENT_CATEGORY_VALUES: set[str] = {"size", "count", "attenuation", "ratio", "other"}
 
 # Tiers follow the ACR Actionable Findings Framework / RSNA colour codes.
@@ -30,9 +31,8 @@ ERROR_TIERS: dict[str, tuple[str, ...]] = {
 }
 ERROR_TIER_PREFIX: dict[str, str] = {"actionable": "a", "triage": "t", "critical": "c"}
 
-# A cross-bucket comparison difference is `major` (misleads on whether action is
-# needed); same-bucket, or one side absent, is `minor`.
-BENIGN_COMPARISONS: frozenset[str] = frozenset({"stable", "improving", "resolved"})
+# Comparisons that signal disease activity (the others are benign). A difference across the two
+# buckets, or a dropped active gt comparison, is `major`; any other difference is `minor`.
 ACTIVE_COMPARISONS: frozenset[str] = frozenset({"worsening", "new"})
 
 
@@ -149,13 +149,19 @@ MUC_CATEGORIES: tuple[str, ...] = ("COR", "PAR", "INC", "MIS", "SPU")
 ATTRIBUTE_ERROR_SEVERITIES: tuple[str, ...] = ("major", "minor")
 
 # Stage 3a handles the structured dimensions, Stage 3b the free-text ones.
-# `measurement` is split: numeric comparison is deterministic, but the LLM may also
-# flag a difference that crosses a clinical boundary.
-ATTRIBUTE_DIMENSIONS_LLM: tuple[str, ...] = ("location", "severity", "morphology", "certainty")
+# `measurement` and `comparison` are split: the comparators flag a size difference or
+# an invented change, and the LLM grades the ones that matter.
+ATTRIBUTE_DIMENSIONS_LLM: tuple[str, ...] = ("site", "extent", "severity", "character", "diagnosis", "certainty")
 # Keep in sync with `assets/prompts/prompt_attribute_errors.md`; anything else the
 # judge emits is dropped by `inference._normalize_llm_error`.
 ATTRIBUTE_DIMENSIONS_LLM_ACCEPTED: tuple[str, ...] = (*ATTRIBUTE_DIMENSIONS_LLM, "measurement", "comparison")
-ATTRIBUTE_DIMENSIONS_ALL: tuple[str, ...] = ("clinical_status", "comparison", "measurement", *ATTRIBUTE_DIMENSIONS_LLM)
+ATTRIBUTE_DIMENSIONS_ALL: tuple[str, ...] = (
+    "clinical_status",
+    "laterality",
+    "comparison",
+    "measurement",
+    *ATTRIBUTE_DIMENSIONS_LLM,
+)
 
 # Parallel views of the finding population. `measurement` / `comparison` collect
 # findings carrying that attribute and may overlap each other; the `*-regular`

@@ -2,6 +2,7 @@
   {
     "text": "Heart size at the upper limit of normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -9,6 +10,7 @@
   {
     "text": "Trace pericardial fluid.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -16,6 +18,7 @@
   {
     "text": "Atherosclerotic calcification of the thoracic aorta.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "routine"
@@ -23,6 +26,7 @@
   {
     "text": "Coronary artery calcification.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -30,6 +34,7 @@
   {
     "text": "Prosthetic aortic valve.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "routine"
@@ -37,6 +42,7 @@
   {
     "text": "A few tiny nonspecific nodules in both lungs.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -44,6 +50,7 @@
   {
     "text": "Bifid right fourth rib.",
     "measurements": [],
+    "laterality": "right",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"

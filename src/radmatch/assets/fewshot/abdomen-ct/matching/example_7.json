@@ -7,6 +7,7 @@
         "finding_id": "p_1",
         "text": "Fast-in fast-out lesion in liver segment 8, 2.1 cm.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": [
           {
@@ -20,6 +21,7 @@
         "finding_id": "p_2",
         "text": "Low-density shadow in the left kidney.",
         "clinical_status": "abnormal",
+        "laterality": "left",
         "comparison": null,
         "measurements": []
       },
@@ -27,6 +29,7 @@
         "finding_id": "p_3",
         "text": "Hepatic lesion in segment 3 suspicious for metastasis.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -34,6 +37,7 @@
         "finding_id": "p_4",
         "text": "No source of hematuria identified.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -41,6 +45,7 @@
         "finding_id": "p_5",
         "text": "Common bile duct dilated to 9 mm.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": [
           {
@@ -56,6 +61,7 @@
         "finding_id": "gt_1",
         "text": "2.1 cm segment 8 lesion with arterial enhancement and washout, LI-RADS 5.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": [
           {
@@ -69,6 +75,7 @@
         "finding_id": "gt_2",
         "text": "Simple left renal cyst.",
         "clinical_status": "abnormal",
+        "laterality": "left",
         "comparison": null,
         "measurements": []
       },
@@ -76,6 +83,7 @@
         "finding_id": "gt_3",
         "text": "No evidence of metastatic disease in the abdomen.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -83,6 +91,7 @@
         "finding_id": "gt_4",
         "text": "4 mm nonobstructing left lower pole renal calculus.",
         "clinical_status": "abnormal",
+        "laterality": "left",
         "comparison": null,
         "measurements": [
           {
@@ -95,7 +104,8 @@
       {
         "finding_id": "gt_5",
         "text": "Common bile duct 9 mm, expected after cholecystectomy.",
-        "clinical_status": "abnormal",
+        "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": [
           {
@@ -122,7 +132,7 @@
       {
         "pred_id": "p_3",
         "gt_id": "gt_3",
-        "reasoning": "a lesion suspicious for metastasis denies 'no metastatic disease'"
+        "reasoning": "'no metastatic disease' denies the lesion suspicious for metastasis"
       },
       {
         "pred_id": "p_4",

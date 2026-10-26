@@ -1,6 +1,6 @@
 {
   "scenario": "Clinical long tail: different diagnosis for one abnormality, unilateral vs bilateral, synonyms",
-  "description": "Constructed; pairs from chest-ct/matching/example_4.json (status inversions excluded). Bulla vs pneumothorax for the same lucency is a major morphology error; a ground-glass opacity extended to the other lung is a major location error; scarring synonyms, a sub-threshold node vs 'no lymphadenopathy' and a lobectomy with its expected appearance have no error.",
+  "description": "Constructed; pairs from chest-ct/matching/example_4.json (status inversions excluded). Bulla vs pneumothorax for the same lucency is a major diagnosis error; a ground-glass opacity extended to the other lung carries no site error, the side is scored upstream (Stage 3a `laterality`); scarring synonyms, a sub-threshold node vs 'no lymphadenopathy' and a lobectomy with its expected appearance have no error.",
   "user": {
     "series_uuid": "chest-ct_example_4",
     "pairs": [
@@ -11,6 +11,7 @@
           "text": "Large bulla at the right lung apex.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         },
@@ -19,6 +20,7 @@
           "text": "Small right apical pneumothorax.",
           "clinical_status": "abnormal",
           "clinical_significance": "critical",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         }
@@ -30,6 +32,7 @@
           "text": "Linear fibrotic strands in both upper lobes.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "bilateral",
           "comparison": null,
           "measurements": []
         },
@@ -38,6 +41,7 @@
           "text": "Biapical pleuroparenchymal scarring.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "bilateral",
           "comparison": null,
           "measurements": []
         }
@@ -49,6 +53,7 @@
           "text": "Small non-enlarged subcarinal lymph node.",
           "clinical_status": "normal",
           "clinical_significance": "routine",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
@@ -57,6 +62,7 @@
           "text": "No mediastinal lymphadenopathy.",
           "clinical_status": "normal",
           "clinical_significance": "routine",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         }
@@ -68,6 +74,7 @@
           "text": "Right lower lobectomy with staple line and volume loss.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         },
@@ -76,6 +83,7 @@
           "text": "Post right lower lobectomy changes.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         }
@@ -87,6 +95,7 @@
           "text": "Ground-glass opacities in both lower lobes.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "bilateral",
           "comparison": null,
           "measurements": []
         },
@@ -95,6 +104,7 @@
           "text": "Ground-glass opacity in the right lower lobe.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         }
@@ -107,7 +117,7 @@
         "pair_id": 1,
         "errors": [
           {
-            "dimension": "morphology",
+            "dimension": "diagnosis",
             "severity": "major",
             "reasoning": "pred calls the right apical lucency a bulla, gt a pneumothorax: a different diagnosis for the same abnormality, with different management"
           }
@@ -127,13 +137,7 @@
       },
       {
         "pair_id": 5,
-        "errors": [
-          {
-            "dimension": "location",
-            "severity": "major",
-            "reasoning": "pred extends the right lower lobe ground-glass opacity to the left lung: bilateral vs unilateral process"
-          }
-        ]
+        "errors": []
       }
     ]
   }

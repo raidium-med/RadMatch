@@ -2,6 +2,7 @@
   {
     "text": "Mild atelectasis in the lung bases.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -9,6 +10,7 @@
   {
     "text": "Mild intrahepatic biliary prominence, increased compared to prior.",
     "measurements": [],
+    "laterality": null,
     "comparison": "worsening",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -16,6 +18,7 @@
   {
     "text": "Small hypodense focus within the right hepatic lobe.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -23,6 +26,7 @@
   {
     "text": "Gallbladder surgically absent.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "routine"
@@ -41,6 +45,7 @@
         "category": "size"
       }
     ],
+    "laterality": null,
     "comparison": "worsening",
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
@@ -48,6 +53,7 @@
   {
     "text": "Focus of internal density within the common bile duct.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
@@ -55,6 +61,7 @@
   {
     "text": "Previously described trace pelvic free fluid has resolved.",
     "measurements": [],
+    "laterality": null,
     "comparison": "resolved",
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -62,6 +69,7 @@
   {
     "text": "Spleen normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -69,6 +77,7 @@
   {
     "text": "Pancreas normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -76,6 +85,7 @@
   {
     "text": "No pancreatitis.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -83,6 +93,7 @@
   {
     "text": "Adrenal glands normal.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -90,6 +101,7 @@
   {
     "text": "Kidneys normal.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -97,6 +109,7 @@
   {
     "text": "Ureters normal.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -115,6 +128,7 @@
         "category": "ratio"
       }
     ],
+    "laterality": null,
     "comparison": "new",
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
@@ -122,6 +136,7 @@
   {
     "text": "No free fluid.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -129,6 +144,7 @@
   {
     "text": "Mild bladder wall thickening.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -136,6 +152,7 @@
   {
     "text": "Uterus is normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -154,6 +171,7 @@
         "category": "size"
       }
     ],
+    "laterality": "right",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -161,6 +179,7 @@
   {
     "text": "Left ovary unremarkable.",
     "measurements": [],
+    "laterality": "left",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -168,6 +187,7 @@
   {
     "text": "Vasculature is patent.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -175,6 +195,7 @@
   {
     "text": "Lymph nodes are normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -182,6 +203,7 @@
   {
     "text": "Abdominal wall is normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -189,6 +211,7 @@
   {
     "text": "Musculoskeletal system normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"

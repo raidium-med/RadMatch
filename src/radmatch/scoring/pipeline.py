@@ -43,7 +43,14 @@ class ScoringContext:
 # Fields whose value changes should invalidate the Stage 3b cache. Mirrors the
 # inputs Stage 3b actually consumes (text + structured attributes referenced by
 # comparators). Keep in sync with `inference.detect_attribute_errors`.
-_FINGERPRINTED_FIELDS: tuple[str, ...] = ("text", "clinical_status", "comparison", "measurements")
+_FINGERPRINTED_FIELDS: tuple[str, ...] = (
+    "text",
+    "clinical_status",
+    "clinical_significance",
+    "laterality",
+    "comparison",
+    "measurements",
+)
 
 
 def _stage3b_config(judge: str | None, reasoning: str | None, fewshot: str | None) -> dict[str, object]:
@@ -64,14 +71,15 @@ def _fingerprint_matched_findings(
     pred_by_id: dict[str, dict],
     gt_by_id: dict[str, dict],
     indication: str = "",
-    stage3b_config: Mapping[str, object] | None = None,
+    *,
+    stage3b_config: Mapping[str, object],
 ) -> str:
     """Hash of everything Stage 3b sees, so the cache invalidates on re-extracted
     findings, a changed indication, or a different judge / fewshot / reasoning.
     """
     payload = {
         "indication": indication,
-        "stage3b_config": dict(stage3b_config) if stage3b_config else None,
+        "stage3b_config": dict(stage3b_config),
         "pairs": [
             {
                 "pred_id": m["pred_id"],
@@ -125,22 +133,19 @@ def build_per_report_summary(
     muc_records: Sequence[dict],
     unmatched_pred: Sequence[dict],
     unmatched_gt: Sequence[dict],
-    series_uuid: str | None = None,
+    series_uuid: str,
 ) -> dict:
     """Per-report summary, keyed identically to `metrics_summary.json` minus the
-    aggregate-only fields. `series_uuid` is None when the dataset aggregator reuses
-    this for the same shape.
+    aggregate-only fields.
     """
     counts = metrics.effective_muc_counts(muc_records, n_spu=len(unmatched_pred), n_mis=len(unmatched_gt))
     distinct_matched_preds, distinct_matched_gts = metrics.count_distinct_findings(muc_records)
-    metadata: dict[str, object] = {
-        "total_gt_findings": distinct_matched_gts + counts["MIS"],
-        "total_pred_findings": distinct_matched_preds + counts["SPU"],
-    }
-    if series_uuid is not None:
-        metadata = {"series_uuid": series_uuid, **metadata}
     return {
-        "metadata": metadata,
+        "metadata": {
+            "series_uuid": series_uuid,
+            "total_gt_findings": distinct_matched_gts + counts["MIS"],
+            "total_pred_findings": distinct_matched_preds + counts["SPU"],
+        },
         "tiers": _tiers_block(muc_records, unmatched_pred, unmatched_gt),
         "muc_counts": counts,
         "attribute_breakdown": metrics.compute_attribute_breakdown(muc_records),
@@ -172,13 +177,21 @@ def score_pair(
     for m in matches:
         if any(x.get("category") == "size" for x in pred_by_id[m["pred_id"]].get("measurements") or []):
             sized_preds_per_gt.setdefault(m["gt_id"], set()).add(m["pred_id"])
+
+    def abnormal_side(findings: list[dict]) -> str | None:
+        return comparators.side_union(f.get("laterality") for f in findings if f.get("clinical_status") == "abnormal")
+
     structured_per_pair: list[list[dict]] = [
         comparators.compute_structured_errors(
             pred_by_id[m["pred_id"]],
             gt_by_id[m["gt_id"]],
             size_given_elsewhere=bool(sized_preds_per_gt.get(m["gt_id"], set()) - {m["pred_id"]}),
+            group_sides=(
+                abnormal_side([pred_by_id[i] for i in group_preds]),
+                abnormal_side([gt_by_id[i] for i in group_gts]),
+            ),
         )
-        for m in matches
+        for m, (group_preds, group_gts) in zip(matches, inference.match_groups(matches))
     ]
     stage3b_config = _stage3b_config(
         getattr(ctx.client, "model", None), getattr(ctx.client, "reasoning", None), ctx.fewshot
@@ -206,7 +219,7 @@ def score_pair(
             pred_finding=pred_by_id[m["pred_id"]],
             gt_finding=gt_by_id[m["gt_id"]],
             structured_errors=structured_per_pair[i],
-            text_errors=text_per_pair[i] if i < len(text_per_pair) else [],
+            text_errors=text_per_pair[i],
         )
         for i, m in enumerate(matches)
     ]

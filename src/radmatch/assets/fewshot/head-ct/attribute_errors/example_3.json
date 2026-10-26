@@ -1,23 +1,23 @@
 {
   "scenario": "Minor measurement difference + clean pairs",
-  "description": "Stage 3b call derived from the matches in head-ct/matching/example_3.json. The micronodule pair carries only a sub-mm measurement difference (4.4 vs 5.1 mm) — a minor measurement error, as both sizes stay under the 6 mm Fleischner threshold. The other two pairs (congenital sinus hypoplasia, no pleural / pericardial effusion) are identical.",
+  "description": "Stage 3b call built from head-ct/findings_gt/example_3.json and findings_pred/example_3.json. The micronodule pair carries only a sub-mm measurement difference (4.4 vs 5.1 mm) — a minor measurement error, as both sizes stay under the 6 mm Fleischner threshold. The other two pairs (congenital sinus hypoplasia, no pleural effusion) are identical.",
   "user": {
     "series_uuid": "head-ct_example_3",
     "pairs": [
       {
         "pair_id": 1,
-        "pred_finding": {"finding_id": "p_1", "text": "Congenital hypoplasia of the paranasal sinuses with agenesis of the frontal sinuses.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_1", "text": "Congenital hypoplasia of the paranasal sinuses with agenesis of the frontal sinuses.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []}
+        "pred_finding": {"finding_id": "p_1", "text": "Congenital hypoplasia of the paranasal sinuses with agenesis of the frontal sinuses.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "bilateral", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_1", "text": "Congenital hypoplasia of the paranasal sinuses with agenesis of the frontal sinuses.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "bilateral", "comparison": null, "measurements": []}
       },
       {
         "pair_id": 2,
-        "pred_finding": {"finding_id": "p_2", "text": "Stable nonspecific micronodule of the right upper lobe measuring 5.1 mm.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": [{"value": 5.1, "unit": "mm", "category": "size"}]},
-        "gt_finding":   {"finding_id": "gt_2", "text": "Stable nonspecific micronodule of the right upper lobe measuring 4.4 mm.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": [{"value": 4.4, "unit": "mm", "category": "size"}]}
+        "pred_finding": {"finding_id": "p_2", "text": "Stable nonspecific micronodule of the right upper lobe measuring 5.1 mm.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "right", "comparison": "stable", "measurements": [{"value": 5.1, "unit": "mm", "category": "size"}]},
+        "gt_finding":   {"finding_id": "gt_2", "text": "Stable nonspecific micronodule of the right upper lobe measuring 4.4 mm.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "right", "comparison": "stable", "measurements": [{"value": 4.4, "unit": "mm", "category": "size"}]}
       },
       {
         "pair_id": 3,
-        "pred_finding": {"finding_id": "p_3", "text": "No pleural or pericardial effusion.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_6", "text": "No pleural or pericardial effusion.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []}
+        "pred_finding": {"finding_id": "p_3", "text": "No pleural effusion.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": null, "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_6", "text": "No pleural effusion.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": null, "comparison": null, "measurements": []}
       }
     ]
   },

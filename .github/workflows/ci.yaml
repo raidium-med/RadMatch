@@ -28,8 +28,7 @@ jobs:
       - name: Run tests
         run: uv run --python ${{ matrix.python-version }} pytest tests/ -v
 
-  # The bug this export exists to fix: the previous wheel shipped no assets, because
-  # they lived outside the package directory. A source checkout could never catch it.
+  # The wheel must ship the assets (prompts, few-shot bundles); a source checkout cannot catch a missing one.
   packaging:
     runs-on: ubuntu-latest
     steps:

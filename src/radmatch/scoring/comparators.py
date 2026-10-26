@@ -1,21 +1,22 @@
 """Stage 3a — deterministic comparators over the structured fields of a matched pair.
 
-`clinical_status` (inversion → INC downstream), `comparison` (cross-bucket → major)
-and `measurement` (ratio, count and attenuation thresholds; sizes are flagged minor
-for the Stage 3b judge). No LLM call; the free-text dimensions are Stage 3b's job
+`clinical_status` (inversion → INC downstream), `laterality` (a side difference the
+match groups do not resolve → major), `comparison` (cross-bucket → major) and
+`measurement` (ratio, count and attenuation thresholds; sizes are flagged minor for the
+Stage 3b judge). No LLM call; the free-text dimensions are Stage 3b's job
 (`scoring.inference`).
 """
 
 from __future__ import annotations
 
 from itertools import permutations
-from typing import Callable, Sequence
+from typing import Callable, Iterable, Sequence
 
 from radmatch import constants
 
 # Modality-agnostic. Anatomy-specific cliffs (spleen 130 mm, AAA 55 mm, Fleischner
 # bands) need covariates the measurement lacks, so they are left to the LLM path.
-_SIZE_REL_DIFF_MAJOR: float = 0.2  # rel-diff above which a `size` diff is flagged (the Stage 3b judge grades it)
+_SIZE_REL_DIFF_FLAG: float = 0.2  # rel-diff above which a `size` diff is flagged (the Stage 3b judge grades it)
 _ATTENUATION_ABS_DIFF_MAJOR: float = 20.0  # abs HU diff above which `attenuation` diff is `major`
 _RATIO_REL_DIFF_MAJOR: float = 0.3  # rel-diff above which `ratio` diff is `major`
 
@@ -72,6 +73,42 @@ def classify_status_conflict(pred_status: str, gt_status: str) -> dict | None:
 
 
 # ============================================================================
+# laterality
+# ============================================================================
+
+
+def side_union(sides: Iterable[str | None]) -> str | None:
+    """The side several findings cover together: left and right make bilateral."""
+    given = {s for s in sides if s}
+    if "bilateral" in given or {"left", "right"} <= given:
+        return "bilateral"
+    return next(iter(given), None)
+
+
+def classify_laterality_conflict(
+    pred_side: str | None,
+    gt_side: str | None,
+    pred_group_side: str | None,
+    gt_group_side: str | None,
+) -> dict | None:
+    """A side difference is `major`: left vs right, bilateral vs one side, a gt side the pred leaves out. None when
+    the two match groups cover the same side together ("bilateral hydronephrosis" vs a left and a right one), when
+    only the pred gives a side (more detail), or when the pred gives none for a gt on both sides: a diffuse process
+    is often called bilateral by inference only ("pulmonary vascular engorgement"), and either wording places it."""
+    if pred_side == gt_side or gt_side is None or pred_group_side == gt_group_side:
+        return None
+    if pred_group_side is None and gt_group_side == "bilateral":
+        return None
+    return _error(
+        dimension="laterality",
+        severity="major",
+        pred_value=pred_side,
+        gt_value=gt_side,
+        reasoning=f"side differs: pred={pred_side!r} vs gt={gt_side!r}",
+    )
+
+
+# ============================================================================
 # comparison
 # ============================================================================
 
@@ -82,7 +119,7 @@ def classify_comparison_conflict(
 ) -> dict | None:
     """Bucket-based comparison conflict severity.
 
-    BENIGN={stable, improving, resolved}, ACTIVE={worsening, new}.
+    ACTIVE={worsening, new}, benign = the other values.
     Cross-bucket → major; same-bucket → minor; identical → no error;
     one-sided mention (one side None) → minor, except a pred that drops an
     ACTIVE gt comparison, which misleads about disease activity exactly as
@@ -134,8 +171,7 @@ def _canonical_value(measurement: dict) -> float:
     """Value rescaled to the per-category base unit (mm for size, HU for attenuation, …).
 
     Falls back to the raw value when the unit is missing or unknown to
-    `constants.MEASUREMENT_UNIT_CONVERSION` — preserves current behaviour for
-    out-of-table units while making known-unit pairs comparable.
+    `constants.MEASUREMENT_UNIT_CONVERSION`.
     """
     value = float(measurement.get("value", 0))
     unit = measurement.get("unit")
@@ -146,7 +182,7 @@ def _canonical_value(measurement: dict) -> float:
     return value
 
 
-def _size_or_ratio_rel_diff_major(pred: dict, gt: dict, threshold: float) -> bool:
+def _rel_diff_exceeds(pred: dict, gt: dict, threshold: float) -> bool:
     pv = _canonical_value(pred)
     gv = _canonical_value(gt)
     if gv == 0:
@@ -313,7 +349,7 @@ def _compare_size(pm: dict, gm: dict, _cat: str) -> dict | None:
         return _error(
             "measurement", "minor", pred_value=pm, gt_value=gm, reasoning="sizes given in units that cannot be compared"
         )
-    if _size_or_ratio_rel_diff_major(pm, gm, _SIZE_REL_DIFF_MAJOR) and (
+    if _rel_diff_exceeds(pm, gm, _SIZE_REL_DIFF_FLAG) and (
         abs(_canonical_value(pm) - _canonical_value(gm)) >= _SIZE_ABS_FLOOR_MM
     ):
         return _error(
@@ -323,7 +359,7 @@ def _compare_size(pm: dict, gm: dict, _cat: str) -> dict | None:
 
 
 def _compare_ratio(pm: dict, gm: dict, _cat: str) -> dict | None:
-    if _size_or_ratio_rel_diff_major(pm, gm, _RATIO_REL_DIFF_MAJOR):
+    if _rel_diff_exceeds(pm, gm, _RATIO_REL_DIFF_MAJOR):
         return _error("measurement", "major", pred_value=pm, gt_value=gm, reasoning="ratio relative difference > 30%")
     return None
 
@@ -369,13 +405,24 @@ _MEASUREMENT_COMPARATORS: dict[str, Callable[[dict, dict, str], "dict | None"]] 
 # ============================================================================
 
 
-def compute_structured_errors(pred: dict, gt: dict, size_given_elsewhere: bool = False) -> list[dict]:
-    """Aggregate Stage 3a errors across status, comparison, measurement. `size_given_elsewhere`: another pred
-    matched to the same gt gives a size, so this pred omitting one is not an omission of the group."""
+def compute_structured_errors(
+    pred: dict,
+    gt: dict,
+    size_given_elsewhere: bool = False,
+    group_sides: tuple[str | None, str | None] | None = None,
+) -> list[dict]:
+    """Aggregate Stage 3a errors across status, laterality, comparison, measurement. `size_given_elsewhere`: another
+    pred matched to the same gt gives a size, so this pred omitting one is not an omission of the group.
+    `group_sides`: the sides the abnormal findings of the pair's pred and gt match groups cover together."""
     errors: list[dict] = []
     status_err = classify_status_conflict(pred.get("clinical_status", ""), gt.get("clinical_status", ""))
     if status_err is not None:
         errors.append(status_err)
+    if pred.get("clinical_status") == gt.get("clinical_status") == "abnormal":
+        pred_side, gt_side = pred.get("laterality"), gt.get("laterality")
+        laterality_err = classify_laterality_conflict(pred_side, gt_side, *(group_sides or (pred_side, gt_side)))
+        if laterality_err is not None:
+            errors.append(laterality_err)
     comparison_err = classify_comparison_conflict(pred.get("comparison"), gt.get("comparison"))
     if comparison_err is not None:
         errors.append(comparison_err)

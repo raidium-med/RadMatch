@@ -40,7 +40,6 @@ class DashboardState:
     findings_pred_dir: Path | None
     matching_dir: Path | None
     attribute_errors_dir: Path | None
-    per_report_metrics_dir: Path | None
     reports_gt_dir: Path | None
     reports_pred_dir: Path | None
     indications_dir: Path | None
@@ -179,7 +178,6 @@ def build_state(raw_results: str, raw_reports_gt: str = "", raw_reports_pred: st
         findings_pred_dir=_existing_subdir(radmatch_dir, constants.FINDINGS_PRED_DIR),
         matching_dir=_existing_subdir(radmatch_dir, constants.MATCHING_DIR),
         attribute_errors_dir=_existing_subdir(radmatch_dir, constants.ATTRIBUTE_ERRORS_DIR),
-        per_report_metrics_dir=_existing_subdir(radmatch_dir, "per_report_metrics"),
         reports_gt_dir=reports_gt_dir,
         reports_pred_dir=reports_pred_dir,
         indications_dir=_existing_subdir(radmatch_dir, constants.INDICATIONS_DIR),
@@ -195,11 +193,6 @@ def inject_styles() -> None:
     st.markdown(
         """
         <style>
-        .filter-card {
-            background: #f8fafc; border: 1px solid rgba(148,163,184,0.4); border-radius: 0.9rem;
-            padding: 0.75rem 0.9rem 0.9rem 0.9rem; box-shadow: 0 8px 24px rgba(15,23,42,0.06);
-            margin-bottom: 1.1rem;
-        }
         .ds-stats-card {
             background: #ecf2ff; border: 1px solid #c7d2fe; border-radius: 0.8rem;
             padding: 0.7rem 0.95rem; box-shadow: 0 12px 24px rgba(15,23,42,0.08);
@@ -218,7 +211,7 @@ def inject_styles() -> None:
             font-variant-numeric: tabular-nums; margin-left: 0.35rem;
         }
         .volume-metric-card { background: linear-gradient(135deg,#eef4ff,#dfe8ff); border-color:#c7d2fe; }
-        .f1-metric-card     { background: linear-gradient(135deg,#fffbeb,#fde68a); border-color:#fcd34d; }
+        .headline-metric-card { background: linear-gradient(135deg,#fffbeb,#fde68a); border-color:#fcd34d; }
         .grey-metric-card   { background: linear-gradient(135deg,#f9fafb,#e5e7eb); border-color:#d1d5db; }
         .report-card {
             border-radius: 0.75rem; padding: 1rem 1.1rem;
@@ -240,16 +233,12 @@ def inject_styles() -> None:
                invisible). Per-element color overrides still apply. */
             color: #1f2937;
         }
-        .selected-panel-divider {
-            border: none; border-top: 1px solid #fde68a; margin: 0.6rem 0 0.5rem 0;
-        }
         .finding-card {
             background: #fff; border: 1px solid #e5e7eb; border-radius: 0.6rem;
             padding: 0.7rem 0.95rem; margin-bottom: 0.5rem;
             color: #1f2933;  /* Same reason as .selected-panel: pin text dark in dark mode. */
         }
-        /* Finding-card colors mirror the Match Outcomes bar so each category is
-           visually distinct (previously MIS shared red with INC, SPU shared amber with PAR). */
+        /* Finding-card colors mirror the Match Outcomes bar so each category is visually distinct. */
         .finding-card-cor { border-color: #15803d; background: #dcfce7; }
         .finding-card-par { border-color: #0d9488; background: #ccfbf1; }
         .finding-card-inc { border-color: #dc2626; background: #fee2e2; }
@@ -271,12 +260,6 @@ def inject_styles() -> None:
         .outcome-inc { background: #991b1b; color: white; }
         .outcome-mis { background: #7f1d1d; color: white; }
         .outcome-spu { background: #b45309; color: white; }
-        .attr-error {
-            background: #fef9c3; border-left: 3px solid #ca8a04;
-            padding: 0.3rem 0.55rem; margin: 0.3rem 0; font-size: 0.85rem; color: #422006;
-        }
-        .attr-error-major { background: #fee2e2; border-left-color: #b91c1c; }
-        .attr-error-stage3a { background: #f1f5f9; border-left-color: #475569; }
         .home-hero {
             background: linear-gradient(135deg,#eef4ff,#fafaff); border: 1px solid #c7d2fe;
             border-radius: 0.8rem; padding: 0.9rem 1.05rem;
@@ -446,13 +429,10 @@ def build_match_index(
     structured_per_pair = attribute_errors.get("structured_errors_per_pair", []) if attribute_errors else []
     text_per_pair = attribute_errors.get("text_errors_per_pair", []) if attribute_errors else []
 
-    rec_by_pair: dict[tuple[str, str], dict[str, object]] = {}
-    for i, rec in enumerate(muc_records):
-        rec_by_pair[(rec.get("pred_id"), rec.get("gt_id"))] = {
-            "category": rec.get("muc_category", "COR"),
-            "structured": structured_per_pair[i] if i < len(structured_per_pair) else rec.get("structured_errors", []),
-            "text": text_per_pair[i] if i < len(text_per_pair) else rec.get("text_errors", []),
-        }
+    rec_by_pair: dict[tuple[str, str], dict[str, object]] = {
+        (rec["pred_id"], rec["gt_id"]): {"category": rec["muc_category"], "structured": structured, "text": text}
+        for rec, structured, text in zip(muc_records, structured_per_pair, text_per_pair)
+    }
 
     gt_cps: dict[str, list[CounterpartMatchInfo]] = {}
     pred_cps: dict[str, list[CounterpartMatchInfo]] = {}
@@ -609,12 +589,12 @@ def format_tier_rate_subtitle(block: dict[str, object], metric: str) -> str | No
 MATCH_OUTCOMES_HELP = (
     "COR — correct: matched with no attribute errors at all.\n\n"
     "PAR — partial: matched with only minor attribute errors "
-    "(imprecise location / severity / morphology / certainty, etc.). The "
+    "(imprecise site / extent / severity / character / diagnosis / certainty, etc.). The "
     "finding was identified, just with rough descriptors. Counts as a "
     "*hit* in safety recalls (the finding wasn't missed).\n\n"
     "INC — incorrect: matched but materially wrong. Either status was inverted "
     "(e.g. pred 'no PTX' vs GT 'PTX present') OR ≥1 major attribute error "
-    "(wrong location / wrong severity / wrong comparison / ...). Counts as a "
+    "(wrong side / wrong site / wrong diagnosis / wrong comparison / ...). Counts as a "
     "miss in safety recalls.\n\n"
     "MIS — missed: a GT finding with no pred counterpart.\n\n"
     "SPU — spurious: a predicted finding with no GT counterpart (hallucination)."
@@ -660,7 +640,6 @@ def render_match_outcomes_bar(muc_counts: dict[str, int], *, is_pct: bool = Fals
     """Horizontal stacked bar of the COR / PAR / INC / MIS / SPU distribution.
     `is_pct=True` switches labels and axis to percentages.
     """
-    import pandas as pd
     import plotly.express as px
 
     raw_counts = [muc_counts.get(cat, 0) for cat in constants.MUC_CATEGORIES]
@@ -713,9 +692,12 @@ def render_match_outcomes_bar(muc_counts: dict[str, int], *, is_pct: bool = Fals
 # Order used everywhere a per-dimension breakdown is rendered (table + chart).
 DIMENSION_DISPLAY_ORDER: list[str] = [
     "clinical_status",
-    "location",
+    "laterality",
+    "site",
+    "extent",
     "severity",
-    "morphology",
+    "character",
+    "diagnosis",
     "certainty",
     "measurement",
     "comparison",
@@ -767,7 +749,7 @@ def build_significance_badge(finding: dict[str, object]) -> str:
 
 
 def build_finding_badges(finding: dict[str, object]) -> str:
-    """Bottom-row badges: significance / status / comparison / measurement."""
+    """Bottom-row badges: significance / status / side / comparison / measurement."""
     badges: list[str] = []
     sig_badge = build_significance_badge(finding)
     if sig_badge:
@@ -785,6 +767,12 @@ def build_finding_badges(finding: dict[str, object]) -> str:
         badges.append(
             f"<span style='font-size:0.62rem;background:{color};color:white;"
             f"padding:0.12rem 0.4rem;border-radius:0.2rem;'>{comp}</span>"
+        )
+    side = finding.get("laterality")
+    if side in dashboard_constants.LATERALITY_COLORS:
+        badges.append(
+            f"<span style='font-size:0.62rem;background:{dashboard_constants.LATERALITY_COLORS[side]};color:white;"
+            f"padding:0.12rem 0.4rem;border-radius:0.2rem;'>{side}</span>"
         )
     measurements = finding.get("measurements") or []
     if isinstance(measurements, list) and measurements:

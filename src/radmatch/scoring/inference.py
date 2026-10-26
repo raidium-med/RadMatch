@@ -116,9 +116,8 @@ def _parse_error_lists_by_pair(content: str, n_pairs: int, series_uuid: str) -> 
     return [by_id[i] for i in range(1, n_pairs + 1)]
 
 
-def _group_context(matches: Sequence[dict], findings_pred: dict[str, dict], findings_gt: dict[str, dict]) -> list[dict]:
-    """Per match, the texts of the other findings in its connected match group (`same_group_pred` /
-    `same_group_gt`), so a pair inside a 1:N or N:1 group is judged against the whole group."""
+def match_groups(matches: Sequence[dict]) -> list[tuple[list[str], list[str]]]:
+    """Per match, the pred ids and gt ids of its connected match group, itself included."""
     parent: dict[str, str] = {}
 
     def find(x: str) -> str:
@@ -131,12 +130,21 @@ def _group_context(matches: Sequence[dict], findings_pred: dict[str, dict], find
     members: dict[str, set[str]] = {}
     for m in matches:
         members.setdefault(find("g:" + m["gt_id"]), set()).update({"p:" + m["pred_id"], "g:" + m["gt_id"]})
-    out = []
+    groups = []
     for m in matches:
-        group = members[find("g:" + m["gt_id"])] - {"p:" + m["pred_id"], "g:" + m["gt_id"]}
+        group = members[find("g:" + m["gt_id"])]
+        groups.append((sorted(x[2:] for x in group if x[0] == "p"), sorted(x[2:] for x in group if x[0] == "g")))
+    return groups
+
+
+def _group_context(matches: Sequence[dict], findings_pred: dict[str, dict], findings_gt: dict[str, dict]) -> list[dict]:
+    """Per match, the texts of the other findings in its connected match group (`same_group_pred` /
+    `same_group_gt`), so a pair inside a 1:N or N:1 group is judged against the whole group."""
+    out = []
+    for m, (group_preds, group_gts) in zip(matches, match_groups(matches)):
         ctx = {}
-        preds = sorted(x[2:] for x in group if x.startswith("p:"))
-        gts = sorted(x[2:] for x in group if x.startswith("g:"))
+        preds = [i for i in group_preds if i != m["pred_id"]]
+        gts = [i for i in group_gts if i != m["gt_id"]]
         if preds:
             ctx["same_group_pred"] = [findings_pred[i]["text"] for i in preds]
         if gts:
@@ -154,7 +162,8 @@ def _detect_attribute_errors_chunk(
     fewshot: str | None = None,
     indication: str = "",
     max_retries: int = DEFAULT_MAX_RETRIES,
-    contexts: Sequence[dict] | None = None,
+    *,
+    contexts: Sequence[dict],
 ) -> list[list[dict]]:
     """One schema-constrained LLM call over a chunk of matches, returning one error list
     per match in input order, placed by the `pair_id` each answer names. Raises
@@ -166,7 +175,7 @@ def _detect_attribute_errors_chunk(
             "pair_id": i,
             "pred_finding": findings_pred[m["pred_id"]],
             "gt_finding": findings_gt[m["gt_id"]],
-            **(contexts[i - 1] if contexts else {}),
+            **contexts[i - 1],
         }
         for i, m in enumerate(matches, start=1)
     ]

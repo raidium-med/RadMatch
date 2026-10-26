@@ -7,10 +7,16 @@
         "finding_id": "p_1",
         "text": "Common bile duct dilated to 8 mm, increased from 5 mm previously.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": "worsening",
         "measurements": [
           {
             "value": 8.0,
+            "unit": "mm",
+            "category": "size"
+          },
+          {
+            "value": 5.0,
             "unit": "mm",
             "category": "size"
           }
@@ -22,10 +28,16 @@
         "finding_id": "gt_1",
         "text": "Common bile duct measures 8 mm, up from 6 mm on the prior study.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": "worsening",
         "measurements": [
           {
             "value": 8.0,
+            "unit": "mm",
+            "category": "size"
+          },
+          {
+            "value": 6.0,
             "unit": "mm",
             "category": "size"
           }

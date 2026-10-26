@@ -2,6 +2,7 @@
   {
     "text": "Stable bilateral pleural effusion.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": "stable",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -9,6 +10,7 @@
   {
     "text": "Left basilar opacity, likely atelectasis.",
     "measurements": [],
+    "laterality": "left",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -16,6 +18,7 @@
   {
     "text": "Nasogastric tube is in the stomach.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -23,6 +26,7 @@
   {
     "text": "Right PICC line ends in the lower SVC.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -30,6 +34,7 @@
   {
     "text": "ET tube is in standard placement.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -37,6 +42,7 @@
   {
     "text": "No pneumothorax.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "critical"
@@ -44,6 +50,7 @@
   {
     "text": "Severe cardiomegaly is stable.",
     "measurements": [],
+    "laterality": null,
     "comparison": "stable",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -51,6 +58,7 @@
   {
     "text": "Possible right lower lobe pneumonia cannot be excluded.",
     "measurements": [],
+    "laterality": "right",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"

@@ -168,9 +168,8 @@ def build_matching_messages(
     fewshot prefix is fetched from `prompts.matching_fewshot_messages`
     (memoised, so the JSON serialization happens once per process).
 
-    `indication`, when non-empty, is included in the user payload so the
-    judge has the clinical context for the study (helps adjudicate
-    binarization artifacts and significance assignment).
+    `indication`, when non-empty, is included in the user payload as the
+    clinical context of the study.
     """
     system = prompts.load_prompt(prompts.PROMPT_MATCHING)
     messages: list[dict] = [{"role": "system", "content": system}]

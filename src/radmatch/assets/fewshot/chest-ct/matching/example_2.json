@@ -7,6 +7,7 @@
         "finding_id": "p_1",
         "text": "Multilevel cervical spondylosis from C2-C3 through C7-T1.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -14,6 +15,7 @@
         "finding_id": "p_2",
         "text": "Mild scoliosis of the thoracic spine.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }
@@ -23,6 +25,7 @@
         "finding_id": "gt_1",
         "text": "Spondylosis at C3-C4.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -30,6 +33,7 @@
         "finding_id": "gt_2",
         "text": "Spondylosis at C4-C5.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -37,6 +41,7 @@
         "finding_id": "gt_3",
         "text": "Spondylosis at C5-C6.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -44,6 +49,7 @@
         "finding_id": "gt_4",
         "text": "Spondylosis at C6-C7.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -51,6 +57,7 @@
         "finding_id": "gt_5",
         "text": "Mild thoracic scoliosis.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }

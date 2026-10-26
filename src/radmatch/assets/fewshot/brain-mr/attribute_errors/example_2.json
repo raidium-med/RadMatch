@@ -1,28 +1,23 @@
 {
-  "scenario": "Major laterality location error + major measurement and severity errors + clean pair",
-  "description": "Stage 3b call derived from the matches in brain-mr/matching/example_2.json. The putamen-metastasis pair carries a laterality flip on a paired structure (right vs left putamen) — always major per the prompt rule. The pituitary pair has a comparison disagreement (gt worsening vs pred stable) that lives in Stage 3a deterministic, plus a downstream significance-tier shift; Stage 3b does NOT re-emit comparison errors, but the pred leaves out the growth into a mass pressing on the optic chiasm, a major severity error. The leptomeningeal tentorial pair has a major measurement error (thickness 1.5 vs 2 cm: more than 20 % and 5 mm). Brainstem-edema pair is identical.",
+  "scenario": "Side flip left upstream + major measurement and extent errors",
+  "description": "Stage 3b call built from brain-mr/findings_gt/example_2.json and findings_pred/example_2.json. The putamen-metastasis pair differs only in side (right vs left putamen): the side is scored upstream (Stage 3a `laterality`), so it carries no site error. The pituitary pair has a comparison disagreement (gt worsening vs pred stable) that Stage 3a scores; Stage 3b does NOT re-emit comparison errors, but the pred leaves out the growth into a mass pressing on the optic chiasm, a major extent error (mass effect). The leptomeningeal tentorial mass is one finding with its edema on each side; it has a major measurement error (thickness 1.5 vs 2 cm: more than 20 % and 5 mm).",
   "user": {
     "series_uuid": "brain-mr_example_2",
     "pairs": [
       {
         "pair_id": 1,
-        "pred_finding": {"finding_id": "p_1", "text": "Leptomeningeal metastasis on the left inferior surface of the tentorium, now forming a mass 2 cm in diameter and 1.5 cm in thickness, previously punctate.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "worsening", "measurements": [{"value": 2, "unit": "cm", "category": "size"}, {"value": 1.5, "unit": "cm", "category": "size"}]},
-        "gt_finding":   {"finding_id": "gt_1", "text": "Leptomeningeal metastasis on the left inferior surface of the tentorium, now forming a mass 2.5 cm in diameter and 2 cm in thickness, previously punctate.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "worsening", "measurements": [{"value": 2.5, "unit": "cm", "category": "size"}, {"value": 2, "unit": "cm", "category": "size"}]}
+        "pred_finding": {"finding_id": "p_1", "text": "Leptomeningeal metastasis on the left inferior surface of the tentorium, now forming a mass 2 cm in diameter and 1.5 cm in thickness, previously punctate, with associated massive edema extending to the brainstem and cerebellum.", "clinical_status": "abnormal", "clinical_significance": "critical", "laterality": "left", "comparison": "worsening", "measurements": [{"value": 2, "unit": "cm", "category": "size"}, {"value": 1.5, "unit": "cm", "category": "size"}]},
+        "gt_finding":   {"finding_id": "gt_1", "text": "Leptomeningeal metastasis on the left inferior surface of the tentorium, now forming a mass 2.5 cm in diameter and 2 cm in thickness, previously punctate, with associated massive edema extending to the brainstem and cerebellum.", "clinical_status": "abnormal", "clinical_significance": "critical", "laterality": "left", "comparison": "worsening", "measurements": [{"value": 2.5, "unit": "cm", "category": "size"}, {"value": 2, "unit": "cm", "category": "size"}]}
       },
       {
         "pair_id": 2,
-        "pred_finding": {"finding_id": "p_2", "text": "Massive edema extending to the brainstem and cerebellum associated with the left tentorial mass.", "clinical_status": "abnormal", "clinical_significance": "critical", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_2", "text": "Massive edema extending to the brainstem and cerebellum associated with the left tentorial mass.", "clinical_status": "abnormal", "clinical_significance": "critical", "comparison": null, "measurements": []}
+        "pred_finding": {"finding_id": "p_3", "text": "New metastasis measuring 17 mm in diameter in the right putamen with extensive perilesional edema.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": "right", "comparison": "new", "measurements": [{"value": 17, "unit": "mm", "category": "size"}]},
+        "gt_finding":   {"finding_id": "gt_4", "text": "New metastasis measuring 17 mm in diameter in the left putamen with extensive perilesional edema.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": "left", "comparison": "new", "measurements": [{"value": 17, "unit": "mm", "category": "size"}]}
       },
       {
         "pair_id": 3,
-        "pred_finding": {"finding_id": "p_3", "text": "New metastasis measuring 17 mm in diameter in the right putamen with extensive perilesional edema.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "new", "measurements": [{"value": 17, "unit": "mm", "category": "size"}]},
-        "gt_finding":   {"finding_id": "gt_4", "text": "New metastasis measuring 17 mm in diameter in the left putamen with extensive perilesional edema.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "new", "measurements": [{"value": 17, "unit": "mm", "category": "size"}]}
-      },
-      {
-        "pair_id": 4,
-        "pred_finding": {"finding_id": "p_4", "text": "Pituitary metastasis infiltrating the anterior lobe and stalk appears stable.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": []},
-        "gt_finding":   {"finding_id": "gt_6", "text": "Pituitary metastasis infiltrating the anterior lobe and stalk is progressively growing and forming a mass, exerting pressure on the optic chiasm and left optic tract.", "clinical_status": "abnormal", "clinical_significance": "critical", "comparison": "worsening", "measurements": []}
+        "pred_finding": {"finding_id": "p_4", "text": "Pituitary metastasis infiltrating the anterior lobe and stalk appears stable.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": null, "comparison": "stable", "measurements": []},
+        "gt_finding":   {"finding_id": "gt_6", "text": "Pituitary metastasis infiltrating the anterior lobe and stalk is progressively growing and forming a mass, exerting pressure on the optic chiasm and left optic tract.", "clinical_status": "abnormal", "clinical_significance": "critical", "laterality": null, "comparison": "worsening", "measurements": []}
       }
     ]
   },
@@ -33,10 +28,7 @@
       ]},
       {"pair_id": 2, "errors": []},
       {"pair_id": 3, "errors": [
-        {"dimension": "location", "severity": "major", "reasoning": "Pred says right putamen, gt says left putamen — laterality flip on a paired deep grey structure. Different hemisphere, different clinical implication."}
-      ]},
-      {"pair_id": 4, "errors": [
-        {"dimension": "severity", "severity": "major", "reasoning": "pred leaves out the growth into a mass pressing on the optic chiasm"}
+        {"dimension": "extent", "severity": "major", "reasoning": "pred leaves out the growth into a mass pressing on the optic chiasm (mass effect)"}
       ]}
     ]
   }

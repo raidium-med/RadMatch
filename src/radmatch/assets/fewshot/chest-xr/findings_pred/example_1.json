@@ -2,6 +2,7 @@
   {
     "text": "Right pleural thickening is chronic.",
     "measurements": [],
+    "laterality": "right",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -9,6 +10,7 @@
   {
     "text": "Moderate cardiomegaly.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -16,6 +18,7 @@
   {
     "text": "Elevation of the right hemidiaphragm.",
     "measurements": [],
+    "laterality": "right",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -23,6 +26,7 @@
   {
     "text": "No focal airspace opacities.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -30,6 +34,7 @@
   {
     "text": "No pulmonary edema.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -37,6 +42,7 @@
   {
     "text": "Small bilateral pleural effusions are noted.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -44,6 +50,7 @@
   {
     "text": "No pneumothorax.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "critical"
@@ -51,8 +58,9 @@
   {
     "text": "No evidence of pneumonia.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "routine"
+    "clinical_significance": "urgent"
   }
 ]

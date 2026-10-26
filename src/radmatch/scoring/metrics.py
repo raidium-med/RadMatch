@@ -12,32 +12,9 @@ definitions.
 
 from __future__ import annotations
 
-from typing import Literal, Sequence, TypedDict
+from typing import Sequence, TypedDict
 
 from radmatch import constants
-
-
-class MatchRecord(TypedDict):
-    """A scored matched pair, assembled in Stage 3c.
-
-    `structured_errors` and `text_errors` are kept as ``list[dict]`` rather
-    than ``list[AttributeError]`` to avoid cross-module type imports
-    (the per-error shape is documented inline in `scoring.comparators` and
-    `scoring.inference`).
-
-    `muc_category` is the *internal* category (COR / PAR / INC). The output
-    summaries reclassify PAR via `reclassify_to_effective_category`.
-    """
-
-    pred_id: str
-    gt_id: str
-    muc_category: Literal["COR", "PAR", "INC"]
-    structured_errors: list[dict]
-    text_errors: list[dict]
-    inc_triggered: bool
-    gt_significance: Literal["critical", "urgent", "notable", "routine"]
-    pred_significance: Literal["critical", "urgent", "notable", "routine"]
-
 
 # ============================================================================
 # Per-pair classification + PAR reclassification
@@ -118,8 +95,8 @@ def build_muc_record(
         "structured_errors": list(structured_errors),
         "text_errors": list(text_errors),
         "inc_triggered": inc_triggered,
-        "gt_significance": gt_finding.get("clinical_significance", constants.DEFAULT_CLINICAL_SIGNIFICANCE),
-        "pred_significance": pred_finding.get("clinical_significance", constants.DEFAULT_CLINICAL_SIGNIFICANCE),
+        "gt_significance": gt_finding["clinical_significance"],
+        "pred_significance": pred_finding["clinical_significance"],
     }
 
 
@@ -412,7 +389,7 @@ def compute_attribute_breakdown(records: Sequence[dict]) -> dict[str, dict[str, 
 
     Every matched pair (COR + PAR + INC internally) is evaluated on every
     attribute dimension by Stage 3a + 3b, so the `evaluated` denominator is
-    uniform across all seven dimensions: `clean + minor + major == evaluated`.
+    uniform across all dimensions: `clean + minor + major == evaluated`.
 
     At most one classification per (record, dimension): a record with both a
     major and a minor on the same dimension counts as major.

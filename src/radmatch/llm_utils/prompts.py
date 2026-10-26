@@ -128,11 +128,6 @@ def load_extraction_fewshot(fewshot_name: str | None) -> Sequence[dict[str, obje
     reports_dir = example_set_dir / constants.REPORTS_GT_DIR
     findings_dir = example_set_dir / constants.FINDINGS_GT_DIR
 
-    if not reports_dir.exists():
-        reports_dir = example_set_dir / "reports"
-    if not findings_dir.exists():
-        findings_dir = example_set_dir / "findings"
-
     missing_dirs = [d for d in (reports_dir, findings_dir) if not d.exists()]
     if missing_dirs:
         dirs_text = ", ".join(str(d) for d in missing_dirs)
@@ -160,7 +155,7 @@ def load_extraction_fewshot(fewshot_name: str | None) -> Sequence[dict[str, obje
             continue
 
         filtered_findings = [
-            extract_utils.project_to_canonical_finding(finding)
+            extract_utils.project_to_canonical_finding(finding, with_id=False)
             for finding in findings_payload
             if isinstance(finding, dict)
         ]

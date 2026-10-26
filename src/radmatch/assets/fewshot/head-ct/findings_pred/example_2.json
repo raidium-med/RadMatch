@@ -1,54 +1,35 @@
 [
   {
-    "text": "Right temporal subdural hematoma.",
-    "measurements": [],
-    "comparison": null,
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
-  },
-  {
-    "text": "Anterior portion of the subdural hematoma shows decreased density with a maximum thickness of 8 mm.",
+    "text": "Right temporal subdural hematoma: the anterior portion shows decreased density and a maximum thickness of 8 mm, the posterior portion is overall stable with a maximal thickness of 13 mm, and there is no significant mass effect on adjacent structures.",
     "measurements": [
       {
         "value": 8,
         "unit": "mm",
         "category": "size"
-      }
-    ],
-    "comparison": "improving",
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
-  },
-  {
-    "text": "Overall stable appearance of the posterior portion of the subdural hematoma with a maximal thickness of 13 mm.",
-    "measurements": [
+      },
       {
         "value": 13,
         "unit": "mm",
         "category": "size"
       }
     ],
-    "comparison": "stable",
+    "laterality": "right",
+    "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
   },
   {
     "text": "No evidence of recent hemorrhage.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "critical"
   },
   {
-    "text": "No significant mass effect on adjacent structures.",
-    "measurements": [],
-    "comparison": null,
-    "clinical_status": "normal",
-    "clinical_significance": "routine"
-  },
-  {
     "text": "Stable right temporo-occipital sequelae with tissue loss.",
     "measurements": [],
+    "laterality": "right",
     "comparison": "stable",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -56,6 +37,7 @@
   {
     "text": "Stable periventricular microangiopathic white matter changes.",
     "measurements": [],
+    "laterality": null,
     "comparison": "stable",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -63,6 +45,7 @@
   {
     "text": "Enlargement of intra- and pericerebral CSF spaces without signs of hydrocephalus.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -70,6 +53,7 @@
   {
     "text": "No abnormal enhancement.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -77,6 +61,7 @@
   {
     "text": "No abnormal spontaneous attenuation in the brainstem and cerebellum.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -84,6 +69,7 @@
   {
     "text": "Fourth ventricle midline, normal in size and morphology.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -91,6 +77,7 @@
   {
     "text": "Normal appearance of the basal cisterns.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"

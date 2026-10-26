@@ -288,7 +288,8 @@ def match_dataset(
     retry_degraded: bool = False,
 ) -> None:
     """Match every series present in both findings dirs, writing
-    `output_dir/matching/<series>.json`. Pairs with an existing output are skipped.
+    `output_dir/matching/<series>.json`. A pair whose existing output carries the current
+    findings and config stamps is skipped.
 
     `series_allowlist` restricts the run to the given stems, so `--limit` against a
     directory holding a larger prior run does not pick up stale files.

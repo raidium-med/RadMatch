@@ -42,7 +42,7 @@ def main() -> None:
 
     st.write(
         "RadMatch scores a report by extracting its findings, matching them against the "
-        "ground truth, and judging each matched pair on seven attribute dimensions. Every "
+        "ground truth, and judging each matched pair on ten attribute dimensions. Every "
         "step is recorded, so a score is never a black box — this dashboard reads those "
         "records back. Start from the dataset-level numbers, then drill into the individual "
         "report, finding pair and attribute error that produced them."

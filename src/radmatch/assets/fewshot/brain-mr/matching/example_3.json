@@ -7,6 +7,7 @@
         "finding_id": "p_1",
         "text": "T2 hyperintensity in the right periventricular white matter.",
         "clinical_status": "abnormal",
+        "laterality": "right",
         "comparison": null,
         "measurements": []
       },
@@ -14,6 +15,7 @@
         "finding_id": "p_2",
         "text": "T2 hyperintensity in the left periventricular white matter.",
         "clinical_status": "abnormal",
+        "laterality": "left",
         "comparison": null,
         "measurements": []
       },
@@ -21,6 +23,7 @@
         "finding_id": "p_3",
         "text": "Pituitary gland normal.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }
@@ -30,6 +33,7 @@
         "finding_id": "gt_1",
         "text": "Bilateral periventricular white matter T2 hyperintensities, age-related.",
         "clinical_status": "abnormal",
+        "laterality": "bilateral",
         "comparison": null,
         "measurements": []
       },
@@ -37,6 +41,7 @@
         "finding_id": "gt_2",
         "text": "Pituitary gland normal.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }

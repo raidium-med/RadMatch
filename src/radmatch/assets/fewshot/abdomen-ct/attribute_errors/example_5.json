@@ -1,6 +1,6 @@
 {
   "scenario": "Constructed: certainty, left-out character and grade, structured category, expected post-surgical state",
-  "description": "Constructed. Small bowel dilatation whose air-fluid levels and 'mild' grade the pred leaves out carries a major morphology and a major severity error; a hedged fracture is major; 'possibly malignant' vs 'consistent with renal cell carcinoma' is two certainty steps (major); a Bosniak class change across follow-up buckets is a major severity error; 'possibly' on a definite negative is two certainty steps (major); a bile duct size gt explains by cholecystectomy carries no error.",
+  "description": "Constructed. Small bowel dilatation whose air-fluid levels and 'mild' grade the pred leaves out carries a major character and a major severity error, and the obstruction the pred adds without gt support a major diagnosis error; a hedged fracture is a major certainty error; 'possibly malignant' vs 'consistent with renal cell carcinoma' is two certainty steps (major); a Bosniak class change across follow-up buckets is a major severity error; 'possibly' on a definite negative is two certainty steps (major); a 9 mm bile duct after cholecystectomy is the expected effect of the procedure (normal on both sides): no error.",
   "user": {
     "series_uuid": "abdomen-ct_example_5",
     "pairs": [
@@ -8,9 +8,10 @@
         "pair_id": 1,
         "pred_finding": {
           "finding_id": "p_1",
-          "text": "Small bowel dilatation compatible with developing small bowel obstruction.",
+          "text": "Small bowel dilatation up to 3.8 cm compatible with developing small bowel obstruction.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": null,
           "comparison": null,
           "measurements": [
             {
@@ -25,6 +26,7 @@
           "text": "Mild small bowel dilatation up to 3.8 cm with air-fluid levels.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": [
             {
@@ -42,6 +44,7 @@
           "text": "Possible minimally displaced right inferior pubic ramus fracture.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         },
@@ -50,6 +53,7 @@
           "text": "Minimally displaced right inferior pubic ramus fracture.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         }
@@ -61,6 +65,7 @@
           "text": "Right renal mass, possibly malignant.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         },
@@ -69,6 +74,7 @@
           "text": "Right renal mass consistent with renal cell carcinoma.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         }
@@ -80,6 +86,7 @@
           "text": "Bosniak IIF left renal cyst.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "left",
           "comparison": null,
           "measurements": []
         },
@@ -88,6 +95,7 @@
           "text": "Bosniak II left renal cyst.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "left",
           "comparison": null,
           "measurements": []
         }
@@ -99,6 +107,7 @@
           "text": "Gallbladder normal, possibly without gallstones.",
           "clinical_status": "normal",
           "clinical_significance": "routine",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
@@ -107,6 +116,7 @@
           "text": "Gallbladder normal without gallstones.",
           "clinical_status": "normal",
           "clinical_significance": "routine",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         }
@@ -116,8 +126,9 @@
         "pred_finding": {
           "finding_id": "p_6",
           "text": "Common bile duct 9 mm.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "notable",
+          "clinical_status": "normal",
+          "clinical_significance": "routine",
+          "laterality": null,
           "comparison": null,
           "measurements": [
             {
@@ -130,8 +141,9 @@
         "gt_finding": {
           "finding_id": "gt_6",
           "text": "Common bile duct 9 mm, expected after cholecystectomy.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "notable",
+          "clinical_status": "normal",
+          "clinical_significance": "routine",
+          "laterality": null,
           "comparison": null,
           "measurements": [
             {
@@ -150,7 +162,7 @@
         "pair_id": 1,
         "errors": [
           {
-            "dimension": "morphology",
+            "dimension": "character",
             "severity": "major",
             "reasoning": "pred leaves out the air-fluid levels gt gives"
           },
@@ -158,6 +170,11 @@
             "dimension": "severity",
             "severity": "major",
             "reasoning": "pred leaves out the mild grade"
+          },
+          {
+            "dimension": "diagnosis",
+            "severity": "major",
+            "reasoning": "pred adds a small bowel obstruction the gt does not state"
           }
         ]
       },

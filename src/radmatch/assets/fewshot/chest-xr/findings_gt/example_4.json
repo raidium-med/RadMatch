@@ -2,6 +2,7 @@
   {
     "text": "Cardiac silhouette at the upper limit of normal in size.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -9,6 +10,7 @@
   {
     "text": "Aortic knob calcification.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "routine"
@@ -16,6 +18,7 @@
   {
     "text": "Sternotomy wires.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "routine"
@@ -23,6 +26,7 @@
   {
     "text": "Tiny nodular opacity in the right lower lung.",
     "measurements": [],
+    "laterality": "right",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -30,6 +34,7 @@
   {
     "text": "No pleural effusion.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -37,6 +42,7 @@
   {
     "text": "No pneumothorax.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"

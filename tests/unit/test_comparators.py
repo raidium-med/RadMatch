@@ -62,6 +62,41 @@ def test_comparison_no_conflict(value):
 
 
 # ============================================================================
+# laterality
+# ============================================================================
+
+
+@pytest.mark.parametrize(
+    "pred, gt, group_sides, is_error",
+    [
+        pytest.param("left", "right", None, True, id="flip"),
+        pytest.param("bilateral", "left", None, True, id="bilateral-vs-one-side"),
+        pytest.param(None, "left", None, True, id="pred-leaves-out-the-side"),
+        pytest.param("left", None, None, False, id="pred-adds-a-side"),
+        pytest.param(None, "bilateral", None, False, id="no-side-vs-bilateral"),
+        pytest.param("left", None, ("left", "right"), False, id="own-gt-gives-no-side"),
+        pytest.param("bilateral", "left", ("bilateral", "bilateral"), False, id="group-gives-the-other-side"),
+        pytest.param(None, None, None, False, id="no-side"),
+    ],
+)
+def test_laterality_conflict(pred, gt, group_sides, is_error):
+    err = comparators.classify_laterality_conflict(pred, gt, *(group_sides or (pred, gt)))
+    assert (err is not None) == is_error
+
+
+def test_side_union():
+    assert comparators.side_union(["left", "right", None]) == "bilateral"
+    assert comparators.side_union(["left", None]) == "left"
+    assert comparators.side_union([None]) is None
+
+
+def test_laterality_is_not_compared_on_a_status_inversion():
+    pred = {"clinical_status": "normal", "laterality": "left"}
+    gt = {"clinical_status": "abnormal", "laterality": "right"}
+    assert {e["dimension"] for e in comparators.compute_structured_errors(pred, gt)} == {"clinical_status"}
+
+
+# ============================================================================
 # classify_measurement_asymmetry
 # ============================================================================
 

@@ -2,6 +2,7 @@
   {
     "text": "Marked bilateral, diffuse paraseptal emphysema, non-confluent.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -9,6 +10,7 @@
   {
     "text": "Left apical pleural cap.",
     "measurements": [],
+    "laterality": "left",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -16,6 +18,7 @@
   {
     "text": "No progressive pleuroparenchymal abnormality.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -29,6 +32,7 @@
         "category": "size"
       }
     ],
+    "laterality": "left",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
@@ -42,6 +46,7 @@
         "category": "size"
       }
     ],
+    "laterality": "left",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
@@ -55,6 +60,7 @@
         "category": "size"
       }
     ],
+    "laterality": "left",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -68,6 +74,7 @@
         "category": "size"
       }
     ],
+    "laterality": "left",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -81,6 +88,7 @@
         "category": "size"
       }
     ],
+    "laterality": "right",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
@@ -88,6 +96,7 @@
   {
     "text": "Small right pleural effusion.",
     "measurements": [],
+    "laterality": "right",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -101,6 +110,7 @@
         "category": "size"
       }
     ],
+    "laterality": "right",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
@@ -108,6 +118,7 @@
   {
     "text": "Subcentimeter left interbronchial lymph node.",
     "measurements": [],
+    "laterality": "left",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -131,6 +142,7 @@
         "category": "size"
       }
     ],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -138,6 +150,7 @@
   {
     "text": "No signs of mural hematoma or dissection.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -145,6 +158,7 @@
   {
     "text": "No endobronchial abnormality.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -152,6 +166,7 @@
   {
     "text": "No osseous abnormality.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -159,6 +174,7 @@
   {
     "text": "Adrenal glands are slender.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -166,6 +182,7 @@
   {
     "text": "Hepatic dysmorphism without signs of portal hypertension.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"

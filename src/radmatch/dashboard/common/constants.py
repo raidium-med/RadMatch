@@ -19,7 +19,13 @@ COMPARISON_COLORS: dict[str, str] = {
     "worsening": "#fca5a5",  # Light red
     "new": "#7dd3fc",  # Light sky
     "resolved": "#6ee7b7",  # Light emerald
-    "no": "#e5e7eb",  # Very light gray
+}
+
+# Side colors (the finding's `laterality`; no badge when it has none)
+LATERALITY_COLORS: dict[str, str] = {
+    "left": "#6366f1",  # Indigo
+    "right": "#14b8a6",  # Teal
+    "bilateral": "#a855f7",  # Purple
 }
 
 # ============================================================================

@@ -13,7 +13,9 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
+from radmatch import constants
 from radmatch.dashboard.build_dashboard_data import _flatten, build_report_index
+from radmatch.dashboard.common import shared
 from radmatch.dashboard.common.shared import PerPairMatchInfo, build_match_index
 from tests.fakes.fake_outputs import tier_block
 
@@ -39,12 +41,7 @@ def fake_per_report_metrics() -> dict:
 
 def test_flatten_extracts_dashboard_columns(fake_per_report_metrics):
     row = _flatten(fake_per_report_metrics)
-    assert (row["actionable_errors"], row["actionable_fn"], row["actionable_fp"]) == (2, 1, 1)
-    assert (row["triage_errors"], row["critical_errors"]) == (1, 0)
-    assert row["triage_recall"] == 0.5
-    assert row["actionable_recall"] == 0.6
-    assert row["triage_precision"] == pytest.approx(2 / 3)
-    assert row["actionable_precision"] == 0.75
+    assert (row["actionable_errors"], row["triage_errors"], row["critical_errors"]) == (2, 1, 0)
     assert row["muc_cor"] == 2
     assert row["muc_inc"] == 1
 
@@ -76,7 +73,7 @@ def test_build_report_index_writes_one_row_per_series(tmp_path, fake_per_report_
     assert isinstance(df, pd.DataFrame)
     assert len(df) == 2
     assert set(df["report_id"]) == {"s1", "s2"}
-    assert {"actionable_errors", "triage_fp", "critical_fn", "muc_cor", "triage_recall"}.issubset(df.columns)
+    assert {"actionable_errors", "triage_errors", "critical_errors", "muc_cor"}.issubset(df.columns)
     assert {"clinical_significances", "measurement_types", "comparisons"}.issubset(df.columns)
     assert df.loc[df["report_id"] == "s1", "measurement_types"].iloc[0] == ["size"]
 
@@ -94,18 +91,18 @@ def test_build_match_index_reclassifies_PAR_with_major_to_INC():
                 "gt_id": "g1",
                 "muc_category": "PAR",
                 "structured_errors": [],
-                "text_errors": [{"dimension": "location", "severity": "major"}],
+                "text_errors": [{"dimension": "site", "severity": "major"}],
             }
         ],
         "structured_errors_per_pair": [[]],
-        "text_errors_per_pair": [[{"dimension": "location", "severity": "major"}]],
+        "text_errors_per_pair": [[{"dimension": "site", "severity": "major"}]],
     }
     gt_idx, pred_idx = build_match_index(matching, attr_errors)
     # PAR with major → INC in the effective taxonomy
     assert gt_idx["g1"].category == "INC"
     assert gt_idx["g1"].counterparts[0].counterpart_id == "p1"
     assert pred_idx["p1"].category == "INC"
-    assert pred_idx["p1"].counterparts[0].text_errors[0]["dimension"] == "location"
+    assert pred_idx["p1"].counterparts[0].text_errors[0]["dimension"] == "site"
     assert gt_idx["g2"].category == "MIS"
     assert pred_idx["p2"].category == "SPU"
 
@@ -123,11 +120,11 @@ def test_build_match_index_keeps_PAR_when_only_minor_errors():
                 "gt_id": "g1",
                 "muc_category": "PAR",
                 "structured_errors": [],
-                "text_errors": [{"dimension": "location", "severity": "minor"}],
+                "text_errors": [{"dimension": "site", "severity": "minor"}],
             }
         ],
         "structured_errors_per_pair": [[]],
-        "text_errors_per_pair": [[{"dimension": "location", "severity": "minor"}]],
+        "text_errors_per_pair": [[{"dimension": "site", "severity": "minor"}]],
     }
     gt_idx, _ = build_match_index(matching, attr_errors)
     # PAR with only minor errors stays PAR in the effective taxonomy.
@@ -172,12 +169,12 @@ def test_build_match_index_aggregates_multi_bind_counterparts():
                 "gt_id": "g2",
                 "muc_category": "PAR",
                 "structured_errors": [],
-                "text_errors": [{"dimension": "location", "severity": "major"}],
+                "text_errors": [{"dimension": "site", "severity": "major"}],
             },
             {"pred_id": "p1", "gt_id": "g3", "muc_category": "COR", "structured_errors": [], "text_errors": []},
         ],
         "structured_errors_per_pair": [[], [], []],
-        "text_errors_per_pair": [[], [{"dimension": "location", "severity": "major"}], []],
+        "text_errors_per_pair": [[], [{"dimension": "site", "severity": "major"}], []],
     }
     gt_idx, pred_idx = build_match_index(matching, attr)
     assert len(pred_idx["p1"].counterparts) == 3
@@ -200,3 +197,7 @@ def test_per_pair_match_info_default_for_unmatched_gt():
     info = PerPairMatchInfo("MIS", [])
     assert info.category == "MIS"
     assert info.counterparts == []
+
+
+def test_display_order_covers_every_dimension():
+    assert set(shared.DIMENSION_DISPLAY_ORDER) == set(constants.ATTRIBUTE_DIMENSIONS_ALL)

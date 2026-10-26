@@ -137,7 +137,8 @@ def _add_extraction_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--workers", type=int, default=15, help="Number of concurrent workers (default: 15)")
     parser.add_argument("--limit", type=int, help="Limit number of reports (for debugging)")
     parser.add_argument(
-        "--findings-gt", help="Path to existing ground truth findings directory to adapt (alternative to --reports-gt)"
+        "--findings-gt",
+        help="Path to existing ground truth findings directory to adapt (alternative to --reports-gt)",
     )
     parser.add_argument(
         "--reasoning",

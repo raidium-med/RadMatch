@@ -7,6 +7,7 @@
         "finding_id": "p_1",
         "text": "Cerebellum unremarkable.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -14,6 +15,7 @@
         "finding_id": "p_2",
         "text": "Ventricles and basal cisterns normal.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -21,6 +23,7 @@
         "finding_id": "p_3",
         "text": "Small lacunar infarct in the right basal ganglia.",
         "clinical_status": "abnormal",
+        "laterality": "right",
         "comparison": null,
         "measurements": []
       }
@@ -30,6 +33,7 @@
         "finding_id": "gt_1",
         "text": "No tumoral lesion in the cerebellum.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -37,6 +41,7 @@
         "finding_id": "gt_2",
         "text": "No hemorrhagic lesion in the cerebellum.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -44,6 +49,7 @@
         "finding_id": "gt_3",
         "text": "No ischemic lesion in the cerebellum.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -51,6 +57,7 @@
         "finding_id": "gt_4",
         "text": "Ventricles and basal cisterns normal.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -58,6 +65,7 @@
         "finding_id": "gt_5",
         "text": "Small lacunar infarct in the right basal ganglia.",
         "clinical_status": "abnormal",
+        "laterality": "right",
         "comparison": null,
         "measurements": []
       }

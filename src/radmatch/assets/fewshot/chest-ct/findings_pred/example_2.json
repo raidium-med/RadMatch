@@ -2,6 +2,7 @@
   {
     "text": "Right chest port catheter.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -9,6 +10,7 @@
   {
     "text": "Scattered aortic atherosclerosis.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "routine"
@@ -16,6 +18,7 @@
   {
     "text": "Left coronary artery calcifications.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -23,6 +26,7 @@
   {
     "text": "Normal heart size.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -30,6 +34,7 @@
   {
     "text": "No pericardial effusion.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -37,13 +42,15 @@
   {
     "text": "No enlarged mediastinal, hilar, or axillary lymph nodes.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "routine"
+    "clinical_significance": "notable"
   },
   {
     "text": "Thyroid gland, trachea, and esophagus demonstrate no significant findings.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -72,6 +79,7 @@
         "category": "size"
       }
     ],
+    "laterality": null,
     "comparison": "worsening",
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
@@ -100,6 +108,7 @@
         "category": "size"
       }
     ],
+    "laterality": "right",
     "comparison": "worsening",
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
@@ -107,6 +116,7 @@
   {
     "text": "Multiple additional bilateral pulmonary nodules are unchanged.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": "stable",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -114,6 +124,7 @@
   {
     "text": "Small left-sided pleural effusion.",
     "measurements": [],
+    "laterality": "left",
     "comparison": "new",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -121,20 +132,31 @@
   {
     "text": "No pneumothorax.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
   },
   {
-    "text": "No chest wall mass or suspicious bone lesions.",
+    "text": "No chest wall mass.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "routine"
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "No suspicious bone lesions.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "notable"
   },
   {
     "text": "No suspicious hepatic lesion identified.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -142,6 +164,7 @@
   {
     "text": "No gallstones, gallbladder wall thickening, or biliary dilatation.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -149,6 +172,7 @@
   {
     "text": "Pancreas unremarkable.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -156,6 +180,7 @@
   {
     "text": "Spleen normal in size.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -163,6 +188,7 @@
   {
     "text": "Adrenal glands unremarkable.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -170,6 +196,7 @@
   {
     "text": "Kidneys normal without renal calculi, solid lesion, or hydronephrosis.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -177,6 +204,7 @@
   {
     "text": "Bladder is unremarkable.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -184,6 +212,7 @@
   {
     "text": "Stomach is within normal limits.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -191,6 +220,7 @@
   {
     "text": "Appendix appears normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -219,6 +249,7 @@
         "category": "size"
       }
     ],
+    "laterality": null,
     "comparison": "worsening",
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
@@ -247,6 +278,7 @@
         "category": "size"
       }
     ],
+    "laterality": "left",
     "comparison": "improving",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -254,6 +286,7 @@
   {
     "text": "Status post hysterectomy.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "routine"
@@ -261,6 +294,7 @@
   {
     "text": "Low midline ventral hernia containing multiple loops of nonobstructed small bowel.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -268,6 +302,7 @@
   {
     "text": "No abdominopelvic ascites.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -275,6 +310,7 @@
   {
     "text": "No acute or significant osseous findings.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -282,6 +318,7 @@
   {
     "text": "Mixed response to treatment.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"

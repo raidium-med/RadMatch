@@ -65,6 +65,20 @@ def test_extract_findings_list_normalises_comparison(raw_comp, expected):
     assert out[0]["comparison"] == expected
 
 
+@pytest.mark.parametrize(
+    "raw_side, expected",
+    [
+        pytest.param("left", "left", id="valid"),
+        pytest.param(" Bilateral", "bilateral", id="case-and-space"),
+        pytest.param("middle", None, id="invalid-coerced-none"),
+        pytest.param(None, None, id="missing-stays-none"),
+    ],
+)
+def test_extract_findings_list_keeps_laterality(raw_side, expected):
+    raw = [{"text": "x"} if raw_side is None else {"text": "x", "laterality": raw_side}]
+    assert extract_utils.extract_findings_list(raw, "s")[0]["laterality"] == expected
+
+
 def test_extract_findings_list_normalises_measurements():
     raw = [
         {"text": "ok", "measurements": [{"value": "5", "category": "size"}, {"value": "1", "category": "bogus"}]},

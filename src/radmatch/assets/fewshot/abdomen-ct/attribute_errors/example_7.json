@@ -1,6 +1,6 @@
 {
-  "scenario": "Constructed: bilateral vs one side, left-out side, site and grade, umbrella, more detail, density vs composition",
-  "description": "Constructed. Bilateral vs one side and a left-out grade are major; a side the pred leaves out is major; an umbrella pred that names no site has a major location error on each located gt lesion; a pred more detailed than the gt has no error; a bilateral pred matched to a left and a right gt has no location error; a density word for a gt composition is a major morphology error. A size the pred leaves out is a major measurement error, minor on a simple renal cyst. A change the pred invents on diverticulosis is no error (not followed by size). A hedge on the cause ('possibly related to hepatitis') leaves the finding definite: no error. A one-step grade difference (large vs moderate) is minor. A side only the pred gives is a major location error.",
+  "scenario": "Constructed: side differences left upstream, left-out site and grade, umbrella, more detail, density vs composition",
+  "description": "Constructed. Bilateral vs one side and a side the pred leaves out: the side is scored upstream (Stage 3a `laterality`), so it carries no site error; a left-out grade is major; an umbrella pred that names no site has a major site error on each located gt lesion; a pred more detailed than the gt has no error; a bilateral pred matched to a left and a right gt has no site error; a density word for a cystic pancreatic lesion is a major character error. A size the pred leaves out is a major measurement error, minor on a simple renal cyst. A change the pred invents on diverticulosis is no error (not followed by size). A hedge on the cause ('possibly related to hepatitis') leaves the finding definite: no error. A one-step grade difference (large vs moderate) is minor. A side only the pred gives: the side is scored upstream (Stage 3a `laterality`), so it carries no site error.",
   "user": {
     "series_uuid": "abdomen-ct_example_7",
     "pairs": [
@@ -11,6 +11,7 @@
           "text": "Bilateral hydronephrosis.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "bilateral",
           "comparison": null,
           "measurements": []
         },
@@ -19,6 +20,7 @@
           "text": "Moderate left hydronephrosis.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "left",
           "comparison": null,
           "measurements": []
         }
@@ -30,6 +32,7 @@
           "text": "Adrenal nodule.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
@@ -38,6 +41,7 @@
           "text": "1.4 cm left adrenal nodule.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "left",
           "comparison": null,
           "measurements": [
             {
@@ -55,6 +59,7 @@
           "text": "Multiple splenic hypodensities.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
@@ -63,6 +68,7 @@
           "text": "8 mm hypodensity in the splenic upper pole.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": [
             {
@@ -83,6 +89,7 @@
           "text": "Multiple splenic hypodensities.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
@@ -91,6 +98,7 @@
           "text": "5 mm hypodensity near the splenic hilum.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": [
             {
@@ -109,16 +117,18 @@
         "pred_finding": {
           "finding_id": "p_4",
           "text": "Splenule at the splenic hilum.",
-          "clinical_status": "abnormal",
+          "clinical_status": "normal",
           "clinical_significance": "routine",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
         "gt_finding": {
           "finding_id": "gt_5",
           "text": "Splenule.",
-          "clinical_status": "abnormal",
+          "clinical_status": "normal",
           "clinical_significance": "routine",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         }
@@ -130,6 +140,7 @@
           "text": "Bilateral ovarian cysts.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "bilateral",
           "comparison": null,
           "measurements": []
         },
@@ -138,6 +149,7 @@
           "text": "Left ovarian cyst.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "left",
           "comparison": null,
           "measurements": []
         },
@@ -152,6 +164,7 @@
           "text": "Hypodense lesion in the pancreatic tail.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
@@ -160,6 +173,7 @@
           "text": "Cystic lesion in the pancreatic tail.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         }
@@ -171,6 +185,7 @@
           "text": "Simple left renal cyst.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "left",
           "comparison": null,
           "measurements": []
         },
@@ -179,6 +194,7 @@
           "text": "2.4 cm simple left renal cyst.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "left",
           "comparison": null,
           "measurements": [
             {
@@ -196,6 +212,7 @@
           "text": "Increased colonic diverticulosis.",
           "clinical_status": "abnormal",
           "clinical_significance": "routine",
+          "laterality": null,
           "comparison": "worsening",
           "measurements": []
         },
@@ -204,6 +221,7 @@
           "text": "Colonic diverticulosis.",
           "clinical_status": "abnormal",
           "clinical_significance": "routine",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         }
@@ -215,6 +233,7 @@
           "text": "Gallbladder wall thickening, possibly related to hepatitis.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
@@ -223,6 +242,7 @@
           "text": "Gallbladder wall thickening.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         }
@@ -234,6 +254,7 @@
           "text": "Large hiatal hernia.",
           "clinical_status": "abnormal",
           "clinical_significance": "routine",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
@@ -242,6 +263,7 @@
           "text": "Moderate hiatal hernia.",
           "clinical_status": "abnormal",
           "clinical_significance": "routine",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         }
@@ -253,6 +275,7 @@
           "text": "Left inguinal hernia containing fat.",
           "clinical_status": "abnormal",
           "clinical_significance": "routine",
+          "laterality": "left",
           "comparison": null,
           "measurements": []
         },
@@ -261,6 +284,7 @@
           "text": "Inguinal hernia.",
           "clinical_status": "abnormal",
           "clinical_significance": "routine",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         }
@@ -273,11 +297,6 @@
         "pair_id": 1,
         "errors": [
           {
-            "dimension": "location",
-            "severity": "major",
-            "reasoning": "pred claims both kidneys, gt only the left"
-          },
-          {
             "dimension": "severity",
             "severity": "major",
             "reasoning": "pred leaves out the moderate grade gt gives"
@@ -287,11 +306,6 @@
       {
         "pair_id": 2,
         "errors": [
-          {
-            "dimension": "location",
-            "severity": "major",
-            "reasoning": "pred leaves out the left side gt gives"
-          },
           {
             "dimension": "measurement",
             "severity": "major",
@@ -303,7 +317,7 @@
         "pair_id": 3,
         "errors": [
           {
-            "dimension": "location",
+            "dimension": "site",
             "severity": "major",
             "reasoning": "pred names no site; gt gives the splenic upper pole"
           },
@@ -318,7 +332,7 @@
         "pair_id": 4,
         "errors": [
           {
-            "dimension": "location",
+            "dimension": "site",
             "severity": "major",
             "reasoning": "pred names no site; gt gives the splenic hilum"
           },
@@ -341,9 +355,9 @@
         "pair_id": 7,
         "errors": [
           {
-            "dimension": "morphology",
+            "dimension": "character",
             "severity": "major",
-            "reasoning": "pred gives only the density (hypodense), gt calls it cystic"
+            "reasoning": "pred gives only the density (hypodense), gt gives a cystic composition: cystic vs solid pancreatic lesion"
           }
         ]
       },
@@ -377,13 +391,7 @@
       },
       {
         "pair_id": 12,
-        "errors": [
-          {
-            "dimension": "location",
-            "severity": "major",
-            "reasoning": "pred gives a left side gt does not give"
-          }
-        ]
+        "errors": []
       }
     ]
   }

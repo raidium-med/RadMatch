@@ -1,28 +1,28 @@
 {
-  "scenario": "Severity_descriptor major + location sub-anatomic major + clean negation",
-  "description": "Stage 3b call derived from the matches in chest-xr/matching/example_2.json. The pleural-effusion pair has a comparison flip (Stage 3a deterministic) but no status conflict, so it reaches Stage 3b; the pred leaves out the moderate grade gt gives, a major severity error. The LLL consolidation pair has a major severity error (pred leaves out the 'severe' grade gt gives; atelectasis and collapse are synonyms) and a minor location error (left basilar vs left lower lobe). The central line pair has a major sub-anatomic location error (upper right atrium vs lower SVC — different management). The pneumothorax pair is clean.",
+  "scenario": "Severity major + site major + clean negation",
+  "description": "Stage 3b call built from chest-xr/findings_gt/example_2.json and findings_pred/example_2.json. The pleural-effusion pair has a comparison flip (Stage 3a deterministic) but no status conflict; the pred leaves out the moderate grade gt gives, a major severity error. The LLL consolidation pair has a major severity error (pred leaves out the 'severe' grade gt gives; atelectasis and collapse are synonyms) and a minor site error (left basilar vs left lower lobe). The central line pair has a major site error (device tip: upper right atrium vs lower SVC — different management). The pneumothorax pair is clean.",
   "user": {
     "series_uuid": "chest-xr_example_2",
     "pairs": [
       {
         "pair_id": 1,
-        "pred_finding": {"finding_id": "p_1", "text": "Stable bilateral pleural effusion.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": []},
-        "gt_finding":   {"finding_id": "gt_1", "text": "Moderate bilateral pleural effusion has increased.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "worsening", "measurements": []}
+        "pred_finding": {"finding_id": "p_1", "text": "Stable bilateral pleural effusion.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "bilateral", "comparison": "stable", "measurements": []},
+        "gt_finding":   {"finding_id": "gt_1", "text": "Moderate bilateral pleural effusion has increased.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "bilateral", "comparison": "worsening", "measurements": []}
       },
       {
         "pair_id": 2,
-        "pred_finding": {"finding_id": "p_2", "text": "Left basilar opacity, likely atelectasis.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_2", "text": "Severe left lower lobe consolidation, presumably collapse, has not improved.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "stable", "measurements": []}
+        "pred_finding": {"finding_id": "p_2", "text": "Left basilar opacity, likely atelectasis.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "left", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_2", "text": "Severe left lower lobe consolidation, presumably collapse, has not improved.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": "left", "comparison": "stable", "measurements": []}
       },
       {
         "pair_id": 3,
-        "pred_finding": {"finding_id": "p_3", "text": "Right PICC line ends in the lower SVC.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_3", "text": "Right central venous line ends in the upper right atrium.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": null, "measurements": []}
+        "pred_finding": {"finding_id": "p_3", "text": "Right PICC line ends in the lower SVC.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": null, "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_3", "text": "Right central venous line ends in the upper right atrium.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": null, "measurements": []}
       },
       {
         "pair_id": 4,
-        "pred_finding": {"finding_id": "p_4", "text": "No pneumothorax.", "clinical_status": "normal", "clinical_significance": "critical", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_4", "text": "No pneumothorax.", "clinical_status": "normal", "clinical_significance": "critical", "comparison": null, "measurements": []}
+        "pred_finding": {"finding_id": "p_4", "text": "No pneumothorax.", "clinical_status": "normal", "clinical_significance": "critical", "laterality": null, "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_4", "text": "No pneumothorax.", "clinical_status": "normal", "clinical_significance": "critical", "laterality": null, "comparison": null, "measurements": []}
       }
     ]
   },
@@ -33,10 +33,10 @@
       ]},
       {"pair_id": 2, "errors": [
         {"dimension": "severity", "severity": "major", "reasoning": "pred leaves out the severe grade gt gives"},
-        {"dimension": "location", "severity": "minor", "reasoning": "left basilar vs left lower lobe"}
+        {"dimension": "site", "severity": "minor", "reasoning": "left basilar vs left lower lobe"}
       ]},
       {"pair_id": 3, "errors": [
-        {"dimension": "location", "severity": "major", "reasoning": "Pred places the tip in the lower SVC, gt places it in the upper right atrium — different anatomic position; atrial tips are conventionally pulled back due to arrhythmia / perforation risk, so the discrepancy changes management."}
+        {"dimension": "site", "severity": "major", "reasoning": "Pred places the tip in the lower SVC, gt places it in the upper right atrium — different anatomic position; atrial tips are conventionally pulled back due to arrhythmia / perforation risk, so the discrepancy changes management."}
       ]},
       {"pair_id": 4, "errors": []}
     ]

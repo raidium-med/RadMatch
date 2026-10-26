@@ -1,6 +1,6 @@
 {
-  "scenario": "Constructed: certainty and added-diagnosis grading",
-  "description": "Constructed. A critical finding hedged ('possible pneumothorax' vs a definite one) is a major certainty error; a different diagnosis for the same opacity is a major morphology error; one certainty step ('probable' vs definite edema) is minor; synonyms carry no error.",
+  "scenario": "Constructed: certainty and different-diagnosis grading",
+  "description": "Constructed. A critical finding hedged ('possible pneumothorax' vs a definite one) is a major certainty error; a different diagnosis for the same opacity is a major diagnosis error; one certainty step ('probable' vs definite edema) is minor; synonyms carry no error.",
   "user": {
     "series_uuid": "chest-xr_example_4",
     "pairs": [
@@ -11,6 +11,7 @@
           "text": "Possible small left apical pneumothorax.",
           "clinical_status": "abnormal",
           "clinical_significance": "critical",
+          "laterality": "left",
           "comparison": null,
           "measurements": []
         },
@@ -19,6 +20,7 @@
           "text": "Small left apical pneumothorax.",
           "clinical_status": "abnormal",
           "clinical_significance": "critical",
+          "laterality": "left",
           "comparison": null,
           "measurements": []
         }
@@ -30,6 +32,7 @@
           "text": "Left basilar opacity, likely pneumonia.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "left",
           "comparison": null,
           "measurements": []
         },
@@ -38,6 +41,7 @@
           "text": "Left basilar opacity, likely atelectasis.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "left",
           "comparison": null,
           "measurements": []
         }
@@ -49,6 +53,7 @@
           "text": "Probable mild pulmonary edema.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "bilateral",
           "comparison": null,
           "measurements": []
         },
@@ -57,6 +62,7 @@
           "text": "Mild pulmonary edema.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "bilateral",
           "comparison": null,
           "measurements": []
         }
@@ -68,6 +74,7 @@
           "text": "Mild cardiomegaly.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
@@ -76,6 +83,7 @@
           "text": "Mild enlargement of the cardiac silhouette.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         }
@@ -98,7 +106,7 @@
         "pair_id": 2,
         "errors": [
           {
-            "dimension": "morphology",
+            "dimension": "diagnosis",
             "severity": "major",
             "reasoning": "pred reads the opacity as pneumonia, gt as atelectasis"
           }

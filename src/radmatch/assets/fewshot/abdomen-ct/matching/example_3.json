@@ -7,6 +7,7 @@
         "finding_id": "p_1",
         "text": "Right kidney simple cyst, 8 mm.",
         "clinical_status": "abnormal",
+        "laterality": "right",
         "comparison": null,
         "measurements": [
           {
@@ -20,6 +21,7 @@
         "finding_id": "p_2",
         "text": "Left kidney simple cyst, 6 mm.",
         "clinical_status": "abnormal",
+        "laterality": "left",
         "comparison": null,
         "measurements": [
           {
@@ -33,6 +35,7 @@
         "finding_id": "p_3",
         "text": "Pancreas normal.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }
@@ -42,6 +45,7 @@
         "finding_id": "gt_1",
         "text": "Multiple bilateral simple renal cysts, the largest measuring 9 mm.",
         "clinical_status": "abnormal",
+        "laterality": "bilateral",
         "comparison": null,
         "measurements": [
           {
@@ -55,6 +59,7 @@
         "finding_id": "gt_2",
         "text": "Pancreas normal.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }

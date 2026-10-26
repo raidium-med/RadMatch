@@ -5,7 +5,7 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/downloads/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-**RadMatch** is an LLM-based evaluation framework for radiology report generation. It extracts atomic findings from each report, matches predictions to ground truth on **clinical equivalence**, and characterizes every error across **seven clinical attribute dimensions** — so a discrepancy is reported as a laterality flip, a severity change or a missed measurement rather than an undifferentiated penalty. From these it reports the **count of errors on clinically relevant findings**, split into missed and unsupported findings, alongside **safety recall and precision**, at three significance tiers.
+**RadMatch** is an LLM-based evaluation framework for radiology report generation. It extracts atomic findings from each report, matches predictions to ground truth on **clinical equivalence**, and characterizes every error across **ten clinical attribute dimensions** — so a discrepancy is reported as a laterality flip, a severity change or a missed measurement rather than an undifferentiated penalty. From these it reports the **count of errors on clinically relevant findings**, split into missed and unsupported findings, alongside **safety recall and precision**, at three significance tiers.
 
 The headline score is **aER**, the actionable errors per report (`tiers.actionable.errors_per_report`): the mean per-report count of errors involving non-routine findings, split as aER = aFN + aFP into reference findings missed or contradicted and claims the reference does not support. **Lower is better.**
 
@@ -148,18 +148,18 @@ For each (ground-truth, predicted) report pair, RadMatch runs a three-stage pipe
 
 ```
 Stage 0 (LLM x 1, optional) Extract the study indication from each report
-Stage 1 (LLM x 2)           Extract atomic findings + clinical significance
+Stage 1 (LLM x 2)           Extract atomic findings + clinical significance + side
 Stage 2 (LLM x 1)           Many-to-many matching on clinical equivalence
 Stage 3a (deterministic)    Comparators on structured attributes
 Stage 3b (LLM x ⌈N/10⌉)     LLM judgement of free-text attributes (N = matched pairs)
 Stage 3c (deterministic)    MUC classification + per-tier error counts
 ```
 
-**Stage 1** breaks each report into atomic findings — single-sentence clinical observations — and tags each with its clinical significance (`critical` / `urgent` / `notable` / `routine`).
+**Stage 1** breaks each report into atomic findings — single-sentence clinical observations — and tags each with its clinical significance (`critical` / `urgent` / `notable` / `routine`) and its side (`left` / `right` / `bilateral`, or none).
 
 **Stage 2** matches every predicted finding to one or more ground-truth findings, and vice versa: an umbrella claim on one side ("Bilateral pleural effusions", "Multilevel cervical spondylosis C2-C3 through C7-T1") binds each atom it covers on the other. Status conflicts ("pneumothorax present" vs "no pneumothorax") and laterality flips (same organ and pathology, wrong side) still match, so Stage 3 records them as one error on the right dimension rather than as a miss plus a hallucination. Stage 2 only links findings; whether a link is correct is judged in Stage 3, so boilerplate such as "Study unremarkable" bound to a real abnormality comes out `INC`. Each report pair is matched in a single call; a long report needs a long answer, so that call gets three times `RADMATCH_REQUEST_TIMEOUT_S` (540 s by default), and a timeout is not retried.
 
-**Stage 3** scores each matched pair on seven attribute dimensions: `clinical_status` and comparison labels handled by deterministic comparators, sizes and invented changes flagged by the comparators and graded by the LLM, and `location`, `severity`, `morphology`, `certainty` graded by the LLM. Every detected error is `major` or `minor`. Each pair then lands in one of five MUC categories:
+**Stage 3** scores each matched pair on ten attribute dimensions: `clinical_status`, `laterality` and comparison labels handled by deterministic comparators, sizes and invented changes flagged by the comparators and graded by the LLM, and `site`, `extent`, `severity`, `character`, `diagnosis`, `certainty` graded by the LLM. Every detected error is `major` or `minor`. Each pair then lands in one of five MUC categories:
 
 | Category | Meaning |
 |---|---|
@@ -171,23 +171,26 @@ Stage 3c (deterministic)    MUC classification + per-tier error counts
 
 ### Error characterization
 
-Every difference within a matched pair is attributed to one of seven dimensions and graded
+Every difference within a matched pair is attributed to one of ten dimensions and graded
 `major` or `minor`, so an error profile says *what kind* of mistake a system makes.
 
 | Dimension | Graded by | What it compares |
 |---|---|---|
 | `clinical_status` | comparator | Presence vs absence. Any disagreement is a status inversion, always major; Stage 1 gives the same observation the same status however it is phrased. |
+| `laterality` | comparator | The side of the finding as Stage 1 extracts it: left, right, bilateral, or none (a midline or unpaired structure, a device, a side the report does not give). On two abnormal findings, a difference is major — a left/right flip, bilateral vs one side, a side the reference gives that the candidate leaves out — unless the two match groups cover the same side together ("bilateral hydronephrosis" vs a left and a right one). A side only the candidate gives is more detail, not an error, and no side against a bilateral reference is not an error either (a diffuse process is often called bilateral by inference only). |
 | `comparison` | comparator | Longitudinal trajectory. Major when it crosses between benign (`stable`, `improving`, `resolved`) and active (`worsening`, `new`), or when the prediction drops an active trajectory the ground truth records. A change the prediction invents is flagged, and the LLM grades it major on a finding followed by size (aneurysm, nodule, mass, lymph node, effusion, metastasis). |
 | `measurement` | comparator + LLM | Counts, ratios and attenuation against per-category thresholds. Sizes: the comparator flags a difference (> 20 %, >= 2 mm) or a size the candidate leaves out, and the LLM grades it: major when it crosses a decision threshold of the structure (Fleischner 6 / 8 mm, node short axis 10 mm, aorta, spleen, bile and pancreatic ducts), differs by more than 20 % and 2 mm, or is left out without a covering size class ("tiny", "subcentimeter", "< 5 mm"); minor on a simple renal, hepatic or splenic cyst. A size only the candidate gives is not an error. |
-| `location` | LLM | Anatomic placement, including laterality and sub-anatomic detail. Major in almost every case: a left/right flip, bilateral vs one side, a different lobe or segment, a site or side the reference gives that the candidate leaves out (also when an umbrella statement does not place each finding it covers). A side only one of the two findings gives is an error too, either way. |
+| `site` | LLM | The site within the side: lobe, segment, level, station, organ part, vessel, device tip position. The side itself is `laterality`'s. Major in almost every case: a different lobe or segment, a site the reference gives that the candidate leaves out (also when an umbrella statement does not place each finding it covers). |
+| `extent` | LLM | How far and how many: one lesion vs several, focal vs diffuse, invasion, vascular involvement, mass effect, complications. Major for one vs several, confined vs invading, or a complication only one report gives (also when the candidate adds it); a different predominant site is minor. |
 | `severity` | LLM | Qualitative magnitude — mild / moderate / severe, small / large. Major two steps apart, for a structured category change (Bosniak, Lung-RADS) or a grade the candidate leaves out; one step is minor. |
-| `morphology` | LLM | Shape, margin, character — spiculated vs smooth, solid vs cystic, one lesion vs several. Major for a different diagnosis or a character the candidate leaves out; naming the diagnosis of what the reference describes is not an error. |
+| `character` | LLM | What the finding looks like — shape, margin, composition, density, enhancement, calcification, gas. Major when the difference changes the differential (solid vs ground-glass, cystic vs solid, gas in a collection). |
+| `diagnosis` | LLM | What the abnormality is — entity, subtype, age (acute vs chronic is major), cause of a secondary finding, device type. Major for two committed diagnoses that exclude each other (atelectasis vs pneumonia), a cause or subtype that changes management, an actionable reference diagnosis given only as an appearance ("opacity" vs pneumonia), or an actionable diagnosis the candidate adds without support; minor for a generic term on a diagnosis that is not actionable ("hypodense lesion" vs a simple cyst). Naming the diagnosis of what the reference describes is not an error. |
 | `certainty` | LLM | Diagnostic hedging — definite vs probable vs possible. Two or more steps apart ("possible fracture" vs a definite fracture) is major, one step minor; a hedge on the cause only ("possibly secondary to") leaves the finding definite. |
 
 `major` means the error would change management or the anatomy referred to, or the prediction leaves out a detail the
 reference gives; `minor` means both give the detail and differ only slightly. Adding detail the reference does not give
 is not an error. Only `major` errors push a
-matched pair to `INC`.
+matched pair to `INC`, plus any `certainty` error on a critical reference finding.
 
 The dataset summary reports `attribute_breakdown` — a clean / minor / major count per
 dimension — which localizes where a system errs, and `subsets` does the same per finding
@@ -251,10 +254,11 @@ Stage 1 keeps coronary artery calcification `notable` at any grade, split from a
 ```json
 [
   {
-    "finding_id": "gt_001",
+    "finding_id": "s1_001",
     "text": "Single-sentence clinical observation.",
     "clinical_status": "normal|abnormal",
     "clinical_significance": "critical|urgent|notable|routine",
+    "laterality": "left|right|bilateral | null",
     "comparison": "stable|improving|worsening|new|resolved | null",
     "measurements": [
       { "value": 5.2, "unit": "mm", "category": "size|count|attenuation|ratio|other" }
@@ -272,8 +276,8 @@ Stage 1 keeps coronary artery calcification `notable` at any grade, split from a
 {
   "matches": [
     {
-      "pred_id": "pred_001",
-      "gt_id": "gt_001",
+      "pred_id": "s1_003",
+      "gt_id": "s1_001",
       "reasoning": "Brief explanation of the match"
     }
   ],
@@ -290,7 +294,7 @@ Stage 1 keeps coronary artery calcification `notable` at any grade, split from a
 ```json
 {
   "metadata": {
-    "radmatch_version": "0.3.1",
+    "radmatch_version": "0.3.2",
     "llm_judge": "local:google/gemma-4-31B-it",
     "fewshot": "chest-ct",
     "n_reports": 100,
@@ -327,7 +331,7 @@ Stage 1 keeps coronary artery calcification `notable` at any grade, split from a
   },
   "muc_counts": { "COR": 215, "PAR": 72, "INC": 80, "MIS": 41, "SPU": 22 },
   "attribute_breakdown": {
-    "location": { "evaluated": 287, "clean": 240, "minor": 31, "major": 16 },
+    "site": { "evaluated": 287, "clean": 240, "minor": 31, "major": 16 },
     "severity": { "...": "..." }
   },
   "subsets": { "measurement": { "muc_counts": { "...": "..." }, "tiers": { "...": "..." } } }
@@ -382,7 +386,7 @@ RadMatch ships with clients for **OpenAI**, **Anthropic**, **Mistral**, and a ge
 
    Prices are USD per 1M tokens and only feed `token_cost`; `None` registers the model without pricing it.
 
-2. **Implement a client** in `src/radmatch/llm_utils/llm_clients.py` — subclass `Client` and implement `complete(messages, response_format, max_tokens)`. `OpenAIClient` and `MistralClient` are working references.
+2. **Implement a client** in `src/radmatch/llm_utils/llm_clients.py` — subclass `Client` and implement `complete(messages, response_format, max_tokens, timeout)`. `OpenAIClient` and `MistralClient` are working references.
 
 3. **Wire the factory and the credential check** in the same file: add a branch to `build_client`, and add the required environment variables to `_PROVIDER_ENV_VARS` so `assert_credentials_for` fails fast when they are missing. Each entry there is a tuple of alternative variable sets, so a provider reachable two ways is satisfied by either.
 

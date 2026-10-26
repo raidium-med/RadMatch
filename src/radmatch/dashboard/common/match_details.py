@@ -336,7 +336,7 @@ def _render_match_details(
 
 
 def _attribute_errors_html_for_pair(cp: "shared.CounterpartMatchInfo") -> str:
-    """All 7 attribute dimensions × per-dim severity. Major > minor > clean
+    """Every attribute dimension × per-dim severity. Major > minor > clean
     precedence per dimension."""
     severity_rank = {"major": 2, "minor": 1, "clean": 0}
     by_dim: dict[str, dict[str, str]] = {}

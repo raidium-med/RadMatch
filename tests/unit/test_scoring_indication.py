@@ -53,7 +53,7 @@ def test_detect_attribute_errors_raises_on_unasked_pair_id(fake_client, ok, make
     bad = ok(
         {
             "errors_per_pair": [
-                {"pair_id": 1, "errors": [{"dimension": "location", "severity": "major", "reasoning": "x"}]},
+                {"pair_id": 1, "errors": [{"dimension": "site", "severity": "major", "reasoning": "x"}]},
                 {"pair_id": 2, "errors": [{"dimension": "severity", "severity": "minor", "reasoning": "y"}]},
             ]
         }
@@ -76,12 +76,12 @@ def test_detect_attribute_errors_places_answers_by_pair_id(fake_client, ok, make
     findings_gt = {"g1": make_finding("g1"), "g2": make_finding("g2")}
     findings_pred = {"p1": make_finding("p1"), "p2": make_finding("p2")}
     matches = [{"pred_id": "p1", "gt_id": "g1", "reasoning": ""}, {"pred_id": "p2", "gt_id": "g2", "reasoning": ""}]
-    loc_err = {"dimension": "location", "severity": "major", "reasoning": "left vs right"}
-    client = fake_client(ok({"errors_per_pair": [{"pair_id": 2, "errors": [loc_err]}, {"pair_id": 1, "errors": []}]}))
+    site_err = {"dimension": "site", "severity": "major", "reasoning": "upper vs lower lobe"}
+    client = fake_client(ok({"errors_per_pair": [{"pair_id": 2, "errors": [site_err]}, {"pair_id": 1, "errors": []}]}))
     out = inference.detect_attribute_errors(
         matches=matches, findings_pred=findings_pred, findings_gt=findings_gt, series_uuid="s1", client=client
     )
-    assert out == [[], [loc_err]]
+    assert out == [[], [site_err]]
     sent = json.loads(client.calls[0]["messages"][-1]["content"])
     assert [p["pair_id"] for p in sent["pairs"]] == [1, 2]
 
@@ -111,9 +111,9 @@ def test_detect_attribute_errors_retries_malformed_then_recovers(fake_client, ok
     gt = [make_finding("g1")]
     pred = [make_finding("p1")]
     matches = [{"pred_id": "p1", "gt_id": "g1", "reasoning": ""}]
-    loc_err = {"dimension": "location", "severity": "major", "reasoning": "left vs right"}
-    bad = ok({"errors_per_pair": [{"pair_id": 1, "errors": []}, {"pair_id": 2, "errors": [loc_err]}]})
-    good = ok({"errors_per_pair": [{"pair_id": 1, "errors": [loc_err]}]})
+    site_err = {"dimension": "site", "severity": "major", "reasoning": "upper vs lower lobe"}
+    bad = ok({"errors_per_pair": [{"pair_id": 1, "errors": []}, {"pair_id": 2, "errors": [site_err]}]})
+    good = ok({"errors_per_pair": [{"pair_id": 1, "errors": [site_err]}]})
     client = fake_client(bad, good)
     out = inference.detect_attribute_errors(
         matches=matches,
@@ -122,7 +122,7 @@ def test_detect_attribute_errors_retries_malformed_then_recovers(fake_client, ok
         series_uuid="s1",
         client=client,
     )
-    assert out[0] == [loc_err]
+    assert out[0] == [site_err]
     assert len(client.calls) == 2  # recovered on the retry
 
 
@@ -147,9 +147,11 @@ def test_fingerprint_changes_with_indication(make_finding):
     pred_by_id = {"p1": make_finding("p1", text="lesion")}
     gt_by_id = {"g1": make_finding("g1", text="lesion")}
     matches = [{"pred_id": "p1", "gt_id": "g1"}]
-    fp_empty = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="")
-    fp_a = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="Trauma")
-    fp_b = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="Follow-up")
+    fp_empty = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="", stage3b_config={})
+    fp_a = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="Trauma", stage3b_config={})
+    fp_b = pipeline._fingerprint_matched_findings(
+        matches, pred_by_id, gt_by_id, indication="Follow-up", stage3b_config={}
+    )
     assert fp_empty != fp_a
     assert fp_a != fp_b
 
@@ -158,6 +160,6 @@ def test_fingerprint_stable_for_same_indication(make_finding):
     pred_by_id = {"p1": make_finding("p1", text="lesion")}
     gt_by_id = {"g1": make_finding("g1", text="lesion")}
     matches = [{"pred_id": "p1", "gt_id": "g1"}]
-    fp1 = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="Trauma")
-    fp2 = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="Trauma")
+    fp1 = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="Trauma", stage3b_config={})
+    fp2 = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="Trauma", stage3b_config={})
     assert fp1 == fp2

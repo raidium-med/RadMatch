@@ -75,7 +75,7 @@ def test_build_messages_interleaves_fewshot_prefix_before_user():
 
 
 # ============================================================================
-# filter_finding_fields — schema-conformance
+# project_to_canonical_finding — schema-conformance
 # ============================================================================
 
 
@@ -212,3 +212,10 @@ def test_extraction_prompt_uses_study_indication_for_tier(extraction_prompt):
     # rule-outs inherit the indication's tier.
     assert "study indication" in lower
     assert "tier of the indication" in lower
+
+
+def test_attribute_errors_fewshot_dimensions_are_accepted():
+    for bundle in sorted(p.name for p in (prompts._ASSETS_DIR / "fewshot").iterdir() if p.is_dir()):
+        for ex in prompts.load_attribute_errors_fewshot(bundle):
+            dims = {e["dimension"] for pair in ex["assistant"]["errors_per_pair"] for e in pair["errors"]}
+            assert dims <= set(constants.ATTRIBUTE_DIMENSIONS_LLM_ACCEPTED), (bundle, dims)

@@ -2,7 +2,7 @@
 
 Align the findings of a predicted report (pred) with the findings of a ground-truth report (gt). Decide which pred finding and which gt finding describe the same observation, and which findings stay unmatched on either side. Do not score correctness and do not flag status conflicts: every difference inside a match is scored downstream.
 
-Input: `pred_findings` and `gt_findings`. Each finding has `finding_id` (an opaque string; pred ids usually start with `p_`, gt ids with `gt_`), `text`, `clinical_status` (`"normal"` / `"abnormal"`), `clinical_significance`, `comparison` and `measurements`.
+Input: `pred_findings` and `gt_findings`. Each finding has `finding_id` (an opaque string; pred ids usually start with `p_`, gt ids with `gt_`), `text`, `clinical_status` (`"normal"` / `"abnormal"`), `clinical_significance`, `laterality`, `comparison` and `measurements`.
 
 ---
 
@@ -12,7 +12,7 @@ They match when they describe the same observation: the same organ or anatomic e
 
 **Match despite these differences:**
 - **Status.** pred "No pneumothorax" vs gt "Moderate pneumothorax" → match (one pneumothorax assessment; scored downstream as a status inversion).
-- **Side or sub-site.** Same organ and pathology, different side / lobe / segment / quadrant → match. pred "Small left apical pneumothorax" vs gt "Small right apical pneumothorax" is one pneumothorax with the wrong location, scored downstream as a `major` location error (→ INC). Leaving them unmatched would count one mislocalisation as both an omission and a hallucination.
+- **Side or sub-site.** Same organ and pathology, different side / lobe / segment / quadrant → match. pred "Small left apical pneumothorax" vs gt "Small right apical pneumothorax" is one pneumothorax on the wrong side, scored downstream as a `major` side error (→ INC). Leaving them unmatched would count one mislocalisation as both an omission and a hallucination.
   - **Guard: prefer the same-side counterpart.** Findings on both sides of a paired structure (a left and a right renal cyst) are distinct entities: bind each to its own counterpart, and cross sides only when the other side has no same-side counterpart. gt "right lower lobe opacity" + gt "left lower lobe opacity" vs pred "left lower lobe opacity" only → match pred to the left gt; the right gt goes to `unmatched_gt` (an omission, not a flip).
 - **Synonyms within one pathology category.** "Nodule" and "mass" in the same anatomy; "opacity" ≈ "consolidation" in the same context.
 - **A negative or normal statement vs each abnormal finding it denies.** pred "Lungs clear" or "No pulmonary nodules" vs gt "4 mm right lower lobe nodule" → match. An organ-level "unremarkable" denies the abnormalities of that organ. Bind it even when the same statement also matches a normal finding on the other side.

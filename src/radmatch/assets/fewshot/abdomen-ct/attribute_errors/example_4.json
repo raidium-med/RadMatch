@@ -1,6 +1,6 @@
 {
-  "scenario": "Clinical long tail: group context, attenuation vs composition, different diagnosis, two-step severity",
-  "description": "Constructed; pairs from abdomen-ct/matching/example_6.json. A stone stated with its consequence has no error against either gt; 'hypodense' vs 'cyst' is major (the pred leaves out the composition); diverticulosis vs diverticulitis is a major morphology error; small vs large ascites is a major severity error; 'no aneurysm' vs 'normal caliber' and the cholecystectomy pairs have none.",
+  "scenario": "Clinical long tail: group context, density for a non-actionable cyst, different diagnosis, two-step severity",
+  "description": "Constructed; pairs from abdomen-ct/matching/example_6.json. A stone stated with its size and consequence has no error against either gt; 'hypodense' for a hepatic cyst is a minor diagnosis error (not actionable); diverticulosis vs diverticulitis is a major diagnosis error; small vs large ascites is a major severity error; 'no aneurysm' vs 'normal caliber', aortic calcification vs atherosclerotic calcification and the cholecystectomy pair have none.",
   "user": {
     "series_uuid": "abdomen-ct_example_4",
     "pairs": [
@@ -8,9 +8,10 @@
         "pair_id": 1,
         "pred_finding": {
           "finding_id": "p_1",
-          "text": "Left UVJ stone causing mild hydroureteronephrosis.",
+          "text": "4 mm left UVJ stone causing mild hydroureteronephrosis.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "left",
           "comparison": null,
           "measurements": [
             {
@@ -25,6 +26,7 @@
           "text": "4 mm left UVJ calculus.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "left",
           "comparison": null,
           "measurements": [
             {
@@ -42,9 +44,10 @@
         "pair_id": 2,
         "pred_finding": {
           "finding_id": "p_1",
-          "text": "Left UVJ stone causing mild hydroureteronephrosis.",
+          "text": "4 mm left UVJ stone causing mild hydroureteronephrosis.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "left",
           "comparison": null,
           "measurements": [
             {
@@ -59,6 +62,7 @@
           "text": "Mild left hydroureteronephrosis.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "left",
           "comparison": null,
           "measurements": []
         },
@@ -73,14 +77,16 @@
           "text": "Hypodense lesion in liver segment 4.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
         "gt_finding": {
           "finding_id": "gt_3",
-          "text": "Small segment 4 hepatic cyst.",
+          "text": "Segment 4 hepatic cyst.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         }
@@ -92,6 +98,7 @@
           "text": "Sigmoid diverticulosis.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
@@ -100,6 +107,7 @@
           "text": "Sigmoid diverticulitis with pericolic fat stranding.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         }
@@ -111,6 +119,7 @@
           "text": "Aortic calcification.",
           "clinical_status": "abnormal",
           "clinical_significance": "routine",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
@@ -119,6 +128,7 @@
           "text": "Atherosclerotic calcification of the abdominal aorta.",
           "clinical_status": "abnormal",
           "clinical_significance": "routine",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         }
@@ -130,6 +140,7 @@
           "text": "No aortic aneurysm.",
           "clinical_status": "normal",
           "clinical_significance": "routine",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
@@ -138,6 +149,7 @@
           "text": "Abdominal aorta normal in caliber.",
           "clinical_status": "normal",
           "clinical_significance": "routine",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         }
@@ -149,6 +161,7 @@
           "text": "Status post cholecystectomy.",
           "clinical_status": "abnormal",
           "clinical_significance": "routine",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
@@ -157,6 +170,7 @@
           "text": "Cholecystectomy clips.",
           "clinical_status": "abnormal",
           "clinical_significance": "routine",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         }
@@ -168,6 +182,7 @@
           "text": "Small amount of ascites.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
@@ -176,6 +191,7 @@
           "text": "Large-volume ascites.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         }
@@ -196,9 +212,9 @@
         "pair_id": 3,
         "errors": [
           {
-            "dimension": "morphology",
-            "severity": "major",
-            "reasoning": "pred gives only the density (hypodense), gt calls it a cyst"
+            "dimension": "diagnosis",
+            "severity": "minor",
+            "reasoning": "pred gives only the density (hypodense) for a hepatic cyst: not actionable"
           }
         ]
       },
@@ -206,7 +222,7 @@
         "pair_id": 4,
         "errors": [
           {
-            "dimension": "morphology",
+            "dimension": "diagnosis",
             "severity": "major",
             "reasoning": "pred reports uncomplicated diverticulosis, gt diverticulitis: a different diagnosis that misses the acute inflammation"
           }

@@ -121,7 +121,7 @@ def _filter_panel(
     df = index_df.copy()
     # Every selected box must be satisfied: `critical` + `urgent` requires a report
     # with at least one of each. Uniform across all the multiselect filters.
-    if significance_filters and "clinical_significances" in df.columns:
+    if significance_filters:
         df = df[df["clinical_significances"].apply(lambda lst: _all_present(lst, significance_filters))]
     if measurement_filters:
         df = df[df["measurement_types"].apply(lambda lst: _all_present(lst, measurement_filters))]
@@ -179,7 +179,7 @@ def _per_report_metric_cards(per_report: dict[str, object], tier: str) -> None:
             shared.render_metric_card(
                 shared.tier_metric_label(tier, metric, suffix=" per Report", with_abbrev=False),
                 shared.format_int(int(block.get(key) or 0)),
-                card_class="f1-metric-card" if metric == "ER" else "grey-metric-card",
+                card_class="headline-metric-card" if metric == "ER" else "grey-metric-card",
             ),
             unsafe_allow_html=True,
         )
@@ -404,15 +404,13 @@ def main() -> None:
     # Apply free-text search across GT + Pred findings, then update the count.
     report_ids = _filter_by_finding_text(state, report_ids, search_query)
     count_placeholder.markdown(
-        f"<div style='text-align:right;color:#6b7280;font-size:0.9rem;'>"
-        f"{len(report_ids):,} / {total:,} reports</div>",
+        f"<div style='text-align:right;color:#6b7280;font-size:0.9rem;'>{len(report_ids):,} / {total:,} reports</div>",
         unsafe_allow_html=True,
     )
 
     if not report_ids:
         st.warning(
-            "No reports match the active filters. Clear the search box or relax the "
-            "errors slider to see results."
+            "No reports match the active filters. Clear the search box or relax the errors slider to see results."
         )
         st.stop()
 
@@ -427,7 +425,9 @@ def main() -> None:
         tier = shared.select_tier(key="tier_radio_explorer")
         _per_report_metric_cards(per_report, tier)
     else:
-        st.info("No per_report_metrics for this series. Re-run scoring to populate per_report_metrics/<series>.json.")
+        st.info(
+            "No per_report_metrics for this series: not scored yet, or it failed Stage 3 (failed_reports_scoring.json)."
+        )
 
     matching_data: dict[str, object] = {}
     if state.matching_dir:

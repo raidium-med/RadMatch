@@ -38,6 +38,7 @@ def make_finding():
             "text": "x",
             "clinical_status": "abnormal",
             "clinical_significance": "notable",
+            "laterality": None,
             "comparison": None,
             "measurements": [],
         }

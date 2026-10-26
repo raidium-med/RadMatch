@@ -7,6 +7,7 @@
     "finding_id": "p_1",
     "text": "Few 3-4 mm nodules in the right upper lobe.",
     "clinical_status": "abnormal",
+    "laterality": "right",
     "comparison": null,
     "measurements": [
      {
@@ -25,6 +26,7 @@
     "finding_id": "p_2",
     "text": "Calcified atherosclerotic plaque of the aortic arch.",
     "clinical_status": "abnormal",
+    "laterality": null,
     "comparison": null,
     "measurements": []
    },
@@ -32,6 +34,7 @@
     "finding_id": "p_3",
     "text": "Small pericardial effusion.",
     "clinical_status": "abnormal",
+    "laterality": null,
     "comparison": null,
     "measurements": []
    },
@@ -39,6 +42,7 @@
     "finding_id": "p_4",
     "text": "Stable 4 mm calcified granuloma in the left lower lobe.",
     "clinical_status": "abnormal",
+    "laterality": "left",
     "comparison": "stable",
     "measurements": [
      {
@@ -52,6 +56,7 @@
     "finding_id": "p_5",
     "text": "Small right pleural effusion.",
     "clinical_status": "abnormal",
+    "laterality": "right",
     "comparison": null,
     "measurements": []
    },
@@ -59,6 +64,7 @@
     "finding_id": "p_6",
     "text": "Cardiothoracic ratio within normal limits.",
     "clinical_status": "normal",
+    "laterality": null,
     "comparison": null,
     "measurements": []
    },
@@ -66,6 +72,7 @@
     "finding_id": "p_7",
     "text": "Mild bronchial wall thickening.",
     "clinical_status": "abnormal",
+    "laterality": null,
     "comparison": null,
     "measurements": []
    }
@@ -75,6 +82,7 @@
     "finding_id": "gt_1",
     "text": "No pulmonary mass.",
     "clinical_status": "normal",
+    "laterality": null,
     "comparison": null,
     "measurements": []
    },
@@ -82,6 +90,7 @@
     "finding_id": "gt_2",
     "text": "Thoracic aorta of normal calibre.",
     "clinical_status": "normal",
+    "laterality": null,
     "comparison": null,
     "measurements": []
    },
@@ -89,6 +98,7 @@
     "finding_id": "gt_3",
     "text": "No pleural effusion.",
     "clinical_status": "normal",
+    "laterality": null,
     "comparison": null,
     "measurements": []
    },
@@ -96,6 +106,7 @@
     "finding_id": "gt_4",
     "text": "No suspicious pulmonary nodule.",
     "clinical_status": "normal",
+    "laterality": null,
     "comparison": null,
     "measurements": []
    },
@@ -103,6 +114,7 @@
     "finding_id": "gt_5",
     "text": "No cardiomegaly.",
     "clinical_status": "normal",
+    "laterality": null,
     "comparison": null,
     "measurements": []
    },
@@ -110,6 +122,7 @@
     "finding_id": "gt_6",
     "text": "No consolidation.",
     "clinical_status": "normal",
+    "laterality": null,
     "comparison": null,
     "measurements": []
    }

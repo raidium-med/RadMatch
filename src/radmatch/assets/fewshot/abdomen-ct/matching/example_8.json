@@ -6,7 +6,8 @@
    {
     "finding_id": "p_1",
     "text": "1.2 cm splenule at the splenic hilum.",
-    "clinical_status": "abnormal",
+    "clinical_status": "normal",
+    "laterality": null,
     "comparison": null,
     "measurements": [
      {
@@ -19,7 +20,8 @@
    {
     "finding_id": "p_2",
     "text": "Retroaortic left renal vein.",
-    "clinical_status": "abnormal",
+    "clinical_status": "normal",
+    "laterality": "left",
     "comparison": null,
     "measurements": []
    },
@@ -27,6 +29,7 @@
     "finding_id": "p_3",
     "text": "Sigmoid diverticulosis.",
     "clinical_status": "abnormal",
+    "laterality": null,
     "comparison": null,
     "measurements": []
    },
@@ -34,6 +37,7 @@
     "finding_id": "p_4",
     "text": "Small bowel obstruction with a transition point in the right lower quadrant.",
     "clinical_status": "abnormal",
+    "laterality": null,
     "comparison": null,
     "measurements": []
    },
@@ -41,6 +45,7 @@
     "finding_id": "p_5",
     "text": "Mild L4-L5 degenerative disc disease.",
     "clinical_status": "abnormal",
+    "laterality": null,
     "comparison": null,
     "measurements": []
    },
@@ -48,6 +53,7 @@
     "finding_id": "p_6",
     "text": "Hepatic steatosis.",
     "clinical_status": "abnormal",
+    "laterality": null,
     "comparison": null,
     "measurements": []
    }
@@ -57,6 +63,7 @@
     "finding_id": "gt_1",
     "text": "1.2 cm soft-tissue nodule at the splenic hilum, likely an enlarged lymph node.",
     "clinical_status": "abnormal",
+    "laterality": null,
     "comparison": null,
     "measurements": [
      {
@@ -70,6 +77,7 @@
     "finding_id": "gt_2",
     "text": "No retroperitoneal lymphadenopathy.",
     "clinical_status": "normal",
+    "laterality": null,
     "comparison": null,
     "measurements": []
    },
@@ -77,6 +85,7 @@
     "finding_id": "gt_3",
     "text": "No diverticulitis.",
     "clinical_status": "normal",
+    "laterality": null,
     "comparison": null,
     "measurements": []
    },
@@ -84,6 +93,7 @@
     "finding_id": "gt_4",
     "text": "Small bowel obstruction; no discrete transition point identified.",
     "clinical_status": "abnormal",
+    "laterality": null,
     "comparison": null,
     "measurements": []
    },
@@ -91,6 +101,7 @@
     "finding_id": "gt_5",
     "text": "Small simple cyst in the left kidney.",
     "clinical_status": "abnormal",
+    "laterality": "left",
     "comparison": null,
     "measurements": []
    },
@@ -98,6 +109,7 @@
     "finding_id": "gt_6",
     "text": "Diffuse fatty infiltration of the liver.",
     "clinical_status": "abnormal",
+    "laterality": null,
     "comparison": null,
     "measurements": []
    }

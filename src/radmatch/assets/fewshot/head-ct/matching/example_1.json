@@ -1,12 +1,13 @@
 {
   "scenario": "Laterality flip on temporal sequelae + SPU on sphenoid + clean matches",
-  "description": "Real subset of head-ct/findings_{gt,pred}/example_1. Demonstrates a laterality flip on lateralized brain pathology (gt 'left temporal pole' hemorrhagic sequelae vs pred 'right temporal pole' — opposite hemisphere, matched and scored downstream as a major location error), a hallucinated mucosal thickening of the sphenoid sinus in the prediction (SPU), and a clean 1:1 match on the left temporal horn ventricular traction.",
+  "description": "Real subset of head-ct/findings_{gt,pred}/example_1. Demonstrates a laterality flip on lateralized brain pathology (gt 'left temporal pole' hypodense sequelae vs pred 'right temporal pole' — opposite hemisphere, matched and scored downstream as a major side error from the findings' laterality), a hallucinated mucosal thickening of the sphenoid sinus in the prediction (SPU), and a clean 1:1 match on the left temporal horn ventricular traction.",
   "user": {
     "pred_findings": [
       {
         "finding_id": "p_1",
         "text": "Hypodense cortico-subcortical sequelae in the right temporal pole and right temporal lobe, without spontaneous hyperdensity.",
         "clinical_status": "abnormal",
+        "laterality": "right",
         "comparison": null,
         "measurements": []
       },
@@ -14,6 +15,7 @@
         "finding_id": "p_2",
         "text": "Passive traction of the left temporal horn of the lateral ventricle.",
         "clinical_status": "abnormal",
+        "laterality": "left",
         "comparison": null,
         "measurements": []
       },
@@ -21,6 +23,7 @@
         "finding_id": "p_3",
         "text": "Ventricular system normal in size and morphology.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -28,6 +31,7 @@
         "finding_id": "p_4",
         "text": "Mild mucosal thickening of the sphenoid sinus.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }
@@ -37,6 +41,7 @@
         "finding_id": "gt_1",
         "text": "Hypodense cortico-subcortical sequelae in the left temporal pole and left temporal lobe, without spontaneous hyperdensity.",
         "clinical_status": "abnormal",
+        "laterality": "left",
         "comparison": null,
         "measurements": []
       },
@@ -44,6 +49,7 @@
         "finding_id": "gt_2",
         "text": "Passive traction of the left temporal horn of the lateral ventricle.",
         "clinical_status": "abnormal",
+        "laterality": "left",
         "comparison": null,
         "measurements": []
       },
@@ -51,6 +57,7 @@
         "finding_id": "gt_3",
         "text": "Ventricular system normal in size and morphology.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }

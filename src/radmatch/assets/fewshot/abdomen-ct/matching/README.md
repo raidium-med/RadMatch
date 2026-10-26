@@ -30,5 +30,5 @@ Each file is one example:
 `radmatch.llm_utils.prompts.load_matching_fewshot` reads every `example_*.json` here and
 appends each `user` / `assistant` pair to the matching prompt as one user/assistant turn.
 Findings carry only the fields matching consumes — `finding_id`, `text`,
-`clinical_status`, `comparison`, `measurements` — since significance plays no part in
+`clinical_status`, `laterality`, `comparison`, `measurements` — since significance plays no part in
 aligning findings. `scenario` and `description` are documentation; the loader ignores them.

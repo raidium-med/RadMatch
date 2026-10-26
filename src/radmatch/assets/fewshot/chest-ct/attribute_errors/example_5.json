@@ -1,6 +1,6 @@
 {
   "scenario": "Constructed: certainty, added diagnosis, structured category",
-  "description": "Constructed. Hedging a definite fracture, or a negative that answers the work-up ('possibly no pulmonary embolism'), is a major certainty error; turning nodes called reactive into nodes suspicious for metastases is a major morphology error (an added diagnosis), and leaving out the gt 'mildly' grade a major severity error; a Lung-RADS class change across management buckets is a major severity error; one certainty step is minor; a subtype the pred leaves out is a major morphology error.",
+  "description": "Constructed. Hedging a definite fracture, or a negative that answers the work-up ('possibly no pulmonary embolism'), is a major certainty error; turning nodes called reactive into nodes suspicious for metastases is a major diagnosis error (an added actionable diagnosis), and leaving out the gt 'mildly' grade a major severity error; a Lung-RADS class change across management buckets is a major severity error; one certainty step is minor; a subtype the pred leaves out is a minor diagnosis error (not actionable).",
   "user": {
     "series_uuid": "chest-ct_example_5",
     "pairs": [
@@ -11,6 +11,7 @@
           "text": "Possible minimally displaced right 6th rib fracture.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         },
@@ -19,6 +20,7 @@
           "text": "Minimally displaced right 6th rib fracture.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         }
@@ -30,6 +32,7 @@
           "text": "Possibly no pulmonary embolism.",
           "clinical_status": "normal",
           "clinical_significance": "critical",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         },
@@ -38,6 +41,7 @@
           "text": "No pulmonary embolism.",
           "clinical_status": "normal",
           "clinical_significance": "critical",
+          "laterality": null,
           "comparison": null,
           "measurements": []
         }
@@ -49,28 +53,18 @@
           "text": "Enlarged mediastinal lymph nodes, suspicious for metastatic disease.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": null,
           "comparison": null,
-          "measurements": [
-            {
-              "value": 14,
-              "unit": "mm",
-              "category": "size"
-            }
-          ]
+          "measurements": []
         },
         "gt_finding": {
           "finding_id": "gt_3",
           "text": "Mildly enlarged mediastinal lymph nodes, likely reactive.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": null,
           "comparison": null,
-          "measurements": [
-            {
-              "value": 14,
-              "unit": "mm",
-              "category": "size"
-            }
-          ]
+          "measurements": []
         }
       },
       {
@@ -80,6 +74,7 @@
           "text": "7 mm solid right upper lobe nodule, Lung-RADS 4A.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "right",
           "comparison": null,
           "measurements": [
             {
@@ -94,6 +89,7 @@
           "text": "7 mm solid right upper lobe nodule, Lung-RADS 3.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "right",
           "comparison": null,
           "measurements": [
             {
@@ -111,6 +107,7 @@
           "text": "Probable right lower lobe pneumonia.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         },
@@ -119,6 +116,7 @@
           "text": "Right lower lobe pneumonia.",
           "clinical_status": "abnormal",
           "clinical_significance": "urgent",
+          "laterality": "right",
           "comparison": null,
           "measurements": []
         }
@@ -130,6 +128,7 @@
           "text": "Mild emphysema.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "bilateral",
           "comparison": null,
           "measurements": []
         },
@@ -138,6 +137,7 @@
           "text": "Mild centrilobular emphysema.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
+          "laterality": "bilateral",
           "comparison": null,
           "measurements": []
         }
@@ -170,7 +170,7 @@
         "pair_id": 3,
         "errors": [
           {
-            "dimension": "morphology",
+            "dimension": "diagnosis",
             "severity": "major",
             "reasoning": "pred adds a malignant interpretation to nodes gt calls reactive"
           },
@@ -205,9 +205,9 @@
         "pair_id": 6,
         "errors": [
           {
-            "dimension": "morphology",
-            "severity": "major",
-            "reasoning": "pred leaves out the centrilobular subtype gt gives"
+            "dimension": "diagnosis",
+            "severity": "minor",
+            "reasoning": "pred leaves out the centrilobular subtype: not actionable"
           }
         ]
       }
