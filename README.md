@@ -84,7 +84,7 @@ Every stage caches on success, so re-running the same command against the same `
 
 A report that *fails* a stage drops out of the results and is listed in `failed_reports{,_matching,_scoring}.json`.
 
-A report can also *degrade* rather than fail: Stage 2 falling back to the valid subset of its matches. It still produces cached output and still counts in `n_reports`, flagged as `validation_fallback` in `matching/<series>.json` — so a plain re-run skips it. Use `--retry-degraded` to re-match it, or `--match-retries` to buy the judge more attempts up front. Stage 3b never degrades: a chunk of pairs the judge keeps answering malformed (`--score-retries` attempts) or that times out is split in half and retried, and a pair that still fails drops the report rather than scoring it as if no attribute errors were found.
+A report can also *degrade* rather than fail: Stage 2 falling back to the valid subset of its matches. It still produces cached output and still counts in `n_reports`, flagged as `validation_fallback` in `matching/<series>.json` — so a plain re-run skips it. Use `--retry-degraded` to re-match it, or `--match-retries` to buy the judge more attempts up front. Stage 3b never degrades: each pair is sent with an id and answered under it, so an error cannot land on the wrong pair, and a chunk of pairs the judge keeps answering malformed (`--score-retries` attempts) or that times out is split in half and retried, and a pair that still fails drops the report rather than scoring it as if no attribute errors were found.
 
 ### Few-shot examples
 
@@ -167,7 +167,7 @@ Stage 3c (deterministic)    MUC classification + per-tier error counts
 | `PAR` | Matched with only minor errors — finding identified, descriptors imprecise. Counts as a hit in safety recalls. |
 | `INC` | Matched but materially wrong: status inverted, or at least one major attribute error. Counts as a miss. |
 | `MIS` | Ground-truth finding unmatched — missed by the model. |
-| `SPU` | Predicted finding unmatched — hallucinated. |
+| `SPU` | Predicted finding unmatched. An error only when it asserts an abnormality: the reference's silence is read as absence, so a normal statement it does not mention ("no pneumothorax") agrees with it and is not scored. |
 
 ### Error characterization
 
@@ -178,7 +178,7 @@ Every difference within a matched pair is attributed to one of seven dimensions 
 |---|---|---|
 | `clinical_status` | comparator | Presence vs absence. Any disagreement is a status inversion, always major. |
 | `comparison` | comparator | Longitudinal trajectory. Major when it crosses between benign (`stable`, `improving`, `resolved`) and active (`worsening`, `new`), or when the prediction drops an active trajectory the ground truth records. |
-| `measurement` | comparator + LLM | Numeric values against per-category thresholds; adding or omitting a value is minor. The LLM adds only differences that cross a clinical decision boundary. |
+| `measurement` | comparator + LLM | Numeric values against per-category thresholds; adding a value is minor, and so is omitting one, except a size the candidate does not give at all, which is major. The LLM adds only differences that cross a clinical decision boundary. |
 | `location` | LLM | Anatomic placement, including laterality and sub-anatomic detail. A left/right flip on a paired structure is always major. |
 | `severity` | LLM | Qualitative magnitude — mild / moderate / severe, small / large. Major when it crosses an action threshold. |
 | `morphology` | LLM | Shape, margin, character — spiculated vs smooth, solid vs cystic. |
@@ -204,14 +204,14 @@ Every metric is computed on three significance tiers, each reported in its own `
 
 | Metric (key in `tiers.<tier>`) | Description |
 |---|---|
-| aER (`errors_per_report`) | Mean per-report count of `INC` + `MIS` + `SPU` involving a finding of the tier. The headline number on the actionable tier; lower is better. |
-| aFN (`fn_per_report`) | Reference side: findings of the tier missed (`MIS`, `fn_mis_total`) or contradicted (`INC`, `fn_inc_total`). Equals the tier's reference findings × (1 − aRec). |
-| aFP (`fp_per_report`) | Prediction side: claims of the tier with no reference counterpart (`SPU`, `fp_spu_total`), or contradicting a reference finding outside the tier, e.g. an abnormality where the reference says normal (`INC`, `fp_inc_total`). |
+| aER (`errors_per_report`) | Mean per-report count of `INC` + `MIS` + `SPU` asserting an abnormality, involving a finding of the tier. The headline number on the actionable tier; lower is better. |
+| aFN (`fn_per_report`) | Reference side: findings of the tier missed (`MIS`, `fn_mis_total`) or contradicted (`INC`, `fn_inc_total`). In totals, `fn_total = gt_total − recall_hits`. |
+| aFP (`fp_per_report`) | Prediction side: abnormalities of the tier with no reference counterpart (`SPU`, `fp_spu_total`), or contradicting a reference finding outside the tier, e.g. an abnormality where the reference says normal, or contradicting a reference finding that another predicted finding gets right (`INC`, `fp_inc_total`). |
 | aRec (`recall`) | Fraction of the reference findings of the tier the model recalled, counting `COR` and `PAR` as hits. tRec is the safety floor: a model can look acceptable on average while missing most urgent findings, and a large gap from aRec means it is differentially worse on the highest-stakes findings. |
 | aPrec (`precision`) | Of the predicted findings of the tier, the fraction crediting a real finding. Flags confident over-calling. `null` when the model predicted none. |
 | errors per finding (`errors_per_finding`) | Errors over the findings at stake on the tier (`findings_total`): a rate that stays comparable between a rare subset and a common one. |
 
-An `INC` counts once per reference finding, on the reference side when that finding is in the tier, so aER = aFN + aFP holds exactly. Two consequences: aFP is close to, but not exactly, the complement of aPrec (which counts per predicted finding), and the side depends on the tier, e.g. a `notable` finding contradicted by an `urgent` claim is an aFN but a tFP.
+An `INC` counts once per reference finding, on the reference side when that finding is in the tier, so aER = aFN + aFP holds exactly. When another predicted finding gets that reference finding right, it is not missed, and the contradicting prediction counts once as an aFP instead. Two consequences: `fp_total` differs from `pred_total − precision_hits` by the `INC` pairs with both sides in the tier, which count as aFN, and the side depends on the tier, e.g. a `notable` finding contradicted by an `urgent` claim is an aFN but a tFP.
 
 Findings are also reported in `subsets` — `measurement`, `comparison`, `abnormal-regular`, `normal-regular` — each with its own MUC counts and `tiers` block.
 

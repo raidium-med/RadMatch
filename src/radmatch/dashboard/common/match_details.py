@@ -15,6 +15,7 @@ import streamlit as st
 from radmatch import constants as radmatch_constants
 from radmatch.dashboard.common import constants as dashboard_constants
 from radmatch.dashboard.common import shared
+from radmatch.scoring import metrics
 
 _CELL_STYLE = (
     "padding:0.5rem 0.6rem;vertical-align:top;border:1px solid #fcd34d;"
@@ -281,6 +282,8 @@ def _finding_level_conclusion(
             if in_pool
             else out_of_pool
         )
+        if info.category == "SPU" and not metrics.is_unsupported_claim(finding):
+            fp_cell = precision_cell = _note("normal statement the reference does not mention, not scored")
 
     bullets = "".join(
         f"<li>{shared.tier_metric_label(tier, metric)}: {cell}</li>"

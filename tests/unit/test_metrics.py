@@ -333,16 +333,15 @@ def test_actionable_opportunities_ge_errors_across_muc_mix():
     assert (errors, opportunities) == (4, 5)
 
 
-def test_actionable_errors_self_contradiction_not_counted():
-    """Per-GT `all_inc`: a GT correctly identified by ANY pred (mixed COR +
-    INC) contributes 0 errors — once the finding is recovered, the redundant
-    wrong claim is noise, not patient-relevant harm. Aligns with recall's
-    per-GT semantic."""
+def test_actionable_errors_self_contradiction_counted_on_pred_side():
+    """A GT credited by one pred (COR) and contradicted by another (INC) is not a miss,
+    but the contradicting pred is still a false claim: one FP, no FN."""
     records = [
         _muc_record("COR", gt_sig="critical", gt_id="g_x", pred_id="p_correct"),
         _muc_record("INC", gt_sig="critical", gt_id="g_x", pred_id="p_wrong"),
     ]
-    assert _errors(records)["total"] == 0
+    errors = _errors(records)
+    assert (errors["fn"], errors["fp"], errors["fp_inc"]) == (0, 1, 1)
 
 
 def test_par_with_certainty_on_critical_gt_reclassifies_to_inc():
@@ -546,3 +545,10 @@ def test_orphans_split_by_side():
     unmatched_pred = [_unmatched("critical"), _unmatched("routine")]
     errors = _errors([], unmatched_pred, [_unmatched("notable"), _unmatched("routine")])
     assert errors == {"total": 2, "fn": 1, "fn_mis": 1, "fn_inc": 0, "fp": 1, "fp_spu": 1, "fp_inc": 0}
+
+
+def test_unreferenced_normal_statement_is_not_an_error():
+    """An unmatched normal prediction is neither an error nor a scored claim; an omitted normal GT still is a FN."""
+    normal = {**_unmatched("critical"), "clinical_status": "normal"}
+    tier = _tier([], unmatched_pred=[normal], unmatched_gt=[normal])
+    assert (tier["fn_total"], tier["fp_total"], tier["pred_total"], tier["findings_total"]) == (1, 0, 0, 1)

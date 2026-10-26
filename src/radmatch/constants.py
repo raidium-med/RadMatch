@@ -28,6 +28,7 @@ ERROR_TIERS: dict[str, tuple[str, ...]] = {
     "triage": TRIAGE_SIGNIFICANCE_TIERS,
     "critical": CRITICAL_SIGNIFICANCE_TIERS,
 }
+ERROR_TIER_PREFIX: dict[str, str] = {"actionable": "a", "triage": "t", "critical": "c"}
 
 # A cross-bucket comparison difference is `major` (misleads on whether action is
 # needed); same-bucket, or one side absent, is `minor`.

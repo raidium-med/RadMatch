@@ -15,37 +15,12 @@ import pytest
 
 from radmatch.dashboard.build_dashboard_data import _flatten, build_report_index
 from radmatch.dashboard.common.shared import PerPairMatchInfo, build_match_index
+from tests.fakes.fake_outputs import tier_block
 
 
 def _write(path: Path, payload) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload), encoding="utf-8")
-
-
-def _tier_block(errors=0, fn=0, recall=1.0, precision=1.0, gt_total=1, pred_total=1, n_reports=None) -> dict:
-    """A `tiers.<name>` block; MIS-only FN and SPU-only FP keep the sub-splits consistent."""
-    block = {
-        "significance": ["critical"],
-        "errors_total": errors,
-        "fn_total": fn,
-        "fp_total": errors - fn,
-        "fn_mis_total": fn,
-        "fn_inc_total": 0,
-        "fp_spu_total": errors - fn,
-        "fp_inc_total": 0,
-        "findings_total": max(errors, gt_total),
-        "errors_per_finding": errors / max(errors, gt_total),
-        "recall": recall,
-        "recall_hits": round(recall * gt_total),
-        "gt_total": gt_total,
-        "precision": precision,
-        "precision_hits": round(precision * pred_total),
-        "pred_total": pred_total,
-    }
-    if n_reports:
-        per_report = {f"{k}_per_report": block[f"{k}_total"] / n_reports for k in ("errors", "fn", "fp")}
-        block = {**per_report, **block}
-    return block
 
 
 @pytest.fixture
@@ -54,9 +29,9 @@ def fake_per_report_metrics() -> dict:
         "metadata": {"series_uuid": "s1", "total_gt_findings": 4, "total_pred_findings": 3},
         "muc_counts": {"COR": 2, "PAR": 0, "INC": 1, "MIS": 1, "SPU": 0},
         "tiers": {
-            "actionable": _tier_block(errors=2, fn=1, recall=0.6, precision=0.75, gt_total=5, pred_total=4),
-            "triage": _tier_block(errors=1, fn=1, recall=0.5, precision=2 / 3, gt_total=2, pred_total=3),
-            "critical": _tier_block(),
+            "actionable": tier_block(errors=2, fn=1, recall=0.6, precision=0.75, gt_total=5, pred_total=4),
+            "triage": tier_block(errors=1, fn=1, recall=0.5, precision=2 / 3, gt_total=2, pred_total=3),
+            "critical": tier_block(),
         },
         "attribute_breakdown": {},
     }

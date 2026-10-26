@@ -5,26 +5,29 @@
     "series_uuid": "head-ct_example_1",
     "pairs": [
       {
+        "pair_id": 1,
         "pred_finding": {"finding_id": "p_1", "text": "Hypodense cortico-subcortical sequelae in the right temporal pole and right temporal lobe, without spontaneous hyperdensity.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []},
         "gt_finding":   {"finding_id": "gt_1", "text": "Hypodense cortico-subcortical sequelae in the left temporal pole and left temporal lobe, without spontaneous hyperdensity.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []}
       },
       {
+        "pair_id": 2,
         "pred_finding": {"finding_id": "p_2", "text": "Passive traction of the left temporal horn of the lateral ventricle.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []},
         "gt_finding":   {"finding_id": "gt_2", "text": "Passive traction of the left temporal horn of the lateral ventricle.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []}
       },
       {
+        "pair_id": 3,
         "pred_finding": {"finding_id": "p_3", "text": "Ventricular system normal in size and morphology.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []},
         "gt_finding":   {"finding_id": "gt_3", "text": "Ventricular system normal in size and morphology.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []}
       }
     ]
   },
   "assistant": {
-    "errors_per_match": [
-      [
+    "errors_per_pair": [
+      {"pair_id": 1, "errors": [
         {"dimension": "location", "severity": "major", "reasoning": "Pred says right temporal pole / lobe, gt says left temporal pole / lobe — laterality flip on lateralized brain pathology (different hemisphere, different downstream clinical implication)."}
-      ],
-      [],
-      []
+      ]},
+      {"pair_id": 2, "errors": []},
+      {"pair_id": 3, "errors": []}
     ]
   }
 }

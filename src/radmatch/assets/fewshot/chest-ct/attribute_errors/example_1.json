@@ -5,33 +5,37 @@
     "series_uuid": "chest-ct_example_1",
     "pairs": [
       {
+        "pair_id": 1,
         "pred_finding": {"finding_id": "p_1", "text": "Minimal cylindrical bronchiectasis most apparent in the left lung apex.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []},
         "gt_finding":   {"finding_id": "gt_1", "text": "Minimal cylindrical bronchiectasis most apparent in the right lung apex.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []}
       },
       {
+        "pair_id": 2,
         "pred_finding": {"finding_id": "p_3", "text": "Moderate coronary artery calcifications.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []},
         "gt_finding":   {"finding_id": "gt_3", "text": "Severe coronary artery calcifications.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []}
       },
       {
+        "pair_id": 3,
         "pred_finding": {"finding_id": "p_4", "text": "Mild widening of the anterior aortic arch diameter to 4.1 cm.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": [{"value": 4.1, "unit": "cm", "category": "size"}]},
         "gt_finding":   {"finding_id": "gt_4", "text": "Mild widening of the anterior aortic arch diameter to 3.6 cm.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": [{"value": 3.6, "unit": "cm", "category": "size"}]}
       },
       {
+        "pair_id": 4,
         "pred_finding": {"finding_id": "p_5", "text": "Small stable hypodense lesion in the right lobe of the liver consistent with incidental benign pathology.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": []},
         "gt_finding":   {"finding_id": "gt_5", "text": "Small stable hypodense lesion in the right lobe of the liver consistent with incidental benign pathology.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": []}
       }
     ]
   },
   "assistant": {
-    "errors_per_match": [
-      [
+    "errors_per_pair": [
+      {"pair_id": 1, "errors": [
         {"dimension": "location", "severity": "major", "reasoning": "Pred says left lung apex, gt says right lung apex — laterality flip on a paired lung."}
-      ],
-      [
+      ]},
+      {"pair_id": 2, "errors": [
         {"dimension": "severity", "severity": "major", "reasoning": "Gt says severe coronary calcifications, pred says moderate — severe → moderate misrepresents the disease burden in this elderly patient (severe CAC has different downstream cardiac workup implications)."}
-      ],
-      [],
-      []
+      ]},
+      {"pair_id": 3, "errors": []},
+      {"pair_id": 4, "errors": []}
     ]
   }
 }

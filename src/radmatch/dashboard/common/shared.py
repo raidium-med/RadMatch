@@ -219,7 +219,6 @@ def inject_styles() -> None:
         }
         .volume-metric-card { background: linear-gradient(135deg,#eef4ff,#dfe8ff); border-color:#c7d2fe; }
         .f1-metric-card     { background: linear-gradient(135deg,#fffbeb,#fde68a); border-color:#fcd34d; }
-        /* Everything but the headline errors-per-report card (gold) is grey. */
         .grey-metric-card   { background: linear-gradient(135deg,#f9fafb,#e5e7eb); border-color:#d1d5db; }
         .report-card {
             border-radius: 0.75rem; padding: 1rem 1.1rem;
@@ -561,12 +560,12 @@ def current_tier(key: str) -> str:
 
 def select_tier(key: str) -> str:
     """Horizontal error-tier radio (actionable by default); the choice carries across pages."""
-    options = list(dashboard_constants.TIER_NAMES)
+    options = list(constants.ERROR_TIERS)
     tier = st.radio(
         "Error tier",
         options=options,
         index=options.index(current_tier(key)),
-        format_func=dashboard_constants.TIER_NAMES.get,
+        format_func=str.capitalize,
         horizontal=True,
         label_visibility="collapsed",
         key=key,
@@ -582,19 +581,14 @@ def tier_metric_label(
     "Actionable Errors per Report (aER)" for `("actionable", "ER", suffix=" per Report")`."""
     name = dashboard_constants.METRIC_NAMES[metric]
     if with_tier:
-        name = f"{dashboard_constants.TIER_NAMES[tier]} {name}"
-    abbrev = f" ({dashboard_constants.TIER_PREFIX[tier]}{metric})" if with_abbrev else ""
+        name = f"{tier.capitalize()} {name}"
+    abbrev = f" ({constants.ERROR_TIER_PREFIX[tier]}{metric})" if with_abbrev else ""
     return f"{name}{suffix}{abbrev}"
 
 
 def tier_block(payload: dict[str, object], tier: str) -> dict[str, object]:
-    """`tiers.<tier>` of a summary / subset / per-report payload; stops the page on
-    outputs scored before radmatch 0.3, which lack it."""
-    block = (payload.get("tiers") or {}).get(tier)
-    if block is None:
-        st.warning("These results predate the per-tier metrics: re-run `radmatch score` on them (no LLM calls).")
-        st.stop()
-    return block
+    """`tiers.<tier>` of a summary / subset / per-report payload."""
+    return payload["tiers"][tier]
 
 
 def format_tier_rate(block: dict[str, object], metric: str) -> str:

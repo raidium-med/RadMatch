@@ -8,7 +8,6 @@ import plotly.express as px
 import streamlit as st
 
 from radmatch import constants
-from radmatch.dashboard.common import constants as dashboard_constants
 from radmatch.dashboard.common import shared
 
 
@@ -58,7 +57,7 @@ def _headline_metric_cards(block: dict[str, object], tier: str) -> None:
         )
     row2[2].markdown(
         shared.render_metric_card(
-            f"{dashboard_constants.TIER_NAMES[tier]} Errors per Finding",
+            f"{tier.capitalize()} Errors per Finding",
             shared.format_numeric_metric(block.get("errors_per_finding"), decimals=3),
             card_class="grey-metric-card",
         ),
@@ -242,7 +241,7 @@ def main() -> None:
     st.subheader("Main Metrics")
     tier = shared.select_tier(key="tier_radio_summary")
     _headline_metric_cards(shared.tier_block(summary, tier), tier)
-    st.caption(f"{dashboard_constants.TIER_NAMES[tier]} tier: {' + '.join(constants.ERROR_TIERS[tier])} findings.")
+    st.caption(f"{tier.capitalize()} tier: {' + '.join(constants.ERROR_TIERS[tier])} findings.")
 
     st.subheader("Match Outcomes", help=shared.MATCH_OUTCOMES_HELP)
     is_pct = shared.render_match_outcomes_toggle(key="match_outcomes_mode_summary")

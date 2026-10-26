@@ -11,9 +11,9 @@ You DO NOT score `clinical_status` or `comparison` — those are evaluated deter
 You receive a JSON object with:
 
 - `series_uuid`: identifier for the report pair (context only).
-- `pairs`: a list of `{"pred_finding": {...}, "gt_finding": {...}}` entries. Each finding has the standard fields (`text`, `clinical_status`, `clinical_significance`, etc.).
+- `pairs`: a list of `{"pair_id": <int>, "pred_finding": {...}, "gt_finding": {...}}` entries, numbered from 1. Each finding has the standard fields (`text`, `clinical_status`, `clinical_significance`, etc.).
 
-Pairs are ordered. Your output must align with the input order.
+Judge each pair on its own two findings, and report its errors under its own `pair_id`.
 
 ---
 
@@ -69,29 +69,29 @@ When a dimension has no applicable difference for a pair, that pair's error list
 
 ## OUTPUT FORMAT
 
-Return JSON with one key, `errors_per_match`, a list whose length **must equal** the input `pairs` length, in the same order:
+Return JSON with one key, `errors_per_pair`: one entry `{"pair_id": <int>, "errors": [...]}` for **every** input pair, each `pair_id` exactly once:
 
 ```json
 {
-  "errors_per_match": [
-    [
+  "errors_per_pair": [
+    {"pair_id": 1, "errors": [
       {"dimension": "location", "severity": "major", "reasoning": "pred says right lower lobe, gt says left lower lobe"}
-    ],
-    [],
-    [
+    ]},
+    {"pair_id": 2, "errors": []},
+    {"pair_id": 3, "errors": [
       {"dimension": "severity", "severity": "minor", "reasoning": "pred says mild-to-moderate, gt says moderate"}
-    ]
+    ]}
   ]
 }
 ```
 
-A pair with no errors has an empty list `[]` at its position.
+A pair with no errors has `"errors": []`.
 
 ---
 
 ## EDGE CASES
 
-- **Empty pairs** → return `{"errors_per_match": []}`.
+- **Empty pairs** → return `{"errors_per_pair": []}`.
 - **A pair where neither side describes anything beyond the bare anatomy + pathology** → `[]` for that pair.
 - **A pair where you are unsure whether to emit an error** → err on the side of NOT emitting. The metric uses these errors multiplicatively; spurious errors compound.
 
@@ -100,7 +100,7 @@ A pair with no errors has an empty list `[]` at its position.
 ## CRITICAL VALIDATIONS
 
 Before outputting, verify:
-1. `errors_per_match` has exactly the same number of entries as the input `pairs`.
+1. `errors_per_pair` has exactly one entry per input `pair_id`, and each entry's errors describe that pair's two findings only.
 2. Every error uses one of the five allowed `dimension` values and one of the two allowed `severity` values.
 3. Every error has a non-empty `reasoning` string.
 4. JSON is valid; no surrounding text, no markdown fences.

@@ -5,24 +5,27 @@
     "series_uuid": "head-ct_example_3",
     "pairs": [
       {
+        "pair_id": 1,
         "pred_finding": {"finding_id": "p_1", "text": "Congenital hypoplasia of the paranasal sinuses with agenesis of the frontal sinuses.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []},
         "gt_finding":   {"finding_id": "gt_1", "text": "Congenital hypoplasia of the paranasal sinuses with agenesis of the frontal sinuses.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []}
       },
       {
+        "pair_id": 2,
         "pred_finding": {"finding_id": "p_2", "text": "Stable nonspecific micronodule of the right upper lobe measuring 5.1 mm.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": [{"value": 5.1, "unit": "mm", "category": "size"}]},
         "gt_finding":   {"finding_id": "gt_2", "text": "Stable nonspecific micronodule of the right upper lobe measuring 4.4 mm.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": [{"value": 4.4, "unit": "mm", "category": "size"}]}
       },
       {
+        "pair_id": 3,
         "pred_finding": {"finding_id": "p_3", "text": "No pleural or pericardial effusion.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []},
         "gt_finding":   {"finding_id": "gt_6", "text": "No pleural or pericardial effusion.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []}
       }
     ]
   },
   "assistant": {
-    "errors_per_match": [
-      [],
-      [],
-      []
+    "errors_per_pair": [
+      {"pair_id": 1, "errors": []},
+      {"pair_id": 2, "errors": []},
+      {"pair_id": 3, "errors": []}
     ]
   }
 }
