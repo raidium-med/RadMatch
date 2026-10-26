@@ -7,6 +7,7 @@ are Stage 3b's job (`scoring.inference`).
 
 from __future__ import annotations
 
+import re
 from itertools import permutations
 from typing import Callable, Sequence
 
@@ -158,24 +159,131 @@ def _crosses_cliff(pv: float, gv: float, boundaries: tuple[float, ...]) -> bool:
     return any((pv <= b) != (gv <= b) for b in boundaries)
 
 
-def _omission_severity(category: str) -> str:
-    """A reference size the pred does not give at all is major; any other omission is minor."""
-    return "major" if category == "size" else "minor"
+_SMALL_SIZE_WORDS = re.compile(r"\b(tiny|punctate|millimetric|micro-?nodul\w*|sub-?centimet\w*|infra-?centimet\w*)")
+_SMALL_SIZE_BOUND_MM = 6.0  # Fleischner: below 6 mm a nodule needs no routine follow-up
+_UPPER_BOUND = re.compile(r"(?:\bsub-?|<|≤|\bless than|\bunder|\bbelow|\bsmaller than)\s*(\d+(?:\.\d+)?)\s*(mm|cm)\b")
+
+
+def _upper_bounds_mm(finding: dict) -> list[float]:
+    """Sizes the finding text gives only as an upper bound ("sub-6 mm", "< 5 mm")."""
+    text = str(finding.get("text") or "").lower()
+    return [float(v) * (10.0 if u == "cm" else 1.0) for v, u in _UPPER_BOUND.findall(text)]
+
+
+def _size_class_mm(finding: dict) -> float | None:
+    """The size a finding states without a number: its smallest upper bound, or a small-size word (< 6 mm)."""
+    bounds = _upper_bounds_mm(finding)
+    if bounds:
+        return min(bounds)
+    text = str(finding.get("text") or "").lower()
+    return _SMALL_SIZE_BOUND_MM if _SMALL_SIZE_WORDS.search(text) else None
+
+
+def _omission_severity(
+    category: str,
+    size_given_elsewhere: bool = False,
+    gt: dict | None = None,
+    pred_size_class: float | None = None,
+    cliffs: tuple[float, ...] | None = None,
+) -> str:
+    """A reference size the pred does not give at all is major, unless the pred gives a size class the reference
+    value falls under ("tiny nodule" vs 4 mm) or the value is below the structure's first decision threshold (a
+    4 mm nodule, a 7 mm node); any other omission is minor."""
+    if category != "size" or size_given_elsewhere:
+        return "minor"
+    if gt is not None and cliffs and _size_unit_kind(gt) == "length" and _canonical_value(gt) < min(cliffs):
+        return "minor"
+    if gt is not None and pred_size_class is not None and _size_unit_kind(gt) == "length":
+        return "minor" if _canonical_value(gt) < pred_size_class else "major"
+    return "major"
+
+
+# Size decision thresholds (mm) by structure, read from the finding texts; a value on a threshold falls below it.
+_SIZE_CLIFFS_MM: tuple[tuple[re.Pattern, tuple[float, ...]], ...] = (
+    (re.compile(r"(?<!lymph )\bnodul|\bnodule"), (5.95, 8.0)),  # lung nodule, Fleischner < 6 / 6-8 / > 8 mm
+    (re.compile(r"\blymph|\bnodes?\b|adenopath"), (10.0,)),  # short axis > 10 mm is enlarged
+    (re.compile(r"abdominal aort|infrarenal aort|\baaa\b"), (29.95, 54.95)),  # aneurysm >= 3 cm, repair >= 5.5 cm
+    (re.compile(r"aort"), (39.95, 54.95)),  # thoracic aorta dilated >= 4 cm, surgery >= 5.5 cm
+    (re.compile(r"\bsplen|\bspleen"), (130.0,)),  # splenomegaly > 13 cm
+    (
+        re.compile(r"common bile duct|\bcbd\b|common duct|choledoch"),
+        (6.0,),
+    ),  # dilated > 6 mm (> 10 mm, cholecystectomy)
+    (re.compile(r"pancreatic duct|wirsung"), (3.0,)),  # dilated > 3 mm
+)
+_NON_LUNG_NODULE = re.compile(
+    r"thyroid|liver|hepatic|renal|kidney|adrenal|breast|lymph|splen|pancrea|skin|subcutaneous"
+)
+
+
+def _size_cliffs(pred: dict, gt: dict) -> tuple[float, ...] | None:
+    """The decision thresholds of the structure the two findings describe (the gt text first), if any."""
+    for finding in (gt, pred):
+        text = str(finding.get("text") or "").lower()
+        for i, (pattern, cliffs) in enumerate(_SIZE_CLIFFS_MM):
+            if not pattern.search(text) or (i == 0 and _NON_LUNG_NODULE.search(text)):
+                continue
+            if i == 5 and "cholecystectomy" in text:
+                return (10.0,)
+            return cliffs
+    return None
+
+
+def _compare_size_with_cliffs(pm: dict, gm: dict, cliffs: tuple[float, ...]) -> dict | None:
+    """A size difference that crosses a decision threshold of the structure is major; within one class it is minor
+    when large (> 20 % and >= 2 mm), else no error."""
+    if _size_unit_kind(pm) != "length" or _size_unit_kind(gm) != "length":
+        return _compare_size(pm, gm, "size")
+    pv, gv = _canonical_value(pm), _canonical_value(gm)
+    if _crosses_cliff(pv, gv, cliffs):
+        return _error("measurement", "major", pred_value=pm, gt_value=gm, reasoning="size crosses a decision threshold")
+    if _size_or_ratio_rel_diff_major(pm, gm, _SIZE_REL_DIFF_MAJOR) and abs(pv - gv) >= _SIZE_ABS_FLOOR_MM:
+        return _error("measurement", "minor", pred_value=pm, gt_value=gm, reasoning="size differs within one class")
+    return None
+
+
+def _within_bound(value: dict, bound_side: dict, bounds: list[float]) -> bool:
+    """`bound_side` is a size its finding gives only as an upper bound, and `value` falls under it."""
+    if _size_unit_kind(value) != "length" or _size_unit_kind(bound_side) != "length":
+        return False
+    b = _canonical_value(bound_side)
+    return any(abs(b - x) < 1e-6 for x in bounds) and _canonical_value(value) < b
+
+
+def _align_categories(pred_measurements: Sequence[dict], gt_measurements: Sequence[dict]) -> list[dict]:
+    """Pred measurements, each relabelled with the category of a gt measurement carrying the same value and unit:
+    the two sides label categories independently, so a label disagreement on one quantity is not a difference."""
+    out = []
+    for m in pred_measurements:
+        same = next(
+            (g for g in gt_measurements if g.get("value") == m.get("value") and g.get("unit") == m.get("unit")), None
+        )
+        out.append({**m, "category": same.get("category", "other")} if same else m)
+    return out
 
 
 def classify_measurement_asymmetry(
     pred_measurements: Sequence[dict],
     gt_measurements: Sequence[dict],
+    size_given_elsewhere: bool = False,
+    pred_size_class: float | None = None,
+    pred_bounds: Sequence[float] = (),
+    gt_bounds: Sequence[float] = (),
+    size_cliffs: tuple[float, ...] | None = None,
 ) -> list[dict]:
     """Per-category measurement comparison.
 
     An addition (pred-only) is minor. An omission (gt-only) is minor, except a size
     when the pred gives no size at all, which is major; a missing extra dimension
-    stays minor. A category mismatch is major; same-category pairs are compared
-    against the thresholds above.
+    stays minor, and so does a size another pred of the same match group gives
+    (`size_given_elsewhere`), and a gt size under the size class the pred states without a number
+    (`pred_size_class`, mm: "tiny", "sub-6 mm"). Same-category pairs are compared against the thresholds
+    above, except a size one side gives only as an upper bound (`pred_bounds` / `gt_bounds`, mm) that the other
+    side's value falls under; a pred measurement with the value and unit of a gt one takes its category.
     """
     if not pred_measurements and not gt_measurements:
         return []
+    pred_measurements = _align_categories(pred_measurements, gt_measurements)
 
     if not gt_measurements:
         # Pred added measurements gt did not record → minor each
@@ -194,7 +302,7 @@ def classify_measurement_asymmetry(
         return [
             _error(
                 "measurement",
-                _omission_severity(m.get("category", "other")),
+                _omission_severity(m.get("category", "other"), size_given_elsewhere, m, pred_size_class, size_cliffs),
                 pred_value=None,
                 gt_value=m,
                 reasoning=f"pred omits a {m.get('category', 'other')} measurement gt records",
@@ -205,19 +313,6 @@ def classify_measurement_asymmetry(
     pred_by_cat = _by_category(pred_measurements)
     gt_by_cat = _by_category(gt_measurements)
     shared_cats = set(pred_by_cat) & set(gt_by_cat)
-
-    # If there is no category overlap, emit a single category-mismatch
-    # error rather than separate "added" + "omitted" entries.
-    if not shared_cats:
-        return [
-            _error(
-                "measurement",
-                "major",
-                pred_value=sorted(pred_by_cat.keys()),
-                gt_value=sorted(gt_by_cat.keys()),
-                reasoning="measurement categories differ between pred and gt",
-            )
-        ]
 
     errors: list[dict] = []
 
@@ -238,7 +333,7 @@ def classify_measurement_asymmetry(
             errors.append(
                 _error(
                     "measurement",
-                    _omission_severity(cat),
+                    _omission_severity(cat, size_given_elsewhere, m, pred_size_class, size_cliffs),
                     pred_value=None,
                     gt_value=m,
                     reasoning=f"pred omits a {cat} measurement gt records",
@@ -252,7 +347,13 @@ def classify_measurement_asymmetry(
         pairs, extras_pred, extras_gt = _best_measurement_pairing(pred_by_cat[cat], gt_by_cat[cat])
         comparator = _MEASUREMENT_COMPARATORS.get(cat, _compare_other)
         for pm, gm in pairs:
-            error = comparator(pm, gm, cat)
+            if cat == "size" and (_within_bound(gm, pm, pred_bounds) or _within_bound(pm, gm, gt_bounds)):
+                continue
+            error = (
+                _compare_size_with_cliffs(pm, gm, size_cliffs)
+                if cat == "size" and size_cliffs
+                else comparator(pm, gm, cat)
+            )
             if error is not None:
                 errors.append(error)
         for pm in extras_pred:
@@ -330,7 +431,20 @@ def _best_measurement_pairing(
 # ============================================================================
 
 
+def _size_unit_kind(measurement: dict) -> str | None:
+    """`length` / `volume` for a known unit, the unit itself for an unknown one, None when there is no unit."""
+    unit = measurement.get("unit")
+    if not isinstance(unit, str) or not unit:
+        return None
+    return constants.MEASUREMENT_SIZE_UNIT_KIND.get(unit.lower(), unit.lower())
+
+
 def _compare_size(pm: dict, gm: dict, _cat: str) -> dict | None:
+    pk, gk = _size_unit_kind(pm), _size_unit_kind(gm)
+    if pk and gk and pk != gk:
+        return _error(
+            "measurement", "minor", pred_value=pm, gt_value=gm, reasoning="sizes given in units that cannot be compared"
+        )
     if _size_or_ratio_rel_diff_major(pm, gm, _SIZE_REL_DIFF_MAJOR) and (
         abs(_canonical_value(pm) - _canonical_value(gm)) >= _SIZE_ABS_FLOOR_MM
     ):
@@ -387,8 +501,25 @@ _MEASUREMENT_COMPARATORS: dict[str, Callable[[dict, dict, str], "dict | None"]] 
 # ============================================================================
 
 
-def compute_structured_errors(pred: dict, gt: dict) -> list[dict]:
-    """Aggregate Stage 3a errors across status, comparison, measurement."""
+_CYST_ORGAN = re.compile(r"\b(renal|kidneys?|hepatic|liver|splenic|spleen|cortical|parapelvic)\b")
+_COMPLEX_CYST = re.compile(
+    r"\b(complex|septat\w*|enhanc\w*|solid|mural|nodul\w*|thick\w*|hyperdens\w*|hemorrhag\w*|calcif\w*"
+    r"|bosniak (?:iif|2f|iii|3|iv|4))"
+)
+_NEGATION = re.compile(r"\b(no|non|without)[- ](?:\w+[- ]){0,2}$")
+
+
+def _is_simple_cyst(finding: dict) -> bool:
+    """A renal, hepatic or splenic cyst with no complex feature (a negated one, "non-enhancing", does not count)."""
+    text = str(finding.get("text") or "").lower()
+    if not re.search(r"\bcysts?\b", text) or not _CYST_ORGAN.search(text):
+        return False
+    return all(_NEGATION.search(text[: m.start()]) for m in _COMPLEX_CYST.finditer(text))
+
+
+def compute_structured_errors(pred: dict, gt: dict, size_given_elsewhere: bool = False) -> list[dict]:
+    """Aggregate Stage 3a errors across status, comparison, measurement. `size_given_elsewhere`: another pred
+    matched to the same gt gives a size, so this pred omitting one is not an omission of the group."""
     errors: list[dict] = []
 
     status_err = classify_status_conflict(
@@ -408,7 +539,14 @@ def compute_structured_errors(pred: dict, gt: dict) -> list[dict]:
     measurement_errs = classify_measurement_asymmetry(
         pred.get("measurements", []),
         gt.get("measurements", []),
+        size_given_elsewhere=size_given_elsewhere,
+        pred_size_class=_size_class_mm(pred),
+        pred_bounds=_upper_bounds_mm(pred),
+        gt_bounds=_upper_bounds_mm(gt),
+        size_cliffs=_size_cliffs(pred, gt),
     )
+    if _is_simple_cyst(pred) and _is_simple_cyst(gt):  # no follow-up at any size (ACR incidental-findings papers)
+        measurement_errs = [{**e, "severity": "minor"} for e in measurement_errs]
     errors.extend(measurement_errs)
 
     return errors

@@ -112,7 +112,9 @@ def test_comparison_no_conflict(value):
             "major",
             id="attenuation-crosses-20hu-cliff",
         ),
-        pytest.param([_m(7, "mm", "size")], [_m(7, None, "count")], 1, "major", id="category-mismatch"),
+        pytest.param([_m(7, "mm", "size")], [_m(7, None, "count")], 2, "minor", id="category-mismatch"),
+        pytest.param([_m(12, "mm", "other")], [_m(12, "mm", "size")], 0, None, id="same-value-other-label"),
+        pytest.param([_m(498, "ml", "size")], [_m(14.4, "cm", "size")], 1, "minor", id="size-volume-vs-length"),
     ],
 )
 def test_measurement_asymmetry(pred_m, gt_m, expected_count, expected_severity):
@@ -123,11 +125,38 @@ def test_measurement_asymmetry(pred_m, gt_m, expected_count, expected_severity):
         assert errs[0]["dimension"] == "measurement"
 
 
+@pytest.mark.parametrize("elsewhere, expected", [(False, ["major", "minor"]), (True, ["minor", "minor"])])
+def test_measurement_omitted_size_is_major_unless_given_elsewhere_in_group(elsewhere, expected):
+    errs = comparators.classify_measurement_asymmetry(
+        [_m(3, None, "count")], [_m(12, "mm", "size")], size_given_elsewhere=elsewhere
+    )
+    assert sorted(e["severity"] for e in errs) == expected
+
+
+@pytest.mark.parametrize(
+    "pred_text, pred_m, gt_text, gt_m, expected",
+    [
+        pytest.param("Tiny right lower lobe nodule.", [], "4 mm nodule.", [_m(4, "mm", "size")], ["minor"], id="word"),
+        pytest.param(
+            "Tiny right lower lobe nodule.", [], "8 mm nodule.", [_m(8, "mm", "size")], ["major"], id="word-8mm"
+        ),
+        pytest.param("Sub-5 mm nodule.", [_m(5, "mm", "size")], "2 mm nodule.", [_m(2, "mm", "size")], [], id="bound"),
+        pytest.param(
+            "7 mm nodule.", [_m(7, "mm", "size")], "Nodule < 5 mm.", [_m(5, "mm", "size")], ["major"], id="above-bound"
+        ),
+    ],
+)
+def test_size_class_or_bound_covers_a_smaller_reference_size(pred_text, pred_m, gt_text, gt_m, expected):
+    pred = {"text": pred_text, "clinical_status": "abnormal", "measurements": pred_m}
+    gt = {"text": gt_text, "clinical_status": "abnormal", "measurements": gt_m}
+    assert [e["severity"] for e in comparators.compute_structured_errors(pred, gt)] == expected
+
+
 @pytest.mark.parametrize(
     "pred_m, gt_m, id_",
     [
         pytest.param([_m(1, "cm", "size")], [_m(10, "mm", "size")], "size-cm-vs-mm"),
-        pytest.param([_m(0.1, "m", "size")], [_m(100, "mm", "size")], "size-m-vs-mm"),
+        pytest.param([_m(500, "ml", "size")], [_m(0.5, "l", "size")], "size-ml-vs-l"),
         pytest.param([_m(1, "inch", "size")], [_m(25.4, "mm", "size")], "size-inch-vs-mm"),
     ],
 )
@@ -217,3 +246,32 @@ def test_compute_structured_errors_identical_pair_is_empty():
         "measurements": [_m(7, "mm", "size")],
     }
     assert comparators.compute_structured_errors(f, f) == []
+
+
+@pytest.mark.parametrize(
+    "pred_text, gt_text, expected",
+    [
+        pytest.param("Left renal cyst.", "Left renal simple cyst, 2.1 cm.", ["minor"], id="simple"),
+        pytest.param("Non-enhancing hepatic cyst.", "Hepatic cyst without septation, 2.1 cm.", ["minor"], id="negated"),
+        pytest.param("Left renal cyst.", "Septated left renal cyst, 2.1 cm.", ["major"], id="complex"),
+        pytest.param("Pancreatic cyst.", "Pancreatic cyst, 2.1 cm.", ["major"], id="pancreas"),
+    ],
+)
+def test_simple_cyst_size_is_at_most_minor(pred_text, gt_text, expected):
+    pred = {"text": pred_text, "clinical_status": "abnormal", "measurements": []}
+    gt = {"text": gt_text, "clinical_status": "abnormal", "measurements": [_m(2.1, "cm", "size")]}
+    assert [e["severity"] for e in comparators.compute_structured_errors(pred, gt)] == expected
+
+
+@pytest.mark.parametrize(
+    "text, pred_v, gt_v, expected",
+    [
+        pytest.param("Right lower lobe nodule.", 5, 7, ["major"], id="nodule-crosses-6mm"),
+        pytest.param("Mediastinal lymph node.", 12, 16, ["minor"], id="node-both-enlarged"),
+        pytest.param("Liver lesion.", 12, 16, ["major"], id="no-threshold-structure"),
+    ],
+)
+def test_size_difference_judged_against_the_structure_thresholds(text, pred_v, gt_v, expected):
+    pred = {"text": text, "clinical_status": "abnormal", "measurements": [_m(pred_v, "mm", "size")]}
+    gt = {"text": text, "clinical_status": "abnormal", "measurements": [_m(gt_v, "mm", "size")]}
+    assert [e["severity"] for e in comparators.compute_structured_errors(pred, gt)] == expected
