@@ -21,7 +21,14 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "No mucosal thickening or visible air-fluid level.",
+    "text": "No mucosal thickening.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No visible air-fluid level.",
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
@@ -70,22 +77,20 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "Stable nonspecific micronodule of the right upper lobe measuring 4.4 mm.",
+    "text": "Stable nonspecific micronodules, the right upper lobe micronodule measuring 4.4 mm and a few others less than 4 mm, particularly in the right lower lobe.",
     "measurements": [
       {
         "value": 4.4,
         "unit": "mm",
         "category": "size"
+      },
+      {
+        "value": 4,
+        "unit": "mm",
+        "category": "size"
       }
     ],
     "comparison": "stable",
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
-  },
-  {
-    "text": "A few other nonspecific micronodules less than 4 mm, particularly in the right lower lobe.",
-    "measurements": [],
-    "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
   },
@@ -118,7 +123,14 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "No pleural or pericardial effusion.",
+    "text": "No pleural effusion.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No pericardial effusion.",
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",

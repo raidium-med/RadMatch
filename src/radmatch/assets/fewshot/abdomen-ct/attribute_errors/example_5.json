@@ -1,6 +1,6 @@
 {
-  "scenario": "Constructed: certainty, added diagnosis, structured category, expected post-surgical state",
-  "description": "Constructed. A sign turned into a diagnosis gt does not make (dilated loops 'compatible with obstruction') and a hedged fracture are major; 'possibly malignant' vs 'consistent with renal cell carcinoma' is two certainty steps (major); a Bosniak class change across follow-up buckets is a major severity error; a hedged negative for an incidental entity is minor; a bile duct size gt explains by cholecystectomy carries no error.",
+  "scenario": "Constructed: certainty, left-out character and grade, structured category, expected post-surgical state",
+  "description": "Constructed. Small bowel dilatation whose air-fluid levels and 'mild' grade the pred leaves out carries a major morphology and a major severity error; a hedged fracture is major; 'possibly malignant' vs 'consistent with renal cell carcinoma' is two certainty steps (major); a Bosniak class change across follow-up buckets is a major severity error; 'possibly' on a definite negative is two certainty steps (major); a bile duct size gt explains by cholecystectomy carries no error.",
   "user": {
     "series_uuid": "abdomen-ct_example_5",
     "pairs": [
@@ -152,7 +152,12 @@
           {
             "dimension": "morphology",
             "severity": "major",
-            "reasoning": "pred adds a small bowel obstruction gt does not diagnose"
+            "reasoning": "pred leaves out the air-fluid levels gt gives"
+          },
+          {
+            "dimension": "severity",
+            "severity": "major",
+            "reasoning": "pred leaves out the mild grade"
           }
         ]
       },
@@ -191,8 +196,8 @@
         "errors": [
           {
             "dimension": "certainty",
-            "severity": "minor",
-            "reasoning": "hedged negative for an incidental entity"
+            "severity": "major",
+            "reasoning": "'possibly' vs definite, two steps"
           }
         ]
       },

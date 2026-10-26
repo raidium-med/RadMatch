@@ -1,6 +1,6 @@
 {
-  "scenario": "No free-text attribute errors — pure measurement diff handled deterministically",
-  "description": "Stage 3b call derived from the matches in head-ct/matching/example_3.json. The micronodule pair carries only a sub-mm measurement difference (4.4 vs 5.1 mm) — Stage 3a deterministic owns that, Stage 3b does not re-emit. The other two pairs (congenital sinus hypoplasia, no pleural / pericardial effusion) are identical.",
+  "scenario": "Minor measurement difference + clean pairs",
+  "description": "Stage 3b call derived from the matches in head-ct/matching/example_3.json. The micronodule pair carries only a sub-mm measurement difference (4.4 vs 5.1 mm) — a minor measurement error, as both sizes stay under the 6 mm Fleischner threshold. The other two pairs (congenital sinus hypoplasia, no pleural / pericardial effusion) are identical.",
   "user": {
     "series_uuid": "head-ct_example_3",
     "pairs": [
@@ -24,7 +24,9 @@
   "assistant": {
     "errors_per_pair": [
       {"pair_id": 1, "errors": []},
-      {"pair_id": 2, "errors": []},
+      {"pair_id": 2, "errors": [
+        {"dimension": "measurement", "severity": "minor", "reasoning": "5.1 vs 4.4 mm, both under the 6 mm threshold"}
+      ]},
       {"pair_id": 3, "errors": []}
     ]
   }

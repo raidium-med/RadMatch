@@ -1,0 +1,334 @@
+{
+  "scenario": "Constructed: umbrella that leaves out sites, left-out lobe and subtype, bilateral vs one side, more detail",
+  "description": "Constructed. An umbrella pred that names no station has a major location error on each located gt node it was matched to; a lobe and a subtype the pred leaves out are major; a pred more detailed than the gt has no error; bilateral vs one side is major; a bilateral pred matched to a left and a right gt has no location error. A size the pred leaves out is not an error when a size class covers the gt value ('enlarged' for the 12 and 15 mm nodes, 'subcentimeter' for 7 mm). A hedge on the cause ('likely reactive') leaves the finding definite and adds detail: no error. Growth the pred invents on a mass is a major comparison error. Naming the diagnosis of what the gt describes ('bronchiectasis' for dilated bronchi) is more detail: no error. A side only the gt gives is a major location error.",
+  "user": {
+    "series_uuid": "chest-ct_example_7",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Enlarged mediastinal lymph nodes.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "12 mm right paratracheal lymph node.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 12,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "same_group_gt": [
+          "15 mm subcarinal lymph node."
+        ]
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Enlarged mediastinal lymph nodes.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "15 mm subcarinal lymph node.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 15,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "same_group_gt": [
+          "12 mm right paratracheal lymph node."
+        ]
+      },
+      {
+        "pair_id": 3,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "Bronchiectasis in the left lung.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "Cylindrical bronchiectasis in the left lower lobe.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 4,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "Consolidation in the posterior basal segment of the right lower lobe.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "Right lower lobe consolidation.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 5,
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "Bronchial wall thickening in both lower lobes.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_5",
+          "text": "Bronchial wall thickening in the right lower lobe.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 6,
+        "pred_finding": {
+          "finding_id": "p_5",
+          "text": "Bilateral apical pleural thickening.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_6",
+          "text": "Left apical pleural thickening.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "same_group_gt": [
+          "Right apical pleural thickening."
+        ]
+      },
+      {
+        "pair_id": 7,
+        "pred_finding": {
+          "finding_id": "p_6",
+          "text": "Subcentimeter right hilar lymph node.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_7",
+          "text": "7 mm right hilar lymph node.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 7,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 8,
+        "pred_finding": {
+          "finding_id": "p_7",
+          "text": "Mediastinal lymph nodes, likely reactive.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_8",
+          "text": "Mediastinal lymph nodes.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 9,
+        "pred_finding": {
+          "finding_id": "p_8",
+          "text": "Enlarging right upper lobe mass.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": "worsening",
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_9",
+          "text": "Right upper lobe mass.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 10,
+        "pred_finding": {
+          "finding_id": "p_9",
+          "text": "Bronchiectasis in the right lower lobe.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_10",
+          "text": "Dilated bronchi in the right lower lobe.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 11,
+        "pred_finding": {
+          "finding_id": "p_10",
+          "text": "Apical pleural thickening.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_11",
+          "text": "Right apical pleural thickening.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "location",
+            "severity": "major",
+            "reasoning": "pred names no station; gt gives the right paratracheal station"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "location",
+            "severity": "major",
+            "reasoning": "pred names no station; gt gives the subcarinal station"
+          }
+        ]
+      },
+      {
+        "pair_id": 3,
+        "errors": [
+          {
+            "dimension": "location",
+            "severity": "major",
+            "reasoning": "pred leaves out the left lower lobe gt gives"
+          },
+          {
+            "dimension": "morphology",
+            "severity": "major",
+            "reasoning": "pred leaves out the cylindrical type gt gives"
+          }
+        ]
+      },
+      {
+        "pair_id": 4,
+        "errors": []
+      },
+      {
+        "pair_id": 5,
+        "errors": [
+          {
+            "dimension": "location",
+            "severity": "major",
+            "reasoning": "pred claims both lower lobes, gt only the right lower lobe"
+          }
+        ]
+      },
+      {
+        "pair_id": 6,
+        "errors": []
+      },
+      {
+        "pair_id": 7,
+        "errors": []
+      },
+      {
+        "pair_id": 8,
+        "errors": []
+      },
+      {
+        "pair_id": 9,
+        "errors": [
+          {
+            "dimension": "comparison",
+            "severity": "major",
+            "reasoning": "pred states growth gt does not give, on a mass"
+          }
+        ]
+      },
+      {
+        "pair_id": 10,
+        "errors": []
+      },
+      {
+        "pair_id": 11,
+        "errors": [
+          {
+            "dimension": "location",
+            "severity": "major",
+            "reasoning": "pred leaves out the right side gt gives"
+          }
+        ]
+      }
+    ]
+  }
+}

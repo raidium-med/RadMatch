@@ -1,6 +1,6 @@
 {
-  "scenario": "No free-text attribute errors after INC exclusion — measurement diff is deterministic",
-  "description": "Stage 3b call derived from the matches in chest-ct/matching/example_3.json. The pleural-effusion pair is a status conflict (gt 'No pleural effusion' vs pred 'Small right pleural effusion') → excluded from Stage 3b at Stage 3a (INC). The LLL nodule pair has a measurement difference (11 mm vs 13 mm) but no free-text attribute difference; Stage 3a owns the measurement comparison. The hilar-node pair is identical.",
+  "scenario": "Size difference on one side of every threshold is minor; INC pair excluded",
+  "description": "Stage 3b call derived from the matches in chest-ct/matching/example_3.json. The pleural-effusion pair is a status conflict (gt 'No pleural effusion' vs pred 'Small right pleural effusion') → excluded from Stage 3b at Stage 3a (INC). The LLL nodule pair (11 mm vs 13 mm) stays above the 8 mm threshold: a minor measurement error. The hilar-node pair is identical.",
   "user": {
     "series_uuid": "chest-ct_example_3",
     "pairs": [
@@ -18,7 +18,9 @@
   },
   "assistant": {
     "errors_per_pair": [
-      {"pair_id": 1, "errors": []},
+      {"pair_id": 1, "errors": [
+        {"dimension": "measurement", "severity": "minor", "reasoning": "11 vs 13 mm stays above the 8 mm threshold"}
+      ]},
       {"pair_id": 2, "errors": []}
     ]
   }

@@ -1,6 +1,6 @@
 {
  "scenario": "Constructed: acute vs chronic, single vs multiple, attenuation, invasion, variant vs neoplasm, clot burden",
- "description": "Constructed. Acute vs chronic emboli, a solitary vs multiple nodules, ground-glass vs solid attenuation, abutment vs invasion, residual thymus vs thymoma and a small vs large clot burden each change management and are major; a mild vs moderate grade of emphysema is minor; a per-vessel calcium grid vs a vessel list is no error.",
+ "description": "Constructed. Acute vs chronic emboli, a solitary vs multiple nodules (also a major location error: one lobe vs bilateral), ground-glass vs solid attenuation, abutment vs invasion, residual thymus vs thymoma and a small vs large clot burden each change management and are major; a mild vs moderate grade of emphysema is minor; a vessel list that leaves out the per-vessel grades is a major severity error.",
  "user": {
   "series_uuid": "chest-ct_example_6",
   "pairs": [
@@ -201,6 +201,11 @@
       "dimension": "morphology",
       "severity": "major",
       "reasoning": "solitary vs multiple nodules: primary vs metastatic work-up"
+     },
+     {
+      "dimension": "location",
+      "severity": "major",
+      "reasoning": "pred places the nodule only in the right lower lobe, gt nodules are bilateral"
      }
     ]
    },
@@ -256,7 +261,13 @@
    },
    {
     "pair_id": 8,
-    "errors": []
+    "errors": [
+     {
+      "dimension": "severity",
+      "severity": "major",
+      "reasoning": "pred leaves out the mild grades gt gives for the LAD and RCA"
+     }
+    ]
    }
   ]
  }

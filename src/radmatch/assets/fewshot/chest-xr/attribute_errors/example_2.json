@@ -1,6 +1,6 @@
 {
   "scenario": "Severity_descriptor major + location sub-anatomic major + clean negation",
-  "description": "Stage 3b call derived from the matches in chest-xr/matching/example_2.json. The pleural-effusion pair has a comparison flip (Stage 3a deterministic) but no status conflict, so it reaches Stage 3b with no free-text attribute errors. The LLL consolidation pair has a major severity error (pred dropped 'severe collapse' to 'likely atelectasis'). The central line pair has a major sub-anatomic location error (upper right atrium vs lower SVC — different management). The pneumothorax pair is clean.",
+  "description": "Stage 3b call derived from the matches in chest-xr/matching/example_2.json. The pleural-effusion pair has a comparison flip (Stage 3a deterministic) but no status conflict, so it reaches Stage 3b; the pred leaves out the moderate grade gt gives, a major severity error. The LLL consolidation pair has a major severity error (pred leaves out the 'severe' grade gt gives; atelectasis and collapse are synonyms) and a minor location error (left basilar vs left lower lobe). The central line pair has a major sub-anatomic location error (upper right atrium vs lower SVC — different management). The pneumothorax pair is clean.",
   "user": {
     "series_uuid": "chest-xr_example_2",
     "pairs": [
@@ -28,9 +28,12 @@
   },
   "assistant": {
     "errors_per_pair": [
-      {"pair_id": 1, "errors": []},
+      {"pair_id": 1, "errors": [
+        {"dimension": "severity", "severity": "major", "reasoning": "pred leaves out the moderate grade gt gives"}
+      ]},
       {"pair_id": 2, "errors": [
-        {"dimension": "severity", "severity": "major", "reasoning": "Gt says 'severe ... presumably collapse', pred says 'likely atelectasis' — pred drops the severity descriptor entirely and downgrades the interpretation from collapse to atelectasis. In an intubated ICU patient, severe LLL collapse triggers bronchoscopy whereas atelectasis is typically observed; clinical management threshold is crossed."}
+        {"dimension": "severity", "severity": "major", "reasoning": "pred leaves out the severe grade gt gives"},
+        {"dimension": "location", "severity": "minor", "reasoning": "left basilar vs left lower lobe"}
       ]},
       {"pair_id": 3, "errors": [
         {"dimension": "location", "severity": "major", "reasoning": "Pred places the tip in the lower SVC, gt places it in the upper right atrium — different anatomic position; atrial tips are conventionally pulled back due to arrhythmia / perforation risk, so the discrepancy changes management."}

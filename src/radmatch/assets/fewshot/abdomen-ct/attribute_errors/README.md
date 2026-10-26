@@ -6,10 +6,11 @@ Stage 3b examples, most derived from the matches of an `abdomen-ct/matching/exam
 |------|------------|------------|
 | `example_1.json` | matching/example_1 | No free-text attribute errors — comparison flip on mesenteric LN and ratio diff on portal vein are owned by Stage 3a deterministic |
 | `example_2.json` | matching/example_2 | No free-text attribute errors on the consolidated hematoma + active-bleeding match |
-| `example_3.json` | matching/example_3 | Minor certainty error on hepatic-cyst pair (gt 'cyst' definite vs pred 'small hypodense focus' hedged); CBD prior-measurement diff is Stage 3a |
-| `example_4.json` | matching/example_6 | Constructed clinical long tail — a stone with its consequence judged against its group (no error), hypodense vs cyst minor, diverticulosis vs diverticulitis major morphology, small vs large ascites major severity |
-| `example_5.json` | constructed | Added diagnosis (obstruction) and hedged fracture major; two certainty steps major; Bosniak II vs IIF major; hedged incidental negative minor; post-cholecystectomy duct no error |
-| `example_6.json` | constructed | Major for an invented SBO transition point / closed loop, solitary vs multiple metastases, SMV abutment vs SMA encasement, acute vs chronic fracture, splenule vs node, gas in a collection; diverticulosis segment and small-hernia content minor |
+| `example_3.json` | matching/example_3 | Major morphology error on the hepatic-cyst pair (pred gives only the density, gt calls it a cyst) + minor measurement error (pred leaves out the 9 mm size of a simple hepatic cyst); CBD prior-measurement diff is Stage 3a |
+| `example_4.json` | matching/example_6 | Constructed clinical long tail — a stone with its consequence judged against its group (no error), hypodense vs cyst major (left-out composition), diverticulosis vs diverticulitis major morphology, small vs large ascites major severity |
+| `example_5.json` | constructed | Left-out air-fluid levels and mild grade on small bowel dilatation major; hedged fracture major; two certainty steps major; Bosniak II vs IIF major; 'possibly' on a definite negative two certainty steps major; post-cholecystectomy duct no error |
+| `example_6.json` | constructed | Major for an invented SBO transition point / closed loop, solitary vs multiple metastases, SMV abutment vs SMA encasement, acute vs chronic fracture, splenule vs node, gas in a collection; diverticulosis segment minor, added hernia content no error |
+| `example_7.json` | constructed | Bilateral vs one side + left-out grade major, left-out side and size major, umbrella with no site vs located lesions major per pair, more detail no error, bilateral pred vs left + right gt no error, density word vs composition major, left-out simple-cyst size minor, invented change on diverticulosis no error, cause hedge no error, one-step grade difference minor, a side only the pred gives major |
 
 ## Format
 

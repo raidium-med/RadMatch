@@ -1,6 +1,6 @@
 {
-  "scenario": "Major laterality + major severity + clean pair",
-  "description": "Stage 3b call derived from the matches in chest-ct/matching/example_1.json, with the heart-size INC pair (gt 'not enlarged' vs pred 'mildly enlarged') excluded upstream. The bronchiectasis pair flips laterality on a paired lung (right vs left lung apex) — major. The coronary-calcification pair flips severity from severe to moderate, crossing the descriptor scale by more than one step — major (severe → moderate misrepresents the burden of disease). The aortic-arch pair has a measurement difference (Stage 3a) but no free-text error. The hepatic-lesion pair is identical.",
+  "scenario": "Major laterality + minor severity + clean pair",
+  "description": "Stage 3b call derived from the matches in chest-ct/matching/example_1.json, with the heart-size INC pair (gt 'not enlarged' vs pred 'mildly enlarged') excluded upstream. The bronchiectasis pair flips laterality on a paired lung (right vs left lung apex) — major. The coronary-calcification pair differs in severity (gt severe vs pred moderate), one step apart on the descriptor scale — minor. The aortic-arch pair (4.1 vs 3.6 cm) crosses the 4 cm thoracic-aorta threshold: a major measurement error. The hepatic-lesion pair is identical.",
   "user": {
     "series_uuid": "chest-ct_example_1",
     "pairs": [
@@ -32,9 +32,11 @@
         {"dimension": "location", "severity": "major", "reasoning": "Pred says left lung apex, gt says right lung apex — laterality flip on a paired lung."}
       ]},
       {"pair_id": 2, "errors": [
-        {"dimension": "severity", "severity": "major", "reasoning": "Gt says severe coronary calcifications, pred says moderate — severe → moderate misrepresents the disease burden in this elderly patient (severe CAC has different downstream cardiac workup implications)."}
+        {"dimension": "severity", "severity": "minor", "reasoning": "moderate vs severe, one step"}
       ]},
-      {"pair_id": 3, "errors": []},
+      {"pair_id": 3, "errors": [
+        {"dimension": "measurement", "severity": "major", "reasoning": "4.1 vs 3.6 cm crosses the 4 cm thoracic aorta threshold"}
+      ]},
       {"pair_id": 4, "errors": []}
     ]
   }

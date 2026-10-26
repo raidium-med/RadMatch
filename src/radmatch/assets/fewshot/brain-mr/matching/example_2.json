@@ -1,6 +1,6 @@
 {
   "scenario": "1:N umbrella — pred parent-anatomy negative covering several GT rule-out atoms",
-  "description": "Pred 'Cerebellum unremarkable.' names the parent anatomy AND is the radiologist's conventional aggregation of multiple cerebellar rule-outs (no tumor, no hemorrhage, no infarct, no traumatic lesion).",
+  "description": "Pred 'Cerebellum unremarkable.' names the parent anatomy AND is the radiologist's conventional aggregation of multiple cerebellar rule-outs (no tumor, no hemorrhage, no infarct).",
   "user": {
     "pred_findings": [
       {

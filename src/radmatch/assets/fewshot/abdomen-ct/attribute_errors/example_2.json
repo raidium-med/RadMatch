@@ -1,6 +1,6 @@
 {
   "scenario": "No free-text attribute errors on consolidated trauma findings",
-  "description": "Stage 3b call derived from the matches in abdomen-ct/matching/example_2.json. The adductor hematoma + active-bleeding entries are consolidated descriptions of the same lesion and align cleanly. The pred 'Findings-section text initially described the lesion as 9 x 6 cm' clause documents a pred report inconsistency rather than a Stage 3b-scoreable attribute error. None of the 4 LLM attribute dimensions (location, severity, morphology, certainty) apply to the matched pairs.",
+  "description": "Stage 3b call derived from the matches in abdomen-ct/matching/example_2.json. The adductor hematoma + active-bleeding entries are consolidated descriptions of the same lesion and align cleanly. The pred 'Findings-section text initially described the lesion as 9 x 6 cm' clause documents a pred report inconsistency rather than a Stage 3b-scoreable attribute error. None of the six attribute dimensions (location, severity, morphology, certainty, measurement, comparison) apply to the matched pairs.",
   "user": {
     "series_uuid": "abdomen-ct_example_2",
     "pairs": [

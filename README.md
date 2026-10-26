@@ -159,7 +159,7 @@ Stage 3c (deterministic)    MUC classification + per-tier error counts
 
 **Stage 2** matches every predicted finding to one or more ground-truth findings, and vice versa: an umbrella claim on one side ("Bilateral pleural effusions", "Multilevel cervical spondylosis C2-C3 through C7-T1") binds each atom it covers on the other. Status conflicts ("pneumothorax present" vs "no pneumothorax") and laterality flips (same organ and pathology, wrong side) still match, so Stage 3 records them as one error on the right dimension rather than as a miss plus a hallucination. Stage 2 only links findings; whether a link is correct is judged in Stage 3, so boilerplate such as "Study unremarkable" bound to a real abnormality comes out `INC`. Each report pair is matched in a single call; a long report needs a long answer, so that call gets three times `RADMATCH_REQUEST_TIMEOUT_S` (540 s by default), and a timeout is not retried.
 
-**Stage 3** scores each matched pair on seven attribute dimensions: three structured (`clinical_status`, `comparison`, `measurement`) handled by deterministic comparators, and four free-text (`location`, `severity`, `morphology`, `certainty`) handled by an LLM, with a lexicon rule for large certainty gaps. Every detected error is `major` or `minor`. Each pair then lands in one of five MUC categories:
+**Stage 3** scores each matched pair on seven attribute dimensions: `clinical_status` and comparison labels handled by deterministic comparators, sizes and invented changes flagged by the comparators and graded by the LLM, and `location`, `severity`, `morphology`, `certainty` graded by the LLM. Every detected error is `major` or `minor`. Each pair then lands in one of five MUC categories:
 
 | Category | Meaning |
 |---|---|
@@ -176,16 +176,17 @@ Every difference within a matched pair is attributed to one of seven dimensions 
 
 | Dimension | Graded by | What it compares |
 |---|---|---|
-| `clinical_status` | comparator | Presence vs absence. Any disagreement is a status inversion, always major, except between near-identical sentences with the same negations. |
-| `comparison` | comparator | Longitudinal trajectory. Major when it crosses between benign (`stable`, `improving`, `resolved`) and active (`worsening`, `new`), or when the prediction drops an active trajectory the ground truth records, or invents one on a finding followed by size (aneurysm, nodule, mass, lymph node, effusion, metastasis). |
-| `measurement` | comparator + LLM | Numeric values against per-category thresholds; adding a value is minor, and so is omitting one, except a size the candidate does not give at all, which is major unless the candidate states a size class the reference value falls under ("tiny", "sub-6 mm") or the value is below the structure's first decision threshold (a 4 mm nodule, a 7 mm node). A size given only as an upper bound is satisfied by a smaller value, and any size difference on a simple renal, hepatic or splenic cyst is minor. The LLM adds only differences that cross a clinical decision boundary. |
-| `location` | LLM | Anatomic placement, including laterality and sub-anatomic detail. A left/right flip on a paired structure is always major. |
-| `severity` | LLM | Qualitative magnitude — mild / moderate / severe, small / large. Major when it crosses an action threshold. |
-| `morphology` | LLM | Shape, margin, character — spiculated vs smooth, solid vs cystic. |
-| `certainty` | comparator + LLM | Diagnostic hedging — definite vs probable vs possible. Two or more steps apart on the hedging lexicon ("possible fracture" vs a definite fracture) is major, unless the gap only comes from a hedge on the cause ("possibly secondary to"); closer steps are judged by the LLM. |
+| `clinical_status` | comparator | Presence vs absence. Any disagreement is a status inversion, always major; Stage 1 gives the same observation the same status however it is phrased. |
+| `comparison` | comparator | Longitudinal trajectory. Major when it crosses between benign (`stable`, `improving`, `resolved`) and active (`worsening`, `new`), or when the prediction drops an active trajectory the ground truth records. A change the prediction invents is flagged, and the LLM grades it major on a finding followed by size (aneurysm, nodule, mass, lymph node, effusion, metastasis). |
+| `measurement` | comparator + LLM | Counts, ratios and attenuation against per-category thresholds. Sizes: the comparator flags a difference (> 20 %, >= 2 mm) or a size the candidate leaves out, and the LLM grades it: major when it crosses a decision threshold of the structure (Fleischner 6 / 8 mm, node short axis 10 mm, aorta, spleen, bile and pancreatic ducts), differs by more than 20 % and 2 mm, or is left out without a covering size class ("tiny", "subcentimeter", "< 5 mm"); minor on a simple renal, hepatic or splenic cyst. A size only the candidate gives is not an error. |
+| `location` | LLM | Anatomic placement, including laterality and sub-anatomic detail. Major in almost every case: a left/right flip, bilateral vs one side, a different lobe or segment, a site or side the reference gives that the candidate leaves out (also when an umbrella statement does not place each finding it covers). A side only one of the two findings gives is an error too, either way. |
+| `severity` | LLM | Qualitative magnitude — mild / moderate / severe, small / large. Major two steps apart, for a structured category change (Bosniak, Lung-RADS) or a grade the candidate leaves out; one step is minor. |
+| `morphology` | LLM | Shape, margin, character — spiculated vs smooth, solid vs cystic, one lesion vs several. Major for a different diagnosis or a character the candidate leaves out; naming the diagnosis of what the reference describes is not an error. |
+| `certainty` | LLM | Diagnostic hedging — definite vs probable vs possible. Two or more steps apart ("possible fracture" vs a definite fracture) is major, one step minor; a hedge on the cause only ("possibly secondary to") leaves the finding definite. |
 
-`major` means the error would change management or the anatomy referred to; `minor` means
-the prediction is less precise but would not mislead a clinician. Only `major` errors push a
+`major` means the error would change management or the anatomy referred to, or the prediction leaves out a detail the
+reference gives; `minor` means both give the detail and differ only slightly. Adding detail the reference does not give
+is not an error. Only `major` errors push a
 matched pair to `INC`.
 
 The dataset summary reports `attribute_breakdown` — a clean / minor / major count per
@@ -226,7 +227,7 @@ Anchored to the ACR Actionable Findings Framework and the RSNA communication col
 | `notable` | yellow | Stable granuloma, simple cyst, chronic atelectasis, minor scarring, coronary artery calcification, support devices (tubes, lines, catheters) |
 | `routine` | green | "Liver unremarkable", "no effusion" in general screening, anatomic variants, mild degenerative change, uncomplicated aortic atherosclerosis, remote uncomplicated post-surgical states |
 
-Scoring keeps coronary artery calcification `notable` even when Stage 1 folds it into a `routine` aortic atherosclerosis finding.
+Stage 1 keeps coronary artery calcification `notable` at any grade, split from aortic atherosclerosis.
 
 ### Output files
 
@@ -289,7 +290,7 @@ Scoring keeps coronary artery calcification `notable` even when Stage 1 folds it
 ```json
 {
   "metadata": {
-    "radmatch_version": "0.3.0",
+    "radmatch_version": "0.3.1",
     "llm_judge": "local:google/gemma-4-31B-it",
     "fewshot": "chest-ct",
     "n_reports": 100,

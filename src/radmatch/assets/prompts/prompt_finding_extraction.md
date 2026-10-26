@@ -74,15 +74,21 @@ One concise clinical sentence ending with a period. Write "Spleen normal.", not 
 
 ### `clinical_status`: `"normal"` | `"abnormal"`
 
+The status follows the observation, not its wording: the same observation takes the same status however it is phrased.
+
 | Status | When | Examples |
 |---|---|---|
-| `"abnormal"` | Pathology present | "Liver lesion", "Pleural effusion", "Bowel wall thickening" |
+| `"abnormal"` | Pathology present, however small | "Liver lesion", "Pleural effusion", "Bowel wall thickening", "A few tiny nonspecific lung nodules" |
 | `"abnormal"` | Uncertain or suspected pathology | "Possible liver lesion", "Suspicious for mass" |
 | `"abnormal"` | Organ physically missing | "Gallbladder surgically absent", "Status post splenectomy" |
+| `"abnormal"` | A post-surgical state, implanted device or transplant, or a tube, line or catheter in any position | "Liver transplant", "Prosthetic aortic valve", "Right chest port catheter", "Endotracheal tube 4 cm above the carina" |
 | `"abnormal"` | A followed entity called stable or unchanged without a word saying it is normal | "Mediastinal lymph nodes are stable" (comparison `"stable"`) |
 | `"normal"` | Explicitly normal / unremarkable, or normal size | "Liver normal", "Kidneys unremarkable", "Spleen normal in size" |
+| `"normal"` | A size at the upper limit of normal or borderline, with no word calling it enlarged | "Heart size at the upper limit of normal", "Borderline spleen size" |
+| `"normal"` | The expected effect of a device, procedure or ingested material | "Gas in the bladder with a urinary catheter", "Oral contrast in the colon" |
+| `"normal"` | An anatomic variant | "Retroaortic left renal vein", "Bifid rib" |
 | `"normal"` | Lymph nodes called small, subcentimetre, not enlarged, nonspecific, non-pathological or reactive-appearing (short axis, or any stated diameter, under 10 mm at most stations), unless called suspicious (necrotic, rounded, clustered, growing) | "Small non-enlarged mediastinal lymph nodes up to 6 mm", "Nonspecific subcentimetre axillary nodes" |
-| `"normal"` | Trace physiologic fluid: trace pericardial fluid, trace or minimal free fluid confined to the pelvis (unless the indication is trauma or concerns it) | "Trace free fluid in the pouch of Douglas" |
+| `"normal"` | Trace physiologic fluid: trace or minimal pericardial fluid or effusion, trace, minimal or a small amount of free fluid confined to the pelvis (unless the indication is trauma or concerns it) | "Trace free fluid in the pouch of Douglas" |
 | `"normal"` | Absence of pathology stated | "No effusion", "No obstruction" |
 | `"normal"` | Prior abnormality resolved | "Previously seen effusion now resolved" |
 | `"normal"` | Patent vessels | "Portal veins patent", "Hepatic veins patent" |
@@ -102,7 +108,9 @@ Tiers (ACR Actionable Findings Framework / RSNA communication colour coding):
 | `"notable"` | Category 3 / Yellow | Documented, future follow-up | Stable granuloma, simple cyst, chronic atelectasis, minor scarring, "no recurrence" in oncology, lymphadenopathy of unclear significance, small pleural effusion, small nodule without suspicious features, coronary artery calcification, a support device whose position is checked (tube, line, catheter, drain, pacemaker lead), post-treatment change under oncologic follow-up |
 | `"routine"` | Baseline / Green | Standard completeness statement, low-impact normal | "Liver unremarkable", "no effusion" in general screening, anatomic variants, mild degenerative changes of the spine or joints (spondylosis, disc bulge, osteophytes), uncomplicated atherosclerosis of the aorta and its branches, nonspecific increased lung markings, a remote uncomplicated post-surgical state unrelated to the indication (organ surgically absent, surgical clips, sternotomy wires, joint prosthesis, spinal fixation, vascular stent) |
 
-**Read the study indication first.** A `Study indication:` block at the top of the user message, when present, gives the clinical reason for the exam and drives significance. Identify the pathologies it asks about. When it names or implies a critical- or urgent-tier pathology, every finding that addresses that pathology, present or ruled out, takes the tier of the indication's concern:
+Coronary artery calcification is `"notable"` at any grade, also when the report states it in one sentence with aortic atherosclerosis: split it (§2) and give the coronary finding `"notable"`.
+
+**Read the study indication first.** A `Study indication:` block at the top of the user message, when present, gives the clinical reason for the exam and drives significance. Without that block, a clinical-information line inside the report (INDICATION, HISTORY, CLINICAL DATA, CLINICAL INFORMATION) plays the same role. Identify the pathologies it asks about. When it names or implies a critical- or urgent-tier pathology, every finding that addresses that pathology, present or ruled out, takes the tier of the indication's concern:
 
 | Indication | Findings that take the indication's tier |
 |---|---|

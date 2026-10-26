@@ -1,6 +1,6 @@
 [
   {
-    "text": "Leptomeningeal metastasis on the left inferior surface of the tentorium, now forming a mass 2.5 cm in diameter and 2 cm in thickness, previously punctate.",
+    "text": "Leptomeningeal metastasis on the left inferior surface of the tentorium, now forming a mass 2.5 cm in diameter and 2 cm in thickness, previously punctate, with associated massive edema extending to the brainstem and cerebellum.",
     "measurements": [
       {
         "value": 2.5,
@@ -14,13 +14,6 @@
       }
     ],
     "comparison": "worsening",
-    "clinical_status": "abnormal",
-    "clinical_significance": "urgent"
-  },
-  {
-    "text": "Massive edema extending to the brainstem and cerebellum associated with the left tentorial mass.",
-    "measurements": [],
-    "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "critical"
   },
@@ -49,7 +42,7 @@
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "routine"
+    "clinical_significance": "notable"
   },
   {
     "text": "New metastasis measuring 17 mm in diameter in the left putamen with extensive perilesional edema.",
@@ -155,6 +148,6 @@
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "routine"
+    "clinical_significance": "notable"
   }
 ]

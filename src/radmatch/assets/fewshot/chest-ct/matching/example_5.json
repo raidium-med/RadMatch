@@ -1,6 +1,6 @@
 {
   "scenario": "Constructed: translated report vocabulary and an indication-answering negative",
-  "description": "Constructed. Translated terms name standard entities: a 'light transmission area' is a lucency (bulla), a 'patchy high-density shadow' an airspace opacity, 'cord-like shadows' fibrous strands, a 'nodular shadow' a nodule; 'No obvious abnormal density shadow' denies an opacity; 'No intrathoracic metastatic disease' is denied by nodules suspicious for metastases; a negative about opacities does not deny a lucency.",
+  "description": "Constructed. Translated terms name standard entities: a 'light transmission area' is a lucency (bulla), a 'patchy high-density shadow' an airspace opacity, 'cord-like shadows' fibrous strands, a 'nodular shadow' a nodule; 'No obvious abnormal density shadow' denies every density it covers (the airspace opacity, the fibrous strands and the nodule); 'No intrathoracic metastatic disease' is denied by nodules suspicious for metastases; a negative about opacities does not deny a lucency.",
   "user": {
     "pred_findings": [
       {
@@ -134,6 +134,16 @@
         "pred_id": "p_6",
         "gt_id": "gt_2",
         "reasoning": "denies the left lower lobe opacity"
+      },
+      {
+        "pred_id": "p_6",
+        "gt_id": "gt_3",
+        "reasoning": "denies the fibrous strands"
+      },
+      {
+        "pred_id": "p_6",
+        "gt_id": "gt_4",
+        "reasoning": "denies the right middle lobe nodule"
       }
     ],
     "unmatched_pred": [],

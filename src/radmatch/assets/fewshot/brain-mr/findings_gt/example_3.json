@@ -59,7 +59,7 @@
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "critical"
+    "clinical_significance": "routine"
   },
   {
     "text": "No space-occupying lesion detected in the cerebral parenchyma.",
@@ -90,14 +90,49 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "Cranium bone structures, both globes, retrobulbar fat tissue, optic nerves, and optic chiasm are normal.",
+    "text": "Cranium bone structures are normal.",
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
   },
   {
-    "text": "Paranasal sinuses and mastoid air cell aeration are intact.",
+    "text": "Both globes are normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Retrobulbar fat tissue is normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Optic nerves are normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Optic chiasm is normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Paranasal sinus aeration is intact.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Mastoid air cell aeration is intact.",
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",

@@ -1,6 +1,6 @@
 {
-  "scenario": "Sub-anatomic location major + clean pairs",
-  "description": "Stage 3b call derived from the matches in brain-mr/matching/example_3.json. The falx-calcification pair has both a measurement difference (Stage 3a) and a sub-anatomic location difference (frontal vs parietal) — Stage 3b flags the location error as major because the descriptor places the same lesion in a different brain region. The remaining 2 matched pairs are clean completeness statements and an identical suboccipital mass.",
+  "scenario": "Sub-anatomic location major + measurement major + clean pairs",
+  "description": "Stage 3b call derived from the matches in brain-mr/matching/example_3.json. The falx-calcification pair has both a major measurement difference (14 vs 11 mm: more than 20 % and 3 mm) and a sub-anatomic location difference (frontal vs parietal) — Stage 3b flags the location error as major because the descriptor places the same lesion in a different brain region. The remaining 2 matched pairs are clean completeness statements and an identical suboccipital mass.",
   "user": {
     "series_uuid": "brain-mr_example_3",
     "pairs": [
@@ -24,7 +24,8 @@
   "assistant": {
     "errors_per_pair": [
       {"pair_id": 1, "errors": [
-        {"dimension": "location", "severity": "major", "reasoning": "Pred places the falx calcification in the parietal region, gt in the frontal region — different sub-anatomic location for the same lesion at the same midline structure."}
+        {"dimension": "location", "severity": "major", "reasoning": "Pred places the falx calcification in the parietal region, gt in the frontal region — different sub-anatomic location for the same lesion at the same midline structure."},
+        {"dimension": "measurement", "severity": "major", "reasoning": "14 vs 11 mm: more than 20 % and 3 mm"}
       ]},
       {"pair_id": 2, "errors": []},
       {"pair_id": 3, "errors": []}

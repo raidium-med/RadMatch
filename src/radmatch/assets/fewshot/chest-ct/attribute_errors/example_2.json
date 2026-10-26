@@ -1,6 +1,6 @@
 {
-  "scenario": "No free-text attribute errors after INC exclusion",
-  "description": "Stage 3b call derived from the matches in chest-ct/matching/example_2.json. The hepatic lesion pair is a status conflict (gt: newly enlarged segment-VI lesion, pred: 'No suspicious hepatic lesion') → excluded from Stage 3b at Stage 3a (INC). The remaining 2 matched pairs (pulmonary nodules and retroperitoneal nodes) carry measurement differences only on the largest target lesion, which Stage 3a handles; no free-text attribute differences exist within the 4 LLM dimensions.",
+  "scenario": "Minor measurement error after INC exclusion",
+  "description": "Stage 3b call derived from the matches in chest-ct/matching/example_2.json. The hepatic lesion pair is a status conflict (gt: newly enlarged segment-VI lesion, pred: 'No suspicious hepatic lesion') → excluded from Stage 3b at Stage 3a (INC). Of the remaining 2 matched pairs, the pulmonary-nodule pair differs only in the size of the largest nodule (2.5 x 1.6 vs 3.1 x 1.7 cm, under 20 % difference): a minor measurement error; the retroperitoneal-node pair is identical. No other differences exist within the six attribute dimensions.",
   "user": {
     "series_uuid": "chest-ct_example_2",
     "pairs": [
@@ -18,7 +18,9 @@
   },
   "assistant": {
     "errors_per_pair": [
-      {"pair_id": 1, "errors": []},
+      {"pair_id": 1, "errors": [
+        {"dimension": "measurement", "severity": "minor", "reasoning": "under 20 % difference"}
+      ]},
       {"pair_id": 2, "errors": []}
     ]
   }

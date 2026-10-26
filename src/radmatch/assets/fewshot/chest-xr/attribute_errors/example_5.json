@@ -1,0 +1,320 @@
+{
+  "scenario": "Constructed: left-out details, bilateral vs one side, group, more detail",
+  "description": "Constructed. Bilateral vs one side is a major location error both ways; a side the pred leaves out is a major location error; a bilateral pred matched to a left and a right gt has no location error on either pair; a pred more detailed than the gt has no error; a grade the gt gives that the pred leaves out is a major severity error. Growth the pred invents on a nodule is a major comparison error; a definite diagnosis for a gt 'possibly' is two certainty steps, major. A side only one of the two findings gives is a major location error, either way; a pred that gives one side for a gt whose wording covers both ('the hila') is a major location error too.",
+  "user": {
+    "series_uuid": "chest-xr_example_5",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Bibasilar atelectasis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "Left basilar atelectasis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "Right lower lobe opacity.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "Bilateral lower lobe opacities.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 3,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "Basilar atelectasis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "Right basilar atelectasis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 4,
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "Bilateral lower lobe consolidation.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "Left lower lobe consolidation.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "same_group_gt": [
+          "Right lower lobe consolidation."
+        ]
+      },
+      {
+        "pair_id": 5,
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "Bilateral lower lobe consolidation.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_5",
+          "text": "Right lower lobe consolidation.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "same_group_gt": [
+          "Left lower lobe consolidation."
+        ]
+      },
+      {
+        "pair_id": 6,
+        "pred_finding": {
+          "finding_id": "p_5",
+          "text": "Left lower lobe consolidation with air bronchograms.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_6",
+          "text": "Left lower lobe consolidation.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 7,
+        "pred_finding": {
+          "finding_id": "p_6",
+          "text": "Cardiomegaly.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_7",
+          "text": "Moderate cardiomegaly.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 8,
+        "pred_finding": {
+          "finding_id": "p_7",
+          "text": "Right upper lobe nodule, increased in size.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": "worsening",
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_8",
+          "text": "Right upper lobe nodule.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 9,
+        "pred_finding": {
+          "finding_id": "p_8",
+          "text": "Right middle lobe pneumonia.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_9",
+          "text": "Right middle lobe opacity, possibly pneumonia.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 10,
+        "pred_finding": {
+          "finding_id": "p_9",
+          "text": "Right hilar enlargement.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_10",
+          "text": "Hilar enlargement.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 11,
+        "pred_finding": {
+          "finding_id": "p_10",
+          "text": "Enlarged right hilum.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_11",
+          "text": "Enlarged hila.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "location",
+            "severity": "major",
+            "reasoning": "pred claims both bases, gt only the left base"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "location",
+            "severity": "major",
+            "reasoning": "pred gives only the right side, gt opacities are bilateral"
+          }
+        ]
+      },
+      {
+        "pair_id": 3,
+        "errors": [
+          {
+            "dimension": "location",
+            "severity": "major",
+            "reasoning": "pred leaves out the right side gt gives"
+          }
+        ]
+      },
+      {
+        "pair_id": 4,
+        "errors": []
+      },
+      {
+        "pair_id": 5,
+        "errors": []
+      },
+      {
+        "pair_id": 6,
+        "errors": []
+      },
+      {
+        "pair_id": 7,
+        "errors": [
+          {
+            "dimension": "severity",
+            "severity": "major",
+            "reasoning": "pred leaves out the moderate grade gt gives"
+          }
+        ]
+      },
+      {
+        "pair_id": 8,
+        "errors": [
+          {
+            "dimension": "comparison",
+            "severity": "major",
+            "reasoning": "pred states growth gt does not give, on a nodule"
+          }
+        ]
+      },
+      {
+        "pair_id": 9,
+        "errors": [
+          {
+            "dimension": "certainty",
+            "severity": "major",
+            "reasoning": "pred calls pneumonia definite, gt only possible"
+          }
+        ]
+      },
+      {
+        "pair_id": 10,
+        "errors": [
+          {
+            "dimension": "location",
+            "severity": "major",
+            "reasoning": "pred gives a right side gt does not give"
+          }
+        ]
+      },
+      {
+        "pair_id": 11,
+        "errors": [
+          {
+            "dimension": "location",
+            "severity": "major",
+            "reasoning": "pred gives only the right hilum, gt both hila"
+          }
+        ]
+      }
+    ]
+  }
+}

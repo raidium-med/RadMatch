@@ -44,8 +44,8 @@
       }
     ],
     "comparison": null,
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
   },
   {
     "text": "Spleen normal.",
@@ -138,8 +138,8 @@
     "text": "Trace fluid in the pelvis likely physiologic.",
     "measurements": [],
     "comparison": null,
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
   },
   {
     "text": "No evidence of retroperitoneal hematoma.",
@@ -159,8 +159,8 @@
     "text": "Focus of air in the bladder, likely related to instrumentation.",
     "measurements": [],
     "comparison": null,
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
   },
   {
     "text": "An intrauterine device is in place.",

@@ -154,7 +154,7 @@ ATTRIBUTE_ERROR_SEVERITIES: tuple[str, ...] = ("major", "minor")
 ATTRIBUTE_DIMENSIONS_LLM: tuple[str, ...] = ("location", "severity", "morphology", "certainty")
 # Keep in sync with `assets/prompts/prompt_attribute_errors.md`; anything else the
 # judge emits is dropped by `inference._normalize_llm_error`.
-ATTRIBUTE_DIMENSIONS_LLM_ACCEPTED: tuple[str, ...] = (*ATTRIBUTE_DIMENSIONS_LLM, "measurement")
+ATTRIBUTE_DIMENSIONS_LLM_ACCEPTED: tuple[str, ...] = (*ATTRIBUTE_DIMENSIONS_LLM, "measurement", "comparison")
 ATTRIBUTE_DIMENSIONS_ALL: tuple[str, ...] = ("clinical_status", "comparison", "measurement", *ATTRIBUTE_DIMENSIONS_LLM)
 
 # Parallel views of the finding population. `measurement` / `comparison` collect

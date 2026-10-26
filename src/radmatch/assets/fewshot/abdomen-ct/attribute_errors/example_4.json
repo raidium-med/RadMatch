@@ -1,6 +1,6 @@
 {
   "scenario": "Clinical long tail: group context, attenuation vs composition, different diagnosis, two-step severity",
-  "description": "Constructed; pairs from abdomen-ct/matching/example_6.json. A stone stated with its consequence has no error against either gt; 'hypodense' vs 'cyst' is minor; diverticulosis vs diverticulitis is a major morphology error; small vs large ascites is a major severity error; 'no aneurysm' vs 'normal caliber' and the cholecystectomy pairs have none.",
+  "description": "Constructed; pairs from abdomen-ct/matching/example_6.json. A stone stated with its consequence has no error against either gt; 'hypodense' vs 'cyst' is major (the pred leaves out the composition); diverticulosis vs diverticulitis is a major morphology error; small vs large ascites is a major severity error; 'no aneurysm' vs 'normal caliber' and the cholecystectomy pairs have none.",
   "user": {
     "series_uuid": "abdomen-ct_example_4",
     "pairs": [
@@ -197,8 +197,8 @@
         "errors": [
           {
             "dimension": "morphology",
-            "severity": "minor",
-            "reasoning": "pred gives the lesion's density (hypodense), gt calls it a cyst: an attenuation word is not a contradicting composition"
+            "severity": "major",
+            "reasoning": "pred gives only the density (hypodense), gt calls it a cyst"
           }
         ]
       },

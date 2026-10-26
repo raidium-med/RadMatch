@@ -4,7 +4,7 @@ Three worked examples of the alignment patterns Stage 2 has to get right. Findin
 
 | File | Scenario |
 |------|----------|
-| `example_1.json` | Status flip on cortical sulci + SPU on sinus + merge of medulla/cerebellum |
+| `example_1.json` | Status flip on cortical sulci + sinus normal denying mucosal thickening + merged pred umbrellas (1:N) |
 | `example_2.json` | 1:N umbrella — pred parent-anatomy negative covering several GT rule-out atoms |
 | `example_3.json` | N:1 umbrella — atomic pred WMH findings covering one umbrella GT |
 

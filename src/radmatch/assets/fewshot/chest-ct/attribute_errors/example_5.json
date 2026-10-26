@@ -1,6 +1,6 @@
 {
   "scenario": "Constructed: certainty, added diagnosis, structured category",
-  "description": "Constructed. Hedging a definite fracture, or a negative that answers the work-up ('possibly no pulmonary embolism'), is a major certainty error; turning nodes called reactive into nodes suspicious for metastases is a major morphology error (an added diagnosis); a Lung-RADS class change across management buckets is a major severity error; one certainty step is minor; an omitted subtype is no error.",
+  "description": "Constructed. Hedging a definite fracture, or a negative that answers the work-up ('possibly no pulmonary embolism'), is a major certainty error; turning nodes called reactive into nodes suspicious for metastases is a major morphology error (an added diagnosis), and leaving out the gt 'mildly' grade a major severity error; a Lung-RADS class change across management buckets is a major severity error; one certainty step is minor; a subtype the pred leaves out is a major morphology error.",
   "user": {
     "series_uuid": "chest-ct_example_5",
     "pairs": [
@@ -173,6 +173,11 @@
             "dimension": "morphology",
             "severity": "major",
             "reasoning": "pred adds a malignant interpretation to nodes gt calls reactive"
+          },
+          {
+            "dimension": "severity",
+            "severity": "major",
+            "reasoning": "pred leaves out the mildly grade"
           }
         ]
       },
@@ -198,7 +203,13 @@
       },
       {
         "pair_id": 6,
-        "errors": []
+        "errors": [
+          {
+            "dimension": "morphology",
+            "severity": "major",
+            "reasoning": "pred leaves out the centrilobular subtype gt gives"
+          }
+        ]
       }
     ]
   }

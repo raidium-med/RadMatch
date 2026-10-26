@@ -12,7 +12,6 @@ definitions.
 
 from __future__ import annotations
 
-import re
 from typing import Literal, Sequence, TypedDict
 
 from radmatch import constants
@@ -96,22 +95,21 @@ def build_muc_record(
 ) -> dict:
     """Assemble a MatchRecord.
 
-    `measurement` is judged on both sides — deterministically (Stage 3a) and,
-    for clinical-boundary crossings the thresholds miss, by the LLM (Stage 3b).
-    A deterministic measurement error suppresses the pair's LLM measurement
-    verdicts to avoid double-counting, *unless* the LLM graded it `major` and
-    the deterministic side did not: suppressing on presence alone let a `minor`
-    deterministic error discard a `major` boundary crossing, silently keeping
-    the pair at PAR when it should be INC.
+    `measurement` and `comparison` are judged on both sides — deterministically
+    (Stage 3a flags) and by the LLM (Stage 3b grades the ones that matter). A
+    deterministic error on a dimension suppresses the pair's LLM verdicts on it
+    to avoid double-counting, *unless* the LLM graded it `major` and the
+    deterministic side did not.
     """
-    structured_measurement = [e for e in structured_errors if e.get("dimension") == "measurement"]
-    if structured_measurement:
-        deterministic_major = any(e.get("severity") == "major" for e in structured_measurement)
-        text_errors = [
-            e
-            for e in text_errors
-            if e.get("dimension") != "measurement" or (e.get("severity") == "major" and not deterministic_major)
-        ]
+    for dim in ("measurement", "comparison"):
+        structured = [e for e in structured_errors if e.get("dimension") == dim]
+        if structured:
+            deterministic_major = any(e.get("severity") == "major" for e in structured)
+            text_errors = [
+                e
+                for e in text_errors
+                if e.get("dimension") != dim or (e.get("severity") == "major" and not deterministic_major)
+            ]
     category, inc_triggered = classify_muc(structured_errors, text_errors)
     return {
         "pred_id": match["pred_id"],
@@ -153,24 +151,6 @@ def effective_muc_counts(
     counts["MIS"] = n_mis
     counts["SPU"] = n_spu
     return counts
-
-
-_CORONARY_CALCIFICATION = re.compile(
-    r"coronar[^.;]{0,40}(?:calcif|atheroscl|atherom|plaque)|(?:calcif|atheroscl|atherom|plaque)[^.;]{0,40}coronar"
-)
-
-
-def with_tier_floor(finding: dict) -> dict:
-    """The fixed tier table applied where the extractor misses it: coronary artery calcification is notable, also
-    when folded into a routine aortic atherosclerosis sentence."""
-    text = str(finding.get("text") or "").lower()
-    if (
-        finding.get("clinical_significance") == "routine"
-        and finding.get("clinical_status") != "normal"
-        and _CORONARY_CALCIFICATION.search(text)
-    ):
-        return {**finding, "clinical_significance": "notable"}
-    return finding
 
 
 def is_unsupported_claim(finding: dict) -> bool:

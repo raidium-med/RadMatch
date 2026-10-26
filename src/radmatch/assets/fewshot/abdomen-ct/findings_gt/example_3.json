@@ -7,11 +7,22 @@
     "clinical_significance": "notable"
   },
   {
-    "text": "Mild intrahepatic biliary prominence increased compared to prior.",
-    "measurements": [],
+    "text": "Mildly increased intrahepatic biliary and common bile duct dilatation, the common bile duct measuring up to 8 mm (previously 6 mm) and tapering distally.",
+    "measurements": [
+      {
+        "value": 8,
+        "unit": "mm",
+        "category": "size"
+      },
+      {
+        "value": 6,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
     "comparison": "worsening",
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "urgent"
   },
   {
     "text": "Cyst in the right hepatic lobe measuring 9 mm unchanged.",
@@ -32,24 +43,6 @@
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "routine"
-  },
-  {
-    "text": "Common bile duct measures up to 8 mm, increased from 6 mm previously, and tapers distally.",
-    "measurements": [
-      {
-        "value": 8,
-        "unit": "mm",
-        "category": "size"
-      },
-      {
-        "value": 6,
-        "unit": "mm",
-        "category": "size"
-      }
-    ],
-    "comparison": "worsening",
-    "clinical_status": "abnormal",
-    "clinical_significance": "urgent"
   },
   {
     "text": "Focus of internal density within the common bile duct.",

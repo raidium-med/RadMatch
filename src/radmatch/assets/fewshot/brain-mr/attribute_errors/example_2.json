@@ -1,6 +1,6 @@
 {
-  "scenario": "Major laterality location error + clean pairs",
-  "description": "Stage 3b call derived from the matches in brain-mr/matching/example_2.json. The putamen-metastasis pair carries a laterality flip on a paired structure (right vs left putamen) — always major per the prompt rule. The pituitary pair has a comparison/severity disagreement (gt worsening with optic-chiasm compression vs pred stable) that lives in Stage 3a deterministic, plus a downstream significance-tier shift; Stage 3b does NOT re-emit comparison errors. The leptomeningeal tentorial pair has size differences (Stage 3a) but no free-text attribute error. Brainstem-edema pair is identical.",
+  "scenario": "Major laterality location error + major measurement and severity errors + clean pair",
+  "description": "Stage 3b call derived from the matches in brain-mr/matching/example_2.json. The putamen-metastasis pair carries a laterality flip on a paired structure (right vs left putamen) — always major per the prompt rule. The pituitary pair has a comparison disagreement (gt worsening vs pred stable) that lives in Stage 3a deterministic, plus a downstream significance-tier shift; Stage 3b does NOT re-emit comparison errors, but the pred leaves out the growth into a mass pressing on the optic chiasm, a major severity error. The leptomeningeal tentorial pair has a major measurement error (thickness 1.5 vs 2 cm: more than 20 % and 5 mm). Brainstem-edema pair is identical.",
   "user": {
     "series_uuid": "brain-mr_example_2",
     "pairs": [
@@ -28,12 +28,16 @@
   },
   "assistant": {
     "errors_per_pair": [
-      {"pair_id": 1, "errors": []},
+      {"pair_id": 1, "errors": [
+        {"dimension": "measurement", "severity": "major", "reasoning": "thickness 1.5 vs 2 cm: more than 20 % and 5 mm"}
+      ]},
       {"pair_id": 2, "errors": []},
       {"pair_id": 3, "errors": [
         {"dimension": "location", "severity": "major", "reasoning": "Pred says right putamen, gt says left putamen — laterality flip on a paired deep grey structure. Different hemisphere, different clinical implication."}
       ]},
-      {"pair_id": 4, "errors": []}
+      {"pair_id": 4, "errors": [
+        {"dimension": "severity", "severity": "major", "reasoning": "pred leaves out the growth into a mass pressing on the optic chiasm"}
+      ]}
     ]
   }
 }

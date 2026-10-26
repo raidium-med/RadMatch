@@ -1,6 +1,6 @@
 {
-  "scenario": "No free-text attribute errors — restraint",
-  "description": "Stage 3b call derived from the matches in chest-xr/matching/example_3.json. The pulmonary-nodule pair carries a major measurement discrepancy (4 mm vs 6 mm) AND a comparison flip (stable vs worsening), but both differences are handled by Stage 3a deterministic comparators — measurement/comparison errors are NOT free-text attribute dimensions, so this stage does not re-emit them. All matched pairs end up with empty error lists. This is the canonical 'don't invent errors that already have a deterministic owner' example.",
+  "scenario": "Size across a threshold; the comparison flip stays upstream",
+  "description": "Stage 3b call derived from the matches in chest-xr/matching/example_3.json. The pulmonary-nodule pair has a size difference (4 mm vs 6 mm) that crosses the 6 mm Fleischner threshold, a major measurement error graded here, and a comparison flip (stable vs worsening) that Stage 3a scores, so it is not re-emitted. The other pairs are clean.",
   "user": {
     "series_uuid": "chest-xr_example_3",
     "pairs": [
@@ -30,7 +30,9 @@
     "errors_per_pair": [
       {"pair_id": 1, "errors": []},
       {"pair_id": 2, "errors": []},
-      {"pair_id": 3, "errors": []},
+      {"pair_id": 3, "errors": [
+        {"dimension": "measurement", "severity": "major", "reasoning": "6 mm vs 4 mm crosses the 6 mm Fleischner threshold"}
+      ]},
       {"pair_id": 4, "errors": []}
     ]
   }

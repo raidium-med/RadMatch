@@ -32,7 +32,7 @@
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "routine"
+    "clinical_significance": "urgent"
   },
   {
     "text": "No pulmonary edema.",
@@ -60,6 +60,6 @@
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "routine"
+    "clinical_significance": "urgent"
   }
 ]

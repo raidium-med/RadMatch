@@ -1,0 +1,390 @@
+{
+  "scenario": "Constructed: bilateral vs one side, left-out side, site and grade, umbrella, more detail, density vs composition",
+  "description": "Constructed. Bilateral vs one side and a left-out grade are major; a side the pred leaves out is major; an umbrella pred that names no site has a major location error on each located gt lesion; a pred more detailed than the gt has no error; a bilateral pred matched to a left and a right gt has no location error; a density word for a gt composition is a major morphology error. A size the pred leaves out is a major measurement error, minor on a simple renal cyst. A change the pred invents on diverticulosis is no error (not followed by size). A hedge on the cause ('possibly related to hepatitis') leaves the finding definite: no error. A one-step grade difference (large vs moderate) is minor. A side only the pred gives is a major location error.",
+  "user": {
+    "series_uuid": "abdomen-ct_example_7",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Bilateral hydronephrosis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "Moderate left hydronephrosis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "Adrenal nodule.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "1.4 cm left adrenal nodule.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 1.4,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 3,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "Multiple splenic hypodensities.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "8 mm hypodensity in the splenic upper pole.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 8,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "same_group_gt": [
+          "5 mm hypodensity near the splenic hilum."
+        ]
+      },
+      {
+        "pair_id": 4,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "Multiple splenic hypodensities.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "5 mm hypodensity near the splenic hilum.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 5,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "same_group_gt": [
+          "8 mm hypodensity in the splenic upper pole."
+        ]
+      },
+      {
+        "pair_id": 5,
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "Splenule at the splenic hilum.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_5",
+          "text": "Splenule.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 6,
+        "pred_finding": {
+          "finding_id": "p_5",
+          "text": "Bilateral ovarian cysts.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_6",
+          "text": "Left ovarian cyst.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "same_group_gt": [
+          "Right ovarian cyst."
+        ]
+      },
+      {
+        "pair_id": 7,
+        "pred_finding": {
+          "finding_id": "p_6",
+          "text": "Hypodense lesion in the pancreatic tail.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_7",
+          "text": "Cystic lesion in the pancreatic tail.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 8,
+        "pred_finding": {
+          "finding_id": "p_7",
+          "text": "Simple left renal cyst.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_8",
+          "text": "2.4 cm simple left renal cyst.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 2.4,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 9,
+        "pred_finding": {
+          "finding_id": "p_8",
+          "text": "Increased colonic diverticulosis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "comparison": "worsening",
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_9",
+          "text": "Colonic diverticulosis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 10,
+        "pred_finding": {
+          "finding_id": "p_9",
+          "text": "Gallbladder wall thickening, possibly related to hepatitis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_10",
+          "text": "Gallbladder wall thickening.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 11,
+        "pred_finding": {
+          "finding_id": "p_10",
+          "text": "Large hiatal hernia.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_11",
+          "text": "Moderate hiatal hernia.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 12,
+        "pred_finding": {
+          "finding_id": "p_11",
+          "text": "Left inguinal hernia containing fat.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_12",
+          "text": "Inguinal hernia.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "comparison": null,
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "location",
+            "severity": "major",
+            "reasoning": "pred claims both kidneys, gt only the left"
+          },
+          {
+            "dimension": "severity",
+            "severity": "major",
+            "reasoning": "pred leaves out the moderate grade gt gives"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "location",
+            "severity": "major",
+            "reasoning": "pred leaves out the left side gt gives"
+          },
+          {
+            "dimension": "measurement",
+            "severity": "major",
+            "reasoning": "pred leaves out the 1.4 cm size"
+          }
+        ]
+      },
+      {
+        "pair_id": 3,
+        "errors": [
+          {
+            "dimension": "location",
+            "severity": "major",
+            "reasoning": "pred names no site; gt gives the splenic upper pole"
+          },
+          {
+            "dimension": "measurement",
+            "severity": "major",
+            "reasoning": "pred leaves out the 8 mm size"
+          }
+        ]
+      },
+      {
+        "pair_id": 4,
+        "errors": [
+          {
+            "dimension": "location",
+            "severity": "major",
+            "reasoning": "pred names no site; gt gives the splenic hilum"
+          },
+          {
+            "dimension": "measurement",
+            "severity": "major",
+            "reasoning": "pred leaves out the 5 mm size"
+          }
+        ]
+      },
+      {
+        "pair_id": 5,
+        "errors": []
+      },
+      {
+        "pair_id": 6,
+        "errors": []
+      },
+      {
+        "pair_id": 7,
+        "errors": [
+          {
+            "dimension": "morphology",
+            "severity": "major",
+            "reasoning": "pred gives only the density (hypodense), gt calls it cystic"
+          }
+        ]
+      },
+      {
+        "pair_id": 8,
+        "errors": [
+          {
+            "dimension": "measurement",
+            "severity": "minor",
+            "reasoning": "pred leaves out the size of a simple renal cyst"
+          }
+        ]
+      },
+      {
+        "pair_id": 9,
+        "errors": []
+      },
+      {
+        "pair_id": 10,
+        "errors": []
+      },
+      {
+        "pair_id": 11,
+        "errors": [
+          {
+            "dimension": "severity",
+            "severity": "minor",
+            "reasoning": "large vs moderate, one step"
+          }
+        ]
+      },
+      {
+        "pair_id": 12,
+        "errors": [
+          {
+            "dimension": "location",
+            "severity": "major",
+            "reasoning": "pred gives a left side gt does not give"
+          }
+        ]
+      }
+    ]
+  }
+}

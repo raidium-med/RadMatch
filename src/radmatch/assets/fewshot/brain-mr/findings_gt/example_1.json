@@ -53,7 +53,7 @@
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "routine"
+    "clinical_significance": "notable"
   },
   {
     "text": "The third ventricle and both lateral ventricles are of normal size.",
@@ -91,7 +91,14 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "Nasopharynx and middle ear aeration are normal.",
+    "text": "Nasopharynx is normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Middle ear aeration is normal.",
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",

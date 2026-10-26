@@ -1,6 +1,6 @@
 {
   "scenario": "Laterality flip on temporal sequelae + SPU on sphenoid + clean matches",
-  "description": "Real subset of head-ct/findings_{gt,pred}/example_1. Demonstrates a laterality flip on lateralized brain pathology (gt 'left temporal pole' hemorrhagic sequelae vs pred 'right temporal pole' — opposite hemisphere; status agrees so it's a major location error, not INC), a hallucinated mucosal thickening of the sphenoid sinus in the prediction (SPU), and a clean 1:1 match on the left temporal horn ventricular traction.",
+  "description": "Real subset of head-ct/findings_{gt,pred}/example_1. Demonstrates a laterality flip on lateralized brain pathology (gt 'left temporal pole' hemorrhagic sequelae vs pred 'right temporal pole' — opposite hemisphere, matched and scored downstream as a major location error), a hallucinated mucosal thickening of the sphenoid sinus in the prediction (SPU), and a clean 1:1 match on the left temporal horn ventricular traction.",
   "user": {
     "pred_findings": [
       {
@@ -61,7 +61,7 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Same lesion entity (hypodense cortico-subcortical hemorrhagic sequelae of the temporal pole / lobe, without spontaneous hyperdensity). Pred says right side, gt says left side — laterality flip kept in matches; status agrees so Stage 3 will flag the location error rather than INC."
+        "reasoning": "Same temporal hypodense sequela, on the opposite side."
       },
       {
         "pred_id": "p_2",

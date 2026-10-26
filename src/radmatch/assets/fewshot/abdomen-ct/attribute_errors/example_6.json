@@ -1,6 +1,6 @@
 {
  "scenario": "Constructed: invented SBO detail, single vs multiple metastases, vascular encasement, acute vs chronic fracture, variant vs node, gas in a collection",
- "description": "Constructed. A transition point or closed loop the reference does not give, a solitary vs multiple liver metastases, abutment vs encasement, an acute vs chronic fracture, a splenule vs a lymph node and gas in a collection each change management and are major; the predominant segment of uncomplicated diverticulosis and fat vs fat-and-fluid in a small umbilical hernia are minor.",
+ "description": "Constructed. A transition point or closed loop the reference does not give, a solitary vs multiple liver metastases, abutment vs encasement, an acute vs chronic fracture, a splenule vs a lymph node and gas in a collection each change management and are major; the predominant segment of uncomplicated diverticulosis is minor; fluid the pred adds to a fat-containing umbilical hernia is no error (added detail).",
  "user": {
   "series_uuid": "abdomen-ct_example_6",
   "pairs": [
@@ -256,13 +256,7 @@
    },
    {
     "pair_id": 8,
-    "errors": [
-     {
-      "dimension": "morphology",
-      "severity": "minor",
-      "reasoning": "hernia content without bowel"
-     }
-    ]
+    "errors": []
    }
   ]
  }

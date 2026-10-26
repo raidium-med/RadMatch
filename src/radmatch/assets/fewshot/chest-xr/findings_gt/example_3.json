@@ -4,7 +4,7 @@
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "routine"
+    "clinical_significance": "urgent"
   },
   {
     "text": "No pleural effusion.",
@@ -18,7 +18,7 @@
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "critical"
+    "clinical_significance": "routine"
   },
   {
     "text": "Pulmonary vasculature is not engorged.",

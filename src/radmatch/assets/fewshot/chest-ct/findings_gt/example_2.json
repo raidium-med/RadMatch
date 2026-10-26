@@ -42,7 +42,21 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "Thyroid gland, trachea, and esophagus demonstrate no significant findings.",
+    "text": "Thyroid gland demonstrates no significant findings.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Trachea demonstrates no significant findings.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Esophagus demonstrates no significant findings.",
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
@@ -126,7 +140,14 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "No chest wall mass or suspicious bone lesions.",
+    "text": "No chest wall mass.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No suspicious bone lesions.",
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
@@ -161,7 +182,21 @@
     "clinical_significance": "urgent"
   },
   {
-    "text": "No gallstones, gallbladder wall thickening, or biliary dilatation.",
+    "text": "No gallstones.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No gallbladder wall thickening.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No biliary dilatation.",
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
@@ -169,6 +204,20 @@
   },
   {
     "text": "Pancreas unremarkable.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No pancreatic ductal dilatation.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No peripancreatic inflammatory changes.",
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
@@ -189,7 +238,28 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "Kidneys normal without renal calculi, solid lesion, or hydronephrosis.",
+    "text": "Kidneys normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No renal calculi.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No solid renal lesion.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No hydronephrosis.",
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
@@ -211,6 +281,27 @@
   },
   {
     "text": "Appendix appears normal.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No evidence of bowel wall thickening.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No evidence of bowel distention.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No evidence of bowel inflammatory changes.",
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
@@ -295,10 +386,10 @@
     "measurements": [],
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "routine"
+    "clinical_significance": "notable"
   },
   {
-    "text": "Numerous new subcutaneous nodules about the low abdomen, largest measuring 3.9 x 1.9 cm.",
+    "text": "Numerous new subcutaneous nodules about the low abdomen, largest measuring 3.9 x 1.9 cm, likely injection granulomas; soft tissue metastases not favored.",
     "measurements": [
       {
         "value": 3.9,
@@ -313,7 +404,7 @@
     ],
     "comparison": "new",
     "clinical_status": "abnormal",
-    "clinical_significance": "urgent"
+    "clinical_significance": "notable"
   },
   {
     "text": "Low midline ventral hernia containing multiple loops of nonobstructed small bowel.",

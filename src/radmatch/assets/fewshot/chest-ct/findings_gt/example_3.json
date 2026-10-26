@@ -136,7 +136,14 @@
     "clinical_significance": "notable"
   },
   {
-    "text": "No signs of mural hematoma or dissection.",
+    "text": "No signs of aortic mural hematoma.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No signs of aortic dissection.",
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
@@ -164,10 +171,17 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "Hepatic dysmorphism without signs of portal hypertension.",
+    "text": "Hepatic dysmorphism.",
     "measurements": [],
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
+  },
+  {
+    "text": "No signs of portal hypertension.",
+    "measurements": [],
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
   }
 ]

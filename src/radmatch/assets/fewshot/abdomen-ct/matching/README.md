@@ -1,6 +1,6 @@
 # Matching few-shot examples (abdomen-ct)
 
-Six worked examples of the alignment patterns Stage 2 has to get right. Findings use placeholder ids (`p_1`, `gt_1`) rather than real report ids, so each example is self-contained.
+Nine worked examples of the alignment patterns Stage 2 has to get right. Findings use placeholder ids (`p_1`, `gt_1`) rather than real report ids, so each example is self-contained.
 
 | File | Scenario |
 |------|----------|

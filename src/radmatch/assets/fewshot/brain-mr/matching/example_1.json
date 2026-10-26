@@ -1,6 +1,6 @@
 {
-  "scenario": "Status flip on cortical sulci + SPU on sinus + merge of medulla/cerebellum",
-  "description": "Real subset of brain-mr/findings_{gt,pred}/example_1 (negative scan in gt, pred adds two abnormalities and merges some completeness statements). Demonstrates a status flip on hemispheric cortical sulci (gt 'compatible with age' = normal vs pred 'mildly prominent for age' = abnormal — INC downstream), a hallucinated abnormality (SPU on left maxillary sinus mucosal thickening), and a split/merge artifact where pred fuses two gt findings (medulla/pons/mesencephalon + cerebellum) into one — that merged pred entity is matched against the better-fitting gt finding and the other becomes MIS.",
+  "scenario": "Status flip on cortical sulci + sinus normal denying mucosal thickening + merged pred umbrellas (1:N)",
+  "description": "Real subset of brain-mr/findings_{gt,pred}/example_1 (negative scan in gt, pred adds two abnormalities and merges some completeness statements). Demonstrates a status flip on hemispheric cortical sulci (gt 'compatible with age' = normal vs pred 'mildly prominent for age' = abnormal — INC downstream), an organ-level normal statement denying an abnormality (gt 'Paranasal sinuses are normal' vs pred left maxillary sinus mucosal thickening — a status inversion, matched), and merged pred completeness statements acting as 1:N umbrellas (medulla/pons/mesencephalon + cerebellum; orbits + paranasal sinuses), each bound to every gt statement it covers.",
   "user": {
     "pred_findings": [
       {
@@ -75,25 +75,35 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Pred merges medulla/pons/mesencephalon with cerebellum into a single completeness statement; aligned with the gt's medulla/pons/mesencephalon entry. The unmatched gt cerebellum statement is the split/merge artifact."
+        "reasoning": "Pred posterior-fossa umbrella covers the medulla, pons and mesencephalon."
+      },
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_2",
+        "reasoning": "Same posterior-fossa umbrella covers the cerebellar hemispheres and vermis."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_3",
-        "reasoning": "Same anatomy (hemispheric cortical sulci). Pred says 'mildly prominent for age' (abnormal), gt says 'compatible with age' (normal) — status flip kept in matches so Stage 3 can classify INC."
+        "reasoning": "Same cortical sulci, normal in gt and prominent in pred."
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_4",
+        "reasoning": "Pred orbits-and-sinuses statement covers the orbits."
       },
       {
         "pred_id": "p_3",
         "gt_id": "gt_5",
-        "reasoning": "Pred merges orbits + paranasal sinuses into a single completeness statement; the closer gt counterpart is the paranasal sinuses statement."
+        "reasoning": "Same statement covers the paranasal sinuses."
+      },
+      {
+        "pred_id": "p_4",
+        "gt_id": "gt_5",
+        "reasoning": "Organ-level 'paranasal sinuses normal' denies the left maxillary mucosal thickening."
       }
     ],
-    "unmatched_pred": [
-      "p_4"
-    ],
-    "unmatched_gt": [
-      "gt_2",
-      "gt_4"
-    ]
+    "unmatched_pred": [],
+    "unmatched_gt": []
   }
 }

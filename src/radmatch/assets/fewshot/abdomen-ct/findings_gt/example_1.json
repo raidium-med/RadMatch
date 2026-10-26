@@ -97,7 +97,7 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "No obstructing renal calculi.",
+    "text": "No nephrolithiasis or obstructing renal calculi.",
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
@@ -111,7 +111,7 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "Appendix normal.",
+    "text": "Appendix normal, without appendicitis.",
     "measurements": [],
     "comparison": null,
     "clinical_status": "normal",
@@ -181,18 +181,11 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "Prominent inguinal lymph nodes, but not enlarged by size criteria.",
+    "text": "Prominent inguinal and left paraaortic lymph nodes, but not enlarged by size criteria.",
     "measurements": [],
     "comparison": null,
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
-  },
-  {
-    "text": "Prominent left paraaortic lymph nodes, but not enlarged by size criteria.",
-    "measurements": [],
-    "comparison": null,
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
   },
   {
     "text": "Three mesenteric lymph nodes measuring up to 12 mm, unchanged compared to prior CT.",
@@ -220,18 +213,11 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "Multilevel degenerative changes of the lower thoracic spine, unchanged compared to prior imaging.",
+    "text": "Multilevel degenerative changes of the lower thoracic and lumbar spine, unchanged compared to prior imaging.",
     "measurements": [],
     "comparison": "stable",
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
-  },
-  {
-    "text": "Multilevel degenerative changes of the lumbar spine, unchanged compared to prior imaging.",
-    "measurements": [],
-    "comparison": "stable",
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Main portal vein demonstrates approximately 60% luminal narrowing at the porta hepatis.",
@@ -245,12 +231,5 @@
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
-  },
-  {
-    "text": "No evidence of obstruction, diverticulitis, appendicitis, nephrolithiasis, or other acute findings to explain the patient's clinical symptoms.",
-    "measurements": [],
-    "comparison": null,
-    "clinical_status": "normal",
-    "clinical_significance": "routine"
   }
 ]

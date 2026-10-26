@@ -1,6 +1,6 @@
 {
-  "scenario": "Minor severity loss + clean pairs",
-  "description": "Stage 3b call derived from the matches in head-ct/matching/example_2.json. The white-matter-changes pair has a severity difference — gt says 'marked' microangiopathic white matter changes, pred drops the descriptor; treated as minor because periventricular microangiopathy is conventionally documented but not action-threshold-crossing. The overall SDH summary pair has a comparison loss (Stage 3a). The anterior SDH portion pair has a measurement diff (Stage 3a). The posterior SDH pair is identical.",
+  "scenario": "Major severity loss + minor measurement difference + clean pairs",
+  "description": "Stage 3b call derived from the matches in head-ct/matching/example_2.json. The white-matter-changes pair has a severity error — gt says 'marked' microangiopathic white matter changes, pred drops the descriptor; major because the pred leaves out a grade the gt gives. The overall SDH summary pair has a comparison loss (Stage 3a). The anterior SDH portion pair has a minor measurement difference (8 vs 10 mm thickness, a smaller difference). The posterior SDH pair is identical.",
   "user": {
     "series_uuid": "head-ct_example_2",
     "pairs": [
@@ -29,10 +29,12 @@
   "assistant": {
     "errors_per_pair": [
       {"pair_id": 1, "errors": []},
-      {"pair_id": 2, "errors": []},
+      {"pair_id": 2, "errors": [
+        {"dimension": "measurement", "severity": "minor", "reasoning": "8 vs 10 mm thickness, a smaller difference"}
+      ]},
       {"pair_id": 3, "errors": []},
       {"pair_id": 4, "errors": [
-        {"dimension": "severity", "severity": "minor", "reasoning": "Gt characterizes the white matter changes as 'marked', pred drops the severity descriptor — minor because chronic microangiopathic changes are documented but the descriptor doesn't cross a management threshold."}
+        {"dimension": "severity", "severity": "major", "reasoning": "pred leaves out the marked grade gt gives"}
       ]}
     ]
   }
