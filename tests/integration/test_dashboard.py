@@ -13,9 +13,7 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from radmatch import constants
 from radmatch.dashboard.build_dashboard_data import _flatten, build_report_index
-from radmatch.dashboard.common import shared
 from radmatch.dashboard.common.shared import PerPairMatchInfo, build_match_index
 from tests.fakes.fake_outputs import tier_block
 
@@ -197,7 +195,3 @@ def test_per_pair_match_info_default_for_unmatched_gt():
     info = PerPairMatchInfo("MIS", [])
     assert info.category == "MIS"
     assert info.counterparts == []
-
-
-def test_display_order_covers_every_dimension():
-    assert set(shared.DIMENSION_DISPLAY_ORDER) == set(constants.ATTRIBUTE_DIMENSIONS_ALL)

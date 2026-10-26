@@ -690,18 +690,7 @@ def render_match_outcomes_bar(muc_counts: dict[str, int], *, is_pct: bool = Fals
 
 
 # Order used everywhere a per-dimension breakdown is rendered (table + chart).
-DIMENSION_DISPLAY_ORDER: list[str] = [
-    "clinical_status",
-    "laterality",
-    "site",
-    "extent",
-    "severity",
-    "character",
-    "diagnosis",
-    "certainty",
-    "measurement",
-    "comparison",
-]
+DIMENSION_DISPLAY_ORDER: list[str] = list(constants.ATTRIBUTE_DIMENSIONS_ALL)
 
 
 def render_hero_row(emoji: str, title: str, subtitle: str, page_path: str, key: str) -> None:
