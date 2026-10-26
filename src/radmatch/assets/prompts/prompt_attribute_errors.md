@@ -52,7 +52,7 @@ Use only these five `dimension` names.
 
 ## 3. OUTPUT
 
-Return only a JSON object with one key, `errors_per_pair`: one entry `{"pair_id": <int>, "errors": [...]}` for every input pair, each `pair_id` exactly once. A pair without errors has `"errors": []`; no pairs → `{"errors_per_pair": []}`. Every error has a `dimension` from §2, a `severity` of `"major"` or `"minor"`, and a non-empty `reasoning`. Other dimension or severity values are dropped downstream. No text outside the JSON, no markdown fences.
+Return only a JSON object with one key, `errors_per_pair`: one entry `{"pair_id": <int>, "errors": [...]}` for every input pair, each `pair_id` exactly once. A pair without errors has `"errors": []`; no pairs → `{"errors_per_pair": []}`. Every error has a `dimension` from §2, a `severity` of `"major"` or `"minor"`, and a short, non-empty `reasoning` (one clause). Other dimension or severity values are dropped downstream. No text outside the JSON, no markdown fences.
 
 ```json
 {

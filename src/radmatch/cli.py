@@ -285,7 +285,7 @@ Examples:
         default=1,
         help=(
             "Run the extract → match → score chain up to N times, so a later pass picks up "
-            "reports that dropped. Stops early once nothing is missing (default: 1)"
+            "reports that are not scored yet. Stops early once nothing is missing (default: 1)"
         ),
     )
     parser_run_all.set_defaults(func=handle_run_all)
