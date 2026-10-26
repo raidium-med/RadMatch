@@ -248,6 +248,13 @@ def test_compute_structured_errors_identical_pair_is_empty():
     assert comparators.compute_structured_errors(f, f) == []
 
 
+def test_identical_text_is_never_a_status_inversion():
+    pred = {"text": "Gallbladder distended, without inflammatory change.", "clinical_status": "normal"}
+    gt = {"text": "Gallbladder distended without inflammatory change", "clinical_status": "abnormal"}
+    assert comparators.compute_structured_errors(pred, gt) == []
+    assert comparators.compute_structured_errors({**pred, "text": "Gallbladder normal."}, gt)[0]["triggers_inc"]
+
+
 @pytest.mark.parametrize(
     "pred_text, gt_text, expected",
     [
@@ -274,4 +281,18 @@ def test_simple_cyst_size_is_at_most_minor(pred_text, gt_text, expected):
 def test_size_difference_judged_against_the_structure_thresholds(text, pred_v, gt_v, expected):
     pred = {"text": text, "clinical_status": "abnormal", "measurements": [_m(pred_v, "mm", "size")]}
     gt = {"text": text, "clinical_status": "abnormal", "measurements": [_m(gt_v, "mm", "size")]}
+    assert [e["severity"] for e in comparators.compute_structured_errors(pred, gt)] == expected
+
+
+@pytest.mark.parametrize(
+    "pred_text, gt_text, expected",
+    [
+        pytest.param("Possible multiple renal stones.", "Multiple renal stones.", ["major"], id="possible-vs-definite"),
+        pytest.param("Probable left renal cyst.", "Left renal cyst.", [], id="one-step-left-to-llm"),
+        pytest.param("Mass, less likely malignant.", "Mass, likely malignant.", ["major"], id="likely-vs-less-likely"),
+    ],
+)
+def test_certainty_gap_of_two_steps_is_major(pred_text, gt_text, expected):
+    pred = {"text": pred_text, "clinical_status": "abnormal", "measurements": []}
+    gt = {"text": gt_text, "clinical_status": "abnormal", "measurements": []}
     assert [e["severity"] for e in comparators.compute_structured_errors(pred, gt)] == expected

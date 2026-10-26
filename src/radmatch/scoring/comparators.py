@@ -76,9 +76,16 @@ def classify_status_conflict(pred_status: str, gt_status: str) -> dict | None:
 # ============================================================================
 
 
+# Findings whose management depends on change over time: an invented active change is a major error on them.
+_CHANGE_MATTERS = re.compile(
+    r"aneurysm|aort\w* (?:dilat|ectasia)|ectatic|nodul|\bmass|lymph|\bnodes?\b|adenopath|effusion|metasta"
+)
+
+
 def classify_comparison_conflict(
     pred_comparison: str | None,
     gt_comparison: str | None,
+    change_matters: bool = False,
 ) -> dict | None:
     """Bucket-based comparison conflict severity.
 
@@ -86,18 +93,24 @@ def classify_comparison_conflict(
     Cross-bucket → major; same-bucket → minor; identical → no error;
     one-sided mention (one side None) → minor, except a pred that drops an
     ACTIVE gt comparison, which misleads about disease activity exactly as
-    much as contradicting it → major.
+    much as contradicting it, or invents one on a finding followed by size
+    (`change_matters`: aneurysm, nodule, mass, node, effusion) → major.
     """
     if pred_comparison == gt_comparison:
         return None
     if pred_comparison is None or gt_comparison is None:
         dropped_active = pred_comparison is None and gt_comparison in constants.ACTIVE_COMPARISONS
+        invented_active = gt_comparison is None and pred_comparison in constants.ACTIVE_COMPARISONS and change_matters
         return _error(
             dimension="comparison",
-            severity="major" if dropped_active else "minor",
+            severity="major" if dropped_active or invented_active else "minor",
             pred_value=pred_comparison,
             gt_value=gt_comparison,
-            reasoning="pred drops an active gt comparison" if dropped_active else "one-sided comparison mention",
+            reasoning="pred drops an active gt comparison"
+            if dropped_active
+            else "pred invents an active change on a finding followed by size"
+            if invented_active
+            else "one-sided comparison mention",
         )
     pred_active = pred_comparison in constants.ACTIVE_COMPARISONS
     gt_active = gt_comparison in constants.ACTIVE_COMPARISONS
@@ -517,21 +530,103 @@ def _is_simple_cyst(finding: dict) -> bool:
     return all(_NEGATION.search(text[: m.start()]) for m in _COMPLEX_CYST.finditer(text))
 
 
+# Hedging lexicon (Panicek & Hricak 2016): level 0 definite / consistent with, 1 probably / suspicious for,
+# 2 possibly / may represent / cannot be excluded, 3 less likely, 4 unlikely. First match wins.
+_HEDGE_LEVELS: tuple[tuple[re.Pattern, int], ...] = (
+    (re.compile(r"\bunlikely\b"), 4),
+    (re.compile(r"\bless likely\b|\bdoubtful\b"), 3),
+    (
+        re.compile(
+            r"\bpossibl[ey]\b|\bperhaps\b|\bmay (?:represent|be|reflect|relate)\b|\bcould (?:represent|be|reflect)\b|"
+            r"\bcan be seen (?:with|in)\b|\braises? the possibility\b|"
+            r"\bcannot (?:be )?(?:excluded|exclude|ruled out|rule out)\b|\bnot excluded\b|\bquestionabl[ey]\b|"
+            r"\bequivocal\b|\b(?:versus|vs\.?) (?:motion |mixing |streak |beam[- ]hardening )?artifact"
+        ),
+        2,
+    ),
+    (
+        re.compile(
+            r"\bprobabl[ey]\b|\blikely\b|\bsuspicious for\b|\bsuspected\b|\bsuggest(?:s|ive|ing)?\b|"
+            r"\bconcerning for\b|\bfavou?r(?:s|ed)?\b|\bpresumed\b|\bworrisome for\b"
+        ),
+        1,
+    ),
+)
+# A hedge on the cause of a finding ("possibly secondary to A versus B") leaves the finding itself definite.
+_ETIOLOGY_HEDGE = re.compile(
+    r"\b(?:possibl[ey]|probabl[ey]|likely|perhaps|may be|could be|may)\s+"
+    r"(?:secondary to|due to|related to|relat(?:e|ing) to|from|because of|reflecting|attributable to)\b[^.;]*"
+    r"|\b(?:possibl[ey]|probabl[ey]|likely|perhaps)\s+(?:reactive|infectious|infective|inflammatory|"
+    r"post-?infectious|post-?inflammatory|degenerative|post-?operative|post-?surgical|post-?treatment|physiologic)"
+)
+_CERTAINTY_MAJOR_TIERS: set[str] | None = None  # None: any tier
+
+
+def _hedge_level(finding: dict, strip_etiology: bool = True) -> int:
+    text = str(finding.get("text") or "").lower()
+    if strip_etiology:
+        text = _ETIOLOGY_HEDGE.sub("", text)
+    return next((level for pattern, level in _HEDGE_LEVELS if pattern.search(text)), 0)
+
+
+def classify_certainty_gap(pred: dict, gt: dict) -> dict | None:
+    """Two or more steps apart on the hedging lexicon is a major certainty error ("possible fracture" vs a definite
+    fracture): it decides whether work-up is ordered. Closer steps are left to the Stage 3b judge. The gap must hold
+    with and without hedges on cause ("possibly related to"), which may hedge the finding or only its etiology."""
+    gap = min(abs(_hedge_level(pred, s) - _hedge_level(gt, s)) for s in (True, False))
+    if gap < 2:
+        return None
+    if _CERTAINTY_MAJOR_TIERS is not None and not (
+        {pred.get("clinical_significance"), gt.get("clinical_significance")} & _CERTAINTY_MAJOR_TIERS
+    ):
+        return None
+    return _error(
+        "certainty",
+        "major",
+        pred_value=_hedge_level(pred),
+        gt_value=_hedge_level(gt),
+        reasoning="hedging differs by two or more steps",
+    )
+
+
+def _normalized_text(finding: dict) -> str:
+    return re.sub(r"\W+", " ", str(finding.get("text") or "").lower()).strip()
+
+
+_NEGATIONS = {"no", "not", "without", "absent", "negative", "free", "none", "resolved"}
+_FILLER = set("the a an of in is are and with to at on evidence discrete seen noted".split())
+
+
+def _near_identical(pred: dict, gt: dict) -> bool:
+    """The same sentence up to filler words (negations kept): >= 80% shared words. Such a pair cannot invert status;
+    a disagreeing status label is extraction noise."""
+    a = set(_normalized_text(pred).split()) - _FILLER
+    b = set(_normalized_text(gt).split()) - _FILLER
+    return bool(a and b) and a & _NEGATIONS == b & _NEGATIONS and len(a & b) / len(a | b) >= 0.8
+
+
 def compute_structured_errors(pred: dict, gt: dict, size_given_elsewhere: bool = False) -> list[dict]:
     """Aggregate Stage 3a errors across status, comparison, measurement. `size_given_elsewhere`: another pred
-    matched to the same gt gives a size, so this pred omitting one is not an omission of the group."""
+    matched to the same gt gives a size, so this pred omitting one is not an omission of the group. Two findings
+    with the same text cannot invert status: a label disagreement on one sentence is extraction noise."""
     errors: list[dict] = []
 
+    same_text = _near_identical(pred, gt)
     status_err = classify_status_conflict(
         pred.get("clinical_status", ""),
         gt.get("clinical_status", ""),
     )
-    if status_err is not None:
+    if status_err is not None and not same_text:
         errors.append(status_err)
+    elif status_err is None:
+        certainty_err = classify_certainty_gap(pred, gt)
+        if certainty_err is not None:
+            errors.append(certainty_err)
 
     comparison_err = classify_comparison_conflict(
         pred.get("comparison"),
         gt.get("comparison"),
+        change_matters=bool(_CHANGE_MATTERS.search(f"{pred.get('text') or ''} {gt.get('text') or ''}".lower())),
     )
     if comparison_err is not None:
         errors.append(comparison_err)
