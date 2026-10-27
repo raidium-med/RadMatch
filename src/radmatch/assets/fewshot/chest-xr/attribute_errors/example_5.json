@@ -274,8 +274,8 @@
         "errors": [
           {
             "dimension": "severity",
-            "severity": "major",
-            "reasoning": "pred leaves out the moderate grade gt gives"
+            "reasoning": "pred leaves out the moderate grade of the cardiomegaly; the grade weighs the cardiac workup",
+            "severity": "major"
           }
         ]
       },
@@ -284,8 +284,8 @@
         "errors": [
           {
             "dimension": "comparison",
-            "severity": "major",
-            "reasoning": "pred states growth gt does not give, on a nodule"
+            "reasoning": "pred adds growth of a right upper lobe nodule the gt does not give; growth calls for CT workup",
+            "severity": "major"
           }
         ]
       },
@@ -294,8 +294,8 @@
         "errors": [
           {
             "dimension": "certainty",
-            "severity": "major",
-            "reasoning": "pred calls pneumonia definite, gt only possible"
+            "reasoning": "definite vs possible right middle lobe pneumonia, two steps; decides antibiotic treatment",
+            "severity": "major"
           }
         ]
       },

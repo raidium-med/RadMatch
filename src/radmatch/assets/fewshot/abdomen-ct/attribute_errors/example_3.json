@@ -1,6 +1,6 @@
 {
-  "scenario": "Diagnosis minor (a cyst is not actionable) + simple-cyst size minor + clean pairs",
-  "description": "Stage 3b call built from abdomen-ct/findings_gt/example_3.json and findings_pred/example_3.json. On the hepatic-cyst pair, gt calls the lesion a 'cyst' and pred gives only the density ('small hypodense focus'): a minor diagnosis error (a simple cyst is not actionable); pred also leaves out the 9 mm size of a simple hepatic cyst, a minor measurement error. The comparison loss (gt unchanged, pred none) is scored deterministically upstream. the CBD prior-measurement difference (6 mm vs 5 mm) is flagged upstream and stays under every threshold: no error.",
+  "scenario": "Diagnosis minor (a cyst is not actionable) + simple-cyst size minor + clean pairs; a prior size is not a measurement",
+  "description": "Stage 3b call built from abdomen-ct/findings_gt/example_3.json and findings_pred/example_3.json. On the hepatic-cyst pair, gt calls the lesion a 'cyst' and pred gives only the density ('small hypodense focus'): a minor diagnosis error (a simple cyst is not actionable); pred also leaves out the 9 mm size of a simple hepatic cyst, a minor measurement error. The comparison loss (gt unchanged, pred none) is scored deterministically upstream. The bile duct pair gives the same current 8 mm size and the same increase; the prior sizes the texts quote (5 vs 6 mm) are carried by `comparison`, not by `measurements`: no error.",
   "user": {
     "series_uuid": "abdomen-ct_example_3",
     "pairs": [
@@ -11,8 +11,8 @@
       },
       {
         "pair_id": 2,
-        "pred_finding": {"finding_id": "p_2", "text": "Common bile duct measures up to 8 mm, increased from 5 mm previously, and tapers distally.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": "worsening", "measurements": [{"value": 8, "unit": "mm", "category": "size"}, {"value": 5, "unit": "mm", "category": "size"}]},
-        "gt_finding":   {"finding_id": "gt_2", "text": "Common bile duct measures up to 8 mm, increased from 6 mm previously, and tapers distally.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": "worsening", "measurements": [{"value": 8, "unit": "mm", "category": "size"}, {"value": 6, "unit": "mm", "category": "size"}]}
+        "pred_finding": {"finding_id": "p_2", "text": "Mildly increased intrahepatic biliary and common bile duct dilatation, the common bile duct measuring up to 8 mm (previously 5 mm) and tapering distally.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": "worsening", "measurements": [{"value": 8, "unit": "mm", "category": "size"}]},
+        "gt_finding":   {"finding_id": "gt_2", "text": "Mildly increased intrahepatic biliary and common bile duct dilatation, the common bile duct measuring up to 8 mm (previously 6 mm) and tapering distally.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": "worsening", "measurements": [{"value": 8, "unit": "mm", "category": "size"}]}
       },
       {
         "pair_id": 3,
@@ -29,8 +29,8 @@
   "assistant": {
     "errors_per_pair": [
       {"pair_id": 1, "errors": [
-        {"dimension": "diagnosis", "severity": "minor", "reasoning": "pred gives only the density (hypodense focus) for a hepatic cyst: not actionable"},
-        {"dimension": "measurement", "severity": "minor", "reasoning": "pred leaves out the size of a simple hepatic cyst"}
+        {"dimension": "diagnosis", "reasoning": "hypodense focus vs simple hepatic cyst; a cyst needs no action, same management", "severity": "minor"},
+        {"dimension": "measurement", "reasoning": "pred leaves out the 9 mm size of a simple hepatic cyst; its size changes nothing", "severity": "minor"}
       ]},
       {"pair_id": 2, "errors": []},
       {"pair_id": 3, "errors": []},

@@ -184,7 +184,7 @@
    {
     "pred_id": "p_3",
     "gt_id": "gt_4",
-    "reasoning": "same segment, descending aorta; the arch is not described in pred"
+    "reasoning": "same segment, descending aorta"
    },
    {
     "pred_id": "p_4",
@@ -194,7 +194,7 @@
    {
     "pred_id": "p_5",
     "gt_id": "gt_6",
-    "reasoning": "same emboli; clot burden is an attribute"
+    "reasoning": "same left lower lobe emboli, whatever clot burden each gives"
    },
    {
     "pred_id": "p_6",

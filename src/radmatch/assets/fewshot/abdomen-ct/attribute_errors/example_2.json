@@ -1,6 +1,6 @@
 {
   "scenario": "No free-text attribute errors on consolidated trauma findings",
-  "description": "Stage 3b call built from abdomen-ct/findings_gt/example_2.json and findings_pred/example_2.json. The adductor hematoma + active-bleeding entries are consolidated descriptions of the same lesion and align cleanly. None of the attribute dimensions apply to the matched pairs.",
+  "description": "Stage 3b call built from abdomen-ct/findings_gt/example_2.json and findings_pred/example_2.json. The adductor hematoma is one finding with its bleeding focus (slow active bleeding versus pseudoaneurysm) on each side and aligns cleanly. The prior hematoma size the texts quote (9 x 5 cm) is carried by `comparison` ('improving'), not by `measurements`. None of the attribute dimensions apply to the matched pairs.",
   "user": {
     "series_uuid": "abdomen-ct_example_2",
     "pairs": [
@@ -11,21 +11,15 @@
       },
       {
         "pair_id": 2,
-        "pred_finding": {"finding_id": "p_2", "text": "Left adductor intramuscular hematoma measuring 7 x 4.7 cm (decreased from 9 x 5 cm on prior exam) with a small 6 mm central focus of hyperdensity on early-phase imaging that did not persist on delayed imaging.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": "left", "comparison": "improving", "measurements": [{"value": 7, "unit": "cm", "category": "size"}, {"value": 4.7, "unit": "cm", "category": "size"}, {"value": 9, "unit": "cm", "category": "size"}, {"value": 5, "unit": "cm", "category": "size"}, {"value": 6, "unit": "mm", "category": "size"}]},
-        "gt_finding":   {"finding_id": "gt_2", "text": "Left adductor intramuscular hematoma measuring 7 x 4.7 cm (decreased from 9 x 5 cm on prior exam) with a small 6 mm central focus of hyperdensity / contrast blush on early-phase imaging that did not persist on delayed imaging.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": "left", "comparison": "improving", "measurements": [{"value": 7, "unit": "cm", "category": "size"}, {"value": 4.7, "unit": "cm", "category": "size"}, {"value": 9, "unit": "cm", "category": "size"}, {"value": 5, "unit": "cm", "category": "size"}, {"value": 6, "unit": "mm", "category": "size"}]}
-      },
-      {
-        "pair_id": 3,
-        "pred_finding": {"finding_id": "p_3", "text": "Small focus of slow, active bleeding which did not continue on delays, versus pseudoaneurysm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": "left", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_3", "text": "Small focus of slow, active bleeding which did not continue on delays, versus pseudoaneurysm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": "left", "comparison": null, "measurements": []}
+        "pred_finding": {"finding_id": "p_2", "text": "Left adductor intramuscular hematoma measuring 7 x 4.7 cm (decreased from 9 x 5 cm on prior exam) with a small 6 mm central focus of hyperdensity on early-phase imaging that did not persist on delayed imaging: slow active bleeding versus pseudoaneurysm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": "left", "comparison": "improving", "measurements": [{"value": 7, "unit": "cm", "category": "size"}, {"value": 4.7, "unit": "cm", "category": "size"}, {"value": 6, "unit": "mm", "category": "size"}]},
+        "gt_finding":   {"finding_id": "gt_2", "text": "Left adductor intramuscular hematoma measuring 7 x 4.7 cm (decreased from 9 x 5 cm on prior exam) with a small 6 mm central focus of hyperdensity / contrast blush on early-phase imaging that did not persist on delayed imaging: slow active bleeding versus pseudoaneurysm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": "left", "comparison": "improving", "measurements": [{"value": 7, "unit": "cm", "category": "size"}, {"value": 4.7, "unit": "cm", "category": "size"}, {"value": 6, "unit": "mm", "category": "size"}]}
       }
     ]
   },
   "assistant": {
     "errors_per_pair": [
       {"pair_id": 1, "errors": []},
-      {"pair_id": 2, "errors": []},
-      {"pair_id": 3, "errors": []}
+      {"pair_id": 2, "errors": []}
     ]
   }
 }

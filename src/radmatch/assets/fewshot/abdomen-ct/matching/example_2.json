@@ -80,17 +80,17 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Pred names biliary ducts (parent of intrahepatic) + pathology (dilation); covers the intrahepatic atom."
+        "reasoning": "Pred's negative for biliary dilatation covers the intrahepatic ducts."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_2",
-        "reasoning": "Same parent-anatomy claim also covers the extrahepatic atom — second row, same pred_id."
+        "reasoning": "The same biliary negative also covers the extrahepatic duct."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_3",
-        "reasoning": "Same finding entity (right hepatic cyst, 12 mm)."
+        "reasoning": "Same 12 mm right hepatic lobe cyst."
       },
       {
         "pred_id": "p_3",

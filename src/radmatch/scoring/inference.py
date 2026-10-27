@@ -46,10 +46,10 @@ _ATTRIBUTE_ERRORS_SCHEMA = {
                                     "type": "object",
                                     "properties": {
                                         "dimension": {"type": "string"},
-                                        "severity": {"type": "string"},
                                         "reasoning": {"type": "string"},
+                                        "severity": {"type": "string"},
                                     },
-                                    "required": ["dimension", "severity", "reasoning"],
+                                    "required": ["dimension", "reasoning", "severity"],
                                     "additionalProperties": False,
                                 },
                             },

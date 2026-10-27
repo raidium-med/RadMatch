@@ -43,11 +43,11 @@ MATCHING_SCHEMA = {
                     "items": {
                         "type": "object",
                         "properties": {
+                            "reasoning": {"type": "string"},
                             "pred_id": {"type": "string"},
                             "gt_id": {"type": "string"},
-                            "reasoning": {"type": "string"},
                         },
-                        "required": ["pred_id", "gt_id", "reasoning"],
+                        "required": ["reasoning", "pred_id", "gt_id"],
                         "additionalProperties": False,
                     },
                 },
@@ -175,7 +175,10 @@ def build_matching_messages(
     messages: list[dict] = [{"role": "system", "content": system}]
     messages.extend(prompts.matching_fewshot_messages(fewshot_name))
 
-    user_payload: dict[str, object] = {"pred_findings": pred_findings, "gt_findings": gt_findings}
+    user_payload: dict[str, object] = {
+        "pred_findings": [prompts.matching_view(f) for f in pred_findings],
+        "gt_findings": [prompts.matching_view(f) for f in gt_findings],
+    }
     if indication:
         user_payload = {"indication": indication, **user_payload}
     user = json.dumps(user_payload, ensure_ascii=False)

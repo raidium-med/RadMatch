@@ -54,6 +54,36 @@
     "clinical_significance": "routine"
   },
   {
+    "text": "Simple renal cysts, the largest 1.8 cm.",
+    "measurements": [
+      {
+        "value": 1.8,
+        "unit": "cm",
+        "category": "size"
+      }
+    ],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Moderate left hydronephrosis with an enlarged kidney and thinning of the renal cortex.",
+    "measurements": [],
+    "laterality": "left",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Stricture of the proximal left ureter.",
+    "measurements": [],
+    "laterality": "left",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
     "text": "Urinary catheter in the bladder.",
     "measurements": [],
     "laterality": null,
@@ -83,6 +113,14 @@
     "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Punctate calcifications in the pelvic floor, along the rectum and in the sigmoid mesocolon, likely phleboliths.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "abnormal",
     "clinical_significance": "routine"
   }
 ]

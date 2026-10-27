@@ -6,8 +6,8 @@
     "pairs": [
       {
         "pair_id": 1,
-        "pred_finding": {"finding_id": "p_1", "text": "Leptomeningeal metastasis on the left inferior surface of the tentorium, now forming a mass 2 cm in diameter and 1.5 cm in thickness, previously punctate, with associated massive edema extending to the brainstem and cerebellum.", "clinical_status": "abnormal", "clinical_significance": "critical", "laterality": "left", "comparison": "worsening", "measurements": [{"value": 2, "unit": "cm", "category": "size"}, {"value": 1.5, "unit": "cm", "category": "size"}]},
-        "gt_finding":   {"finding_id": "gt_1", "text": "Leptomeningeal metastasis on the left inferior surface of the tentorium, now forming a mass 2.5 cm in diameter and 2 cm in thickness, previously punctate, with associated massive edema extending to the brainstem and cerebellum.", "clinical_status": "abnormal", "clinical_significance": "critical", "laterality": "left", "comparison": "worsening", "measurements": [{"value": 2.5, "unit": "cm", "category": "size"}, {"value": 2, "unit": "cm", "category": "size"}]}
+        "pred_finding": {"finding_id": "p_1", "text": "Leptomeningeal metastasis on the left inferior surface of the tentorium, now forming a mass 2 cm in diameter and 1.5 cm in thickness, previously punctate, with associated massive edema extending to the brainstem and cerebellum.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": "left", "comparison": "worsening", "measurements": [{"value": 2, "unit": "cm", "category": "size"}, {"value": 1.5, "unit": "cm", "category": "size"}]},
+        "gt_finding":   {"finding_id": "gt_1", "text": "Leptomeningeal metastasis on the left inferior surface of the tentorium, now forming a mass 2.5 cm in diameter and 2 cm in thickness, previously punctate, with associated massive edema extending to the brainstem and cerebellum.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": "left", "comparison": "worsening", "measurements": [{"value": 2.5, "unit": "cm", "category": "size"}, {"value": 2, "unit": "cm", "category": "size"}]}
       },
       {
         "pair_id": 2,
@@ -17,18 +17,18 @@
       {
         "pair_id": 3,
         "pred_finding": {"finding_id": "p_4", "text": "Pituitary metastasis infiltrating the anterior lobe and stalk appears stable.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": null, "comparison": "stable", "measurements": []},
-        "gt_finding":   {"finding_id": "gt_6", "text": "Pituitary metastasis infiltrating the anterior lobe and stalk is progressively growing and forming a mass, exerting pressure on the optic chiasm and left optic tract.", "clinical_status": "abnormal", "clinical_significance": "critical", "laterality": null, "comparison": "worsening", "measurements": []}
+        "gt_finding":   {"finding_id": "gt_6", "text": "Pituitary metastasis infiltrating the anterior lobe and stalk is progressively growing and forming a mass, exerting pressure on the optic chiasm and left optic tract.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": "worsening", "measurements": []}
       }
     ]
   },
   "assistant": {
     "errors_per_pair": [
       {"pair_id": 1, "errors": [
-        {"dimension": "measurement", "severity": "major", "reasoning": "thickness 1.5 vs 2 cm: more than 20 % and 5 mm"}
+        {"dimension": "measurement", "reasoning": "thickness 1.5 vs 2 cm of the tentorial metastasis, more than 20 % and 5 mm; misstates the growth followed under treatment", "severity": "major"}
       ]},
       {"pair_id": 2, "errors": []},
       {"pair_id": 3, "errors": [
-        {"dimension": "extent", "severity": "major", "reasoning": "pred leaves out the growth into a mass pressing on the optic chiasm (mass effect)"}
+        {"dimension": "extent", "reasoning": "pred leaves out the mass effect on the optic chiasm and left optic tract; chiasm compression needs treatment", "severity": "major"}
       ]}
     ]
   }

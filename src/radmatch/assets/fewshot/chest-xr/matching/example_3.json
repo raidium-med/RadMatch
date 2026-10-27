@@ -52,17 +52,17 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "GT names pathology (pleural effusion) + bilateral anatomy; covers the left atom."
+        "reasoning": "The bilateral effusions of gt include this left effusion."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_1",
-        "reasoning": "Same umbrella covers the right atom — second row, same gt_id."
+        "reasoning": "The bilateral effusions of gt also include this right effusion."
       },
       {
         "pred_id": "p_3",
         "gt_id": "gt_2",
-        "reasoning": "Heart size normal ≈ cardiac silhouette WNL."
+        "reasoning": "Both state the heart size is normal."
       }
     ],
     "unmatched_pred": [],

@@ -53,7 +53,7 @@
     "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "routine"
+    "clinical_significance": "notable"
   },
   {
     "text": "The third ventricle and both lateral ventricles are of normal size.",
@@ -97,6 +97,14 @@
   },
   {
     "text": "Visualized osseous structures are normal.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Contrast-enhanced cranial MRI examination within normal limits.",
     "measurements": [],
     "laterality": null,
     "comparison": null,

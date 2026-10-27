@@ -56,7 +56,7 @@ A site error is major in almost every case.
 - no error: both findings use the same hedging level, or both are unhedged. A hedge on what the finding is counts: gt "haze, possibly pulmonary edema" is a possible edema, so a definite edema is two steps away. Only a hedge on why it is there, or on what accentuates it, leaves the finding itself definite: "possibly related to", "likely due to", "probably secondary to", "likely from cardiac decompensation", "possibly accentuated by positioning", or a hedged cause word ("likely reactive", "possibly post-operative").
 
 **`measurement`**: sizes (`measurements`, or written in the text), judged against the structure and context (finding text, `clinical_significance`, `indication`).
-- major: a gt size the pred leaves out (rule 3), unless the pred gives a size class or bound that covers it ("tiny" or "millimetric" for a gt under 6 mm, "subcentimeter" under 10 mm, "< 5 mm" for 4 mm, "enlarged" for a lymph node over 10 mm) or another pred of the group gives the size; a difference that crosses a decision threshold of the structure: lung nodule 6 and 8 mm (Fleischner), lymph node short axis 10 mm, thoracic aorta 4 and 5.5 cm, abdominal aorta 3 and 5.5 cm, spleen 13 cm, common bile duct 6 mm (10 mm after cholecystectomy), pancreatic duct 3 mm; a difference of more than 20 % of the gt value and at least 2 mm on any other measured finding (a mass 3.0 vs 4.0 cm).
+- major: a gt size the pred leaves out (rule 3), unless the pred gives a size class or bound that covers it ("tiny" or "millimetric" for a gt under 6 mm, "subcentimeter" under 10 mm, "< 5 mm" for 4 mm, "enlarged" for a lymph node over 10 mm) or another pred of the group gives the size; a difference that crosses a decision threshold of the structure: lung nodule 6, 8 and 15 mm (Fleischner, Lung-RADS), lymph node short axis 10 mm (15 mm for a target node), thoracic aorta 4, 5 and 5.5 cm, abdominal aorta 3 and 5.5 cm (5 cm in women), subdural or epidural hematoma 10 mm, midline shift 5 mm, spleen 13 cm, common bile duct 6 mm (10 mm after cholecystectomy), main pancreatic duct 3, 5 and 10 mm, ureteral stone 5 and 10 mm; a difference of more than 20 % of the gt value and at least 2 mm on any other measured finding (a mass 3.0 vs 4.0 cm).
 - minor: a difference or a left-out size on a simple renal, hepatic or splenic cyst (no follow-up at any size); a smaller difference that stays on one side of every threshold.
 - no error: the same value; a size only the pred gives; a size class or bound that covers the gt value.
 
@@ -68,17 +68,17 @@ A site error is major in almost every case.
 
 ## 3. OUTPUT
 
-Return only a JSON object with one key, `errors_per_pair`: one entry `{"pair_id": <int>, "errors": [...]}` for every input pair, each `pair_id` exactly once. A pair without errors has `"errors": []`; no pairs → `{"errors_per_pair": []}`. Every error has a `dimension` from §2, a `severity` of `"major"` or `"minor"`, and a short, non-empty `reasoning` (one clause). Other dimension or severity values are dropped downstream. No text outside the JSON, no markdown fences.
+Return only a JSON object with one key, `errors_per_pair`: one entry `{"pair_id": <int>, "errors": [...]}` for every input pair, each `pair_id` exactly once. A pair without errors has `"errors": []`; no pairs → `{"errors_per_pair": []}`. Every error has a `dimension` from §2, a short, non-empty `reasoning` (one clause: what differs, and why it does or does not change management) and a `severity` of `"major"` or `"minor"`, in that order: write the reasoning before deciding the severity. Other dimension or severity values are dropped downstream. No text outside the JSON, no markdown fences.
 
 ```json
 {
   "errors_per_pair": [
     {"pair_id": 1, "errors": [
-      {"dimension": "site", "severity": "major", "reasoning": "pred says right lower lobe, gt says right middle lobe"}
+      {"dimension": "site", "reasoning": "nodule in the right lower vs right middle lobe; the follow-up targets another lobe", "severity": "major"}
     ]},
     {"pair_id": 2, "errors": []},
     {"pair_id": 3, "errors": [
-      {"dimension": "severity", "severity": "minor", "reasoning": "pred says mild-to-moderate, gt says moderate"}
+      {"dimension": "severity", "reasoning": "mild-to-moderate vs moderate effusion; one step, same management", "severity": "minor"}
     ]}
   ]
 }

@@ -13,7 +13,7 @@
      "laterality": "right",
      "comparison": null,
      "clinical_status": "abnormal",
-     "clinical_significance": "urgent"
+     "clinical_significance": "critical"
     },
     "gt_finding": {
      "finding_id": "gt_1",
@@ -40,7 +40,7 @@
      "laterality": "right",
      "comparison": null,
      "clinical_status": "abnormal",
-     "clinical_significance": "urgent"
+     "clinical_significance": "notable"
     },
     "gt_finding": {
      "finding_id": "gt_2",
@@ -55,7 +55,7 @@
      "laterality": "bilateral",
      "comparison": null,
      "clinical_status": "abnormal",
-     "clinical_significance": "urgent"
+     "clinical_significance": "notable"
     }
    },
    {
@@ -88,7 +88,7 @@
      "laterality": "left",
      "comparison": null,
      "clinical_status": "abnormal",
-     "clinical_significance": "urgent"
+     "clinical_significance": "notable"
     }
    },
    {
@@ -142,7 +142,7 @@
      "laterality": "left",
      "comparison": null,
      "clinical_status": "abnormal",
-     "clinical_significance": "urgent"
+     "clinical_significance": "critical"
     },
     "gt_finding": {
      "finding_id": "gt_6",
@@ -151,7 +151,7 @@
      "laterality": "left",
      "comparison": null,
      "clinical_status": "abnormal",
-     "clinical_significance": "urgent"
+     "clinical_significance": "critical"
     }
    },
    {
@@ -205,8 +205,8 @@
     "errors": [
      {
       "dimension": "diagnosis",
-      "severity": "major",
-      "reasoning": "acute vs chronic emboli changes anticoagulation"
+      "reasoning": "acute vs chronic segmental emboli; acute emboli call for anticoagulation now",
+      "severity": "major"
      }
     ]
    },
@@ -215,8 +215,8 @@
     "errors": [
      {
       "dimension": "extent",
-      "severity": "major",
-      "reasoning": "solitary vs multiple nodules: primary vs metastatic work-up"
+      "reasoning": "solitary vs multiple nodules; primary vs metastatic workup",
+      "severity": "major"
      }
     ]
    },
@@ -225,8 +225,8 @@
     "errors": [
      {
       "dimension": "character",
-      "severity": "major",
-      "reasoning": "ground-glass vs solid switches the Fleischner pathway"
+      "reasoning": "ground-glass vs solid 8 mm nodule; switches the Fleischner pathway",
+      "severity": "major"
      }
     ]
    },
@@ -235,8 +235,8 @@
     "errors": [
      {
       "dimension": "extent",
-      "severity": "major",
-      "reasoning": "abutment vs mediastinal invasion changes T stage"
+      "reasoning": "abutment vs invasion of the mediastinum; changes the T stage and resectability",
+      "severity": "major"
      }
     ]
    },
@@ -249,8 +249,8 @@
     "errors": [
      {
       "dimension": "severity",
-      "severity": "major",
-      "reasoning": "large vs small clot burden changes risk stratification"
+      "reasoning": "large vs small clot burden, two steps; changes risk stratification and treatment",
+      "severity": "major"
      }
     ]
    },
@@ -259,8 +259,8 @@
     "errors": [
      {
       "dimension": "severity",
-      "severity": "minor",
-      "reasoning": "one emphysema grade"
+      "reasoning": "moderate vs mild emphysema; one step, same management",
+      "severity": "minor"
      }
     ]
    },
@@ -269,8 +269,8 @@
     "errors": [
      {
       "dimension": "severity",
-      "severity": "major",
-      "reasoning": "pred leaves out the mild grades gt gives for the LAD and RCA"
+      "reasoning": "pred leaves out the mild LAD and RCA calcium grades gt gives; the grade sets the cardiovascular risk",
+      "severity": "major"
      }
     ]
    }

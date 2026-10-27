@@ -97,8 +97,8 @@
         "errors": [
           {
             "dimension": "certainty",
-            "severity": "major",
-            "reasoning": "pred hedges a definite pneumothorax as possible"
+            "reasoning": "possible vs definite small apical pneumothorax, two steps; a definite one needs follow-up or drainage",
+            "severity": "major"
           }
         ]
       },
@@ -107,8 +107,8 @@
         "errors": [
           {
             "dimension": "diagnosis",
-            "severity": "major",
-            "reasoning": "pred reads the opacity as pneumonia, gt as atelectasis"
+            "reasoning": "pneumonia vs atelectasis for the same basilar opacity; pneumonia needs antibiotics",
+            "severity": "major"
           }
         ]
       },
@@ -117,8 +117,8 @@
         "errors": [
           {
             "dimension": "certainty",
-            "severity": "minor",
-            "reasoning": "one step: probable vs definite"
+            "reasoning": "probable vs definite mild pulmonary edema; one step, same treatment",
+            "severity": "minor"
           }
         ]
       },

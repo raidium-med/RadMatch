@@ -76,32 +76,32 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "'Intracranial hemorrhage' is the parent class containing SDH; pred explicitly rules it out."
+        "reasoning": "No acute intracranial hemorrhage denies a subdural hemorrhage."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_2",
-        "reasoning": "Same parent rule-out covers EDH."
+        "reasoning": "No acute intracranial hemorrhage denies an epidural hemorrhage."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_3",
-        "reasoning": "Same parent rule-out covers SAH."
+        "reasoning": "No acute intracranial hemorrhage denies a subarachnoid hemorrhage."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_4",
-        "reasoning": "Same parent rule-out covers IVH."
+        "reasoning": "No acute intracranial hemorrhage denies an intraventricular hemorrhage."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_5",
-        "reasoning": "Pred bundles mass effect + midline shift in one statement; covers the no-mass-effect atom."
+        "reasoning": "Pred's negative covers mass effect."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_6",
-        "reasoning": "Same bundled negative covers the no-midline-shift atom."
+        "reasoning": "Pred's negative also covers midline shift."
       }
     ],
     "unmatched_pred": [],

@@ -83,16 +83,6 @@
         "value": 1.7,
         "unit": "cm",
         "category": "size"
-      },
-      {
-        "value": 2.3,
-        "unit": "cm",
-        "category": "size"
-      },
-      {
-        "value": 1.5,
-        "unit": "cm",
-        "category": "size"
       }
     ],
     "laterality": null,
@@ -110,16 +100,6 @@
       },
       {
         "value": 0.9,
-        "unit": "cm",
-        "category": "size"
-      },
-      {
-        "value": 0.4,
-        "unit": "cm",
-        "category": "size"
-      },
-      {
-        "value": 0.4,
         "unit": "cm",
         "category": "size"
       }
@@ -179,16 +159,6 @@
       },
       {
         "value": 1.4,
-        "unit": "cm",
-        "category": "size"
-      },
-      {
-        "value": 0.9,
-        "unit": "cm",
-        "category": "size"
-      },
-      {
-        "value": 0.8,
         "unit": "cm",
         "category": "size"
       }
@@ -354,16 +324,6 @@
         "value": 1.7,
         "unit": "cm",
         "category": "size"
-      },
-      {
-        "value": 2.0,
-        "unit": "cm",
-        "category": "size"
-      },
-      {
-        "value": 1.2,
-        "unit": "cm",
-        "category": "size"
       }
     ],
     "laterality": null,
@@ -381,16 +341,6 @@
       },
       {
         "value": 0.8,
-        "unit": "cm",
-        "category": "size"
-      },
-      {
-        "value": 2.2,
-        "unit": "cm",
-        "category": "size"
-      },
-      {
-        "value": 1.4,
         "unit": "cm",
         "category": "size"
       }

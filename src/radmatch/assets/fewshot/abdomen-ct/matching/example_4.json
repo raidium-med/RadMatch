@@ -44,7 +44,7 @@
       {
         "pred_id": "p_2",
         "gt_id": "gt_1",
-        "reasoning": "Both state the liver is unremarkable; same anatomy, same status."
+        "reasoning": "Both state the liver is normal."
       }
     ],
     "unmatched_pred": [

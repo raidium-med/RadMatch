@@ -175,7 +175,7 @@
       {
         "pred_id": "p_3",
         "gt_id": "gt_4",
-        "reasoning": "Same sigmoid diverticular disease: two readings (diverticulosis vs diverticulitis)."
+        "reasoning": "Same sigmoid diverticular disease, read as diverticulosis vs diverticulitis."
       },
       {
         "pred_id": "p_4",
@@ -190,7 +190,7 @@
       {
         "pred_id": "p_7",
         "gt_id": "gt_8",
-        "reasoning": "Both describe the cholecystectomy; clips are its expected appearance."
+        "reasoning": "Same cholecystectomy, the clips being its expected appearance."
       },
       {
         "pred_id": "p_8",

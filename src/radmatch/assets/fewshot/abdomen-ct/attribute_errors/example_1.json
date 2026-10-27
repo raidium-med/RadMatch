@@ -21,7 +21,7 @@
       },
       {
         "pair_id": 4,
-        "pred_finding": {"finding_id": "p_4", "text": "Three mesenteric lymph nodes measuring up to 12 mm, worsening compared to prior CT.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": "worsening", "measurements": [{"value": 3, "unit": null, "category": "count"}, {"value": 12, "unit": "mm", "category": "size"}]},
+        "pred_finding": {"finding_id": "p_4", "text": "Three mesenteric lymph nodes measuring up to 12 mm, worsening compared to prior CT.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": null, "comparison": "worsening", "measurements": [{"value": 3, "unit": null, "category": "count"}, {"value": 12, "unit": "mm", "category": "size"}]},
         "gt_finding":   {"finding_id": "gt_4", "text": "Three mesenteric lymph nodes measuring up to 12 mm, unchanged compared to prior CT.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": null, "comparison": "stable", "measurements": [{"value": 3, "unit": null, "category": "count"}, {"value": 12, "unit": "mm", "category": "size"}]}
       },
       {

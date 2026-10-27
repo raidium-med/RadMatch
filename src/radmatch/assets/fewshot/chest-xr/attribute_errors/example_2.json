@@ -17,26 +17,26 @@
       {
         "pair_id": 3,
         "pred_finding": {"finding_id": "p_3", "text": "Right PICC line ends in the lower SVC.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": null, "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_3", "text": "Right central venous line ends in the upper right atrium.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": null, "measurements": []}
+        "gt_finding":   {"finding_id": "gt_3", "text": "Right central venous line ends in the upper right atrium.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": null, "comparison": null, "measurements": []}
       },
       {
         "pair_id": 4,
-        "pred_finding": {"finding_id": "p_4", "text": "No pneumothorax.", "clinical_status": "normal", "clinical_significance": "critical", "laterality": null, "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_4", "text": "No pneumothorax.", "clinical_status": "normal", "clinical_significance": "critical", "laterality": null, "comparison": null, "measurements": []}
+        "pred_finding": {"finding_id": "p_4", "text": "No pneumothorax.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": null, "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_4", "text": "No pneumothorax.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": null, "comparison": null, "measurements": []}
       }
     ]
   },
   "assistant": {
     "errors_per_pair": [
       {"pair_id": 1, "errors": [
-        {"dimension": "severity", "severity": "major", "reasoning": "pred leaves out the moderate grade gt gives"}
+        {"dimension": "severity", "reasoning": "pred leaves out the moderate grade of the bilateral effusions; the grade weighs drainage vs observation", "severity": "major"}
       ]},
       {"pair_id": 2, "errors": [
-        {"dimension": "severity", "severity": "major", "reasoning": "pred leaves out the severe grade gt gives"},
-        {"dimension": "site", "severity": "minor", "reasoning": "left basilar vs left lower lobe"}
+        {"dimension": "severity", "reasoning": "pred leaves out the severe grade of the left lower lobe collapse; severe collapse may need bronchoscopy", "severity": "major"},
+        {"dimension": "site", "reasoning": "left basilar vs left lower lobe; two words for the same site, same management", "severity": "minor"}
       ]},
       {"pair_id": 3, "errors": [
-        {"dimension": "site", "severity": "major", "reasoning": "Pred places the tip in the lower SVC, gt places it in the upper right atrium — different anatomic position; atrial tips are conventionally pulled back due to arrhythmia / perforation risk, so the discrepancy changes management."}
+        {"dimension": "site", "reasoning": "line tip in the lower SVC vs the upper right atrium; an atrial tip is pulled back", "severity": "major"}
       ]},
       {"pair_id": 4, "errors": []}
     ]

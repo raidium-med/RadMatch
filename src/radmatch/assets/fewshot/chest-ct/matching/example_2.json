@@ -68,7 +68,7 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Pred enumerates C2-C3 through C7-T1; C3-C4 is in the named range."
+        "reasoning": "C3-C4 lies in the C2-C3 to C7-T1 range pred names."
       },
       {
         "pred_id": "p_1",
@@ -88,7 +88,7 @@
       {
         "pred_id": "p_2",
         "gt_id": "gt_5",
-        "reasoning": "Same finding entity (mild thoracic scoliosis)."
+        "reasoning": "Same mild thoracic scoliosis."
       }
     ],
     "unmatched_pred": [],

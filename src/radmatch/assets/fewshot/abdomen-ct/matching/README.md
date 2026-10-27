@@ -8,7 +8,7 @@ Nine worked examples of the alignment patterns Stage 2 has to get right. Finding
 | `example_2.json` | 1:N umbrella — pred parent-anatomy claim covering several GT atoms |
 | `example_3.json` | N:1 umbrella — multiple atomic pred cysts covering one umbrella GT |
 | `example_4.json` | SPU + MIS — a pred finding the GT never assesses, and a GT finding with no pred counterpart |
-| `example_5.json` | 1:1 match despite a measurement difference |
+| `example_5.json` | 1:1 match despite different quoted prior sizes |
 | `example_6.json` | Constructed clinical long tail — stone with the hydroureteronephrosis it causes (1:N), hypodense lesion vs cyst and diverticulosis vs diverticulitis (two readings), bowel segments not matched |
 | `example_7.json` | Constructed — 'fast-in fast-out', 'low-density shadow', 'no metastatic disease' and 'no source of hematuria' as denials, post-cholecystectomy duct |
 | `example_8.json` | Constructed — splenule vs splenic hilar node (two readings), a variant beside 'no lymphadenopathy', diverticulosis beside 'no diverticulitis', SBO with and without transition point, leftovers across organs not paired |
@@ -29,6 +29,7 @@ Each file is one example:
 
 `radmatch.llm_utils.prompts.load_matching_fewshot` reads every `example_*.json` here and
 appends each `user` / `assistant` pair to the matching prompt as one user/assistant turn.
-Findings carry only the fields matching consumes — `finding_id`, `text`,
-`clinical_status`, `laterality`, `comparison`, `measurements` — since significance plays no part in
-aligning findings. `scenario` and `description` are documentation; the loader ignores them.
+Stage 2 sees only the `finding_id`, `text`, `clinical_status` and `laterality` of each finding
+(`radmatch.llm_utils.prompts.matching_view`) and each match row as `reasoning`, `pred_id`, `gt_id`;
+the `comparison` and `measurements` kept in the files are not sent. Each `reasoning` is one plain
+clause. `scenario` and `description` are documentation; the loader ignores them.

@@ -1,25 +1,25 @@
 {
   "scenario": "Minor measurement error after INC exclusion",
-  "description": "Stage 3b call built from chest-ct/findings_gt/example_2.json and findings_pred/example_2.json. The hepatic lesion pair is a status conflict (gt: newly enlarged segment-VI lesion, pred: 'No suspicious hepatic lesion') → a status inversion scored at Stage 3a (INC), left out of this example. Of the remaining 2 matched pairs, the pulmonary-nodule pair differs only in the size of the largest nodule (2.5 x 1.6 vs 3.1 x 1.7 cm, under 20 % difference): a minor measurement error; the retroperitoneal-node pair is identical. No other attribute differences exist.",
+  "description": "Stage 3b call built from chest-ct/findings_gt/example_2.json and findings_pred/example_2.json. The hepatic lesion pair is a status conflict (gt: newly enlarged segment-VI lesion, pred: 'No suspicious hepatic lesion') → a status inversion scored at Stage 3a (INC), left out of this example. Of the remaining 2 matched pairs, the pulmonary-nodule pair differs only in the size of the largest nodule (2.5 x 1.6 vs 3.1 x 1.7 cm, under 20 % difference): a minor measurement error; the retroperitoneal-node pair is identical. The prior sizes the texts quote are carried by `comparison` ('worsening'), not by `measurements`. No other attribute differences exist.",
   "user": {
     "series_uuid": "chest-ct_example_2",
     "pairs": [
       {
         "pair_id": 1,
-        "pred_finding": {"finding_id": "p_1", "text": "Slight interval enlargement of multiple pulmonary nodules, largest in the right lung base measuring 2.5 x 1.6 cm, previously 2.3 x 1.5 cm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": "worsening", "measurements": [{"value": 2.5, "unit": "cm", "category": "size"}, {"value": 1.6, "unit": "cm", "category": "size"}, {"value": 2.3, "unit": "cm", "category": "size"}, {"value": 1.5, "unit": "cm", "category": "size"}]},
-        "gt_finding":   {"finding_id": "gt_1", "text": "Slight interval enlargement of multiple pulmonary nodules, largest in the right lung base measuring 3.1 x 1.7 cm, previously 2.3 x 1.5 cm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": "worsening", "measurements": [{"value": 3.1, "unit": "cm", "category": "size"}, {"value": 1.7, "unit": "cm", "category": "size"}, {"value": 2.3, "unit": "cm", "category": "size"}, {"value": 1.5, "unit": "cm", "category": "size"}]}
+        "pred_finding": {"finding_id": "p_1", "text": "Slight interval enlargement of multiple pulmonary nodules, largest in the right lung base measuring 2.5 x 1.6 cm, previously 2.3 x 1.5 cm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": "worsening", "measurements": [{"value": 2.5, "unit": "cm", "category": "size"}, {"value": 1.6, "unit": "cm", "category": "size"}]},
+        "gt_finding":   {"finding_id": "gt_1", "text": "Slight interval enlargement of multiple pulmonary nodules, largest in the right lung base measuring 3.1 x 1.7 cm, previously 2.3 x 1.5 cm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": "worsening", "measurements": [{"value": 3.1, "unit": "cm", "category": "size"}, {"value": 1.7, "unit": "cm", "category": "size"}]}
       },
       {
         "pair_id": 2,
-        "pred_finding": {"finding_id": "p_3", "text": "Interval enlargement of multiple retroperitoneal and aortocaval lymph nodes, largest left retroperitoneal node measuring 2.4 x 1.7 cm, previously 2.0 x 1.2 cm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": "worsening", "measurements": [{"value": 2.4, "unit": "cm", "category": "size"}, {"value": 1.7, "unit": "cm", "category": "size"}, {"value": 2.0, "unit": "cm", "category": "size"}, {"value": 1.2, "unit": "cm", "category": "size"}]},
-        "gt_finding":   {"finding_id": "gt_3", "text": "Interval enlargement of multiple retroperitoneal and aortocaval lymph nodes, largest left retroperitoneal node measuring 2.4 x 1.7 cm, previously 2.0 x 1.2 cm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": "worsening", "measurements": [{"value": 2.4, "unit": "cm", "category": "size"}, {"value": 1.7, "unit": "cm", "category": "size"}, {"value": 2.0, "unit": "cm", "category": "size"}, {"value": 1.2, "unit": "cm", "category": "size"}]}
+        "pred_finding": {"finding_id": "p_3", "text": "Interval enlargement of multiple retroperitoneal and aortocaval lymph nodes, largest left retroperitoneal node measuring 2.4 x 1.7 cm, previously 2.0 x 1.2 cm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": "worsening", "measurements": [{"value": 2.4, "unit": "cm", "category": "size"}, {"value": 1.7, "unit": "cm", "category": "size"}]},
+        "gt_finding":   {"finding_id": "gt_3", "text": "Interval enlargement of multiple retroperitoneal and aortocaval lymph nodes, largest left retroperitoneal node measuring 2.4 x 1.7 cm, previously 2.0 x 1.2 cm.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": "worsening", "measurements": [{"value": 2.4, "unit": "cm", "category": "size"}, {"value": 1.7, "unit": "cm", "category": "size"}]}
       }
     ]
   },
   "assistant": {
     "errors_per_pair": [
       {"pair_id": 1, "errors": [
-        {"dimension": "measurement", "severity": "minor", "reasoning": "under 20 % difference"}
+        {"dimension": "measurement", "reasoning": "largest nodule 2.5 x 1.6 vs 3.1 x 1.7 cm, under 20 % of the gt and above every nodule threshold; same management", "severity": "minor"}
       ]},
       {"pair_id": 2, "errors": []}
     ]

@@ -76,27 +76,27 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Pred names cerebellum + 'unremarkable' = no abnormal entities; covers the no-tumor atom by clinical convention."
+        "reasoning": "An unremarkable cerebellum denies a cerebellar tumor."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_2",
-        "reasoning": "Same cerebellum-unremarkable claim covers the no-hemorrhage atom."
+        "reasoning": "An unremarkable cerebellum denies a cerebellar hemorrhage."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_3",
-        "reasoning": "Same claim covers the no-ischemic-lesion atom."
+        "reasoning": "An unremarkable cerebellum denies a cerebellar ischemic lesion."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_4",
-        "reasoning": "Identical ventricles + cisterns normal statement."
+        "reasoning": "Identical statement that the ventricles and basal cisterns are normal."
       },
       {
         "pred_id": "p_3",
         "gt_id": "gt_5",
-        "reasoning": "Same anatomic + pathologic finding (right basal ganglia lacunar infarct)."
+        "reasoning": "Same right basal ganglia lacunar infarct."
       }
     ],
     "unmatched_pred": [],

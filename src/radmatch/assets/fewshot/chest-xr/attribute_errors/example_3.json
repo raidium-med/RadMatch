@@ -16,7 +16,7 @@
       },
       {
         "pair_id": 3,
-        "pred_finding": {"finding_id": "p_3", "text": "A 6 mm pulmonary nodule in the peripheral right upper lobe has slightly increased compared to the preceding radiograph.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": "right", "comparison": "worsening", "measurements": [{"value": 6, "unit": "mm", "category": "size"}]},
+        "pred_finding": {"finding_id": "p_3", "text": "A 6 mm pulmonary nodule in the peripheral right upper lobe has slightly increased compared to the preceding radiograph.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "right", "comparison": "worsening", "measurements": [{"value": 6, "unit": "mm", "category": "size"}]},
         "gt_finding":   {"finding_id": "gt_4", "text": "A 4 mm pulmonary nodule in the peripheral right upper lobe, unchanged from the preceding radiograph, is one of several pulmonary nodules shown on recent CT and not appreciated by radiography.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": null, "comparison": "stable", "measurements": [{"value": 4, "unit": "mm", "category": "size"}]}
       },
       {
@@ -31,8 +31,8 @@
       {"pair_id": 1, "errors": []},
       {"pair_id": 2, "errors": []},
       {"pair_id": 3, "errors": [
-        {"dimension": "measurement", "severity": "major", "reasoning": "6 mm vs 4 mm crosses the 6 mm Fleischner threshold"},
-        {"dimension": "extent", "severity": "major", "reasoning": "pred describes one nodule, gt several on CT"}
+        {"dimension": "measurement", "reasoning": "6 vs 4 mm nodule, across the 6 mm Fleischner threshold; adds a follow-up CT", "severity": "major"},
+        {"dimension": "extent", "reasoning": "one nodule vs one of several nodules on CT; multiple nodules change the follow-up and differential", "severity": "major"}
       ]},
       {"pair_id": 4, "errors": []}
     ]

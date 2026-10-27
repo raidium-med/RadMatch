@@ -35,7 +35,7 @@
     "laterality": "left",
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "urgent"
+    "clinical_significance": "notable"
   },
   {
     "text": "9 mm left lower lobe nodule with smooth margins.",
@@ -49,7 +49,7 @@
     "laterality": "left",
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "urgent"
+    "clinical_significance": "notable"
   },
   {
     "text": "Small 3.5 mm left lower lobe nodule with smooth margins.",
@@ -91,7 +91,7 @@
     "laterality": "right",
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "urgent"
+    "clinical_significance": "notable"
   },
   {
     "text": "Small right pleural effusion.",
@@ -113,7 +113,7 @@
     "laterality": "right",
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "urgent"
+    "clinical_significance": "notable"
   },
   {
     "text": "Subcentimeter left interbronchial lymph node.",
@@ -148,7 +148,15 @@
     "clinical_significance": "notable"
   },
   {
-    "text": "No signs of mural hematoma or dissection.",
+    "text": "No signs of aortic mural hematoma.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No signs of aortic dissection.",
     "measurements": [],
     "laterality": null,
     "comparison": null,
@@ -180,11 +188,19 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "Hepatic dysmorphism without signs of portal hypertension.",
+    "text": "Hepatic dysmorphism.",
     "measurements": [],
     "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
+  },
+  {
+    "text": "No signs of portal hypertension.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
   }
 ]

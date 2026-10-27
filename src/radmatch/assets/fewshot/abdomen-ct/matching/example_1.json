@@ -136,7 +136,7 @@
       {
         "pred_id": "p_2",
         "gt_id": "gt_2",
-        "reasoning": "Same finding (bilateral renal hypodense lesions, characterized as cysts); descriptors differ slightly but anatomy + pathology entity match."
+        "reasoning": "Same bilateral renal hypodense lesions, likely cysts in both reports."
       },
       {
         "pred_id": "p_3",
@@ -146,12 +146,12 @@
       {
         "pred_id": "p_4",
         "gt_id": "gt_4",
-        "reasoning": "Same three 12 mm mesenteric lymph nodes; only the comparison differs."
+        "reasoning": "Same three mesenteric lymph nodes up to 12 mm."
       },
       {
         "pred_id": "p_5",
         "gt_id": "gt_5",
-        "reasoning": "Same finding (portal vein luminal narrowing at the porta hepatis); pred reports a range, gt reports a single value."
+        "reasoning": "Same portal vein narrowing at the porta hepatis."
       }
     ],
     "unmatched_pred": [],

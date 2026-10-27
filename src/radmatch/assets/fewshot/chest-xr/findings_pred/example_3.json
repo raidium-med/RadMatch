@@ -35,7 +35,7 @@
     "laterality": "right",
     "comparison": "worsening",
     "clinical_status": "abnormal",
-    "clinical_significance": "urgent"
+    "clinical_significance": "notable"
   },
   {
     "text": "Cardiac silhouette is normal in size.",
@@ -46,9 +46,17 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "Mediastinal and hilar contours are within normal limits.",
+    "text": "Mediastinal contours are within normal limits.",
     "measurements": [],
     "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Hilar contours are within normal limits.",
+    "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"

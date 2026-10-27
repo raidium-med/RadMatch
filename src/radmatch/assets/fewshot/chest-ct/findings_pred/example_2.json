@@ -48,7 +48,23 @@
     "clinical_significance": "notable"
   },
   {
-    "text": "Thyroid gland, trachea, and esophagus demonstrate no significant findings.",
+    "text": "Thyroid gland demonstrates no significant findings.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Trachea demonstrates no significant findings.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Esophagus demonstrates no significant findings.",
     "measurements": [],
     "laterality": null,
     "comparison": null,
@@ -65,16 +81,6 @@
       },
       {
         "value": 1.6,
-        "unit": "cm",
-        "category": "size"
-      },
-      {
-        "value": 2.3,
-        "unit": "cm",
-        "category": "size"
-      },
-      {
-        "value": 1.5,
         "unit": "cm",
         "category": "size"
       }
@@ -96,16 +102,6 @@
         "value": 0.9,
         "unit": "cm",
         "category": "size"
-      },
-      {
-        "value": 0.4,
-        "unit": "cm",
-        "category": "size"
-      },
-      {
-        "value": 0.4,
-        "unit": "cm",
-        "category": "size"
       }
     ],
     "laterality": "right",
@@ -125,7 +121,7 @@
     "text": "Small left-sided pleural effusion.",
     "measurements": [],
     "laterality": "left",
-    "comparison": "new",
+    "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
   },
@@ -159,10 +155,26 @@
     "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "No gallstones.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
     "clinical_significance": "routine"
   },
   {
-    "text": "No gallstones, gallbladder wall thickening, or biliary dilatation.",
+    "text": "No gallbladder wall thickening.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No biliary dilatation.",
     "measurements": [],
     "laterality": null,
     "comparison": null,
@@ -171,6 +183,22 @@
   },
   {
     "text": "Pancreas unremarkable.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No pancreatic ductal dilatation.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No peripancreatic inflammatory changes.",
     "measurements": [],
     "laterality": null,
     "comparison": null,
@@ -194,9 +222,33 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "Kidneys normal without renal calculi, solid lesion, or hydronephrosis.",
+    "text": "Kidneys normal.",
     "measurements": [],
     "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No renal calculi.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No solid renal lesion.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No hydronephrosis.",
+    "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -226,6 +278,30 @@
     "clinical_significance": "routine"
   },
   {
+    "text": "No evidence of bowel wall thickening.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No evidence of bowel distention.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No evidence of bowel inflammatory changes.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
     "text": "Interval enlargement of multiple retroperitoneal and aortocaval lymph nodes, largest left retroperitoneal node measuring 2.4 x 1.7 cm, previously 2.0 x 1.2 cm.",
     "measurements": [
       {
@@ -235,16 +311,6 @@
       },
       {
         "value": 1.7,
-        "unit": "cm",
-        "category": "size"
-      },
-      {
-        "value": 2.0,
-        "unit": "cm",
-        "category": "size"
-      },
-      {
-        "value": 1.2,
         "unit": "cm",
         "category": "size"
       }
@@ -266,16 +332,6 @@
         "value": 0.8,
         "unit": "cm",
         "category": "size"
-      },
-      {
-        "value": 2.2,
-        "unit": "cm",
-        "category": "size"
-      },
-      {
-        "value": 1.4,
-        "unit": "cm",
-        "category": "size"
       }
     ],
     "laterality": "left",
@@ -289,7 +345,7 @@
     "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "routine"
+    "clinical_significance": "notable"
   },
   {
     "text": "Low midline ventral hernia containing multiple loops of nonobstructed small bowel.",
@@ -319,8 +375,8 @@
     "text": "Mixed response to treatment.",
     "measurements": [],
     "laterality": null,
-    "comparison": null,
+    "comparison": "worsening",
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "urgent"
   }
 ]

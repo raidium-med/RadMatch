@@ -152,7 +152,7 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Same right apical lucency read as a bulla vs a pneumothorax: two readings of one abnormality."
+        "reasoning": "One right apical lucency, read as a bulla vs a pneumothorax."
       },
       {
         "pred_id": "p_2",
@@ -162,7 +162,7 @@
       {
         "pred_id": "p_3",
         "gt_id": "gt_3",
-        "reasoning": "A small non-enlarged node is below the threshold of 'no lymphadenopathy': one nodal assessment."
+        "reasoning": "A non-enlarged subcarinal node lies below 'no mediastinal lymphadenopathy'."
       },
       {
         "pred_id": "p_4",
@@ -172,17 +172,17 @@
       {
         "pred_id": "p_5",
         "gt_id": "gt_5",
-        "reasoning": "Both describe the right lower lobectomy; staple line and volume loss are its expected appearance."
+        "reasoning": "Same right lower lobectomy, the staple line and volume loss being its expected appearance."
       },
       {
         "pred_id": "p_6",
         "gt_id": "gt_6",
-        "reasoning": "One pleural effusion assessment: denied vs present."
+        "reasoning": "One pleural effusion assessment, denied vs present."
       },
       {
         "pred_id": "p_8",
         "gt_id": "gt_8",
-        "reasoning": "Same lower lobe ground-glass opacity; pred extends it to the left lung."
+        "reasoning": "Same lower lobe ground-glass opacity, extended to the left lung in pred."
       }
     ],
     "unmatched_pred": [

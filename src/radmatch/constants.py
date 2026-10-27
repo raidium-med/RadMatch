@@ -154,6 +154,8 @@ ATTRIBUTE_ERROR_SEVERITIES: tuple[str, ...] = ("major", "minor")
 ATTRIBUTE_DIMENSIONS_LLM: tuple[str, ...] = ("site", "extent", "severity", "character", "diagnosis", "certainty")
 # Keep in sync with `assets/prompts/prompt_attribute_errors.md`; anything else the
 # judge emits is dropped by `inference._normalize_llm_error`.
+# The finding fields Stage 2 sees (sizes and changes are in the text; significance does not decide a match).
+MATCHING_FINDING_FIELDS: tuple[str, ...] = ("finding_id", "text", "clinical_status", "laterality")
 ATTRIBUTE_DIMENSIONS_LLM_ACCEPTED: tuple[str, ...] = (*ATTRIBUTE_DIMENSIONS_LLM, "comparison", "measurement")
 # In the order the dimensions are shown everywhere (outputs, dashboard).
 ATTRIBUTE_DIMENSIONS_ALL: tuple[str, ...] = (

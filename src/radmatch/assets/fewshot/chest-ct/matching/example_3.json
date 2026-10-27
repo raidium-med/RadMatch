@@ -70,12 +70,12 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "GT names pathology (pulmonary nodules) + bilateral anatomy; covers the RUL atom."
+        "reasoning": "The bilateral pulmonary nodules of gt include this right upper lobe nodule."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_1",
-        "reasoning": "Same umbrella covers the LLL atom — second row, same gt_id."
+        "reasoning": "The bilateral pulmonary nodules of gt also include this left lower lobe nodule."
       },
       {
         "pred_id": "p_3",

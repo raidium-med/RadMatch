@@ -32,7 +32,15 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "No spontaneous density abnormality in the brainstem or cerebellum.",
+    "text": "No spontaneous density abnormality in the brainstem.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No spontaneous density abnormality in the cerebellum.",
     "measurements": [],
     "laterality": null,
     "comparison": null,

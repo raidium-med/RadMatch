@@ -68,17 +68,17 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Lungs ⊃ right lung; 'clear' entails 'no consolidation'."
+        "reasoning": "Clear lungs deny consolidation in the right lung."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_2",
-        "reasoning": "Same parent-anatomy claim covers the left lung atom — second row, same pred_id."
+        "reasoning": "Clear lungs also deny consolidation in the left lung."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_3",
-        "reasoning": "Cardiomediastinal silhouette normal statement matches cardiac silhouette WNL."
+        "reasoning": "Both state the cardiac silhouette is normal."
       },
       {
         "pred_id": "p_3",

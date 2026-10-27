@@ -10,7 +10,7 @@
           "finding_id": "p_1",
           "text": "Large bulla at the right lung apex.",
           "clinical_status": "abnormal",
-          "clinical_significance": "urgent",
+          "clinical_significance": "notable",
           "laterality": "right",
           "comparison": null,
           "measurements": []
@@ -118,8 +118,8 @@
         "errors": [
           {
             "dimension": "diagnosis",
-            "severity": "major",
-            "reasoning": "pred calls the right apical lucency a bulla, gt a pneumothorax: a different diagnosis for the same abnormality, with different management"
+            "reasoning": "bulla vs pneumothorax for the same apical lucency; a pneumothorax may need a chest tube",
+            "severity": "major"
           }
         ]
       },

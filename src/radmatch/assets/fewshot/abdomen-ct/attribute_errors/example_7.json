@@ -298,8 +298,8 @@
         "errors": [
           {
             "dimension": "severity",
-            "severity": "major",
-            "reasoning": "pred leaves out the moderate grade gt gives"
+            "reasoning": "pred leaves out the moderate grade of the left hydronephrosis; the grade weighs how urgently it is decompressed",
+            "severity": "major"
           }
         ]
       },
@@ -308,8 +308,8 @@
         "errors": [
           {
             "dimension": "measurement",
-            "severity": "major",
-            "reasoning": "pred leaves out the 1.4 cm size"
+            "reasoning": "pred leaves out the 1.4 cm size of an adrenal nodule; over 1 cm calls for workup",
+            "severity": "major"
           }
         ]
       },
@@ -318,13 +318,13 @@
         "errors": [
           {
             "dimension": "site",
-            "severity": "major",
-            "reasoning": "pred names no site; gt gives the splenic upper pole"
+            "reasoning": "pred names no site for the 8 mm hypodensity in the splenic upper pole; a follow-up cannot locate it",
+            "severity": "major"
           },
           {
             "dimension": "measurement",
-            "severity": "major",
-            "reasoning": "pred leaves out the 8 mm size"
+            "reasoning": "pred leaves out the 8 mm size of the splenic hypodensity; its size is what a follow-up compares",
+            "severity": "major"
           }
         ]
       },
@@ -333,13 +333,13 @@
         "errors": [
           {
             "dimension": "site",
-            "severity": "major",
-            "reasoning": "pred names no site; gt gives the splenic hilum"
+            "reasoning": "pred names no site for the 5 mm hypodensity near the splenic hilum; a follow-up cannot locate it",
+            "severity": "major"
           },
           {
             "dimension": "measurement",
-            "severity": "major",
-            "reasoning": "pred leaves out the 5 mm size"
+            "reasoning": "pred leaves out the 5 mm size of the splenic hypodensity; its size is what a follow-up compares",
+            "severity": "major"
           }
         ]
       },
@@ -356,8 +356,8 @@
         "errors": [
           {
             "dimension": "character",
-            "severity": "major",
-            "reasoning": "pred gives only the density (hypodense), gt gives a cystic composition: cystic vs solid pancreatic lesion"
+            "reasoning": "hypodense vs cystic pancreatic tail lesion; cystic vs solid changes the workup",
+            "severity": "major"
           }
         ]
       },
@@ -366,8 +366,8 @@
         "errors": [
           {
             "dimension": "measurement",
-            "severity": "minor",
-            "reasoning": "pred leaves out the size of a simple renal cyst"
+            "reasoning": "pred leaves out the 2.4 cm size of a simple renal cyst; its size changes nothing",
+            "severity": "minor"
           }
         ]
       },
@@ -384,8 +384,8 @@
         "errors": [
           {
             "dimension": "severity",
-            "severity": "minor",
-            "reasoning": "large vs moderate, one step"
+            "reasoning": "large vs moderate hiatal hernia; one step, same management",
+            "severity": "minor"
           }
         ]
       },

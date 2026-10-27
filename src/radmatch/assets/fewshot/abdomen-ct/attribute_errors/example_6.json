@@ -205,8 +205,8 @@
     "errors": [
      {
       "dimension": "extent",
-      "severity": "major",
-      "reasoning": "pred invents a closed loop and transition point: surgical urgency"
+      "reasoning": "pred adds a closed loop and a transition point; a closed loop calls for urgent surgery",
+      "severity": "major"
      }
     ]
    },
@@ -215,8 +215,8 @@
     "errors": [
      {
       "dimension": "extent",
-      "severity": "major",
-      "reasoning": "solitary vs multiple metastases: resection or ablation candidacy"
+      "reasoning": "solitary vs multiple liver metastases; decides resection or ablation vs systemic therapy",
+      "severity": "major"
      }
     ]
    },
@@ -225,8 +225,8 @@
     "errors": [
      {
       "dimension": "extent",
-      "severity": "major",
-      "reasoning": "SMA abutment vs encasement: resectable vs locally advanced"
+      "reasoning": "SMA abutment vs encasement; resectable vs locally advanced pancreatic cancer",
+      "severity": "major"
      }
     ]
    },
@@ -235,8 +235,8 @@
     "errors": [
      {
       "dimension": "diagnosis",
-      "severity": "major",
-      "reasoning": "acute vs chronic fracture"
+      "reasoning": "acute vs chronic L1 compression fracture; an acute fracture needs treatment, a chronic one does not",
+      "severity": "major"
      }
     ]
    },
@@ -249,8 +249,8 @@
     "errors": [
      {
       "dimension": "character",
-      "severity": "major",
-      "reasoning": "gas in a collection raises infection or leak"
+      "reasoning": "gas vs no gas in a gallbladder fossa collection; gas suggests infection or a leak and may need drainage",
+      "severity": "major"
      }
     ]
    },
@@ -259,8 +259,8 @@
     "errors": [
      {
       "dimension": "extent",
-      "severity": "minor",
-      "reasoning": "predominant segment of uncomplicated diverticulosis"
+      "reasoning": "sigmoid vs descending colon predominance of uncomplicated diverticulosis; same management",
+      "severity": "minor"
      }
     ]
    },

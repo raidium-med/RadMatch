@@ -1,6 +1,6 @@
 {
   "scenario": "Constructed: certainty, added diagnosis, structured category",
-  "description": "Constructed. Hedging a definite fracture, or a negative that answers the work-up ('possibly no pulmonary embolism'), is a major certainty error; turning nodes called reactive into nodes suspicious for metastases is a major diagnosis error (an added actionable diagnosis), and leaving out the gt 'mildly' grade a major severity error; a Lung-RADS class change across management buckets is a major severity error; one certainty step is minor; a subtype the pred leaves out is a minor diagnosis error (not actionable).",
+  "description": "Constructed. Hedging a definite fracture, or a definite negative ('possibly no pulmonary embolism' vs 'no pulmonary embolism'), is two certainty steps, a major certainty error; turning nodes called reactive into nodes suspicious for metastases is a major diagnosis error (an added actionable diagnosis), and leaving out the gt 'mildly' grade a major severity error; a Lung-RADS class change across management buckets is a major severity error; one certainty step is minor; a subtype the pred leaves out is a minor diagnosis error (not actionable).",
   "user": {
     "series_uuid": "chest-ct_example_5",
     "pairs": [
@@ -31,7 +31,7 @@
           "finding_id": "p_2",
           "text": "Possibly no pulmonary embolism.",
           "clinical_status": "normal",
-          "clinical_significance": "critical",
+          "clinical_significance": "routine",
           "laterality": null,
           "comparison": null,
           "measurements": []
@@ -40,7 +40,7 @@
           "finding_id": "gt_2",
           "text": "No pulmonary embolism.",
           "clinical_status": "normal",
-          "clinical_significance": "critical",
+          "clinical_significance": "routine",
           "laterality": null,
           "comparison": null,
           "measurements": []
@@ -151,8 +151,8 @@
         "errors": [
           {
             "dimension": "certainty",
-            "severity": "major",
-            "reasoning": "pred hedges a definite fracture as possible"
+            "reasoning": "possible vs definite right 6th rib fracture, two steps; a possible fracture is sent for more imaging",
+            "severity": "major"
           }
         ]
       },
@@ -161,8 +161,8 @@
         "errors": [
           {
             "dimension": "certainty",
-            "severity": "major",
-            "reasoning": "pred hedges the negative that answers the PE work-up"
+            "reasoning": "possibly vs definitely no pulmonary embolism, two steps; a hedged negative leaves an embolism to rule out",
+            "severity": "major"
           }
         ]
       },
@@ -171,13 +171,13 @@
         "errors": [
           {
             "dimension": "diagnosis",
-            "severity": "major",
-            "reasoning": "pred adds a malignant interpretation to nodes gt calls reactive"
+            "reasoning": "suspicious for metastases vs likely reactive nodes; adds an oncologic workup",
+            "severity": "major"
           },
           {
             "dimension": "severity",
-            "severity": "major",
-            "reasoning": "pred leaves out the mildly grade"
+            "reasoning": "pred leaves out the mild grade of the node enlargement; the grade weighs reactive vs malignant nodes",
+            "severity": "major"
           }
         ]
       },
@@ -186,8 +186,8 @@
         "errors": [
           {
             "dimension": "severity",
-            "severity": "major",
-            "reasoning": "Lung-RADS 4A (3-month low-dose CT) vs 3 (6-month low-dose CT)"
+            "reasoning": "Lung-RADS 4A vs 3; 3-month vs 6-month low-dose CT",
+            "severity": "major"
           }
         ]
       },
@@ -196,8 +196,8 @@
         "errors": [
           {
             "dimension": "certainty",
-            "severity": "minor",
-            "reasoning": "one step: probable vs definite"
+            "reasoning": "probable vs definite right lower lobe pneumonia; one step, same treatment",
+            "severity": "minor"
           }
         ]
       },
@@ -206,8 +206,8 @@
         "errors": [
           {
             "dimension": "diagnosis",
-            "severity": "minor",
-            "reasoning": "pred leaves out the centrilobular subtype: not actionable"
+            "reasoning": "pred leaves out the centrilobular subtype of emphysema; same management",
+            "severity": "minor"
           }
         ]
       }

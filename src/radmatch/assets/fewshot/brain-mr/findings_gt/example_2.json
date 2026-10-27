@@ -16,7 +16,7 @@
     "laterality": "left",
     "comparison": "worsening",
     "clinical_status": "abnormal",
-    "clinical_significance": "critical"
+    "clinical_significance": "urgent"
   },
   {
     "text": "Cerebellar metastases that enhanced on the previous examination have disappeared or transformed into cystic focal areas.",
@@ -146,7 +146,7 @@
     "laterality": null,
     "comparison": "worsening",
     "clinical_status": "abnormal",
-    "clinical_significance": "critical"
+    "clinical_significance": "urgent"
   },
   {
     "text": "Bone metastases in the clivus, cervical vertebrae, and bilateral mandibular condyles.",

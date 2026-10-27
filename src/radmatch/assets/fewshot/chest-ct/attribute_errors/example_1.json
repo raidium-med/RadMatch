@@ -30,10 +30,10 @@
     "errors_per_pair": [
       {"pair_id": 1, "errors": []},
       {"pair_id": 2, "errors": [
-        {"dimension": "severity", "severity": "minor", "reasoning": "moderate vs severe, one step"}
+        {"dimension": "severity", "reasoning": "moderate vs severe coronary calcification; one step, same management", "severity": "minor"}
       ]},
       {"pair_id": 3, "errors": [
-        {"dimension": "measurement", "severity": "major", "reasoning": "4.1 vs 3.6 cm crosses the 4 cm thoracic aorta threshold"}
+        {"dimension": "measurement", "reasoning": "4.1 vs 3.6 cm aortic arch, across the 4 cm threshold; dilated vs normal changes surveillance", "severity": "major"}
       ]},
       {"pair_id": 4, "errors": []}
     ]

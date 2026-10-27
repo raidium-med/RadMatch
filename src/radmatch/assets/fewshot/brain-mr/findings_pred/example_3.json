@@ -1,6 +1,14 @@
 [
   {
-    "text": "Medulla oblongata, pons, midbrain, both cerebellar hemispheres and vermis, cerebellar folia are normal.",
+    "text": "Medulla oblongata, pons and midbrain are normal.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Both cerebellar hemispheres, the vermis and the cerebellar folia are normal.",
     "measurements": [],
     "laterality": "bilateral",
     "comparison": null,
@@ -67,7 +75,7 @@
     "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "critical"
+    "clinical_significance": "routine"
   },
   {
     "text": "No space-occupying lesion detected in the cerebral parenchyma.",
@@ -102,9 +110,41 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "Cranium bone structures, both globes, retrobulbar fat tissue, optic nerves, and optic chiasm are normal.",
+    "text": "Cranium bone structures are normal.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Both globes are normal.",
     "measurements": [],
     "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Retrobulbar fat tissue is normal.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Optic nerves are normal.",
+    "measurements": [],
+    "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Optic chiasm is normal.",
+    "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"

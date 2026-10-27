@@ -190,7 +190,7 @@
           "finding_id": "gt_9",
           "text": "Large-volume ascites.",
           "clinical_status": "abnormal",
-          "clinical_significance": "notable",
+          "clinical_significance": "urgent",
           "laterality": null,
           "comparison": null,
           "measurements": []
@@ -213,8 +213,8 @@
         "errors": [
           {
             "dimension": "diagnosis",
-            "severity": "minor",
-            "reasoning": "pred gives only the density (hypodense) for a hepatic cyst: not actionable"
+            "reasoning": "hypodense lesion vs segment 4 hepatic cyst; a cyst needs no action, same management",
+            "severity": "minor"
           }
         ]
       },
@@ -223,8 +223,8 @@
         "errors": [
           {
             "dimension": "diagnosis",
-            "severity": "major",
-            "reasoning": "pred reports uncomplicated diverticulosis, gt diverticulitis: a different diagnosis that misses the acute inflammation"
+            "reasoning": "diverticulosis vs diverticulitis; pred misses an acute inflammation that needs treatment",
+            "severity": "major"
           }
         ]
       },
@@ -245,8 +245,8 @@
         "errors": [
           {
             "dimension": "severity",
-            "severity": "major",
-            "reasoning": "pred says a small amount, gt large-volume ascites: grades two steps apart (paracentesis)"
+            "reasoning": "small vs large-volume ascites, two steps; large ascites may need paracentesis",
+            "severity": "major"
           }
         ]
       }

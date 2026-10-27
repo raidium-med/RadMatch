@@ -1,14 +1,6 @@
 [
   {
-    "text": "Small right-sided pleural effusion.",
-    "measurements": [],
-    "laterality": "right",
-    "comparison": null,
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
-  },
-  {
-    "text": "Minimal atelectasis in the right lower lobe.",
+    "text": "Small right-sided pleural effusion with minimal atelectasis in the right lower lobe.",
     "measurements": [],
     "laterality": "right",
     "comparison": null,
@@ -50,8 +42,8 @@
     ],
     "laterality": null,
     "comparison": null,
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
   },
   {
     "text": "Spleen is normal.",
@@ -94,7 +86,7 @@
   {
     "text": "Symmetric nephrograms with normal contrast excretion.",
     "measurements": [],
-    "laterality": null,
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -161,8 +153,8 @@
     "measurements": [],
     "laterality": null,
     "comparison": null,
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
   },
   {
     "text": "No evidence of retroperitoneal hematoma.",
@@ -185,8 +177,8 @@
     "measurements": [],
     "laterality": null,
     "comparison": null,
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
   },
   {
     "text": "Intrauterine device present.",
@@ -237,7 +229,7 @@
     "clinical_significance": "notable"
   },
   {
-    "text": "Left adductor intramuscular hematoma measuring 7 x 4.7 cm (decreased from 9 x 5 cm on prior exam) with a small 6 mm central focus of hyperdensity on early-phase imaging that did not persist on delayed imaging.",
+    "text": "Left adductor intramuscular hematoma measuring 7 x 4.7 cm (decreased from 9 x 5 cm on prior exam) with a small 6 mm central focus of hyperdensity on early-phase imaging that did not persist on delayed imaging: slow active bleeding versus pseudoaneurysm.",
     "measurements": [
       {
         "value": 7,
@@ -250,16 +242,6 @@
         "category": "size"
       },
       {
-        "value": 9,
-        "unit": "cm",
-        "category": "size"
-      },
-      {
-        "value": 5,
-        "unit": "cm",
-        "category": "size"
-      },
-      {
         "value": 6,
         "unit": "mm",
         "category": "size"
@@ -267,14 +249,6 @@
     ],
     "laterality": "left",
     "comparison": "improving",
-    "clinical_status": "abnormal",
-    "clinical_significance": "urgent"
-  },
-  {
-    "text": "Small focus of slow, active bleeding which did not continue on delays, versus pseudoaneurysm.",
-    "measurements": [],
-    "laterality": "left",
-    "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
   }

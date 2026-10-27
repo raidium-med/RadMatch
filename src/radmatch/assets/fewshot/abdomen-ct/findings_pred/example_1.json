@@ -206,20 +206,12 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "Inguinal lymph nodes are prominent, but not enlarged by size criteria.",
+    "text": "Inguinal and left paraaortic lymph nodes are prominent, but not enlarged by size criteria.",
     "measurements": [],
     "laterality": null,
     "comparison": null,
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
-  },
-  {
-    "text": "Left paraaortic lymph nodes are prominent, but not enlarged by size criteria.",
-    "measurements": [],
-    "laterality": "left",
-    "comparison": null,
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
   },
   {
     "text": "Three mesenteric lymph nodes measuring up to 12 mm, worsening compared to prior CT.",
@@ -238,7 +230,7 @@
     "laterality": null,
     "comparison": "worsening",
     "clinical_status": "abnormal",
-    "clinical_significance": "urgent"
+    "clinical_significance": "notable"
   },
   {
     "text": "Abdominal wall normal.",
@@ -249,20 +241,12 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "Degenerative changes of the lower thoracic spine, stable compared to prior imaging.",
+    "text": "Degenerative changes of the lower thoracic and lumbar spine, stable compared to prior imaging.",
     "measurements": [],
     "laterality": null,
     "comparison": "stable",
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
-  },
-  {
-    "text": "Degenerative changes of the lumbar spine, stable compared to prior imaging.",
-    "measurements": [],
-    "laterality": null,
-    "comparison": "stable",
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Portal vein shows approximately 50-60% narrowing at the porta hepatis.",

@@ -70,12 +70,12 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "GT umbrella names pathology (simple cysts) + parent anatomy (bilateral renal); covers the right-kidney atom."
+        "reasoning": "The bilateral renal cysts of gt include this right renal cyst."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_1",
-        "reasoning": "Same GT umbrella also covers the left-kidney cyst atom — second row, same gt_id."
+        "reasoning": "The bilateral renal cysts of gt also include this left renal cyst."
       },
       {
         "pred_id": "p_3",

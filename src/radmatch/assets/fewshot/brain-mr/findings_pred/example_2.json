@@ -16,7 +16,7 @@
     "laterality": "left",
     "comparison": "worsening",
     "clinical_status": "abnormal",
-    "clinical_significance": "critical"
+    "clinical_significance": "urgent"
   },
   {
     "text": "Cerebellar metastases that enhanced on the previous examination have disappeared or transformed into cystic focal areas.",
@@ -32,7 +32,7 @@
     "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "routine"
+    "clinical_significance": "notable"
   },
   {
     "text": "New metastasis measuring 17 mm in diameter in the right putamen with extensive perilesional edema.",
@@ -140,6 +140,6 @@
     "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "routine"
+    "clinical_significance": "notable"
   }
 ]

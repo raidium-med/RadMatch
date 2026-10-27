@@ -52,12 +52,12 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "GT names pathology (T2 hyperintensity) + parent anatomy (bilateral periventricular WM); covers the right-side atom."
+        "reasoning": "The bilateral periventricular hyperintensities of gt include the right side."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_1",
-        "reasoning": "Same umbrella covers the left-side atom — second row, same gt_id."
+        "reasoning": "The bilateral periventricular hyperintensities of gt also include the left side."
       },
       {
         "pred_id": "p_3",

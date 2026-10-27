@@ -127,7 +127,7 @@
       {
         "pred_id": "p_2",
         "gt_id": "gt_2",
-        "reasoning": "low-density shadow and cyst: two readings of the left renal lesion"
+        "reasoning": "low-density shadow and cyst are two readings of the left renal lesion"
       },
       {
         "pred_id": "p_3",

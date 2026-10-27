@@ -14,11 +14,6 @@
         "value": 8,
         "unit": "mm",
         "category": "size"
-      },
-      {
-        "value": 6,
-        "unit": "mm",
-        "category": "size"
       }
     ],
     "laterality": null,

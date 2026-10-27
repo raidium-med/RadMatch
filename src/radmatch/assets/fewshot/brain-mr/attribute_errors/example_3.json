@@ -24,8 +24,8 @@
   "assistant": {
     "errors_per_pair": [
       {"pair_id": 1, "errors": [
-        {"dimension": "site", "severity": "major", "reasoning": "Pred places the falx calcification in the parietal region, gt in the frontal region — different sub-anatomic location for the same lesion at the same midline structure."},
-        {"dimension": "measurement", "severity": "major", "reasoning": "14 vs 11 mm: more than 20 % and 3 mm"}
+        {"dimension": "site", "reasoning": "parietal vs frontal region for the falx calcification; points the reader to another region", "severity": "major"},
+        {"dimension": "measurement", "reasoning": "14 vs 11 mm, more than 20 % and 3 mm apart; another size for the lesion a follow-up would compare", "severity": "major"}
       ]},
       {"pair_id": 2, "errors": []},
       {"pair_id": 3, "errors": []}

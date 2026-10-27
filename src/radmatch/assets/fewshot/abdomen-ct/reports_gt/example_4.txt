@@ -2,6 +2,7 @@ FINDINGS:
 Lung bases: Calcified atherosclerotic plaque in the aorta and coronary arteries.
 Liver: Liver transplant. Hepatic vasculature patent.
 Spleen: Upper limit of normal in size, 12.8 cm.
-Kidneys: Retroaortic left renal vein.
+Kidneys: Retroaortic left renal vein. Simple renal cysts, the largest 1.8 cm. Moderate left hydronephrosis with an enlarged kidney and thinning of the renal cortex, from a stricture of the proximal left ureter.
 Bladder: Urinary catheter in place, with gas in the bladder.
 Bowel: Oral contrast in the colon. Trace free fluid in the pelvis.
+Pelvis: Punctate calcifications in the pelvic floor, along the rectum and in the sigmoid mesocolon, likely phleboliths.

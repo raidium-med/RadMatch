@@ -10,7 +10,7 @@
           "finding_id": "p_1",
           "text": "Enlarged mediastinal lymph nodes.",
           "clinical_status": "abnormal",
-          "clinical_significance": "urgent",
+          "clinical_significance": "notable",
           "laterality": null,
           "comparison": null,
           "measurements": []
@@ -19,7 +19,7 @@
           "finding_id": "gt_1",
           "text": "12 mm right paratracheal lymph node.",
           "clinical_status": "abnormal",
-          "clinical_significance": "urgent",
+          "clinical_significance": "notable",
           "laterality": "right",
           "comparison": null,
           "measurements": [
@@ -40,7 +40,7 @@
           "finding_id": "p_1",
           "text": "Enlarged mediastinal lymph nodes.",
           "clinical_status": "abnormal",
-          "clinical_significance": "urgent",
+          "clinical_significance": "notable",
           "laterality": null,
           "comparison": null,
           "measurements": []
@@ -49,7 +49,7 @@
           "finding_id": "gt_2",
           "text": "15 mm subcarinal lymph node.",
           "clinical_status": "abnormal",
-          "clinical_significance": "urgent",
+          "clinical_significance": "notable",
           "laterality": null,
           "comparison": null,
           "measurements": [
@@ -271,8 +271,8 @@
         "errors": [
           {
             "dimension": "site",
-            "severity": "major",
-            "reasoning": "pred names no station; gt gives the paratracheal station"
+            "reasoning": "pred names no station for the 12 mm right paratracheal node; nodes are followed and sampled by station",
+            "severity": "major"
           }
         ]
       },
@@ -281,8 +281,8 @@
         "errors": [
           {
             "dimension": "site",
-            "severity": "major",
-            "reasoning": "pred names no station; gt gives the subcarinal station"
+            "reasoning": "pred names no station for the 15 mm subcarinal node; nodes are followed and sampled by station",
+            "severity": "major"
           }
         ]
       },
@@ -291,13 +291,13 @@
         "errors": [
           {
             "dimension": "site",
-            "severity": "major",
-            "reasoning": "pred leaves out the left lower lobe gt gives"
+            "reasoning": "left lung vs left lower lobe bronchiectasis; pred leaves out the lobe that follow-up compares",
+            "severity": "major"
           },
           {
             "dimension": "diagnosis",
-            "severity": "minor",
-            "reasoning": "pred leaves out the cylindrical subtype: not actionable"
+            "reasoning": "pred leaves out the cylindrical subtype of bronchiectasis; same management",
+            "severity": "minor"
           }
         ]
       },
@@ -326,8 +326,8 @@
         "errors": [
           {
             "dimension": "comparison",
-            "severity": "major",
-            "reasoning": "pred states growth gt does not give, on a mass"
+            "reasoning": "pred adds growth of a right upper lobe mass the gt does not give; growth changes staging and treatment",
+            "severity": "major"
           }
         ]
       },

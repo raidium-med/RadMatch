@@ -104,22 +104,22 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Same finding entity (minimal cylindrical bronchiectasis at the lung apex). Pred says left apex, gt says right apex: a side error, scored from the findings' laterality."
+        "reasoning": "Same minimal apical bronchiectasis, placed on opposite sides."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_2",
-        "reasoning": "Same entity (heart size), stated enlarged vs not enlarged."
+        "reasoning": "One heart size assessment, enlarged vs not enlarged."
       },
       {
         "pred_id": "p_3",
         "gt_id": "gt_3",
-        "reasoning": "Same finding entity (coronary artery calcifications); severity descriptors differ (moderate vs severe)."
+        "reasoning": "Same coronary artery calcifications, graded moderate vs severe."
       },
       {
         "pred_id": "p_4",
         "gt_id": "gt_4",
-        "reasoning": "Same finding entity (mild widening of the anterior aortic arch); measurements differ (4.1 cm vs 3.6 cm)."
+        "reasoning": "Same widening of the anterior aortic arch, measured 4.1 vs 3.6 cm."
       },
       {
         "pred_id": "p_5",

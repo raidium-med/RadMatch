@@ -84,12 +84,12 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Pred posterior-fossa umbrella covers the medulla, pons and mesencephalon."
+        "reasoning": "Pred's brainstem-and-cerebellum statement covers the medulla, pons and mesencephalon."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_2",
-        "reasoning": "Same posterior-fossa umbrella covers the cerebellar hemispheres and vermis."
+        "reasoning": "The same statement also covers the cerebellar hemispheres and vermis."
       },
       {
         "pred_id": "p_2",
