@@ -7,7 +7,7 @@
 
 **RadMatch** is an LLM-based evaluation framework for radiology report generation. It extracts atomic findings from each report, matches predictions to ground truth on **clinical equivalence**, and characterizes every error across **ten clinical attribute dimensions** — so a discrepancy is reported as a laterality flip, a severity change or a missed measurement rather than an undifferentiated penalty. From these it reports the **count of errors on clinically relevant findings**, split into missed and unsupported findings, alongside **safety recall and precision**, at three significance tiers.
 
-The headline score is **aER**, the actionable errors per report (`tiers.actionable.errors_per_report`): the mean per-report count of errors involving non-routine findings, split as aER = aFN + aFP into reference findings missed or contradicted and claims the reference does not support. **Lower is better.**
+The headline score is **aER**, the actionable errors per report (`tiers.actionable.errors_per_report`): the mean per-report count of errors involving non-routine findings, split as aER = aFN + aFP into reference findings missed or contradicted and claims the reference does not support. **Lower is better.** To compare with total error counts (significant and insignificant), use **allER** (`tiers.all`), the same count on findings of every significance.
 
 **Every step is written to disk:** the findings extracted from each report, which prediction matched which ground truth and why, and each attribute error with the judge's reasoning. So a score is **auditable**: it can always be traced back to the findings that produced it, and an optional [**dashboard**](#dashboard) reads those records back, taking you from a dataset-level number to the individual finding pair behind it.
 
@@ -199,18 +199,19 @@ type.
 
 ### Metrics
 
-Every metric is computed on three significance tiers, each reported in its own `tiers.<tier>` block:
+Every metric is computed on four significance tiers, each reported in its own `tiers.<tier>` block:
 
 | Tier | Significance | Metrics |
 |---|---|---|
 | `actionable` | `critical` + `urgent` + `notable` | aER = aFN + aFP, aRec, aPrec |
 | `triage` | `critical` + `urgent` | tER = tFN + tFP, tRec, tPrec |
 | `critical` | `critical` | cER = cFN + cFP, cRec, cPrec |
+| `all` | every significance | allER = allFN + allFP, allRec, allPrec: the count to compare with total error counts |
 
 | Metric (key in `tiers.<tier>`) | Description |
 |---|---|
 | aER (`errors_per_report`) | Mean per-report count of `INC` + `MIS` + `SPU` asserting an abnormality, involving a finding of the tier. The headline number on the actionable tier; lower is better. |
-| aFN (`fn_per_report`) | Reference side: findings of the tier missed (`MIS`, `fn_mis_total`) or contradicted (`INC`, `fn_inc_total`). In totals, `fn_total = gt_total − recall_hits`. |
+| aFN (`fn_per_report`) | Reference side: findings of the tier missed (`MIS`, `fn_mis_total`) or contradicted (`INC`, `fn_inc_total`). A routine normal statement the prediction does not repeat is not missed, as a normal statement the reference does not mention is not an aFP (a template difference); a pertinent negative is. In totals, `fn_total = gt_total − recall_hits`. |
 | aFP (`fp_per_report`) | Prediction side: abnormalities of the tier with no reference counterpart (`SPU`, `fp_spu_total`), or contradicting a reference finding outside the tier, e.g. an abnormality where the reference says normal, or contradicting a reference finding that another predicted finding gets right (`INC`, `fp_inc_total`). |
 | aRec (`recall`) | Fraction of the reference findings of the tier the model recalled, counting `COR` and `PAR` as hits. tRec is the safety floor: a model can look acceptable on average while missing most urgent findings, and a large gap from aRec means it is differentially worse on the highest-stakes findings. |
 | aPrec (`precision`) | Of the predicted findings of the tier, the fraction crediting a real finding. Flags confident over-calling. `null` when the model predicted none. |

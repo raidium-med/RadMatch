@@ -22,14 +22,17 @@ DEFAULT_CLINICAL_SIGNIFICANCE: str = "routine"
 CRITICAL_SIGNIFICANCE_TIERS: tuple[str, ...] = ("critical",)
 TRIAGE_SIGNIFICANCE_TIERS: tuple[str, ...] = ("critical", "urgent")
 ACTIONABLE_SIGNIFICANCE_TIERS: tuple[str, ...] = ("critical", "urgent", "notable")
+ALL_SIGNIFICANCE_TIERS: tuple[str, ...] = ("critical", "urgent", "notable", "routine")
 # The `tiers.<name>` output blocks, reported as aER = aFN + aFP with aRec / aPrec
-# (actionable), and likewise tER, ... (triage) and cER, ... (critical).
+# (actionable), and likewise tER, ... (triage), cER, ... (critical) and allER, ... (all: every finding, the count to
+# compare with total error counts).
 ERROR_TIERS: dict[str, tuple[str, ...]] = {
     "actionable": ACTIONABLE_SIGNIFICANCE_TIERS,
     "triage": TRIAGE_SIGNIFICANCE_TIERS,
     "critical": CRITICAL_SIGNIFICANCE_TIERS,
+    "all": ALL_SIGNIFICANCE_TIERS,
 }
-ERROR_TIER_PREFIX: dict[str, str] = {"actionable": "a", "triage": "t", "critical": "c"}
+ERROR_TIER_PREFIX: dict[str, str] = {"actionable": "a", "triage": "t", "critical": "c", "all": "all"}
 
 # Comparisons that signal disease activity (the others are benign). A difference across the two
 # buckets, or a dropped active gt comparison, is `major`; any other difference is `minor`.

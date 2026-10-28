@@ -138,6 +138,29 @@
             "notable"
           ]
         },
+        "all": {
+          "errors_per_finding": 0.5,
+          "errors_total": 1,
+          "findings_total": 2,
+          "fn_inc_total": 1,
+          "fn_mis_total": 0,
+          "fn_total": 1,
+          "fp_inc_total": 0,
+          "fp_spu_total": 0,
+          "fp_total": 0,
+          "gt_total": 2,
+          "precision": 0.5,
+          "precision_hits": 1,
+          "pred_total": 2,
+          "recall": 0.5,
+          "recall_hits": 1,
+          "significance": [
+            "critical",
+            "urgent",
+            "notable",
+            "routine"
+          ]
+        },
         "critical": {
           "errors_per_finding": 1.0,
           "errors_total": 1,
@@ -210,6 +233,29 @@
             "critical",
             "urgent",
             "notable"
+          ]
+        },
+        "all": {
+          "errors_per_finding": 1.0,
+          "errors_total": 2,
+          "findings_total": 2,
+          "fn_inc_total": 1,
+          "fn_mis_total": 1,
+          "fn_total": 2,
+          "fp_inc_total": 0,
+          "fp_spu_total": 0,
+          "fp_total": 0,
+          "gt_total": 2,
+          "precision": 0.0,
+          "precision_hits": 0,
+          "pred_total": 1,
+          "recall": 0.0,
+          "recall_hits": 0,
+          "significance": [
+            "critical",
+            "urgent",
+            "notable",
+            "routine"
           ]
         },
         "critical": {
@@ -286,6 +332,29 @@
             "notable"
           ]
         },
+        "all": {
+          "errors_per_finding": 1.0,
+          "errors_total": 1,
+          "findings_total": 1,
+          "fn_inc_total": 0,
+          "fn_mis_total": 1,
+          "fn_total": 1,
+          "fp_inc_total": 0,
+          "fp_spu_total": 0,
+          "fp_total": 0,
+          "gt_total": 1,
+          "precision": null,
+          "precision_hits": 0,
+          "pred_total": 0,
+          "recall": 0.0,
+          "recall_hits": 0,
+          "significance": [
+            "critical",
+            "urgent",
+            "notable",
+            "routine"
+          ]
+        },
         "critical": {
           "errors_per_finding": 0.0,
           "errors_total": 0,
@@ -360,6 +429,29 @@
             "notable"
           ]
         },
+        "all": {
+          "errors_per_finding": 0.0,
+          "errors_total": 0,
+          "findings_total": 0,
+          "fn_inc_total": 0,
+          "fn_mis_total": 0,
+          "fn_total": 0,
+          "fp_inc_total": 0,
+          "fp_spu_total": 0,
+          "fp_total": 0,
+          "gt_total": 0,
+          "precision": null,
+          "precision_hits": 0,
+          "pred_total": 0,
+          "recall": null,
+          "recall_hits": 0,
+          "significance": [
+            "critical",
+            "urgent",
+            "notable",
+            "routine"
+          ]
+        },
         "critical": {
           "errors_per_finding": 0.0,
           "errors_total": 0,
@@ -428,6 +520,32 @@
         "critical",
         "urgent",
         "notable"
+      ]
+    },
+    "all": {
+      "errors_per_finding": 0.75,
+      "errors_per_report": 0.6,
+      "errors_total": 3,
+      "findings_total": 4,
+      "fn_inc_total": 2,
+      "fn_mis_total": 1,
+      "fn_per_report": 0.6,
+      "fn_total": 3,
+      "fp_inc_total": 0,
+      "fp_per_report": 0.0,
+      "fp_spu_total": 0,
+      "fp_total": 0,
+      "gt_total": 4,
+      "precision": 0.333333,
+      "precision_hits": 1,
+      "pred_total": 3,
+      "recall": 0.25,
+      "recall_hits": 1,
+      "significance": [
+        "critical",
+        "urgent",
+        "notable",
+        "routine"
       ]
     },
     "critical": {

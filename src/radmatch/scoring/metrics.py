@@ -136,6 +136,13 @@ def is_unsupported_claim(finding: dict) -> bool:
     return finding.get("clinical_status") != "normal"
 
 
+def is_missed_finding(finding: dict) -> bool:
+    """Whether an unmatched reference finding (`MIS`) is an error. Symmetric to `is_unsupported_claim`: a routine
+    normal statement the prediction does not repeat is not one (a template difference); a pertinent negative, whose
+    significance comes from the indication, is."""
+    return finding.get("clinical_status") != "normal" or finding.get("clinical_significance") != "routine"
+
+
 class TierErrors(TypedDict):
     """Errors on one significance tier, split by side and source:
     `total == fn + fp`, `fn == fn_mis + fn_inc`, `fp == fp_spu + fp_inc`."""
@@ -159,7 +166,7 @@ def compute_tier_errors(
     """Errors involving findings in `significance_pool`, split by side.
 
     An error is an INC on a matched GT whose GT (or any matched pred) is in the
-    pool, a MIS in the pool, or a SPU in the pool asserting an abnormality
+    pool, a MIS in the pool that is an error (`is_missed_finding`), or a SPU in the pool asserting an abnormality
     (`is_unsupported_claim`). INC counts once per unique GT (`all_inc`: every
     matched record fails to credit it); MIS / SPU per orphan.
 
@@ -175,7 +182,7 @@ def compute_tier_errors(
     """
     pool = set(significance_pool)
     inc_gts = [b for b in _per_gt_safety_outcomes(records).values() if b["all_inc"]]
-    fn_mis = sum(1 for f in unmatched_gt if f.get("clinical_significance") in pool)
+    fn_mis = sum(1 for f in unmatched_gt if f.get("clinical_significance") in pool and is_missed_finding(f))
     fn_inc = sum(1 for b in inc_gts if b["gt_sig"] in pool)
     fp_spu = sum(1 for f in unmatched_pred if f.get("clinical_significance") in pool and is_unsupported_claim(f))
     fp_inc = sum(1 for b in inc_gts if b["gt_sig"] not in pool and any(s in pool for s in b["pred_sigs"]))
@@ -208,7 +215,7 @@ def compute_tier_opportunities(
     pool = set(significance_pool)
     per_gt = _per_gt_safety_outcomes(records)
     distinct_gt = sum(1 for b in per_gt.values() if b["gt_sig"] in pool or any(s in pool for s in b["pred_sigs"]))
-    distinct_gt += sum(1 for f in unmatched_gt if f.get("clinical_significance") in pool)
+    distinct_gt += sum(1 for f in unmatched_gt if f.get("clinical_significance") in pool and is_missed_finding(f))
     spu = sum(1 for f in unmatched_pred if f.get("clinical_significance") in pool and is_unsupported_claim(f))
     contradicted = sum(1 for sig in _contradicted_preds(records) if sig in pool)
     return distinct_gt + spu + contradicted
@@ -354,7 +361,7 @@ def compute_tier_metrics(
     per_gt = _per_gt_safety_outcomes(records)
     per_pred = _per_pred_safety_outcomes(records)
     gt_total = sum(1 for b in per_gt.values() if b["gt_sig"] in pool)
-    gt_total += sum(1 for f in unmatched_gt if f.get("clinical_significance") in pool)
+    gt_total += sum(1 for f in unmatched_gt if f.get("clinical_significance") in pool and is_missed_finding(f))
     pred_total = sum(1 for b in per_pred.values() if b["pred_sig"] in pool)
     pred_total += sum(1 for f in unmatched_pred if f.get("clinical_significance") in pool and is_unsupported_claim(f))
     recall_hits = sum(1 for b in per_gt.values() if b["gt_sig"] in pool and b["is_hit"])

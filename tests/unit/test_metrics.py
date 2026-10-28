@@ -511,6 +511,17 @@ def test_tier_split_identities(tier):
     assert t["errors_total"] <= t["findings_total"]
 
 
+def test_an_omitted_routine_normal_statement_is_not_missed():
+    """Symmetric to an unreferenced normal prediction: a routine normal GT the prediction does not repeat is no error;
+    a pertinent negative (significance from the indication) is."""
+    omitted = [
+        dict(_unmatched("routine"), clinical_status="normal"),
+        dict(_unmatched("critical"), clinical_status="normal"),
+    ]
+    t = _tier([], (), omitted, pool=constants.ERROR_TIERS["all"])
+    assert (t["fn_mis_total"], t["gt_total"]) == (1, 1)
+
+
 @pytest.mark.parametrize(
     "records, expected",
     [
