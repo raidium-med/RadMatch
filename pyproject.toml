@@ -1,6 +1,6 @@
 [project]
 name = "radmatch"
-version = "0.3.4"
+version = "0.3.5"
 description = "Auditable Radiology Report Evaluation via Finding-Level Matching"
 authors = [{ name = "Raidium" }]
 license = "Apache-2.0"
