@@ -18,7 +18,7 @@
       },
       {
         "pair_id": 3,
-        "pred_finding": {"finding_id": "p_2", "text": "Hemispheric cortical sulcal widths are mildly prominent for the patient's age.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": null, "comparison": null, "measurements": []},
+        "pred_finding": {"finding_id": "p_2", "text": "Hemispheric cortical sulcal widths are mildly prominent for the patient's age.", "clinical_status": "abnormal", "clinical_significance": "routine", "laterality": null, "comparison": null, "measurements": []},
         "gt_finding":   {"finding_id": "gt_3", "text": "Hemispheric cortical sulcal widths are compatible with the patient's age.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": null, "comparison": null, "measurements": []}
       },
       {
@@ -37,7 +37,7 @@
       },
       {
         "pair_id": 6,
-        "pred_finding": {"finding_id": "p_4", "text": "Mucosal thickening in the left maxillary sinus.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "left", "comparison": null, "measurements": []},
+        "pred_finding": {"finding_id": "p_4", "text": "Mucosal thickening in the left maxillary sinus.", "clinical_status": "abnormal", "clinical_significance": "routine", "laterality": "left", "comparison": null, "measurements": []},
         "gt_finding":   {"finding_id": "gt_5", "text": "Paranasal sinuses are normal.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": "bilateral", "comparison": null, "measurements": []},
         "same_group_pred": ["Bilateral orbits and paranasal sinuses are normal."],
         "same_group_gt": ["Bilateral orbits are normal."]

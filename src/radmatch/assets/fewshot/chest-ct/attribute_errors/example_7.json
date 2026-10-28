@@ -133,7 +133,7 @@
           "finding_id": "p_5",
           "text": "Bilateral apical pleural thickening.",
           "clinical_status": "abnormal",
-          "clinical_significance": "notable",
+          "clinical_significance": "routine",
           "laterality": "bilateral",
           "comparison": null,
           "measurements": []
@@ -142,7 +142,7 @@
           "finding_id": "gt_6",
           "text": "Left apical pleural thickening.",
           "clinical_status": "abnormal",
-          "clinical_significance": "notable",
+          "clinical_significance": "routine",
           "laterality": "left",
           "comparison": null,
           "measurements": []
@@ -182,7 +182,7 @@
         "pair_id": 8,
         "pred_finding": {
           "finding_id": "p_7",
-          "text": "Mediastinal lymph nodes, likely reactive.",
+          "text": "Enlarged axillary lymph nodes, likely reactive.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
           "laterality": null,
@@ -191,7 +191,7 @@
         },
         "gt_finding": {
           "finding_id": "gt_8",
-          "text": "Mediastinal lymph nodes.",
+          "text": "Enlarged axillary lymph nodes.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
           "laterality": null,
@@ -247,7 +247,7 @@
           "finding_id": "p_10",
           "text": "Apical pleural thickening.",
           "clinical_status": "abnormal",
-          "clinical_significance": "notable",
+          "clinical_significance": "routine",
           "laterality": null,
           "comparison": null,
           "measurements": []
@@ -256,7 +256,7 @@
           "finding_id": "gt_11",
           "text": "Right apical pleural thickening.",
           "clinical_status": "abnormal",
-          "clinical_significance": "notable",
+          "clinical_significance": "routine",
           "laterality": "right",
           "comparison": null,
           "measurements": []

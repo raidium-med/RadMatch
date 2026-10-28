@@ -1,6 +1,6 @@
 {
- "scenario": "Constructed: acute vs chronic, single vs multiple, attenuation, invasion, a variant vs a neoplasm, clot burden",
- "description": "Constructed. Acute vs chronic emboli is a major diagnosis error (the age); a solitary vs multiple nodules and abutment vs invasion are major extent errors (the side is scored upstream); ground-glass vs solid attenuation is a major character error; a small vs large clot burden is a major severity error. Residual thymus (a normal variant) vs a suspected thymoma is a status inversion scored upstream: no Stage 3b error. A mild vs moderate grade of emphysema is minor; a vessel list that leaves out the per-vessel grades is a major severity error.",
+ "scenario": "Constructed: acute vs chronic, single vs multiple, attenuation, invasion, a variant vs a neoplasm, clot burden, diffuse pneumonia distribution and descriptors, a benign-lesion size",
+ "description": "Constructed. Acute vs chronic emboli is a major diagnosis error (the age); a solitary vs multiple nodules and abutment vs invasion are major extent errors (the side is scored upstream); ground-glass vs solid attenuation is a major character error; a small vs large clot burden is a major severity error. Residual thymus (a normal variant) vs a suspected thymoma is a status inversion scored upstream: no Stage 3b error. A mild vs moderate grade of emphysema is minor; a vessel list that leaves out the per-vessel grades is a major severity error. For a diffuse viral pneumonia, a coarser distribution is a minor site error and septal thickening vs consolidation within the ground glass a minor character error; a size difference on a chest wall lipoma (benign, not followed by its size) is a minor measurement error.",
  "user": {
   "series_uuid": "chest-ct_example_6",
   "pairs": [
@@ -195,6 +195,60 @@
      "clinical_status": "abnormal",
      "clinical_significance": "notable"
     }
+   },
+   {
+    "pair_id": 9,
+    "pred_finding": {
+     "finding_id": "p_9",
+     "text": "Bilateral ground-glass opacities with interlobular septal thickening, consistent with viral pneumonia.",
+     "measurements": [],
+     "laterality": "bilateral",
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "urgent"
+    },
+    "gt_finding": {
+     "finding_id": "gt_9",
+     "text": "Bilateral peripheral ground-glass opacities with consolidation in the lower lobes, consistent with viral pneumonia.",
+     "measurements": [],
+     "laterality": "bilateral",
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "urgent"
+    }
+   },
+   {
+    "pair_id": 10,
+    "pred_finding": {
+     "finding_id": "p_10",
+     "text": "4.2 cm lipoma in the left chest wall.",
+     "measurements": [
+      {
+       "value": 4.2,
+       "unit": "cm",
+       "category": "size"
+      }
+     ],
+     "laterality": "left",
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "routine"
+    },
+    "gt_finding": {
+     "finding_id": "gt_10",
+     "text": "3.0 cm left chest wall lipoma.",
+     "measurements": [
+      {
+       "value": 3.0,
+       "unit": "cm",
+       "category": "size"
+      }
+     ],
+     "laterality": "left",
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "routine"
+    }
    }
   ]
  },
@@ -271,6 +325,31 @@
       "dimension": "severity",
       "reasoning": "pred leaves out the mild LAD and RCA calcium grades gt gives; the grade sets the cardiovascular risk",
       "severity": "major"
+     }
+    ]
+   },
+   {
+    "pair_id": 9,
+    "errors": [
+     {
+      "dimension": "site",
+      "reasoning": "both lungs vs peripheral lower-lobe ground glass; a coarser distribution of a diffuse pneumonia, same treatment",
+      "severity": "minor"
+     },
+     {
+      "dimension": "character",
+      "reasoning": "septal thickening vs consolidation within the ground glass; two descriptors of one diffuse pneumonia, same treatment",
+      "severity": "minor"
+     }
+    ]
+   },
+   {
+    "pair_id": 10,
+    "errors": [
+     {
+      "dimension": "measurement",
+      "reasoning": "4.2 vs 3.0 cm chest wall lipoma, over 20 %; a lipoma is benign and not followed by its size",
+      "severity": "minor"
      }
     ]
    }

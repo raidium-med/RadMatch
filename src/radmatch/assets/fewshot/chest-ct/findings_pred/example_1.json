@@ -5,7 +5,7 @@
     "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Minor chronic atelectasis medially in the left lower lobe.",
@@ -13,7 +13,7 @@
     "laterality": "left",
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "No evidence for pneumonia.",
@@ -37,7 +37,7 @@
     "laterality": "left",
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "No emphysema.",
@@ -137,7 +137,7 @@
     "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "No enlarged mediastinal lymph nodes.",
@@ -177,7 +177,7 @@
     "laterality": null,
     "comparison": "stable",
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Surface of the liver exhibits nodularity suggesting cirrhosis.",

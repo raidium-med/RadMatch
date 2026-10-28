@@ -10,7 +10,7 @@ Worked examples of the alignment patterns Stage 2 has to get right. Findings use
 | `example_4.json` | Constructed clinical long tail — bulla vs pneumothorax (two readings of one abnormality), scarring synonyms, sub-threshold node, post-lobectomy state, a negative that does not deny other entities |
 | `example_5.json` | Constructed — translated vocabulary (light transmission area, density and cord-like shadows), 'no metastatic disease' denies the suspicious nodules |
 | `example_6.json` | Constructed — aortic segments matched segment to segment, per-vessel calcium grid as one finding, clot burden inside the PE finding, residual thymus vs thymoma (two readings), leftovers across systems not paired |
-| `example_7.json` | Constructed — negatives matched only to what they deny ('no mass' vs millimetric nodules, calibre vs plaque, pleural vs pericardial, qualified 'no suspicious nodule'), a real denial and a cardiothoracic-ratio equivalence |
+| `example_7.json` | Constructed — negatives matched only to what they deny ('no mass' vs millimetric nodules, calibre vs plaque, pleural vs pericardial, qualified 'no suspicious nodule', 'no nodular or infiltrative lesion' vs blebs and septal thickening), real denials (a pleural effusion; the nodules and the granuloma under the unqualified 'no nodular lesion') and a cardiothoracic-ratio equivalence |
 
 ## Format
 

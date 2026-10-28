@@ -5,7 +5,7 @@
     "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Liver normal.",
@@ -99,7 +99,7 @@
     "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "No hydronephrosis.",
@@ -260,6 +260,6 @@
     "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "urgent"
+    "clinical_significance": "notable"
   }
 ]

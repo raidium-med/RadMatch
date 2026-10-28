@@ -1,6 +1,6 @@
 {
   "scenario": "Constructed: translated report vocabulary, indication-answering negatives, expected post-surgical state",
-  "description": "Constructed. 'Fast-in fast-out' is arterial enhancement with washout; a 'low-density shadow' is a hypodense lesion (two readings of the renal cyst); 'No evidence of metastatic disease' is denied by a lesion suspicious for metastasis; 'No source of hematuria' denies a renal calculus; a bile duct gt explains by cholecystectomy is the same duct.",
+  "description": "Constructed. 'Fast-in fast-out' is arterial enhancement with washout; a 'low-density shadow' is a hypodense lesion (two readings of the renal cyst); 'No evidence of metastatic disease' denies a lesion suspicious for metastasis; 'No source of hematuria' denies a renal calculus; a dilated bile duct and one the gt explains by cholecystectomy are the same duct.",
   "user": {
     "pred_findings": [
       {

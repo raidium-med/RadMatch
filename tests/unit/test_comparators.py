@@ -90,10 +90,15 @@ def test_side_union():
     assert comparators.side_union([None]) is None
 
 
-def test_laterality_is_not_compared_on_a_status_inversion():
-    pred = {"clinical_status": "normal", "laterality": "left"}
-    gt = {"clinical_status": "abnormal", "laterality": "right"}
-    assert {e["dimension"] for e in comparators.compute_structured_errors(pred, gt)} == {"clinical_status"}
+@pytest.mark.parametrize(
+    "pred_sig, gt_sig, severity",
+    [("routine", "routine", "minor"), ("urgent", "routine", "major"), ("notable", "notable", "major")],
+)
+def test_side_difference_is_minor_only_between_routine_findings(pred_sig, gt_sig, severity):
+    pred = {"clinical_status": "abnormal", "laterality": "left", "clinical_significance": pred_sig}
+    gt = {"clinical_status": "abnormal", "laterality": "right", "clinical_significance": gt_sig}
+    [err] = comparators.compute_structured_errors(pred, gt)
+    assert (err["dimension"], err["severity"]) == ("laterality", severity)
 
 
 # ============================================================================
@@ -243,14 +248,33 @@ def test_measurement_asymmetry_handles_extra_measurement_on_gt_side():
 
 
 def test_compute_structured_errors_aggregates_all_dimensions():
-    pred = {"clinical_status": "normal", "comparison": "stable", "measurements": []}
+    pred = {"clinical_status": "abnormal", "laterality": "left", "comparison": "stable", "measurements": []}
     gt = {
         "clinical_status": "abnormal",
+        "laterality": "right",
         "comparison": "worsening",
         "measurements": [_m(7, "mm", "size")],
     }
     dims = {e["dimension"] for e in comparators.compute_structured_errors(pred, gt)}
-    assert dims == {"clinical_status", "comparison", "measurement"}
+    assert dims == {"laterality", "comparison", "measurement"}
+
+
+@pytest.mark.parametrize(
+    "gt_status, expected",
+    [
+        pytest.param("abnormal", ["clinical_status"], id="status-inversion-only-status"),
+        pytest.param("normal", [], id="two-normal-none"),
+    ],
+)
+def test_compute_structured_errors_skips_the_other_dimensions(gt_status, expected):
+    pred = {"clinical_status": "normal", "laterality": "left", "comparison": "stable", "measurements": []}
+    gt = {
+        "clinical_status": gt_status,
+        "laterality": "right",
+        "comparison": "worsening",
+        "measurements": [_m(7, "mm", "size")],
+    }
+    assert [e["dimension"] for e in comparators.compute_structured_errors(pred, gt)] == expected
 
 
 def test_compute_structured_errors_identical_pair_is_empty():

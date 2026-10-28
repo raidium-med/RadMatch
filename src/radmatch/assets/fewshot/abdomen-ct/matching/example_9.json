@@ -1,6 +1,6 @@
 {
  "scenario": "Constructed: negatives matched only to what they deny (abdomen CT)",
- "description": "Constructed. 'No hydronephrosis' does not deny a nonobstructing stone, 'no aggressive osseous lesion' does not deny degenerative change, 'vasculature patent' does not deny wall plaque but does deny a venous thrombosis, a patent portal vein says nothing about the splenic vein, 'no peritoneal disease' does not deny pneumatosis of the bowel wall; ascites contradicts 'no free fluid' and free air contradicts 'no pneumoperitoneum'.",
+ "description": "Constructed. 'No hydronephrosis' does not deny a nonobstructing stone, 'no aggressive osseous lesion' does not deny degenerative change, 'vasculature patent' does not deny wall plaque but does deny a venous thrombosis, a patent portal vein says nothing about the splenic vein, 'no peritoneal disease' does not deny pneumatosis of the bowel wall, 'no bowel obstruction or dilatation' denies neither colitis nor that intramural gas, and a urinary catheter does not contradict 'bladder unremarkable' (all left unmatched); ascites contradicts 'no free fluid' and free air contradicts 'no pneumoperitoneum'.",
  "user": {
   "pred_findings": [
    {
@@ -54,6 +54,22 @@
    {
     "finding_id": "p_7",
     "text": "Free intraperitoneal air under the right hemidiaphragm.",
+    "clinical_status": "abnormal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_8",
+    "text": "Wall thickening of the descending colon with pericolic stranding, consistent with colitis.",
+    "clinical_status": "abnormal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_9",
+    "text": "Urinary catheter in the bladder.",
     "clinical_status": "abnormal",
     "laterality": null,
     "comparison": null,
@@ -116,6 +132,22 @@
     "laterality": null,
     "comparison": null,
     "measurements": []
+   },
+   {
+    "finding_id": "gt_8",
+    "text": "No bowel obstruction or dilatation.",
+    "clinical_status": "normal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_9",
+    "text": "Bladder unremarkable.",
+    "clinical_status": "normal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
    }
   ]
  },
@@ -141,13 +173,17 @@
    "p_1",
    "p_2",
    "p_3",
-   "p_4"
+   "p_4",
+   "p_8",
+   "p_9"
   ],
   "unmatched_gt": [
    "gt_1",
    "gt_2",
    "gt_4",
-   "gt_5"
+   "gt_5",
+   "gt_8",
+   "gt_9"
   ]
  }
 }

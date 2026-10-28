@@ -417,11 +417,15 @@ def compute_structured_errors(
     errors: list[dict] = []
     status_err = classify_status_conflict(pred.get("clinical_status", ""), gt.get("clinical_status", ""))
     if status_err is not None:
-        errors.append(status_err)
+        return [status_err]  # the inversion is the error; sizes or changes of an absent finding are not compared
+    if pred.get("clinical_status") == gt.get("clinical_status") == "normal":
+        return []  # two normal statements differ only by template
     if pred.get("clinical_status") == gt.get("clinical_status") == "abnormal":
         pred_side, gt_side = pred.get("laterality"), gt.get("laterality")
         laterality_err = classify_laterality_conflict(pred_side, gt_side, *(group_sides or (pred_side, gt_side)))
         if laterality_err is not None:
+            if gt.get("clinical_significance") == pred.get("clinical_significance") == "routine":
+                laterality_err["severity"] = "minor"  # the side of findings nobody follows up changes nothing
             errors.append(laterality_err)
     comparison_err = classify_comparison_conflict(pred.get("comparison"), gt.get("comparison"))
     if comparison_err is not None:

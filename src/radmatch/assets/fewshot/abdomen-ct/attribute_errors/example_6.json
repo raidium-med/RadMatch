@@ -1,6 +1,6 @@
 {
- "scenario": "Constructed: invented SBO complication, single vs multiple metastases, vascular encasement, acute vs chronic fracture, a variant vs a node, gas in a collection",
- "description": "Constructed. A transition point or closed loop the reference does not give, solitary vs multiple liver metastases and SMA abutment vs encasement are major extent errors; an acute vs chronic fracture is a major diagnosis error (the age); gas in a collection is a major character error. A splenule (an anatomic variant, normal) vs a lymph node (abnormal) is a status inversion scored upstream: no Stage 3b error. The predominant segment of uncomplicated diverticulosis is a minor extent error; fluid the pred adds to a fat-containing umbilical hernia is no error (added detail).",
+ "scenario": "Constructed: invented SBO complication, single vs multiple metastases, vascular encasement, acute vs chronic fracture, a variant vs a node, gas in a collection, steatosis distribution, a benign-lesion size",
+ "description": "Constructed. A transition point or closed loop the reference does not give, solitary vs multiple liver metastases and SMA abutment vs encasement are major extent errors; an acute vs chronic fracture is a major diagnosis error (the age); gas in a collection is a major character error. A splenule (an anatomic variant, normal) vs a lymph node (abnormal) is a status inversion scored upstream: no Stage 3b error. The predominant segment of uncomplicated diverticulosis is a minor extent error; fluid the pred adds to a fat-containing umbilical hernia is no error (added detail). A right-lobe vs diffuse distribution of hepatic steatosis (a diffuse process) is a minor site error; a size difference on a hemangioma (benign, not followed by its size) is a minor measurement error.",
  "user": {
   "series_uuid": "abdomen-ct_example_6",
   "pairs": [
@@ -184,7 +184,7 @@
      "laterality": null,
      "comparison": null,
      "clinical_status": "abnormal",
-     "clinical_significance": "notable"
+     "clinical_significance": "routine"
     },
     "gt_finding": {
      "finding_id": "gt_8",
@@ -193,7 +193,61 @@
      "laterality": null,
      "comparison": null,
      "clinical_status": "abnormal",
-     "clinical_significance": "notable"
+     "clinical_significance": "routine"
+    }
+   },
+   {
+    "pair_id": 9,
+    "pred_finding": {
+     "finding_id": "p_9",
+     "text": "Patchy hepatic steatosis in the right lobe.",
+     "measurements": [],
+     "laterality": null,
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "routine"
+    },
+    "gt_finding": {
+     "finding_id": "gt_9",
+     "text": "Diffuse hepatic steatosis.",
+     "measurements": [],
+     "laterality": null,
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "routine"
+    }
+   },
+   {
+    "pair_id": 10,
+    "pred_finding": {
+     "finding_id": "p_10",
+     "text": "2.0 cm hemangioma in liver segment 6.",
+     "measurements": [
+      {
+       "value": 2.0,
+       "unit": "cm",
+       "category": "size"
+      }
+     ],
+     "laterality": null,
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "routine"
+    },
+    "gt_finding": {
+     "finding_id": "gt_10",
+     "text": "1.4 cm hemangioma in liver segment 6.",
+     "measurements": [
+      {
+       "value": 1.4,
+       "unit": "cm",
+       "category": "size"
+      }
+     ],
+     "laterality": null,
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "routine"
     }
    }
   ]
@@ -267,6 +321,26 @@
    {
     "pair_id": 8,
     "errors": []
+   },
+   {
+    "pair_id": 9,
+    "errors": [
+     {
+      "dimension": "site",
+      "reasoning": "right-lobe vs diffuse hepatic steatosis; a partly different distribution of a diffuse process, same management",
+      "severity": "minor"
+     }
+    ]
+   },
+   {
+    "pair_id": 10,
+    "errors": [
+     {
+      "dimension": "measurement",
+      "reasoning": "2.0 vs 1.4 cm hepatic hemangioma, over 20 %; a benign hemangioma is not followed by its size",
+      "severity": "minor"
+     }
+    ]
    }
   ]
  }

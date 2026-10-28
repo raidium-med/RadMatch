@@ -5,7 +5,7 @@
     "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Liver is normal.",
@@ -99,7 +99,7 @@
     "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "No hydronephrosis.",
@@ -110,7 +110,7 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "No obstructing renal stones.",
+    "text": "No nephrolithiasis or obstructing renal stones.",
     "measurements": [],
     "laterality": null,
     "comparison": null,
@@ -126,7 +126,7 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "Appendix normal.",
+    "text": "Appendix normal, without appendicitis.",
     "measurements": [],
     "laterality": null,
     "comparison": null,
@@ -265,6 +265,6 @@
     "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "urgent"
+    "clinical_significance": "notable"
   }
 ]

@@ -1,8 +1,9 @@
 {
-  "scenario": "Constructed: certainty, added diagnosis, structured category",
-  "description": "Constructed. Hedging a definite fracture, or a definite negative ('possibly no pulmonary embolism' vs 'no pulmonary embolism'), is two certainty steps, a major certainty error; turning nodes called reactive into nodes suspicious for metastases is a major diagnosis error (an added actionable diagnosis), and leaving out the gt 'mildly' grade a major severity error; a Lung-RADS class change across management buckets is a major severity error; one certainty step is minor; a subtype the pred leaves out is a minor diagnosis error (not actionable).",
+  "scenario": "Constructed: certainty (also on the rule-out the indication asks for), added diagnosis, structured category",
+  "description": "Constructed. Hedging a definite fracture, or the definite negative that answers the indication ('possibly no pulmonary embolism' vs 'no pulmonary embolism' in a pulmonary embolism workup, critical on both sides), is two certainty steps, a major certainty error; turning nodes called reactive into nodes suspicious for metastases is a major diagnosis error (an added actionable diagnosis), and leaving out the gt 'mildly' grade a major severity error; a Lung-RADS class change across management buckets is a major severity error; one certainty step is minor; a subtype the pred leaves out is a minor diagnosis error (not actionable).",
   "user": {
     "series_uuid": "chest-ct_example_5",
+    "indication": "Acute dyspnea, pulmonary embolism workup.",
     "pairs": [
       {
         "pair_id": 1,
@@ -31,7 +32,7 @@
           "finding_id": "p_2",
           "text": "Possibly no pulmonary embolism.",
           "clinical_status": "normal",
-          "clinical_significance": "routine",
+          "clinical_significance": "critical",
           "laterality": null,
           "comparison": null,
           "measurements": []
@@ -40,7 +41,7 @@
           "finding_id": "gt_2",
           "text": "No pulmonary embolism.",
           "clinical_status": "normal",
-          "clinical_significance": "routine",
+          "clinical_significance": "critical",
           "laterality": null,
           "comparison": null,
           "measurements": []

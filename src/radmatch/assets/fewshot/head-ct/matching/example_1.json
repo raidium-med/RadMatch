@@ -1,11 +1,12 @@
 {
-  "scenario": "Laterality flip on temporal sequelae + SPU on sphenoid + clean matches",
-  "description": "Real subset of head-ct/findings_{gt,pred}/example_1. Demonstrates a laterality flip on lateralized brain pathology (gt 'left temporal pole' hypodense sequelae vs pred 'right temporal pole' — opposite hemisphere, matched and scored downstream as a major side error from the findings' laterality), a hallucinated mucosal thickening of the sphenoid sinus in the prediction (SPU), and a clean 1:1 match on the left temporal horn ventricular traction.",
+  "scenario": "Laterality flip on temporal sequelae and on their hemorrhage rule-out + SPU on sphenoid + clean matches",
+  "description": "Real subset of head-ct/findings_{gt,pred}/example_1. Demonstrates a laterality flip on lateralized brain pathology (gt 'left temporal pole' hypodense sequelae vs pred 'right temporal pole' — opposite hemisphere, matched and scored downstream as a major side error from the findings' laterality), a hallucinated mucosal thickening of the sphenoid sinus in the prediction (SPU), and a clean 1:1 match on the left temporal horn ventricular traction. The hemorrhage rule-out inside the sequelae ('without spontaneous hyperdensity') is its own finding, as Stage 1 extracts it; the two rule-outs, placed on opposite sides like the sequelae, match each other.",
   "user": {
+    "indication": "Head trauma with left frontotemporal hemorrhagic contusion, thin left temporal subdural hematoma.",
     "pred_findings": [
       {
         "finding_id": "p_1",
-        "text": "Hypodense cortico-subcortical sequelae in the right temporal pole and right temporal lobe, without spontaneous hyperdensity.",
+        "text": "Hypodense cortico-subcortical sequelae in the right temporal pole and right temporal lobe.",
         "clinical_status": "abnormal",
         "laterality": "right",
         "comparison": null,
@@ -34,12 +35,20 @@
         "laterality": null,
         "comparison": null,
         "measurements": []
+      },
+      {
+        "finding_id": "p_5",
+        "text": "No spontaneous hyperdensity in the right temporal sequelae.",
+        "clinical_status": "normal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
       }
     ],
     "gt_findings": [
       {
         "finding_id": "gt_1",
-        "text": "Hypodense cortico-subcortical sequelae in the left temporal pole and left temporal lobe, without spontaneous hyperdensity.",
+        "text": "Hypodense cortico-subcortical sequelae in the left temporal pole and left temporal lobe.",
         "clinical_status": "abnormal",
         "laterality": "left",
         "comparison": null,
@@ -58,6 +67,14 @@
         "text": "Ventricular system normal in size and morphology.",
         "clinical_status": "normal",
         "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "No spontaneous hyperdensity in the left temporal sequelae.",
+        "clinical_status": "normal",
+        "laterality": "left",
         "comparison": null,
         "measurements": []
       }
@@ -79,6 +96,11 @@
         "pred_id": "p_3",
         "gt_id": "gt_3",
         "reasoning": "Identical completeness statement about the ventricular system."
+      },
+      {
+        "pred_id": "p_5",
+        "gt_id": "gt_4",
+        "reasoning": "One rule-out of bleeding in the temporal sequelae, placed on opposite sides."
       }
     ],
     "unmatched_pred": [

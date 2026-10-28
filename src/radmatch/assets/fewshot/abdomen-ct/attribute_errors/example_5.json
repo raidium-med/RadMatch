@@ -1,6 +1,6 @@
 {
-  "scenario": "Constructed: certainty, left-out character and grade, structured category, expected post-surgical state",
-  "description": "Constructed. Small bowel dilatation whose air-fluid levels and 'mild' grade the pred leaves out carries a major character and a major severity error, and the obstruction the pred adds without gt support a major diagnosis error; a hedged fracture is a major certainty error; 'possibly malignant' vs 'consistent with renal cell carcinoma' is two certainty steps (major); a Bosniak class change across follow-up buckets is a major severity error; 'possibly' on a definite negative is two certainty steps (major); a 9 mm bile duct after cholecystectomy is the expected effect of the procedure (normal on both sides): no error.",
+  "scenario": "Constructed: certainty, left-out character and grade, structured category, a hedge between two routine findings, expected post-surgical state",
+  "description": "Constructed. Small bowel dilatation whose air-fluid levels and 'mild' grade the pred leaves out carries a major character and a major severity error, and the obstruction the pred adds without gt support a major diagnosis error; a hedged fracture is a major certainty error; 'possibly malignant' vs 'consistent with renal cell carcinoma' is two certainty steps (major); a Bosniak class change across follow-up buckets is a major severity error; 'possibly' on a definite negative is two certainty steps, but both findings are routine, so it is minor; a 9 mm bile duct after cholecystectomy is the expected effect of the procedure (normal on both sides): no error.",
   "user": {
     "series_uuid": "abdomen-ct_example_5",
     "pairs": [
@@ -94,7 +94,7 @@
           "finding_id": "gt_4",
           "text": "Bosniak II left renal cyst.",
           "clinical_status": "abnormal",
-          "clinical_significance": "notable",
+          "clinical_significance": "routine",
           "laterality": "left",
           "comparison": null,
           "measurements": []
@@ -213,8 +213,8 @@
         "errors": [
           {
             "dimension": "certainty",
-            "reasoning": "possibly vs definitely no gallstones, two steps; a hedged negative leaves gallstones to rule out",
-            "severity": "major"
+            "reasoning": "possibly vs definitely no gallstones, two steps; two routine completeness statements, so the hedge changes no management",
+            "severity": "minor"
           }
         ]
       },

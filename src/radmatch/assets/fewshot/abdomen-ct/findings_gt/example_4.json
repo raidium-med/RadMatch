@@ -65,7 +65,7 @@
     "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Moderate left hydronephrosis with an enlarged kidney and thinning of the renal cortex.",
@@ -89,7 +89,7 @@
     "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Gas in the bladder with a urinary catheter.",
@@ -112,7 +112,7 @@
     "measurements": [],
     "laterality": null,
     "comparison": null,
-    "clinical_status": "normal",
+    "clinical_status": "abnormal",
     "clinical_significance": "routine"
   },
   {

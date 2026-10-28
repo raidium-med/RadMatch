@@ -6,8 +6,8 @@
     "pairs": [
       {
         "pair_id": 1,
-        "pred_finding": {"finding_id": "p_1", "text": "Small hypodense focus within the right hepatic lobe.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": null, "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_1", "text": "Cyst in the right hepatic lobe measuring 9 mm unchanged.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": null, "comparison": "stable", "measurements": [{"value": 9, "unit": "mm", "category": "size"}]}
+        "pred_finding": {"finding_id": "p_1", "text": "Small hypodense focus within the right hepatic lobe.", "clinical_status": "abnormal", "clinical_significance": "routine", "laterality": null, "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_1", "text": "Cyst in the right hepatic lobe measuring 9 mm unchanged.", "clinical_status": "abnormal", "clinical_significance": "routine", "laterality": null, "comparison": "stable", "measurements": [{"value": 9, "unit": "mm", "category": "size"}]}
       },
       {
         "pair_id": 2,

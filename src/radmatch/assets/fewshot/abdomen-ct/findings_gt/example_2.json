@@ -13,7 +13,7 @@
     "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Subtle nodular contour of the liver, which may represent fibrotic or cirrhotic changes.",
@@ -97,7 +97,7 @@
     "laterality": "left",
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Approximately 1.3 cm renal cyst in the left lower pole measuring approximately 26 Hounsfield units.",
@@ -180,7 +180,7 @@
     "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Mild atherosclerosis.",

@@ -184,7 +184,7 @@
           "finding_id": "p_7",
           "text": "Simple left renal cyst.",
           "clinical_status": "abnormal",
-          "clinical_significance": "notable",
+          "clinical_significance": "routine",
           "laterality": "left",
           "comparison": null,
           "measurements": []
@@ -193,7 +193,7 @@
           "finding_id": "gt_8",
           "text": "2.4 cm simple left renal cyst.",
           "clinical_status": "abnormal",
-          "clinical_significance": "notable",
+          "clinical_significance": "routine",
           "laterality": "left",
           "comparison": null,
           "measurements": [
@@ -253,7 +253,7 @@
           "finding_id": "p_10",
           "text": "Large hiatal hernia.",
           "clinical_status": "abnormal",
-          "clinical_significance": "routine",
+          "clinical_significance": "notable",
           "laterality": null,
           "comparison": null,
           "measurements": []
@@ -262,7 +262,7 @@
           "finding_id": "gt_11",
           "text": "Moderate hiatal hernia.",
           "clinical_status": "abnormal",
-          "clinical_significance": "routine",
+          "clinical_significance": "notable",
           "laterality": null,
           "comparison": null,
           "measurements": []

@@ -5,7 +5,7 @@
     "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Mildly increased intrahepatic biliary and common bile duct dilatation, the common bile duct measuring up to 8 mm (previously 5 mm) and tapering distally.",
@@ -27,7 +27,7 @@
     "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Gallbladder surgically absent.",
@@ -161,7 +161,7 @@
     "laterality": "right",
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Left ovary unremarkable.",

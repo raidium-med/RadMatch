@@ -28,11 +28,11 @@
       "minor_pct": 0.0
     },
     "comparison": {
-      "clean": 2,
-      "clean_pct": 0.666667,
+      "clean": 3,
+      "clean_pct": 1.0,
       "evaluated": 3,
-      "major": 1,
-      "major_pct": 0.333333,
+      "major": 0,
+      "major_pct": 0.0,
       "minor": 0,
       "minor_pct": 0.0
     },

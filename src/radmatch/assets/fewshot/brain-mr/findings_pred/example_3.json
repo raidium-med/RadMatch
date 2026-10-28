@@ -43,7 +43,7 @@
     "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Cavum septum pellucidum et vergae variation.",
@@ -163,7 +163,7 @@
     "laterality": "right",
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Well-defined 12x10 mm mass lesion within the left suboccipital fatty tissue, hypointense on T1 and hyperintense on T2.",

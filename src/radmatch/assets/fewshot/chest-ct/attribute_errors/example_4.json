@@ -31,7 +31,7 @@
           "finding_id": "p_2",
           "text": "Linear fibrotic strands in both upper lobes.",
           "clinical_status": "abnormal",
-          "clinical_significance": "notable",
+          "clinical_significance": "routine",
           "laterality": "bilateral",
           "comparison": null,
           "measurements": []
@@ -40,7 +40,7 @@
           "finding_id": "gt_2",
           "text": "Biapical pleuroparenchymal scarring.",
           "clinical_status": "abnormal",
-          "clinical_significance": "notable",
+          "clinical_significance": "routine",
           "laterality": "bilateral",
           "comparison": null,
           "measurements": []

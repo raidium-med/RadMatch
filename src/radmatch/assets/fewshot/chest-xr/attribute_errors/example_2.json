@@ -11,8 +11,8 @@
       },
       {
         "pair_id": 2,
-        "pred_finding": {"finding_id": "p_2", "text": "Left basilar opacity, likely atelectasis.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "left", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_2", "text": "Severe left lower lobe consolidation, presumably collapse, has not improved.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": "left", "comparison": "stable", "measurements": []}
+        "pred_finding": {"finding_id": "p_2", "text": "Left basilar opacity, likely atelectasis.", "clinical_status": "abnormal", "clinical_significance": "routine", "laterality": "left", "comparison": null, "measurements": []},
+        "gt_finding":   {"finding_id": "gt_2", "text": "Severe left lower lobe consolidation, presumably collapse, has not improved.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "left", "comparison": "stable", "measurements": []}
       },
       {
         "pair_id": 3,
