@@ -1,6 +1,6 @@
 {
  "scenario": "Constructed: negatives matched only to what they deny (abdomen CT)",
- "description": "Constructed. 'No hydronephrosis' does not deny a nonobstructing stone, 'no aggressive osseous lesion' does not deny degenerative change, 'vasculature patent' does not deny wall plaque but does deny a venous thrombosis, a patent portal vein says nothing about the splenic vein, 'no peritoneal disease' does not deny pneumatosis of the bowel wall, 'no bowel obstruction or dilatation' denies neither colitis nor that intramural gas, and a urinary catheter does not contradict 'bladder unremarkable' (all left unmatched); ascites contradicts 'no free fluid' and free air contradicts 'no pneumoperitoneum'.",
+ "description": "Constructed. 'No hydronephrosis' does not deny a nonobstructing stone, 'no aggressive osseous lesion' does not deny degenerative change, 'vasculature patent' does not deny wall plaque but does deny a venous thrombosis, a patent portal vein says nothing about the splenic vein, 'no peritoneal nodularity' does not deny pneumatosis of the bowel wall, 'no bowel obstruction or dilatation' denies neither colitis nor that intramural gas, and a urinary catheter does not contradict 'bladder unremarkable' (all left unmatched); ascites contradicts 'no free fluid' and free air contradicts 'no pneumoperitoneum'.",
  "user": {
   "pred_findings": [
    {
@@ -103,7 +103,7 @@
    },
    {
     "finding_id": "gt_4",
-    "text": "No peritoneal disease.",
+    "text": "No peritoneal nodularity.",
     "clinical_status": "normal",
     "laterality": null,
     "comparison": null,
@@ -156,17 +156,17 @@
    {
     "pred_id": "p_5",
     "gt_id": "gt_3",
-    "reasoning": "a venous thrombosis that patent vasculature denies"
+    "reasoning": "A venous thrombosis that patent vasculature denies."
    },
    {
     "pred_id": "p_6",
     "gt_id": "gt_6",
-    "reasoning": "ascites = free fluid, denied by gt"
+    "reasoning": "Ascites = free fluid, denied by gt."
    },
    {
     "pred_id": "p_7",
     "gt_id": "gt_7",
-    "reasoning": "free air = pneumoperitoneum, denied by gt"
+    "reasoning": "Free air = pneumoperitoneum, denied by gt."
    }
   ],
   "unmatched_pred": [

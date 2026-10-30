@@ -3,6 +3,7 @@
   "description": "Stage 3b call derived from the matches in chest-xr/matching/example_1.json. 'Moderate cardiomegaly' vs 'Mild cardiomegaly, unchanged': severity minor (moderate vs mild cardiomegaly; one step, same management); 'No focal airspace opacities; no evidence of pneumonia' vs 'No concerning focal airspace opacities; no evidence of…': no error (two normal statements).",
   "user": {
     "series_uuid": "chest-xr_example_1",
+    "indication": "Recent pancreatitis, fall with gluteal hematoma, fever last night. Exclude pneumonia.",
     "pairs": [
       {
         "pair_id": 1,

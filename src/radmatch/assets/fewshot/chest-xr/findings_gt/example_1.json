@@ -5,7 +5,7 @@
     "laterality": "bilateral",
     "comparison": "stable",
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Right pleural thickening is chronic.",
@@ -13,7 +13,7 @@
     "laterality": "right",
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Mild cardiomegaly, unchanged.",
@@ -29,7 +29,7 @@
     "laterality": "right",
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "No pulmonary edema.",

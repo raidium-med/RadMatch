@@ -1,6 +1,6 @@
 {
-  "scenario": "Constructed: certainty (also on the rule-out the indication asks for), added diagnosis, structured category",
-  "description": "Constructed. 'Possible minimally displaced right 6th rib fracture' vs 'Minimally displaced right 6th rib fracture': certainty major (possible vs definite right 6th rib fracture, two steps; a possible fracture is sent for more imaging); 'Possibly no pulmonary embolism' vs 'No pulmonary embolism': certainty major (possibly vs definitely no pulmonary embolism, two steps; a hedged negative leaves an embolism to rule out); 'Enlarged mediastinal lymph nodes, suspicious for…' vs 'Mildly enlarged mediastinal lymph nodes, likely reactive': diagnosis major (suspicious for metastases vs likely reactive nodes; adds an oncologic workup), severity minor (pred leaves out the mild grade of the node enlargement; a low grade left out changes nothing); '7 mm solid right upper lobe nodule, Lung-RADS 4A' vs '7 mm solid right upper lobe nodule, Lung-RADS 3': severity major (Lung-RADS 4A vs 3; 3-month vs 6-month low-dose CT); 'Mild emphysema' vs 'Mild centrilobular emphysema': diagnosis minor (pred leaves out the centrilobular subtype of emphysema; same management).",
+  "scenario": "Constructed: certainty (also on the rule-out the indication asks for), added diagnosis",
+  "description": "Constructed. 'Possible minimally displaced right 6th rib fracture' vs 'Minimally displaced right 6th rib fracture': certainty major (possible vs definite right 6th rib fracture, two steps; a possible fracture is sent for more imaging); 'Possibly no pulmonary embolism' vs 'No pulmonary embolism': certainty major (possibly vs definitely no pulmonary embolism, two steps; a hedged negative leaves an embolism to rule out); 'Enlarged mediastinal lymph nodes, suspicious for…' vs 'Mildly enlarged mediastinal lymph nodes, likely reactive': diagnosis major (suspicious for metastases vs likely reactive nodes; adds an oncologic workup), severity minor (pred leaves out the mild grade of the node enlargement; a low grade left out changes nothing); 'Mild emphysema' vs 'Mild centrilobular emphysema': diagnosis minor (pred leaves out the centrilobular subtype of emphysema; same management).",
   "user": {
     "series_uuid": "chest-ct_example_5",
     "indication": "Acute dyspnea, pulmonary embolism workup.",
@@ -71,39 +71,6 @@
       {
         "pair_id": 4,
         "pred_finding": {
-          "finding_id": "p_4",
-          "text": "7 mm solid right upper lobe nodule, Lung-RADS 4A.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "urgent",
-          "laterality": "right",
-          "comparison": null,
-          "measurements": [
-            {
-              "value": 7,
-              "unit": "mm",
-              "category": "size"
-            }
-          ]
-        },
-        "gt_finding": {
-          "finding_id": "gt_4",
-          "text": "7 mm solid right upper lobe nodule, Lung-RADS 3.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "notable",
-          "laterality": "right",
-          "comparison": null,
-          "measurements": [
-            {
-              "value": 7,
-              "unit": "mm",
-              "category": "size"
-            }
-          ]
-        }
-      },
-      {
-        "pair_id": 5,
-        "pred_finding": {
           "finding_id": "p_6",
           "text": "Mild emphysema.",
           "clinical_status": "abnormal",
@@ -163,16 +130,6 @@
       },
       {
         "pair_id": 4,
-        "errors": [
-          {
-            "dimension": "severity",
-            "reasoning": "Lung-RADS 4A vs 3; 3-month vs 6-month low-dose CT",
-            "severity": "major"
-          }
-        ]
-      },
-      {
-        "pair_id": 5,
         "errors": [
           {
             "dimension": "diagnosis",

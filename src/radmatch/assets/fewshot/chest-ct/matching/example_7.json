@@ -1,6 +1,6 @@
 {
  "scenario": "Constructed: negatives matched only to what they deny (chest CT)",
- "description": "Constructed. 'No pulmonary mass' does not deny millimetric nodules, a normal aortic calibre does not deny wall plaque, 'no pleural effusion' does not deny a pericardial effusion, 'no suspicious nodule' does not deny a benign granuloma, 'no consolidation' does not deny airway wall thickening, 'no nodular or infiltrative lesion' denies neither apical blebs nor interlobular septal thickening (all left unmatched); 'no pleural effusion' is contradicted by a pleural effusion, the unqualified 'no nodular or infiltrative lesion' by the millimetric nodules and the calcified granuloma that the qualified negatives leave unmatched, and a normal cardiothoracic ratio is 'no cardiomegaly'.",
+ "description": "Constructed. 'No pulmonary mass' does not deny millimetric nodules, a normal aortic calibre does not deny wall plaque, 'no pleural effusion' does not deny a pericardial effusion, 'no suspicious nodule' does not deny a benign granuloma, 'no consolidation' does not deny airway wall thickening, 'no nodular lesion' and 'no infiltrative lesion' deny neither apical blebs nor interlobular septal thickening (all left unmatched); 'no pleural effusion' is contradicted by a pleural effusion, the unqualified 'no nodular lesion' by the millimetric nodules and the calcified granuloma that the qualified negatives leave unmatched, and a normal cardiothoracic ratio is 'no cardiomegaly'.",
  "user": {
   "pred_findings": [
    {
@@ -144,7 +144,15 @@
    },
    {
     "finding_id": "gt_7",
-    "text": "No nodular or infiltrative lesion in the lungs.",
+    "text": "No nodular lesion in the lungs.",
+    "clinical_status": "normal",
+    "laterality": "bilateral",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_8",
+    "text": "No infiltrative lesion in the lungs.",
     "clinical_status": "normal",
     "laterality": "bilateral",
     "comparison": null,
@@ -157,22 +165,22 @@
    {
     "pred_id": "p_5",
     "gt_id": "gt_3",
-    "reasoning": "pleural effusion that gt denies"
+    "reasoning": "Pleural effusion that gt denies."
    },
    {
     "pred_id": "p_6",
     "gt_id": "gt_5",
-    "reasoning": "normal cardiothoracic ratio = no cardiomegaly"
+    "reasoning": "Normal cardiothoracic ratio = no cardiomegaly."
    },
    {
     "pred_id": "p_1",
     "gt_id": "gt_7",
-    "reasoning": "'no nodular lesion' denies the right upper lobe nodules"
+    "reasoning": "'no nodular lesion' denies the right upper lobe nodules."
    },
    {
     "pred_id": "p_4",
     "gt_id": "gt_7",
-    "reasoning": "a calcified granuloma is a nodular lesion the unqualified negative denies"
+    "reasoning": "A calcified granuloma is a nodular lesion the unqualified negative denies."
    }
   ],
   "unmatched_pred": [
@@ -186,7 +194,8 @@
    "gt_1",
    "gt_2",
    "gt_4",
-   "gt_6"
+   "gt_6",
+   "gt_8"
   ]
  }
 }

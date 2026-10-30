@@ -10,7 +10,7 @@
           "finding_id": "p_1",
           "text": "Microangiopathic white matter changes in the centrum semiovale.",
           "clinical_status": "abnormal",
-          "clinical_significance": "notable",
+          "clinical_significance": "routine",
           "laterality": null,
           "comparison": null,
           "measurements": []
@@ -19,7 +19,7 @@
           "finding_id": "gt_1",
           "text": "Periventricular and subcortical microangiopathic white matter changes.",
           "clinical_status": "abnormal",
-          "clinical_significance": "notable",
+          "clinical_significance": "routine",
           "laterality": null,
           "comparison": null,
           "measurements": []

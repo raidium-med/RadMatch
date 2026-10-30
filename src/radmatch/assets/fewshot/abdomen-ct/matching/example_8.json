@@ -120,17 +120,17 @@
    {
     "pred_id": "p_1",
     "gt_id": "gt_1",
-    "reasoning": "one splenic hilar nodule read two ways"
+    "reasoning": "One splenic hilar nodule read two ways."
    },
    {
     "pred_id": "p_4",
     "gt_id": "gt_4",
-    "reasoning": "same small bowel obstruction, whatever transition point each side gives"
+    "reasoning": "Same small bowel obstruction, whatever transition point each side gives."
    },
    {
     "pred_id": "p_6",
     "gt_id": "gt_6",
-    "reasoning": "fatty infiltration = steatosis"
+    "reasoning": "Fatty infiltration = steatosis."
    }
   ],
   "unmatched_pred": [

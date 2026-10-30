@@ -91,7 +91,7 @@
           "finding_id": "p_3",
           "text": "Consolidation in the posterior basal segment of the right lower lobe.",
           "clinical_status": "abnormal",
-          "clinical_significance": "urgent",
+          "clinical_significance": "notable",
           "laterality": "right",
           "comparison": null,
           "measurements": []
@@ -100,7 +100,7 @@
           "finding_id": "gt_4",
           "text": "Right lower lobe consolidation.",
           "clinical_status": "abnormal",
-          "clinical_significance": "urgent",
+          "clinical_significance": "notable",
           "laterality": "right",
           "comparison": null,
           "measurements": []
@@ -214,7 +214,7 @@
           "finding_id": "p_15",
           "text": "Left lower lobe consolidation.",
           "clinical_status": "abnormal",
-          "clinical_significance": "urgent",
+          "clinical_significance": "notable",
           "laterality": "left",
           "comparison": null,
           "measurements": []

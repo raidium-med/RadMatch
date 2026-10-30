@@ -1,6 +1,6 @@
 {
   "scenario": "Size across a threshold; the comparison flip stays upstream",
-  "description": "Stage 3b call built from chest-xr/findings_gt/example_3.json and findings_pred/example_3.json. 'A 6 mm pulmonary nodule in the peripheral right upper lobe…' vs 'A 4 mm pulmonary nodule in the peripheral right upper…': measurement major (6 vs 4 mm nodule, across the 6 mm Fleischner threshold; adds a follow-up CT), extent major (one nodule vs one of several nodules on CT; multiple nodules change the follow-up and differential).",
+  "description": "Stage 3b call built from chest-xr/findings_gt/example_3.json and findings_pred/example_3.json. 'A 6 mm pulmonary nodule in the peripheral right upper lobe…' vs 'A 4 mm pulmonary nodule in the peripheral right upper…': measurement major (6 vs 4 mm nodule, across the 6 mm Fleischner threshold; adds a follow-up CT), extent minor (pred leaves out the other nodules, seen only on CT; a radiograph report cannot be expected to give them).",
   "user": {
     "series_uuid": "chest-xr_example_3",
     "pairs": [
@@ -26,7 +26,7 @@
           "text": "A 4 mm pulmonary nodule in the peripheral right upper lobe, unchanged from the preceding radiograph, is one of several pulmonary nodules shown on recent CT and not appreciated by radiography.",
           "clinical_status": "abnormal",
           "clinical_significance": "notable",
-          "laterality": null,
+          "laterality": "right",
           "comparison": "stable",
           "measurements": [
             {
@@ -51,8 +51,8 @@
           },
           {
             "dimension": "extent",
-            "reasoning": "one nodule vs one of several nodules on CT; multiple nodules change the follow-up and differential",
-            "severity": "major"
+            "reasoning": "pred leaves out the other nodules, seen only on CT; a radiograph report cannot be expected to give them",
+            "severity": "minor"
           }
         ]
       }

@@ -1,6 +1,6 @@
 {
   "scenario": "Constructed: side differences left upstream, left-out site, size and grade (minor unless they change management), umbrella, more detail, left-out gas, colon segment",
-  "description": "Constructed. 'Bilateral hydronephrosis' vs 'Moderate left hydronephrosis': severity minor (pred leaves out the moderate grade of the left hydronephrosis; a middle grade left out changes nothing); 'Adrenal nodule' vs '1.4 cm left adrenal nodule': measurement major (pred leaves out the 1.4 cm size of an adrenal nodule; over the 1 cm threshold, it calls for workup); 'Multiple splenic hypodensities' vs '8 mm hypodensity in the splenic upper pole': site minor (pred names no site for the 8 mm hypodensity in the splenic upper pole; a sub-centimetre splenic hypodensity is not followed, so its site guides nothing), measurement minor (pred leaves out the 8 mm size of the splenic hypodensity; a sub-centimetre lesion too small to characterize is not followed by its size); 'Multiple splenic hypodensities' vs '5 mm hypodensity near the splenic hilum': site minor (pred names no site for the 5 mm hypodensity near the splenic hilum; a sub-centimetre splenic hypodensity is not followed, so its site guides nothing), measurement minor (pred leaves out the 5 mm size of the splenic hypodensity; a sub-centimetre lesion too small to characterize is not followed by its size); 'Hypodense lesion in the pancreatic tail' vs 'Cystic lesion in the pancreatic tail': character minor (pred leaves out that the pancreatic tail lesion is cystic; 'hypodense' does not contradict it and the lesion is worked up either way); 'Increased colonic diverticulosis' vs 'Colonic diverticulosis': no error (the comparison difference is scored upstream (Stage 3a)); 'Large hiatal hernia' vs 'Moderate hiatal hernia': severity minor (large vs moderate hiatal hernia; one step, same management); 'Left inguinal hernia containing fat' vs 'Inguinal hernia': no error (the side is scored upstream (Stage 3a laterality)); 'Right paracolic gutter fluid collection' vs 'Right paracolic gutter fluid collection with gas locules': character major (pred leaves out the gas locules; gas signals an abscess or a leak that may need drainage); 'Colonic mass' vs 'Sigmoid colon mass': site major (pred leaves out the sigmoid location of the colonic mass; the segment sets the endoscopic and surgical approach).",
+  "description": "Constructed. 'Bilateral hydronephrosis' vs 'Moderate left hydronephrosis': severity minor (pred leaves out the moderate grade of the left hydronephrosis; a middle grade left out changes nothing); 'Adrenal nodule' vs '1.4 cm left adrenal nodule': measurement major (pred leaves out the 1.4 cm size of an adrenal nodule; over the 1 cm threshold, it calls for workup); 'Multiple splenic hypodensities' vs '8 mm hypodensity in the splenic upper pole, too small to…': site minor (pred names no site for the 8 mm hypodensity in the splenic upper pole; a sub-centimetre splenic hypodensity is not followed, so its site guides nothing), measurement minor (pred leaves out the 8 mm size of the splenic hypodensity; a sub-centimetre lesion too small to characterize is not followed by its size); 'Multiple splenic hypodensities' vs '5 mm hypodensity near the splenic hilum, too small to…': site minor (pred names no site for the 5 mm hypodensity near the splenic hilum; a sub-centimetre splenic hypodensity is not followed, so its site guides nothing), measurement minor (pred leaves out the 5 mm size of the splenic hypodensity; a sub-centimetre lesion too small to characterize is not followed by its size); 'Hypodense lesion in the pancreatic tail' vs 'Cystic lesion in the pancreatic tail': character minor (pred leaves out that the pancreatic tail lesion is cystic; 'hypodense' does not contradict it and the lesion is worked up either way); 'Increased colonic diverticulosis' vs 'Colonic diverticulosis': no error (the comparison difference is scored upstream (Stage 3a)); 'Large hiatal hernia' vs 'Moderate hiatal hernia': severity minor (large vs moderate hiatal hernia; one step, same management); 'Left inguinal hernia containing fat' vs 'Inguinal hernia': no error (the side is scored upstream (Stage 3a laterality)); 'Right paracolic gutter fluid collection' vs 'Right paracolic gutter fluid collection with gas locules': character major (pred leaves out the gas locules; gas signals an abscess or a leak that may need drainage); 'Colonic mass' vs 'Sigmoid colon mass': site major (pred leaves out the sigmoid location of the colonic mass; the segment sets the endoscopic and surgical approach).",
   "user": {
     "series_uuid": "abdomen-ct_example_7",
     "pairs": [
@@ -65,9 +65,9 @@
         },
         "gt_finding": {
           "finding_id": "gt_3",
-          "text": "8 mm hypodensity in the splenic upper pole.",
+          "text": "8 mm hypodensity in the splenic upper pole, too small to characterize.",
           "clinical_status": "abnormal",
-          "clinical_significance": "notable",
+          "clinical_significance": "routine",
           "laterality": null,
           "comparison": null,
           "measurements": [
@@ -79,7 +79,7 @@
           ]
         },
         "same_group_gt": [
-          "5 mm hypodensity near the splenic hilum."
+          "5 mm hypodensity near the splenic hilum, too small to characterize."
         ]
       },
       {
@@ -95,9 +95,9 @@
         },
         "gt_finding": {
           "finding_id": "gt_4",
-          "text": "5 mm hypodensity near the splenic hilum.",
+          "text": "5 mm hypodensity near the splenic hilum, too small to characterize.",
           "clinical_status": "abnormal",
-          "clinical_significance": "notable",
+          "clinical_significance": "routine",
           "laterality": null,
           "comparison": null,
           "measurements": [
@@ -109,7 +109,7 @@
           ]
         },
         "same_group_gt": [
-          "8 mm hypodensity in the splenic upper pole."
+          "8 mm hypodensity in the splenic upper pole, too small to characterize."
         ]
       },
       {

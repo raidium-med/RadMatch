@@ -9,10 +9,10 @@ Nine worked examples of the alignment patterns Stage 2 has to get right. Finding
 | `example_3.json` | N:1 umbrella — multiple atomic pred cysts covering one umbrella GT |
 | `example_4.json` | SPU + MIS — a pred finding the GT never assesses, and a GT finding with no pred counterpart |
 | `example_5.json` | 1:1 match despite different quoted prior sizes |
-| `example_6.json` | Constructed clinical long tail — stone with the hydroureteronephrosis it causes (1:N), hypodense lesion vs cyst and diverticulosis vs diverticulitis (two readings), bowel segments not matched |
-| `example_7.json` | Constructed — 'fast-in fast-out', 'low-density shadow', 'no metastatic disease' and 'no source of hematuria' as denials, post-cholecystectomy duct |
+| `example_6.json` | Constructed clinical long tail — renal pelvis stone with the hydronephrosis it causes in the same kidney (1:N), hypodense lesion vs cyst and diverticulosis vs diverticulitis (two readings), bowel segments not matched |
+| `example_7.json` | Constructed — translated vocabulary ('fast-in fast-out', 'low-density shadow'); 'no metastatic disease' as a denial; 'no source of hematuria' (names no entity) vs a renal calculus, both unmatched; post-cholecystectomy duct |
 | `example_8.json` | Constructed — splenule vs splenic hilar node (two readings), a variant beside 'no lymphadenopathy', diverticulosis beside 'no diverticulitis', SBO with and without transition point, leftovers across organs not paired |
-| `example_9.json` | Constructed — negatives matched only to what they deny ('no hydronephrosis' vs a nonobstructing stone, patency vs plaque, a named vein vs another vein, 'no peritoneal disease' vs pneumatosis, 'no bowel obstruction or dilatation' vs colitis and intramural gas, a urinary catheter vs 'bladder unremarkable'), real denials of ascites, free air and a venous thrombosis |
+| `example_9.json` | Constructed — negatives matched only to what they deny ('no hydronephrosis' vs a nonobstructing stone, 'no aggressive osseous lesion' vs degenerative change, patency vs plaque, a named vein vs another vein, 'no peritoneal nodularity' vs pneumatosis, 'no bowel obstruction or dilatation' vs colitis and intramural gas, a urinary catheter vs 'bladder unremarkable'), real denials of ascites, free air and a venous thrombosis |
 
 ## Format
 
@@ -22,7 +22,7 @@ Each file is one example:
 {
   "scenario": "...",
   "description": "...",
-  "user":      { "pred_findings": [...], "gt_findings": [...] },
+  "user":      { "indication": "...", "pred_findings": [...], "gt_findings": [...] },
   "assistant": { "matches": [...], "unmatched_pred": [...], "unmatched_gt": [...] }
 }
 ```
@@ -32,4 +32,5 @@ appends each `user` / `assistant` pair to the matching prompt as one user/assist
 Stage 2 sees only the `finding_id`, `text`, `clinical_status` and `laterality` of each finding
 (`radmatch.llm_utils.prompts.matching_view`) and each match row as `reasoning`, `pred_id`, `gt_id`;
 the `comparison` and `measurements` kept in the files are not sent. Each `reasoning` is one plain
-clause. `scenario` and `description` are documentation; the loader ignores them.
+clause. `indication` is optional, as in live calls, where it is sent only when the study has one.
+`scenario` and `description` are documentation; the loader ignores them.

@@ -1,13 +1,13 @@
 {
-  "scenario": "Status flip on cortical sulci + sinus normal denying mucosal thickening + merged pred umbrellas (1:N)",
-  "description": "Real subset of brain-mr/findings_{gt,pred}/example_1 (negative scan in gt, pred adds two abnormalities and merges some completeness statements). Demonstrates a status flip on hemispheric cortical sulci (gt 'compatible with age' = normal vs pred 'mildly prominent for age' = abnormal — INC downstream), an organ-level normal statement denying an abnormality (gt 'Paranasal sinuses are normal' vs pred left maxillary sinus mucosal thickening — a status inversion, matched), and merged pred completeness statements acting as 1:N umbrellas (medulla/pons/mesencephalon + cerebellum; orbits + paranasal sinuses), each bound to every gt statement it covers.",
+  "scenario": "Status flip on cortical sulci + sinus normal denying mucosal thickening + a one-region pred statement covering two gt statements (1:N)",
+  "description": "Adapted from brain-mr/findings_{gt,pred}/example_1 (negative scan in gt, pred adds two abnormalities and summarizes the posterior fossa in one statement). Demonstrates a status flip on hemispheric cortical sulci (gt 'compatible with age' = normal vs pred 'mildly prominent for age' = abnormal — INC downstream), an organ-level normal statement denying an abnormality (gt 'Paranasal sinuses are normal' vs pred left maxillary sinus mucosal thickening — a status inversion, matched), and a one-region pred statement ('Posterior fossa structures are normal') bound to both gt statements it covers (1:N).",
   "user": {
     "pred_findings": [
       {
         "finding_id": "p_1",
-        "text": "Medulla oblongata, pons, mesencephalon, both cerebellar hemispheres, and vermis parenchyma are normal.",
+        "text": "Posterior fossa structures are normal.",
         "clinical_status": "normal",
-        "laterality": "bilateral",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -21,7 +21,7 @@
       },
       {
         "finding_id": "p_3",
-        "text": "Bilateral orbits and paranasal sinuses are normal.",
+        "text": "Bilateral orbits are normal.",
         "clinical_status": "normal",
         "laterality": "bilateral",
         "comparison": null,
@@ -29,6 +29,14 @@
       },
       {
         "finding_id": "p_4",
+        "text": "Paranasal sinuses are normal.",
+        "clinical_status": "normal",
+        "laterality": "bilateral",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_5",
         "text": "Mucosal thickening in the left maxillary sinus.",
         "clinical_status": "abnormal",
         "laterality": "left",
@@ -84,7 +92,7 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Pred's brainstem-and-cerebellum statement covers the medulla, pons and mesencephalon."
+        "reasoning": "Pred's posterior fossa statement covers the medulla, pons and mesencephalon."
       },
       {
         "pred_id": "p_1",
@@ -99,15 +107,15 @@
       {
         "pred_id": "p_3",
         "gt_id": "gt_4",
-        "reasoning": "Pred orbits-and-sinuses statement covers the orbits."
-      },
-      {
-        "pred_id": "p_3",
-        "gt_id": "gt_5",
-        "reasoning": "Same statement covers the paranasal sinuses."
+        "reasoning": "Same normal orbits."
       },
       {
         "pred_id": "p_4",
+        "gt_id": "gt_5",
+        "reasoning": "Same normal paranasal sinuses."
+      },
+      {
+        "pred_id": "p_5",
         "gt_id": "gt_5",
         "reasoning": "Organ-level 'paranasal sinuses normal' denies the left maxillary mucosal thickening."
       }

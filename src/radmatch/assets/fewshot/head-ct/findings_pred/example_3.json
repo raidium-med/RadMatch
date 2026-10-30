@@ -4,7 +4,7 @@
     "measurements": [],
     "laterality": "bilateral",
     "comparison": null,
-    "clinical_status": "abnormal",
+    "clinical_status": "normal",
     "clinical_significance": "routine"
   },
   {
@@ -32,7 +32,7 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "No mucosal thickening.",
+    "text": "No paranasal sinus mucosal thickening.",
     "measurements": [],
     "laterality": null,
     "comparison": null,
@@ -40,7 +40,7 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "No visible air-fluid level.",
+    "text": "No paranasal sinus air-fluid level.",
     "measurements": [],
     "laterality": null,
     "comparison": null,
@@ -96,7 +96,7 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "Stable nonspecific micronodules, the right upper lobe micronodule measuring 5.1 mm and a few others less than 4 mm, particularly in the right lower lobe.",
+    "text": "Stable nonspecific micronodules, the right upper lobe micronodule measuring 5.1 mm and a few others less than 4 mm, particularly in the right lower lobe; no progressive lesion detected.",
     "measurements": [
       {
         "value": 5.1,

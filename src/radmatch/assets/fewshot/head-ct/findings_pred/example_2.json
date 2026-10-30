@@ -14,7 +14,7 @@
       }
     ],
     "laterality": "right",
-    "comparison": null,
+    "comparison": "improving",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
   },
@@ -40,7 +40,7 @@
     "laterality": null,
     "comparison": "stable",
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Enlargement of the intra- and pericerebral CSF spaces.",

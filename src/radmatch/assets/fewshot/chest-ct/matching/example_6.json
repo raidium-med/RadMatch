@@ -1,6 +1,6 @@
 {
- "scenario": "Constructed: aortic segments, coronary calcium grid, PE burden, one abnormality read two ways, leftovers across systems",
- "description": "Constructed. Each aortic segment is matched only to the same segment; a per-vessel coronary calcium grid is one finding; clot burden belongs to the PE finding; a soft-tissue focus read as residual thymus on one side and as a thymoma on the other is one abnormality (one pair); unmatched findings from different systems are never paired.",
+ "scenario": "Constructed: aortic segments, per-vessel coronary calcium, PE burden, one abnormality read two ways, leftovers across systems",
+ "description": "Constructed. Each aortic segment is matched only to the same segment; a per-vessel coronary calcium statement is one finding; clot burden belongs to the PE finding; a soft-tissue focus read as residual thymus on one side and as a thymoma on the other is one abnormality (one pair); unmatched findings from different systems are never paired.",
  "user": {
   "pred_findings": [
    {
@@ -137,7 +137,7 @@
    },
    {
     "finding_id": "gt_5",
-    "text": "Coronary artery calcium: left main none, LAD mild, circumflex none, RCA mild.",
+    "text": "Mild coronary artery calcium in the LAD and RCA, none in the left main or circumflex.",
     "clinical_status": "abnormal",
     "laterality": null,
     "comparison": null,
@@ -174,32 +174,32 @@
    {
     "pred_id": "p_1",
     "gt_id": "gt_1",
-    "reasoning": "same segment, aortic root"
+    "reasoning": "Same segment, aortic root."
    },
    {
     "pred_id": "p_2",
     "gt_id": "gt_2",
-    "reasoning": "same segment, ascending aorta"
+    "reasoning": "Same segment, ascending aorta."
    },
    {
     "pred_id": "p_3",
     "gt_id": "gt_4",
-    "reasoning": "same segment, descending aorta"
+    "reasoning": "Same segment, descending aorta."
    },
    {
     "pred_id": "p_4",
     "gt_id": "gt_5",
-    "reasoning": "one coronary calcification finding, grid or list"
+    "reasoning": "Same coronary calcification in the LAD and RCA, given per vessel or as a list."
    },
    {
     "pred_id": "p_5",
     "gt_id": "gt_6",
-    "reasoning": "same left lower lobe emboli, whatever clot burden each gives"
+    "reasoning": "Same left lower lobe emboli, whatever clot burden each gives."
    },
    {
     "pred_id": "p_6",
     "gt_id": "gt_7",
-    "reasoning": "one anterior mediastinal focus read two ways"
+    "reasoning": "One anterior mediastinal focus read two ways."
    }
   ],
   "unmatched_pred": [

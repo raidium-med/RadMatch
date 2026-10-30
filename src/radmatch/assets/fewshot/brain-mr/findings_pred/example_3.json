@@ -24,7 +24,23 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "Basal cisterns, cerebellopontine angle cisterns, internal acoustic canal widths, 5th, 7th-8th cranial nerves are normal.",
+    "text": "Basal cisterns and cerebellopontine angle cisterns are normal.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Internal acoustic canal widths are normal.",
+    "measurements": [],
+    "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "The 5th and 7th-8th cranial nerves are normal.",
     "measurements": [],
     "laterality": "bilateral",
     "comparison": null,

@@ -73,7 +73,7 @@
           "finding_id": "p_8",
           "text": "Ground-glass opacities in both lower lobes.",
           "clinical_status": "abnormal",
-          "clinical_significance": "urgent",
+          "clinical_significance": "notable",
           "laterality": "bilateral",
           "comparison": null,
           "measurements": []
@@ -82,7 +82,7 @@
           "finding_id": "gt_8",
           "text": "Ground-glass opacity in the right lower lobe.",
           "clinical_status": "abnormal",
-          "clinical_significance": "urgent",
+          "clinical_significance": "notable",
           "laterality": "right",
           "comparison": null,
           "measurements": []

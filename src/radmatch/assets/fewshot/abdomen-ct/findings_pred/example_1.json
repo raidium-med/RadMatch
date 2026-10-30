@@ -66,8 +66,8 @@
     ],
     "laterality": null,
     "comparison": null,
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
   },
   {
     "text": "Spleen normal.",

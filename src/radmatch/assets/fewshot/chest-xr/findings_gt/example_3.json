@@ -40,7 +40,7 @@
         "category": "size"
       }
     ],
-    "laterality": null,
+    "laterality": "right",
     "comparison": "stable",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"

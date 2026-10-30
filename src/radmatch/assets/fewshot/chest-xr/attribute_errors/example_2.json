@@ -33,7 +33,7 @@
           "clinical_status": "abnormal",
           "clinical_significance": "routine",
           "laterality": "left",
-          "comparison": null,
+          "comparison": "stable",
           "measurements": []
         },
         "gt_finding": {

@@ -1,17 +1,17 @@
 {
   "scenario": "Clinical long tail: cause and consequence, two readings of one abnormality, bowel segments",
-  "description": "Constructed example of clinical long-tail patterns: a stone stated with the hydroureteronephrosis it causes covers both gt findings (1:N); a hypodense lesion and a cyst at the same segment, and diverticulosis vs diverticulitis of the same sigmoid, are two readings of one abnormality (matched); 'no aneurysm' matches 'normal caliber'; a small bowel statement does not cover a rectal finding (both unmatched).",
+  "description": "Constructed example of clinical long-tail patterns: a renal pelvis stone stated with the hydronephrosis it causes in the same kidney covers both gt findings (1:N); a hypodense lesion and a cyst at the same segment, and diverticulosis vs diverticulitis of the same sigmoid, are two readings of one abnormality (matched); 'no aneurysm' matches 'normal caliber'; a small bowel statement does not cover a rectal finding (both unmatched).",
   "user": {
     "pred_findings": [
       {
         "finding_id": "p_1",
-        "text": "4 mm left UVJ stone causing mild hydroureteronephrosis.",
+        "text": "6 mm left renal pelvis stone causing moderate hydronephrosis.",
         "clinical_status": "abnormal",
         "laterality": "left",
         "comparison": null,
         "measurements": [
           {
-            "value": 4,
+            "value": 6,
             "unit": "mm",
             "category": "size"
           }
@@ -77,13 +77,13 @@
     "gt_findings": [
       {
         "finding_id": "gt_1",
-        "text": "4 mm left UVJ calculus.",
+        "text": "6 mm calculus in the left renal pelvis.",
         "clinical_status": "abnormal",
         "laterality": "left",
         "comparison": null,
         "measurements": [
           {
-            "value": 4,
+            "value": 6,
             "unit": "mm",
             "category": "size"
           }
@@ -91,7 +91,7 @@
       },
       {
         "finding_id": "gt_2",
-        "text": "Mild left hydroureteronephrosis.",
+        "text": "Moderate left hydronephrosis.",
         "clinical_status": "abnormal",
         "laterality": "left",
         "comparison": null,
@@ -160,12 +160,12 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Same left UVJ stone."
+        "reasoning": "Same left renal pelvis stone."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_2",
-        "reasoning": "pred states the hydroureteronephrosis as the consequence of the stone."
+        "reasoning": "Pred states the hydronephrosis as the stone's consequence in the same kidney."
       },
       {
         "pred_id": "p_2",

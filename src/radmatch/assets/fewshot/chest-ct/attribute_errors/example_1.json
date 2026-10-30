@@ -1,6 +1,6 @@
 {
   "scenario": "Minor severity (one step) + aortic size across the 4 cm threshold (major)",
-  "description": "Stage 3b call derived from the matches in chest-ct/matching/example_1.json, with the heart-size status inversion (gt 'not enlarged' vs pred 'mildly enlarged') left out of this example (scored upstream). 'Moderate coronary artery calcifications' vs 'Severe coronary artery calcifications': severity minor (moderate vs severe coronary calcification; one step, same management); 'Mild widening of the anterior aortic arch diameter to 4.1 cm' vs 'Mild widening of the anterior aortic arch diameter to 3.6 cm': measurement major (4.1 vs 3.6 cm aortic arch, across the 4 cm threshold; dilated vs normal changes surveillance).",
+  "description": "Stage 3b call derived from the matches in chest-ct/matching/example_1.json, with the heart-size status inversion (gt 'not enlarged' vs pred 'mildly enlarged') left out of this example (scored upstream). 'Moderate coronary artery calcifications' vs 'Severe coronary artery calcifications': severity minor (moderate vs severe coronary calcification; one step, same management); 'Mild widening of the anterior aortic arch diameter to 4.1 cm' vs 'Mild widening of the anterior aortic arch diameter to 3.6 cm': measurement major (4.1 vs 3.6 cm aortic arch, across the 4 cm threshold; from 4 cm the arch enters imaging surveillance).",
   "user": {
     "series_uuid": "chest-ct_example_1",
     "pairs": [
@@ -77,7 +77,7 @@
         "errors": [
           {
             "dimension": "measurement",
-            "reasoning": "4.1 vs 3.6 cm aortic arch, across the 4 cm threshold; dilated vs normal changes surveillance",
+            "reasoning": "4.1 vs 3.6 cm aortic arch, across the 4 cm threshold; from 4 cm the arch enters imaging surveillance",
             "severity": "major"
           }
         ]

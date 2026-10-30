@@ -1,8 +1,8 @@
 [
   {
-    "text": "Medulla oblongata, pons, mesencephalon, both cerebellar hemispheres, and vermis parenchyma are normal.",
+    "text": "Posterior fossa structures are normal.",
     "measurements": [],
-    "laterality": "bilateral",
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -80,7 +80,15 @@
     "clinical_significance": "routine"
   },
   {
-    "text": "Bilateral orbits and paranasal sinuses are normal.",
+    "text": "Bilateral orbits are normal.",
+    "measurements": [],
+    "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Paranasal sinuses are normal.",
     "measurements": [],
     "laterality": "bilateral",
     "comparison": null,
