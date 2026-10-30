@@ -1,6 +1,6 @@
 {
   "scenario": "Constructed: diffuse-process distribution, benign-lesion size",
-  "description": "Constructed. 'Microangiopathic white matter changes in the centrum…' vs 'Periventricular and subcortical microangiopathic white…': site minor (centrum semiovale vs periventricular and subcortical white matter changes; a partly different distribution of a diffuse process, same management); '18 mm mucous retention cyst in the right maxillary sinus' vs '12 mm mucous retention cyst in the right maxillary sinus': measurement minor (18 vs 12 mm maxillary retention cyst, over 20 %; a benign retention cyst is not followed by its size).",
+  "description": "Constructed. 'Microangiopathic white matter changes in the centrum…' vs 'Periventricular and subcortical microangiopathic white…': location minor (centrum semiovale vs periventricular and subcortical white matter changes; a partly different distribution of a diffuse process, same management); '18 mm mucous retention cyst in the right maxillary sinus' vs '12 mm mucous retention cyst in the right maxillary sinus': measurement minor (18 vs 12 mm maxillary retention cyst, over 20 %; a benign retention cyst is not followed by its size).",
   "user": {
     "series_uuid": "head-ct_example_4",
     "pairs": [
@@ -66,7 +66,7 @@
         "pair_id": 1,
         "errors": [
           {
-            "dimension": "site",
+            "dimension": "location",
             "reasoning": "centrum semiovale vs periventricular and subcortical white matter changes; a partly different distribution of a diffuse process, same management",
             "severity": "minor"
           }

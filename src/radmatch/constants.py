@@ -154,7 +154,7 @@ ATTRIBUTE_ERROR_SEVERITIES: tuple[str, ...] = ("major", "minor")
 # Stage 3a handles the structured dimensions, Stage 3b the free-text ones.
 # `measurement` and `comparison` are split: the comparators flag a size difference or
 # an invented change, and the LLM grades the ones that matter.
-ATTRIBUTE_DIMENSIONS_LLM: tuple[str, ...] = ("site", "extent", "severity", "character", "diagnosis", "certainty")
+ATTRIBUTE_DIMENSIONS_LLM: tuple[str, ...] = ("location", "extent", "grade", "appearance", "diagnosis", "certainty")
 # Keep in sync with `assets/prompts/prompt_attribute_errors.md`; anything else the
 # judge emits is dropped by `inference._normalize_llm_error`.
 # The finding fields Stage 2 sees (sizes and changes are in the text; significance does not decide a match).
@@ -163,11 +163,11 @@ ATTRIBUTE_DIMENSIONS_LLM_ACCEPTED: tuple[str, ...] = (*ATTRIBUTE_DIMENSIONS_LLM,
 # In the order the dimensions are shown everywhere (outputs, dashboard).
 ATTRIBUTE_DIMENSIONS_ALL: tuple[str, ...] = (
     "clinical_status",
-    "site",
+    "location",
     "laterality",
     "extent",
-    "severity",
-    "character",
+    "grade",
+    "appearance",
     "diagnosis",
     "certainty",
     "comparison",

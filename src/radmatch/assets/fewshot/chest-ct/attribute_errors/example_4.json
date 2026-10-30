@@ -1,6 +1,6 @@
 {
   "scenario": "Clinical long tail: different diagnosis for one abnormality, unilateral vs bilateral, synonyms",
-  "description": "Constructed; pairs from chest-ct/matching/example_4.json (status inversions excluded). 'Large bulla at the right lung apex' vs 'Small right apical pneumothorax': diagnosis major (bulla vs pneumothorax for the same apical lucency; a pneumothorax may need a chest tube); 'Linear fibrotic strands in both upper lobes' vs 'Biapical pleuroparenchymal scarring': no error (same content in other words, or the pred adds detail); 'Small non-enlarged subcarinal lymph node' vs 'No mediastinal lymphadenopathy': no error (two normal statements); 'Ground-glass opacities in both lower lobes' vs 'Ground-glass opacity in the right lower lobe': no error (the side is scored upstream (Stage 3a laterality)).",
+  "description": "Constructed; pairs from chest-ct/matching/example_4.json (status inversions excluded). 'Large bulla at the right lung apex' vs 'Small right apical pneumothorax': diagnosis major (bulla vs pneumothorax for the same apical lucency; a pneumothorax may need a chest tube); 'Linear fibrotic strands in both upper lobes' vs 'Biapical pleuroparenchymal scarring': location minor (both upper lobes vs both apices; a coarser location word on routine scarring, same management); 'Small non-enlarged subcarinal lymph node' vs 'No mediastinal lymphadenopathy': no error (two normal statements); 'Ground-glass opacities in both lower lobes' vs 'Ground-glass opacity in the right lower lobe': no error (the side is scored upstream (Stage 3a laterality)).",
   "user": {
     "series_uuid": "chest-ct_example_4",
     "pairs": [
@@ -104,7 +104,13 @@
       },
       {
         "pair_id": 2,
-        "errors": []
+        "errors": [
+          {
+            "dimension": "location",
+            "reasoning": "both upper lobes vs both apices; a coarser location word on routine scarring, same management",
+            "severity": "minor"
+          }
+        ]
       },
       {
         "pair_id": 3,

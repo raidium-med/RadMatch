@@ -1,8 +1,8 @@
 """Stage 3b — LLM calls asking whether the free-text attribute dimensions differ
 between pred and gt, in chunks of `_STAGE3B_CHUNK_SIZE` matched pairs per call.
 
-INC pairs are evaluated like any other, for diagnostics — their category is already
-settled by Stage 3a's status inversion.
+Pairs whose outcome the rules already fix (a status inversion, two normal statements
+without a hedge, identical texts) are not sent (`needs_judge`).
 """
 
 from __future__ import annotations

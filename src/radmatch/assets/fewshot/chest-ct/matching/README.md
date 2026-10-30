@@ -4,7 +4,7 @@ Worked examples of the alignment patterns Stage 2 has to get right. Findings use
 
 | File | Scenario |
 |------|----------|
-| `example_1.json` | Laterality flip + status flip + severity flip + measurement diff |
+| `example_1.json` | Laterality flip + status flip + grade flip + measurement diff |
 | `example_2.json` | 1:N umbrella — pred gives a range of spinal levels covering multiple GT atoms |
 | `example_3.json` | N:1 umbrella — atomic pred pulmonary nodules covering one umbrella GT |
 | `example_4.json` | Constructed clinical long tail — bulla vs pneumothorax (two readings of one abnormality), scarring synonyms, sub-threshold node, post-lobectomy state, a negative that does not deny other entities |

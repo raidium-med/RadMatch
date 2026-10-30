@@ -1,6 +1,6 @@
 {
   "attribute_breakdown": {
-    "certainty": {
+    "appearance": {
       "clean": 3,
       "clean_pct": 1.0,
       "evaluated": 3,
@@ -9,7 +9,7 @@
       "minor": 0,
       "minor_pct": 0.0
     },
-    "character": {
+    "certainty": {
       "clean": 3,
       "clean_pct": 1.0,
       "evaluated": 3,
@@ -54,6 +54,15 @@
       "minor": 0,
       "minor_pct": 0.0
     },
+    "grade": {
+      "clean": 3,
+      "clean_pct": 1.0,
+      "evaluated": 3,
+      "major": 0,
+      "major_pct": 0.0,
+      "minor": 0,
+      "minor_pct": 0.0
+    },
     "laterality": {
       "clean": 2,
       "clean_pct": 0.666667,
@@ -63,25 +72,16 @@
       "minor": 0,
       "minor_pct": 0.0
     },
+    "location": {
+      "clean": 3,
+      "clean_pct": 1.0,
+      "evaluated": 3,
+      "major": 0,
+      "major_pct": 0.0,
+      "minor": 0,
+      "minor_pct": 0.0
+    },
     "measurement": {
-      "clean": 3,
-      "clean_pct": 1.0,
-      "evaluated": 3,
-      "major": 0,
-      "major_pct": 0.0,
-      "minor": 0,
-      "minor_pct": 0.0
-    },
-    "severity": {
-      "clean": 3,
-      "clean_pct": 1.0,
-      "evaluated": 3,
-      "major": 0,
-      "major_pct": 0.0,
-      "minor": 0,
-      "minor_pct": 0.0
-    },
-    "site": {
       "clean": 3,
       "clean_pct": 1.0,
       "evaluated": 3,

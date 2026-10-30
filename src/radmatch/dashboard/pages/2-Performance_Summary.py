@@ -92,8 +92,8 @@ ATTRIBUTE_ERRORS_HELP = (
     "Per-attribute distribution of clean / minor / major across all matched "
     "pairs (COR + INC + the internal PAR records before reclassification). "
     "Diagnostic only — does not feed the tier errors (aER, tER, cER).\n\n"
-    "clinical_status: normal vs abnormal. site: where within the side. laterality: the side. "
-    "extent: how far and how many. severity: the grade. character: what it looks like. "
+    "clinical_status: normal vs abnormal. location: where within the side. laterality: the side. "
+    "extent: how far and how many. grade: mild to severe, or a structured category. appearance: what it looks like. "
     "diagnosis: what it is, its age and cause. certainty: the hedging. comparison: change over time. "
     "measurement: sizes, counts, attenuation."
 )

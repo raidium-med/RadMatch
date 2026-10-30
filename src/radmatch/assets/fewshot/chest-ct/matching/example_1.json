@@ -1,6 +1,6 @@
 {
-  "scenario": "Laterality flip + status flip + severity flip + measurement diff",
-  "description": "Real subset of chest-ct/findings_{gt,pred}/example_1 (elderly patient). Demonstrates a laterality flip on bronchiectasis (gt right lung apex vs pred left lung apex, a side error scored from the findings' laterality), a status flip on heart size (gt 'not enlarged' = normal vs pred 'mildly enlarged' = abnormal — INC downstream), a severity flip on coronary calcifications (severe vs moderate), and a measurement diff on aortic arch (3.6 vs 4.1 cm).",
+  "scenario": "Laterality flip + status flip + grade flip + measurement diff",
+  "description": "Real subset of chest-ct/findings_{gt,pred}/example_1 (elderly patient). Demonstrates a laterality flip on bronchiectasis (gt right lung apex vs pred left lung apex, a side error scored from the findings' laterality), a status flip on heart size (gt 'not enlarged' = normal vs pred 'mildly enlarged' = abnormal — INC downstream), a grade flip on coronary calcifications (severe vs moderate), and a measurement diff on aortic arch (3.6 vs 4.1 cm).",
   "user": {
     "pred_findings": [
       {

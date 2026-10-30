@@ -1,6 +1,6 @@
 {
-  "scenario": "Major severity loss + minor measurement difference on a lesion described with its portions",
-  "description": "Stage 3b call built from head-ct/findings_gt/example_2.json and findings_pred/example_2.json. The subdural hematoma is one finding on each side, its two portions and the absent mass effect included: the anterior thickness differs (8 vs 10 mm, not more than 20 % of the gt value) while the largest thickness (posterior, 13 mm) is the same on both sides, so the 10 mm hematoma threshold is not in play: a minor measurement error. The white-matter-changes pair has a severity error: gt says 'marked' microangiopathic white matter changes, pred drops the descriptor; major because the grade the pred leaves out is a high one ('marked').",
+  "scenario": "Major grade loss + a size difference within measurement variability on a lesion described with its portions",
+  "description": "Stage 3b call built from head-ct/findings_gt/example_2.json and findings_pred/example_2.json. The subdural hematoma is one finding on each side, its two portions and the absent mass effect included: the anterior thickness differs (8 vs 10 mm, within measurement variability) while the largest thickness (posterior, 13 mm) is the same on both sides, so the 10 mm hematoma threshold is not in play: no error. The white-matter-changes pair has a grade error: gt says 'marked' microangiopathic white matter changes, pred drops the descriptor; major because the grade the pred leaves out is a high one ('marked').",
   "user": {
     "series_uuid": "head-ct_example_2",
     "pairs": [
@@ -74,19 +74,13 @@
     "errors_per_pair": [
       {
         "pair_id": 1,
-        "errors": [
-          {
-            "dimension": "measurement",
-            "reasoning": "anterior thickness 8 vs 10 mm, not more than 20 %; the largest thickness, 13 mm, is the same, so the 10 mm threshold is not in play",
-            "severity": "minor"
-          }
-        ]
+        "errors": []
       },
       {
         "pair_id": 2,
         "errors": [
           {
-            "dimension": "severity",
+            "dimension": "grade",
             "reasoning": "pred leaves out the marked grade of the white matter changes; a high grade weighs the vascular risk workup",
             "severity": "major"
           }

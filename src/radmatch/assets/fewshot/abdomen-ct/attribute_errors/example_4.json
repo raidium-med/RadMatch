@@ -1,6 +1,6 @@
 {
-  "scenario": "Clinical long tail: group context, different diagnosis, synonyms, two-step severity",
-  "description": "Constructed; pairs from abdomen-ct/matching/example_6.json. '6 mm left renal pelvis stone causing moderate…' vs '6 mm calculus in the left renal pelvis': no error (the match group gives the detail); '6 mm left renal pelvis stone causing moderate…' vs 'Moderate left hydronephrosis': no error (the match group gives the detail); 'Sigmoid diverticulosis' vs 'Sigmoid diverticulitis with pericolic fat stranding': diagnosis major (diverticulosis vs diverticulitis; pred misses an acute inflammation that needs treatment); 'Aortic calcification' vs 'Atherosclerotic calcification of the abdominal aorta': no error (same content in other words, or the pred adds detail); 'Small amount of ascites' vs 'Large-volume ascites': severity major (small vs large-volume ascites, two steps; large ascites may need paracentesis).",
+  "scenario": "Clinical long tail: group context, different diagnosis, synonyms, two-step grade",
+  "description": "Constructed; pairs from abdomen-ct/matching/example_6.json. '6 mm left renal pelvis stone causing moderate…' vs '6 mm calculus in the left renal pelvis': no error (the match group gives the detail); '6 mm left renal pelvis stone causing moderate…' vs 'Moderate left hydronephrosis': no error (the match group gives the detail); 'Sigmoid diverticulosis' vs 'Sigmoid diverticulitis with pericolic fat stranding': diagnosis major (diverticulosis vs diverticulitis; pred misses an acute inflammation that needs treatment); 'Aortic calcification' vs 'Atherosclerotic calcification of the abdominal aorta': no error (same content in other words, or the pred adds detail); 'Small amount of ascites' vs 'Large-volume ascites': grade major (small vs large-volume ascites, two steps; large ascites may need paracentesis).",
   "user": {
     "series_uuid": "abdomen-ct_example_4",
     "pairs": [
@@ -163,7 +163,7 @@
         "pair_id": 5,
         "errors": [
           {
-            "dimension": "severity",
+            "dimension": "grade",
             "reasoning": "small vs large-volume ascites, two steps; large ascites may need paracentesis",
             "severity": "major"
           }

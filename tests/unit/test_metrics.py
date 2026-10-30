@@ -8,7 +8,7 @@ from radmatch import constants
 from radmatch.scoring import metrics
 
 
-def _err(severity: str, dimension: str = "site") -> dict:
+def _err(severity: str, dimension: str = "location") -> dict:
     return {"dimension": dimension, "severity": severity}
 
 
@@ -151,10 +151,10 @@ def test_build_muc_record_drops_llm_measurement_when_deterministic_fired():
         pred_finding=finding,
         gt_finding=finding,
         structured_errors=[_meas("major")],
-        text_errors=[_meas("major"), _err("minor", "site")],
+        text_errors=[_meas("major"), _err("minor", "location")],
     )
     assert rec["structured_errors"] == [_meas("major")]
-    assert rec["text_errors"] == [_err("minor", "site")]
+    assert rec["text_errors"] == [_err("minor", "location")]
 
 
 def test_build_muc_record_keeps_llm_measurement_when_deterministic_silent():
@@ -364,8 +364,8 @@ def test_par_with_certainty_on_urgent_gt_stays_par():
 
 def test_par_with_non_certainty_minor_on_critical_gt_stays_par():
     """The escalation rule is specific to `certainty` errors — a minor
-    severity or site error on a critical GT still counts as PAR."""
-    rec = _record_with_errors("PAR", text=[_err("minor", dimension="severity")], gt_sig="critical")
+    grade or location error on a critical GT still counts as PAR."""
+    rec = _record_with_errors("PAR", text=[_err("minor", dimension="grade")], gt_sig="critical")
     assert metrics.reclassify_to_effective_category(rec) == "PAR"
 
 

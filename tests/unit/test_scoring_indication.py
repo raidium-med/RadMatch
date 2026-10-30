@@ -53,8 +53,8 @@ def test_detect_attribute_errors_raises_on_unasked_pair_id(fake_client, ok, make
     bad = ok(
         {
             "errors_per_pair": [
-                {"pair_id": 1, "errors": [{"dimension": "site", "severity": "major", "reasoning": "x"}]},
-                {"pair_id": 2, "errors": [{"dimension": "severity", "severity": "minor", "reasoning": "y"}]},
+                {"pair_id": 1, "errors": [{"dimension": "location", "severity": "major", "reasoning": "x"}]},
+                {"pair_id": 2, "errors": [{"dimension": "grade", "severity": "minor", "reasoning": "y"}]},
             ]
         }
     )
@@ -76,12 +76,12 @@ def test_detect_attribute_errors_places_answers_by_pair_id(fake_client, ok, make
     findings_gt = {"g1": make_finding("g1"), "g2": make_finding("g2")}
     findings_pred = {"p1": make_finding("p1"), "p2": make_finding("p2")}
     matches = [{"pred_id": "p1", "gt_id": "g1", "reasoning": ""}, {"pred_id": "p2", "gt_id": "g2", "reasoning": ""}]
-    site_err = {"dimension": "site", "severity": "major", "reasoning": "upper vs lower lobe"}
-    client = fake_client(ok({"errors_per_pair": [{"pair_id": 2, "errors": [site_err]}, {"pair_id": 1, "errors": []}]}))
+    loc_err = {"dimension": "location", "severity": "major", "reasoning": "upper vs lower lobe"}
+    client = fake_client(ok({"errors_per_pair": [{"pair_id": 2, "errors": [loc_err]}, {"pair_id": 1, "errors": []}]}))
     out = inference.detect_attribute_errors(
         matches=matches, findings_pred=findings_pred, findings_gt=findings_gt, series_uuid="s1", client=client
     )
-    assert out == [[], [site_err]]
+    assert out == [[], [loc_err]]
     sent = json.loads(client.calls[0]["messages"][-1]["content"])
     assert [p["pair_id"] for p in sent["pairs"]] == [1, 2]
 
@@ -111,9 +111,9 @@ def test_detect_attribute_errors_retries_malformed_then_recovers(fake_client, ok
     gt = [make_finding("g1")]
     pred = [make_finding("p1")]
     matches = [{"pred_id": "p1", "gt_id": "g1", "reasoning": ""}]
-    site_err = {"dimension": "site", "severity": "major", "reasoning": "upper vs lower lobe"}
-    bad = ok({"errors_per_pair": [{"pair_id": 1, "errors": []}, {"pair_id": 2, "errors": [site_err]}]})
-    good = ok({"errors_per_pair": [{"pair_id": 1, "errors": [site_err]}]})
+    loc_err = {"dimension": "location", "severity": "major", "reasoning": "upper vs lower lobe"}
+    bad = ok({"errors_per_pair": [{"pair_id": 1, "errors": []}, {"pair_id": 2, "errors": [loc_err]}]})
+    good = ok({"errors_per_pair": [{"pair_id": 1, "errors": [loc_err]}]})
     client = fake_client(bad, good)
     out = inference.detect_attribute_errors(
         matches=matches,
@@ -122,7 +122,7 @@ def test_detect_attribute_errors_retries_malformed_then_recovers(fake_client, ok
         series_uuid="s1",
         client=client,
     )
-    assert out[0] == [site_err]
+    assert out[0] == [loc_err]
     assert len(client.calls) == 2  # recovered on the retry
 
 

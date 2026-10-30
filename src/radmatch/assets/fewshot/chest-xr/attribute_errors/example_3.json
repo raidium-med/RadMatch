@@ -1,6 +1,6 @@
 {
   "scenario": "Size across a threshold; the comparison flip stays upstream",
-  "description": "Stage 3b call built from chest-xr/findings_gt/example_3.json and findings_pred/example_3.json. 'A 6 mm pulmonary nodule in the peripheral right upper lobe…' vs 'A 4 mm pulmonary nodule in the peripheral right upper…': measurement major (6 vs 4 mm nodule, across the 6 mm Fleischner threshold; adds a follow-up CT), extent minor (pred leaves out the other nodules, seen only on CT; a radiograph report cannot be expected to give them).",
+  "description": "Stage 3b call built from chest-xr/findings_gt/example_3.json and findings_pred/example_3.json. 'A 6 mm pulmonary nodule in the peripheral right upper lobe…' vs 'A 4 mm pulmonary nodule in the peripheral right upper…': measurement major (6 vs 4 mm nodule, across the 6 mm Fleischner threshold; adds a follow-up CT); the other nodules, seen only on CT, are not left out by a radiograph report.",
   "user": {
     "series_uuid": "chest-xr_example_3",
     "pairs": [
@@ -48,11 +48,6 @@
             "dimension": "measurement",
             "reasoning": "6 vs 4 mm nodule, across the 6 mm Fleischner threshold; adds a follow-up CT",
             "severity": "major"
-          },
-          {
-            "dimension": "extent",
-            "reasoning": "pred leaves out the other nodules, seen only on CT; a radiograph report cannot be expected to give them",
-            "severity": "minor"
           }
         ]
       }

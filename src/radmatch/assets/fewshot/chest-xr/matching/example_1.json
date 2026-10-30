@@ -1,6 +1,6 @@
 {
-  "scenario": "1:1 matches + severity diff + status flip + MIS",
-  "description": "Real subset of chest-xr/findings_{gt,pred}/example_1. Demonstrates a clean match (right pleural thickening), a match with a severity difference (mild vs moderate cardiomegaly), a status-flip match kept in matches so Stage 3a fires INC (gt 'No pleural effusion' vs pred 'Small bilateral pleural effusions'), and a GT-only finding that becomes MIS (the bilateral pleural plaques the prediction missed).",
+  "scenario": "1:1 matches + grade diff + status flip + MIS",
+  "description": "Real subset of chest-xr/findings_{gt,pred}/example_1. Demonstrates a clean match (right pleural thickening), a match with a grade difference (mild vs moderate cardiomegaly), a status-flip match kept in matches so Stage 3a fires INC (gt 'No pleural effusion' vs pred 'Small bilateral pleural effusions'), and a GT-only finding that becomes MIS (the bilateral pleural plaques the prediction missed).",
   "user": {
     "pred_findings": [
       {"finding_id": "p_1", "text": "Right pleural thickening is chronic.", "clinical_status": "abnormal", "laterality": "right", "comparison": null, "measurements": []},

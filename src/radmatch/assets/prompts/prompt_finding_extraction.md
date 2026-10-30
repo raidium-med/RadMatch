@@ -25,7 +25,7 @@ One process is one finding: never split what a radiologist would count as one ob
 | Pattern | Example → findings |
 |---|---|
 | Several organs | "Liver and spleen: Normal" → "Liver normal." + "Spleen normal." |
-| One negation, several locations | "No pleural or pericardial effusion" → "No pleural effusion." + "No pericardial effusion." |
+| One negation, several locations (lymph node stations stay one finding, below) | "No pleural or pericardial effusion" → "No pleural effusion." + "No pericardial effusion." |
 | One negation, several pathologies | "No bowel perforation or ischemia" → "No bowel perforation." + "No bowel ischemia." |
 | Different abnormalities of one organ | "Liver mass in segment 6, cyst in segment 4" → two findings; "Spondylosis with L1 height loss" → spondylosis + L1 compression deformity |
 | Different vascular beds in one sentence | "Calcified plaques of the aorta and coronary arteries" → aortic atherosclerosis + coronary artery calcification |
@@ -46,7 +46,7 @@ One process is one finding: never split what a radiologist would count as one ob
 | Passive (compressive) atelectasis next to an effusion, mass or consolidation; bronchial wall thickening with the bronchiectasis it accompanies; traction bronchiectasis with fibrosis | "Right pleural effusion with adjacent passive atelectasis." |
 | One process at several sites of one organ, organ system or paired organs | "Atelectasis in the right middle lobe and lingula.", "Bilateral ovarian cysts.", "Intrahepatic and extrahepatic biliary dilatation.", "Bilateral calcified pleural thickening.", "Acute fractures of the left 4th to 7th ribs." |
 | One kind of small lesion or deposit listed at several sites in one sentence (calcifications, stones, small nodes, tiny nodules) | "Punctate calcifications in the pelvis, along the rectum and in the sigmoid mesocolon.", "Bilateral nonobstructing renal calculi, up to 4 mm." |
-| Lymph nodes at several stations described together, or several nodes of one chain on one or both sides | "Enlarged mediastinal and hilar lymph nodes, largest 14 mm.", "Right external iliac node 12 mm and left external iliac node 10 mm." |
+| Lymph nodes at several stations described together, or several nodes of one chain on one or both sides, also when negated | "Enlarged mediastinal and hilar lymph nodes, largest 14 mm.", "Right external iliac node 12 mm and left external iliac node 10 mm.", "No enlarged mediastinal, hilar or axillary lymph nodes." |
 | A procedure with its expected post-treatment appearance (staple or suture line, clips, skin incision, staples or drains, volume loss and ipsilateral mediastinal shift after lung resection, bowel or fat filling a resection bed, post-surgical change of the operated organ, a TURP cavity); a complication (leak, collection, recurrence, hernia) is its own finding | "Right lower lobectomy with staple line, volume loss and rightward mediastinal shift.", "Hysterectomy and bilateral oophorectomy." |
 | A set of lesions and its largest member (the size is a measurement of the set), including members listed one by one: small (< 6 mm) non-suspicious lung nodules, cysts of one organ with its "too small to characterize, likely cysts" lesions | "Several hepatic cysts, the largest measuring 2 cm.", "Multiple small pulmonary nodules, largest 5 mm." |
 | One observation described in two parts of one report (CT and scout or correlative radiograph; PET and CT) | one finding |
@@ -73,7 +73,7 @@ An examination-quality hedge (§1) is dropped, not merged: "RLL pneumonia." + "R
 
 ### `text`
 
-One concise clinical sentence ending with a period. Write "Spleen normal.", not "Spleen: Normal.". Keep hedging words exactly as written ("possibly", "likely", "probably", "suspicious for", "cannot be excluded"): the certainty of a finding is part of its text. Keep a structured assessment category (Lung-RADS 4A, Bosniak IIF, LI-RADS 3, O-RADS 2) in the text of the finding it grades.
+One concise clinical sentence ending with a period. Write "Spleen normal.", not "Spleen: Normal.". Keep hedging words exactly as written ("possibly", "likely", "probably", "suspicious for", "could represent", "versus", "cannot be excluded"): the certainty of a finding is part of its text. Keep a structured assessment category (Lung-RADS 4A, Bosniak IIF, LI-RADS 3, O-RADS 2) in the text of the finding it grades.
 
 ### `clinical_status`: `"normal"` | `"abnormal"`
 

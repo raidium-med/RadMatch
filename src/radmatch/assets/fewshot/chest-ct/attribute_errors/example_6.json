@@ -1,6 +1,6 @@
 {
  "scenario": "Constructed: acute vs chronic, single vs multiple, attenuation, invasion, diffuse pneumonia distribution and descriptors, a benign-lesion size, a structured category",
- "description": "Constructed. 'Acute pulmonary emboli in the right lower lobe segmental…' vs 'Chronic pulmonary emboli in the right lower lobe segmental…': diagnosis major (acute vs chronic segmental emboli; acute emboli call for anticoagulation now); 'Solitary 9 mm right lower lobe pulmonary nodule' vs 'Multiple right lower lobe pulmonary nodules, the largest 9…': extent major (solitary vs multiple nodules; primary vs metastatic workup); '8 mm ground-glass nodule in the left upper lobe' vs '8 mm solid nodule in the left upper lobe': character major (ground-glass vs solid 8 mm nodule; switches the Fleischner pathway); 'Right upper lobe mass abutting the mediastinal pleura' vs 'Right upper lobe mass invading the mediastinum': extent major (abutment vs invasion of the mediastinum; changes the T stage and resectability); 'Bilateral ground-glass opacities with interlobular septal…' vs 'Bilateral peripheral ground-glass opacities with…': site minor (both lungs vs peripheral ground glass; a coarser distribution of a diffuse pneumonia, same treatment), character minor (septal thickening vs consolidation within the ground glass; two descriptors of one diffuse pneumonia, same treatment); '4.2 cm lipoma in the left chest wall' vs '3.0 cm left chest wall lipoma': measurement minor (4.2 vs 3.0 cm chest wall lipoma, over 20 %; a lipoma is benign and not followed by its size); '7 mm solid right upper lobe nodule, Lung-RADS 4A' vs '7 mm solid right upper lobe nodule, Lung-RADS 3': severity major (Lung-RADS 4A vs 3; 3-month vs 6-month low-dose CT).",
+ "description": "Constructed. 'Acute pulmonary emboli in the right lower lobe segmental…' vs 'Chronic pulmonary emboli in the right lower lobe segmental…': diagnosis major (acute vs chronic segmental emboli; acute emboli call for anticoagulation now); 'Solitary 9 mm right lower lobe pulmonary nodule' vs 'Multiple right lower lobe pulmonary nodules, the largest 9…': extent major (solitary vs multiple nodules; primary vs metastatic workup); '8 mm ground-glass nodule in the left upper lobe' vs '8 mm solid nodule in the left upper lobe': appearance major (ground-glass vs solid 8 mm nodule; switches the Fleischner pathway); 'Right upper lobe mass abutting the mediastinal pleura' vs 'Right upper lobe mass invading the mediastinum': extent major (abutment vs invasion of the mediastinum; changes the T stage and resectability); 'Bilateral ground-glass opacities with interlobular septal…' vs 'Bilateral peripheral ground-glass opacities with…': location minor (both lungs vs peripheral ground glass; a coarser distribution of a diffuse pneumonia, same treatment), appearance minor (septal thickening vs consolidation within the ground glass; two descriptors of one diffuse pneumonia, same treatment); '4.2 cm lipoma in the left chest wall' vs '3.0 cm left chest wall lipoma': measurement minor (4.2 vs 3.0 cm chest wall lipoma, over 20 %; a lipoma is benign and not followed by its size); '7 mm solid right upper lobe nodule, Lung-RADS 4A' vs '7 mm solid right upper lobe nodule, Lung-RADS 3': grade major (Lung-RADS 4A vs 3; 3-month vs 6-month low-dose CT).",
  "user": {
   "series_uuid": "chest-ct_example_6",
   "pairs": [
@@ -227,7 +227,7 @@
     "pair_id": 3,
     "errors": [
      {
-      "dimension": "character",
+      "dimension": "appearance",
       "reasoning": "ground-glass vs solid 8 mm nodule; switches the Fleischner pathway",
       "severity": "major"
      }
@@ -247,12 +247,12 @@
     "pair_id": 5,
     "errors": [
      {
-      "dimension": "site",
+      "dimension": "location",
       "reasoning": "both lungs vs peripheral ground glass; a coarser distribution of a diffuse pneumonia, same treatment",
       "severity": "minor"
      },
      {
-      "dimension": "character",
+      "dimension": "appearance",
       "reasoning": "septal thickening vs consolidation within the ground glass; two descriptors of one diffuse pneumonia, same treatment",
       "severity": "minor"
      }
@@ -272,7 +272,7 @@
     "pair_id": 7,
     "errors": [
      {
-      "dimension": "severity",
+      "dimension": "grade",
       "reasoning": "Lung-RADS 4A vs 3; 3-month vs 6-month low-dose CT",
       "severity": "major"
      }

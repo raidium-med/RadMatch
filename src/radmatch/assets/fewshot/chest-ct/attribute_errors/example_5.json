@@ -1,6 +1,6 @@
 {
   "scenario": "Constructed: certainty (also on the rule-out the indication asks for), added diagnosis",
-  "description": "Constructed. 'Possible minimally displaced right 6th rib fracture' vs 'Minimally displaced right 6th rib fracture': certainty major (possible vs definite right 6th rib fracture, two steps; a possible fracture is sent for more imaging); 'Possibly no pulmonary embolism' vs 'No pulmonary embolism': certainty major (possibly vs definitely no pulmonary embolism, two steps; a hedged negative leaves an embolism to rule out); 'Enlarged mediastinal lymph nodes, suspicious for…' vs 'Mildly enlarged mediastinal lymph nodes, likely reactive': diagnosis major (suspicious for metastases vs likely reactive nodes; adds an oncologic workup), severity minor (pred leaves out the mild grade of the node enlargement; a low grade left out changes nothing); 'Mild emphysema' vs 'Mild centrilobular emphysema': diagnosis minor (pred leaves out the centrilobular subtype of emphysema; same management).",
+  "description": "Constructed. 'Possible minimally displaced right 6th rib fracture' vs 'Minimally displaced right 6th rib fracture': certainty major (possible vs definite right 6th rib fracture, two steps; a possible fracture is sent for more imaging); 'No definite pulmonary embolism' vs 'No pulmonary embolism': certainty minor (no definite vs no pulmonary embolism, one step; both still rule out the embolism); 'Enlarged mediastinal lymph nodes, suspicious for…' vs 'Mildly enlarged mediastinal lymph nodes, likely reactive': diagnosis major (suspicious for metastases vs likely reactive nodes; adds an oncologic workup), grade minor (pred leaves out the mild grade of the node enlargement; a low grade left out changes nothing); 'Mild emphysema' vs 'Mild centrilobular emphysema': diagnosis minor (pred leaves out the centrilobular subtype of emphysema; same management).",
   "user": {
     "series_uuid": "chest-ct_example_5",
     "indication": "Acute dyspnea, pulmonary embolism workup.",
@@ -30,7 +30,7 @@
         "pair_id": 2,
         "pred_finding": {
           "finding_id": "p_2",
-          "text": "Possibly no pulmonary embolism.",
+          "text": "No definite pulmonary embolism.",
           "clinical_status": "normal",
           "clinical_significance": "critical",
           "laterality": null,
@@ -108,8 +108,8 @@
         "errors": [
           {
             "dimension": "certainty",
-            "reasoning": "possibly vs definitely no pulmonary embolism, two steps; a hedged negative leaves an embolism to rule out",
-            "severity": "major"
+            "reasoning": "no definite vs no pulmonary embolism, one step; both still rule out the embolism",
+            "severity": "minor"
           }
         ]
       },
@@ -122,7 +122,7 @@
             "severity": "major"
           },
           {
-            "dimension": "severity",
+            "dimension": "grade",
             "reasoning": "pred leaves out the mild grade of the node enlargement; a low grade left out changes nothing",
             "severity": "minor"
           }

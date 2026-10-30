@@ -108,7 +108,7 @@ def test_par_with_major_error_internally_PAR(fake_client, ok, make_finding):
                 "errors_per_pair": [
                     {
                         "pair_id": 1,
-                        "errors": [{"dimension": "site", "severity": "major", "reasoning": "upper vs lower lobe"}],
+                        "errors": [{"dimension": "location", "severity": "major", "reasoning": "upper vs lower lobe"}],
                     }
                 ]
             }
@@ -131,7 +131,7 @@ def test_par_with_only_minor_errors_keeps_PAR(fake_client, ok, make_finding):
         ok(
             {
                 "errors_per_pair": [
-                    {"pair_id": 1, "errors": [{"dimension": "site", "severity": "minor", "reasoning": "imprecise"}]}
+                    {"pair_id": 1, "errors": [{"dimension": "location", "severity": "minor", "reasoning": "imprecise"}]}
                 ]
             }
         ),
@@ -192,7 +192,7 @@ def test_dataset_five_pairs_one_per_muc_category(tmp_path, fake_client, ok, make
         ok(
             {
                 "errors_per_pair": [
-                    {"pair_id": 1, "errors": [{"dimension": "site", "severity": "major", "reasoning": "..."}]}
+                    {"pair_id": 1, "errors": [{"dimension": "location", "severity": "major", "reasoning": "..."}]}
                 ]
             }
         ),  # s2 attr
@@ -201,7 +201,7 @@ def test_dataset_five_pairs_one_per_muc_category(tmp_path, fake_client, ok, make
 
     summary = _run_dataset(gt_dir, pred_dir, out_dir, client)
 
-    # PAR (s2, major site error on critical GT) reclassifies to INC.
+    # PAR (s2, major location error on critical GT) reclassifies to INC.
     # Effective counts: 1 COR (s1), 0 PAR, 2 INC (s2 reclassified + s3 original),
     # 1 MIS (s4), 1 SPU (s5).
     assert summary["muc_counts"] == {"COR": 1, "PAR": 0, "INC": 2, "MIS": 1, "SPU": 1}
@@ -426,7 +426,7 @@ def test_score_pair_reuses_cached_text_errors(tmp_path, fake_client, make_findin
         "matches": matches,
         "findings_fingerprint": fingerprint,
         "structured_errors_per_pair": [[]],
-        "text_errors_per_pair": [[{"dimension": "site", "severity": "major", "reasoning": "cached"}]],
+        "text_errors_per_pair": [[{"dimension": "location", "severity": "major", "reasoning": "cached"}]],
         "muc_records": [],
     }
     _write(out_dir / "attribute_errors" / "s.json", cached)
@@ -456,7 +456,7 @@ def test_score_pair_writes_per_report_metrics(tmp_path, fake_client, ok, make_fi
                 "errors_per_pair": [
                     {
                         "pair_id": 1,
-                        "errors": [{"dimension": "site", "severity": "major", "reasoning": "upper vs lower lobe"}],
+                        "errors": [{"dimension": "location", "severity": "major", "reasoning": "upper vs lower lobe"}],
                     }
                 ]
             }
@@ -486,7 +486,7 @@ def test_score_pair_invalidates_cache_when_matches_differ(tmp_path, fake_client,
     stale = {
         "matches": [_match("p_OLD", "g_OLD")],  # different pair → cache invalid
         "structured_errors_per_pair": [[]],
-        "text_errors_per_pair": [[{"dimension": "site", "severity": "minor", "reasoning": "stale"}]],
+        "text_errors_per_pair": [[{"dimension": "location", "severity": "minor", "reasoning": "stale"}]],
         "muc_records": [],
     }
     _write(out_dir / "attribute_errors" / "s.json", stale)
@@ -524,7 +524,7 @@ def test_score_pair_invalidates_cache_when_finding_text_differs(tmp_path, fake_c
         "matches": [_match("p_1", "gt_1")],
         "findings_fingerprint": stale_fingerprint,
         "structured_errors_per_pair": [[]],
-        "text_errors_per_pair": [[{"dimension": "site", "severity": "minor", "reasoning": "stale"}]],
+        "text_errors_per_pair": [[{"dimension": "location", "severity": "minor", "reasoning": "stale"}]],
         "muc_records": [],
     }
     _write(out_dir / "attribute_errors" / "s.json", stale)

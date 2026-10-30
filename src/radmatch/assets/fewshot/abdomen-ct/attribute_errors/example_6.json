@@ -1,6 +1,6 @@
 {
  "scenario": "Constructed: invented SBO complication, single vs multiple metastases, acute vs chronic fracture, steatosis distribution, a benign-lesion size",
- "description": "Constructed. 'Closed-loop small bowel obstruction with a transition…' vs 'Small bowel obstruction; no discrete transition point…': extent major (pred adds a closed loop and a transition point; a closed loop calls for urgent surgery); 'Solitary 2.1 cm hepatic metastasis in segment 7' vs 'Multiple hepatic metastases, the largest 2.1 cm in segment 7': extent major (solitary vs multiple liver metastases; decides resection or ablation vs systemic therapy); 'Acute L1 compression fracture' vs 'Chronic L1 compression deformity': diagnosis major (acute vs chronic L1 compression fracture; an acute fracture needs treatment, a chronic one does not); 'Patchy hepatic steatosis in the right lobe' vs 'Diffuse hepatic steatosis': site minor (right-lobe vs diffuse hepatic steatosis; a partly different distribution of a diffuse process, same management); '2.0 cm hemangioma in liver segment 6' vs '1.4 cm hemangioma in liver segment 6': measurement minor (2.0 vs 1.4 cm hepatic hemangioma, over 20 %; a benign hemangioma is not followed by its size).",
+ "description": "Constructed. 'Closed-loop small bowel obstruction with a transition…' vs 'Small bowel obstruction; no discrete transition point…': extent major (pred adds a closed loop and a transition point; a closed loop calls for urgent surgery); 'Solitary 2.1 cm hepatic metastasis in segment 7' vs 'Multiple hepatic metastases, the largest 2.1 cm in segment 7': extent major (solitary vs multiple liver metastases; decides resection or ablation vs systemic therapy); 'Acute L1 compression fracture' vs 'Chronic L1 compression deformity': diagnosis major (acute vs chronic L1 compression fracture; an acute fracture needs treatment, a chronic one does not); 'Patchy hepatic steatosis in the right lobe' vs 'Diffuse hepatic steatosis': location minor (right-lobe vs diffuse hepatic steatosis; a partly different distribution of a diffuse process, same management); '2.0 cm hemangioma in liver segment 6' vs '1.4 cm hemangioma in liver segment 6': measurement minor (2.0 vs 1.4 cm hepatic hemangioma, over 20 %; a benign hemangioma is not followed by its size).",
  "user": {
   "series_uuid": "abdomen-ct_example_6",
   "pairs": [
@@ -171,7 +171,7 @@
     "pair_id": 4,
     "errors": [
      {
-      "dimension": "site",
+      "dimension": "location",
       "reasoning": "right-lobe vs diffuse hepatic steatosis; a partly different distribution of a diffuse process, same management",
       "severity": "minor"
      }

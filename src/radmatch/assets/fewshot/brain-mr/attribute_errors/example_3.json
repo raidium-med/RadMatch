@@ -1,6 +1,6 @@
 {
-  "scenario": "Site and measurement minor on a benign finding",
-  "description": "Stage 3b call built from brain-mr/findings_gt/example_3.json and findings_pred/example_3.json. 'A 14 mm long diameter hypointense appearance on T2…' vs 'An 11 mm long diameter hypointense appearance on T2…': site minor (falx calcification in the parietal vs frontal region; a benign calcification needs no follow-up, so its site changes nothing), measurement minor (14 vs 11 mm falx calcification, more than 20 % and 3 mm apart; a benign calcification is not followed by its size).",
+  "scenario": "Location and measurement minor on a benign finding",
+  "description": "Stage 3b call built from brain-mr/findings_gt/example_3.json and findings_pred/example_3.json. 'A 14 mm long diameter hypointense appearance on T2…' vs 'An 11 mm long diameter hypointense appearance on T2…': location minor (falx calcification in the parietal vs frontal region; a benign calcification needs no follow-up, so its location changes nothing), measurement minor (14 vs 11 mm falx calcification, more than 20 % and 3 mm apart; a benign calcification is not followed by its size).",
   "user": {
     "series_uuid": "brain-mr_example_3",
     "pairs": [
@@ -45,8 +45,8 @@
         "pair_id": 1,
         "errors": [
           {
-            "dimension": "site",
-            "reasoning": "falx calcification in the parietal vs frontal region; a benign calcification needs no follow-up, so its site changes nothing",
+            "dimension": "location",
+            "reasoning": "falx calcification in the parietal vs frontal region; a benign calcification needs no follow-up, so its location changes nothing",
             "severity": "minor"
           },
           {

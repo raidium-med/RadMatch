@@ -89,18 +89,18 @@ def test_build_match_index_reclassifies_PAR_with_major_to_INC():
                 "gt_id": "g1",
                 "muc_category": "PAR",
                 "structured_errors": [],
-                "text_errors": [{"dimension": "site", "severity": "major"}],
+                "text_errors": [{"dimension": "location", "severity": "major"}],
             }
         ],
         "structured_errors_per_pair": [[]],
-        "text_errors_per_pair": [[{"dimension": "site", "severity": "major"}]],
+        "text_errors_per_pair": [[{"dimension": "location", "severity": "major"}]],
     }
     gt_idx, pred_idx = build_match_index(matching, attr_errors)
     # PAR with major → INC in the effective taxonomy
     assert gt_idx["g1"].category == "INC"
     assert gt_idx["g1"].counterparts[0].counterpart_id == "p1"
     assert pred_idx["p1"].category == "INC"
-    assert pred_idx["p1"].counterparts[0].text_errors[0]["dimension"] == "site"
+    assert pred_idx["p1"].counterparts[0].text_errors[0]["dimension"] == "location"
     assert gt_idx["g2"].category == "MIS"
     assert pred_idx["p2"].category == "SPU"
 
@@ -118,11 +118,11 @@ def test_build_match_index_keeps_PAR_when_only_minor_errors():
                 "gt_id": "g1",
                 "muc_category": "PAR",
                 "structured_errors": [],
-                "text_errors": [{"dimension": "site", "severity": "minor"}],
+                "text_errors": [{"dimension": "location", "severity": "minor"}],
             }
         ],
         "structured_errors_per_pair": [[]],
-        "text_errors_per_pair": [[{"dimension": "site", "severity": "minor"}]],
+        "text_errors_per_pair": [[{"dimension": "location", "severity": "minor"}]],
     }
     gt_idx, _ = build_match_index(matching, attr_errors)
     # PAR with only minor errors stays PAR in the effective taxonomy.
@@ -167,12 +167,12 @@ def test_build_match_index_aggregates_multi_bind_counterparts():
                 "gt_id": "g2",
                 "muc_category": "PAR",
                 "structured_errors": [],
-                "text_errors": [{"dimension": "site", "severity": "major"}],
+                "text_errors": [{"dimension": "location", "severity": "major"}],
             },
             {"pred_id": "p1", "gt_id": "g3", "muc_category": "COR", "structured_errors": [], "text_errors": []},
         ],
         "structured_errors_per_pair": [[], [], []],
-        "text_errors_per_pair": [[], [{"dimension": "site", "severity": "major"}], []],
+        "text_errors_per_pair": [[], [{"dimension": "location", "severity": "major"}], []],
     }
     gt_idx, pred_idx = build_match_index(matching, attr)
     assert len(pred_idx["p1"].counterparts) == 3

@@ -1,6 +1,6 @@
 {
-  "scenario": "Left-out moderate grade minor, left-out severe grade major, device tip site major",
-  "description": "Stage 3b call built from chest-xr/findings_gt/example_2.json and findings_pred/example_2.json. 'Stable bilateral pleural effusion' vs 'Moderate bilateral pleural effusion has increased': severity minor (pred leaves out the moderate grade of the bilateral effusions; a middle grade left out changes nothing); 'Left basilar opacity, likely atelectasis' vs 'Severe left lower lobe consolidation, presumably collapse,…': severity major (pred leaves out the severe grade of the left lower lobe collapse; severe collapse may need bronchoscopy), site minor (left basilar vs left lower lobe; two words for the same site, same management); 'Right PICC line ends in the lower SVC' vs 'Right central venous line ends in the upper right atrium': site major (line tip in the lower SVC vs the upper right atrium; an atrial tip is pulled back).",
+  "scenario": "Left-out moderate grade minor, left-out severe grade major, device tip location major",
+  "description": "Stage 3b call built from chest-xr/findings_gt/example_2.json and findings_pred/example_2.json. 'Stable bilateral pleural effusion' vs 'Moderate bilateral pleural effusion has increased': grade minor (pred leaves out the moderate grade of the bilateral effusions; a middle grade left out changes nothing); 'Left basilar opacity, likely atelectasis' vs 'Severe left lower lobe consolidation, presumably collapse,…': grade major (pred leaves out the severe grade of the left lower lobe collapse; severe collapse may need bronchoscopy), location minor (left basilar vs left lower lobe; a coarser location word, same management); 'Right PICC line ends in the lower SVC' vs 'Right central venous line ends in the upper right atrium': location major (line tip in the lower SVC vs the upper right atrium; an atrial tip is pulled back).",
   "user": {
     "series_uuid": "chest-xr_example_2",
     "pairs": [
@@ -75,7 +75,7 @@
         "pair_id": 1,
         "errors": [
           {
-            "dimension": "severity",
+            "dimension": "grade",
             "reasoning": "pred leaves out the moderate grade of the bilateral effusions; a middle grade left out changes nothing",
             "severity": "minor"
           }
@@ -85,13 +85,13 @@
         "pair_id": 2,
         "errors": [
           {
-            "dimension": "severity",
+            "dimension": "grade",
             "reasoning": "pred leaves out the severe grade of the left lower lobe collapse; severe collapse may need bronchoscopy",
             "severity": "major"
           },
           {
-            "dimension": "site",
-            "reasoning": "left basilar vs left lower lobe; two words for the same site, same management",
+            "dimension": "location",
+            "reasoning": "left basilar vs left lower lobe; a coarser location word, same management",
             "severity": "minor"
           }
         ]
@@ -100,7 +100,7 @@
         "pair_id": 3,
         "errors": [
           {
-            "dimension": "site",
+            "dimension": "location",
             "reasoning": "line tip in the lower SVC vs the upper right atrium; an atrial tip is pulled back",
             "severity": "major"
           }

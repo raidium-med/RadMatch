@@ -1,6 +1,6 @@
 {
-  "scenario": "Size difference on one side of every threshold is minor; INC pair excluded",
-  "description": "Stage 3b call built from chest-ct/findings_gt/example_3.json and findings_pred/example_3.json. 'Left lower lobe nodule with smooth margins measuring 11…' vs 'Left lower lobe nodule with smooth margins measuring 13…': measurement minor (11 vs 13 mm nodule, both between the 8 and 15 mm thresholds; same management).",
+  "scenario": "A size difference within measurement variability: no error",
+  "description": "Stage 3b call built from chest-ct/findings_gt/example_3.json and findings_pred/example_3.json. 'Left lower lobe nodule with smooth margins measuring 11…' vs 'Left lower lobe nodule with smooth margins measuring 13…': no error (11 vs 13 mm, within measurement variability and between the 8 and 15 mm thresholds).",
   "user": {
     "series_uuid": "chest-ct_example_3",
     "pairs": [
@@ -43,13 +43,7 @@
     "errors_per_pair": [
       {
         "pair_id": 1,
-        "errors": [
-          {
-            "dimension": "measurement",
-            "reasoning": "11 vs 13 mm nodule, both between the 8 and 15 mm thresholds; same management",
-            "severity": "minor"
-          }
-        ]
+        "errors": []
       }
     ]
   }
