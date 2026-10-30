@@ -1,35 +1,91 @@
 {
-  "scenario": "Minor severity loss + clean pairs",
-  "description": "Stage 3b call derived from the matches in head-ct/matching/example_2.json. The white-matter-changes pair has a severity difference — gt says 'marked' microangiopathic white matter changes, pred drops the descriptor; treated as minor because periventricular microangiopathy is conventionally documented but not action-threshold-crossing. The overall SDH summary pair has a comparison loss (Stage 3a). The anterior SDH portion pair has a measurement diff (Stage 3a). The posterior SDH pair is identical.",
+  "scenario": "Major grade loss + a size difference within measurement variability on a lesion described with its portions",
+  "description": "Stage 3b call built from head-ct/findings_gt/example_2.json and findings_pred/example_2.json. The subdural hematoma is one finding on each side, its two portions and the absent mass effect included: the anterior thickness differs (8 vs 10 mm, within measurement variability) while the largest thickness (posterior, 13 mm) is the same on both sides, so the 10 mm hematoma threshold is not in play: no error. The white-matter-changes pair has a grade error: gt says 'marked' microangiopathic white matter changes, pred drops the descriptor; major because the grade the pred leaves out is a high one ('marked').",
   "user": {
     "series_uuid": "head-ct_example_2",
     "pairs": [
       {
-        "pred_finding": {"finding_id": "p_1", "text": "Right temporal subdural hematoma.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_1", "text": "Slight decrease in the right temporal subdural hematoma.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "improving", "measurements": []}
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Right temporal subdural hematoma: the anterior portion shows decreased density and a maximum thickness of 8 mm, the posterior portion is overall stable with a maximal thickness of 13 mm, and there is no significant mass effect on adjacent structures.",
+          "measurements": [
+            {
+              "value": 8,
+              "unit": "mm",
+              "category": "size"
+            },
+            {
+              "value": 13,
+              "unit": "mm",
+              "category": "size"
+            }
+          ],
+          "laterality": "right",
+          "comparison": "improving",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable"
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "Slight decrease in the right temporal subdural hematoma: the anterior portion shows decreased density and a maximum thickness of 10 mm, the posterior portion is overall stable with a maximal thickness of 13 mm, and there is no significant mass effect on adjacent structures.",
+          "measurements": [
+            {
+              "value": 10,
+              "unit": "mm",
+              "category": "size"
+            },
+            {
+              "value": 13,
+              "unit": "mm",
+              "category": "size"
+            }
+          ],
+          "laterality": "right",
+          "comparison": "improving",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable"
+        }
       },
       {
-        "pred_finding": {"finding_id": "p_2", "text": "Anterior portion of the subdural hematoma shows decreased density with a maximum thickness of 8 mm.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "improving", "measurements": [{"value": 8, "unit": "mm", "category": "size"}]},
-        "gt_finding":   {"finding_id": "gt_2", "text": "Anterior portion of the subdural hematoma shows decreased density with a maximum thickness of 10 mm.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "improving", "measurements": [{"value": 10, "unit": "mm", "category": "size"}]}
-      },
-      {
-        "pred_finding": {"finding_id": "p_3", "text": "Overall stable appearance of the posterior portion of the subdural hematoma with a maximal thickness of 13 mm.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": [{"value": 13, "unit": "mm", "category": "size"}]},
-        "gt_finding":   {"finding_id": "gt_3", "text": "Overall stable appearance of the posterior portion of the subdural hematoma with a maximal thickness of 13 mm.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": [{"value": 13, "unit": "mm", "category": "size"}]}
-      },
-      {
-        "pred_finding": {"finding_id": "p_4", "text": "Stable periventricular microangiopathic white matter changes.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": []},
-        "gt_finding":   {"finding_id": "gt_4", "text": "Stable marked periventricular microangiopathic white matter changes.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": []}
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "Stable periventricular microangiopathic white matter changes.",
+          "measurements": [],
+          "laterality": null,
+          "comparison": "stable",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine"
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "Stable marked periventricular microangiopathic white matter changes.",
+          "measurements": [],
+          "laterality": null,
+          "comparison": "stable",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable"
+        }
       }
     ]
   },
   "assistant": {
-    "errors_per_match": [
-      [],
-      [],
-      [],
-      [
-        {"dimension": "severity", "severity": "minor", "reasoning": "Gt characterizes the white matter changes as 'marked', pred drops the severity descriptor — minor because chronic microangiopathic changes are documented but the descriptor doesn't cross a management threshold."}
-      ]
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": []
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "grade",
+            "reasoning": "pred leaves out the marked grade of the white matter changes; a high grade weighs the vascular risk workup",
+            "severity": "major"
+          }
+        ]
+      }
     ]
   }
 }

@@ -1,12 +1,13 @@
 {
-  "scenario": "1:N umbrella — pred enumerates spinal levels covering multiple GT atoms",
-  "description": "Pred 'Multilevel cervical spondylosis from C2-C3 through C7-T1.' explicitly enumerates the spinal levels and names the pathology. GT atomizes at each level. The pred binds each level (they are explicitly named in the pred).",
+  "scenario": "1:N umbrella — pred gives a range of spinal levels covering multiple GT atoms",
+  "description": "Pred 'Multilevel cervical spondylosis from C2-C3 through C7-T1.' gives a range of spinal levels and names the pathology. GT atomizes at each level; each gt level inside the range binds to the pred.",
   "user": {
     "pred_findings": [
       {
         "finding_id": "p_1",
         "text": "Multilevel cervical spondylosis from C2-C3 through C7-T1.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -14,6 +15,7 @@
         "finding_id": "p_2",
         "text": "Mild scoliosis of the thoracic spine.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }
@@ -23,6 +25,7 @@
         "finding_id": "gt_1",
         "text": "Spondylosis at C3-C4.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -30,6 +33,7 @@
         "finding_id": "gt_2",
         "text": "Spondylosis at C4-C5.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -37,6 +41,7 @@
         "finding_id": "gt_3",
         "text": "Spondylosis at C5-C6.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -44,6 +49,7 @@
         "finding_id": "gt_4",
         "text": "Spondylosis at C6-C7.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -51,6 +57,7 @@
         "finding_id": "gt_5",
         "text": "Mild thoracic scoliosis.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }
@@ -61,27 +68,27 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "Pred enumerates C2-C3 through C7-T1; C3-C4 is in the named range."
+        "reasoning": "C3-C4 lies in the C2-C3 to C7-T1 range pred names."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_2",
-        "reasoning": "C4-C5 is in the explicitly enumerated range."
+        "reasoning": "C4-C5 lies in the same C2-C3 to C7-T1 range."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_3",
-        "reasoning": "C5-C6 is in the explicitly enumerated range."
+        "reasoning": "C5-C6 lies in the same range."
       },
       {
         "pred_id": "p_1",
         "gt_id": "gt_4",
-        "reasoning": "C6-C7 is in the explicitly enumerated range."
+        "reasoning": "C6-C7 lies in the same range."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_5",
-        "reasoning": "Same finding entity (mild thoracic scoliosis)."
+        "reasoning": "Same mild thoracic scoliosis."
       }
     ],
     "unmatched_pred": [],

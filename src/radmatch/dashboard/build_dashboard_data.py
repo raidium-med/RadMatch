@@ -22,18 +22,12 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
-def _flatten(metrics: dict[str, object]) -> dict[str, float | int | bool]:
-    """One row per series, with the columns the dashboard needs for filtering / sort."""
+def _flatten(metrics: dict[str, object]) -> dict[str, int]:
+    """One row per series, with the columns the dashboard filters and sorts on:
+    `<tier>_errors` for each error tier and `muc_<category>`."""
     muc = metrics.get("muc_counts") or {}
-    safety = metrics.get("clinical_safety_summary") or {}
-    return {
-        "actionable_errors": int(metrics.get("actionable_errors_total") or 0),
-        "triage_recall": safety.get("triage_recall") or 0.0,
-        "actionable_recall": safety.get("actionable_recall") or 0.0,
-        "triage_precision": safety.get("triage_precision") or 0.0,
-        "actionable_precision": safety.get("actionable_precision") or 0.0,
-        **{f"muc_{cat.lower()}": int(muc.get(cat, 0)) for cat in constants.MUC_CATEGORIES},
-    }
+    row = {f"{tier}_errors": int(block["errors_total"]) for tier, block in metrics["tiers"].items()}
+    return {**row, **{f"muc_{cat.lower()}": int(muc.get(cat, 0)) for cat in constants.MUC_CATEGORIES}}
 
 
 def _per_finding_attributes(*finding_sets: list[dict]) -> dict[str, list[str]]:

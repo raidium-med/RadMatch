@@ -1,26 +1,26 @@
 [
   {
-    "matches": [{"pred_id": "s1_001", "gt_id": "s1_001", "reasoning": "same finding"}],
+    "matches": [{"pred_id": "p_1", "gt_id": "gt_1", "reasoning": "same finding"}],
     "unmatched_pred": [],
     "unmatched_gt": []
   },
   {
-    "matches": [{"pred_id": "s2_001", "gt_id": "s2_001", "reasoning": "same finding, different laterality"}],
+    "matches": [{"pred_id": "p_1", "gt_id": "gt_1", "reasoning": "same finding, different laterality"}],
     "unmatched_pred": [],
     "unmatched_gt": []
   },
   {
-    "matches": [{"pred_id": "s3_001", "gt_id": "s3_001", "reasoning": "anatomy + pathology match (status conflict)"}],
+    "matches": [{"pred_id": "p_1", "gt_id": "gt_1", "reasoning": "anatomy + pathology match (status conflict)"}],
     "unmatched_pred": [],
     "unmatched_gt": []
   },
   {
-    "errors_per_match": [[]]
+    "errors_per_pair": [{"pair_id": 1, "errors": []}]
   },
   {
-    "errors_per_match": [[{"dimension": "location", "severity": "major", "reasoning": "left vs right laterality"}]]
+    "errors_per_pair": [{"pair_id": 1, "errors": []}]
   },
   {
-    "errors_per_match": [[]]
+    "errors_per_pair": [{"pair_id": 1, "errors": []}]
   }
 ]

@@ -1,0 +1,125 @@
+{
+  "scenario": "Clinical long tail: different diagnosis for one abnormality, unilateral vs bilateral, synonyms",
+  "description": "Constructed; pairs from chest-ct/matching/example_4.json (status inversions excluded). 'Large bulla at the right lung apex' vs 'Small right apical pneumothorax': diagnosis major (bulla vs pneumothorax for the same apical lucency; a pneumothorax may need a chest tube); 'Linear fibrotic strands in both upper lobes' vs 'Biapical pleuroparenchymal scarring': location minor (both upper lobes vs both apices; a coarser location word on routine scarring, same management); 'Small non-enlarged subcarinal lymph node' vs 'No mediastinal lymphadenopathy': no error (two normal statements); 'Ground-glass opacities in both lower lobes' vs 'Ground-glass opacity in the right lower lobe': no error (the side is scored upstream (Stage 3a laterality)).",
+  "user": {
+    "series_uuid": "chest-ct_example_4",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Large bulla at the right lung apex.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "Small right apical pneumothorax.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "critical",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "Linear fibrotic strands in both upper lobes.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "bilateral",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "Biapical pleuroparenchymal scarring.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "bilateral",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 3,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "Small non-enlarged subcarinal lymph node.",
+          "clinical_status": "normal",
+          "clinical_significance": "routine",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "No mediastinal lymphadenopathy.",
+          "clinical_status": "normal",
+          "clinical_significance": "routine",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 4,
+        "pred_finding": {
+          "finding_id": "p_8",
+          "text": "Ground-glass opacities in both lower lobes.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "bilateral",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_8",
+          "text": "Ground-glass opacity in the right lower lobe.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "diagnosis",
+            "reasoning": "bulla vs pneumothorax for the same apical lucency; a pneumothorax may need a chest tube",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "location",
+            "reasoning": "both upper lobes vs both apices; a coarser location word on routine scarring, same management",
+            "severity": "minor"
+          }
+        ]
+      },
+      {
+        "pair_id": 3,
+        "errors": []
+      },
+      {
+        "pair_id": 4,
+        "errors": []
+      }
+    ]
+  }
+}

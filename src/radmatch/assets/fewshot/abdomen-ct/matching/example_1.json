@@ -1,12 +1,13 @@
 {
-  "scenario": "1:1 matches + comparison flip on actionable nodes",
-  "description": "Real subset of abdomen-ct/findings_{gt,pred}/example_1. Demonstrates clean alignment on near-synonymous descriptions of renal cysts and hepatic veins, a comparison flip on the mesenteric lymph node cluster (gt 'unchanged compared to prior' vs pred 'worsening compared to prior') that flows to Stage 3a deterministic, and a 1:1 match on portal vein narrowing.",
+  "scenario": "1:1 matches + comparison flip on actionable nodes + patency not bound to a narrowing",
+  "description": "Real subset of abdomen-ct/findings_{gt,pred}/example_1. Demonstrates clean alignment on near-synonymous descriptions of renal cysts and hepatic veins, a comparison flip on the mesenteric lymph node cluster (gt 'unchanged compared to prior' vs pred 'worsening compared to prior') that flows to Stage 3a deterministic, and a 1:1 match on portal vein narrowing. Both reports also call the portal veins patent: the two patency statements match each other and neither is bound to the narrowing, since 'patent' denies occlusion or thrombosis, not a stenosis of the same vein.",
   "user": {
     "pred_findings": [
       {
         "finding_id": "p_1",
         "text": "Hepatic veins are patent.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -14,6 +15,7 @@
         "finding_id": "p_2",
         "text": "Multiple small hypodense lesions in both kidneys, likely representing cysts.",
         "clinical_status": "abnormal",
+        "laterality": "bilateral",
         "comparison": null,
         "measurements": []
       },
@@ -21,6 +23,7 @@
         "finding_id": "p_3",
         "text": "No hydronephrosis.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -28,6 +31,7 @@
         "finding_id": "p_4",
         "text": "Three mesenteric lymph nodes measuring up to 12 mm, worsening compared to prior CT.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": "worsening",
         "measurements": [
           {
@@ -46,6 +50,7 @@
         "finding_id": "p_5",
         "text": "Portal vein shows approximately 50-60% narrowing at the porta hepatis.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": [
           {
@@ -59,6 +64,14 @@
             "category": "ratio"
           }
         ]
+      },
+      {
+        "finding_id": "p_6",
+        "text": "Portal venous system patent.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
       }
     ],
     "gt_findings": [
@@ -66,6 +79,7 @@
         "finding_id": "gt_1",
         "text": "Hepatic veins patent.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -73,6 +87,7 @@
         "finding_id": "gt_2",
         "text": "Multiple subcentimeter hypodense lesions in the bilateral kidneys, likely small cysts.",
         "clinical_status": "abnormal",
+        "laterality": "bilateral",
         "comparison": null,
         "measurements": []
       },
@@ -80,6 +95,7 @@
         "finding_id": "gt_3",
         "text": "No hydronephrosis.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -87,6 +103,7 @@
         "finding_id": "gt_4",
         "text": "Three mesenteric lymph nodes measuring up to 12 mm, unchanged compared to prior CT.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": "stable",
         "measurements": [
           {
@@ -105,6 +122,7 @@
         "finding_id": "gt_5",
         "text": "Main portal vein demonstrates approximately 60% luminal narrowing at the porta hepatis.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": [
           {
@@ -113,6 +131,14 @@
             "category": "ratio"
           }
         ]
+      },
+      {
+        "finding_id": "gt_6",
+        "text": "Portal veins patent.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
       }
     ]
   },
@@ -126,7 +152,7 @@
       {
         "pred_id": "p_2",
         "gt_id": "gt_2",
-        "reasoning": "Same finding (bilateral renal hypodense lesions, characterized as cysts); descriptors differ slightly but anatomy + pathology entity match."
+        "reasoning": "Same bilateral renal hypodense lesions, likely cysts in both reports."
       },
       {
         "pred_id": "p_3",
@@ -136,12 +162,17 @@
       {
         "pred_id": "p_4",
         "gt_id": "gt_4",
-        "reasoning": "Same finding (three 12 mm mesenteric lymph nodes); comparison differs (worsening vs stable) but anatomy + count + size match — Stage 3a will flag the comparison disagreement."
+        "reasoning": "Same three mesenteric lymph nodes up to 12 mm."
       },
       {
         "pred_id": "p_5",
         "gt_id": "gt_5",
-        "reasoning": "Same finding (portal vein luminal narrowing at the porta hepatis); pred reports a range, gt reports a single value."
+        "reasoning": "Same portal vein narrowing at the porta hepatis."
+      },
+      {
+        "pred_id": "p_6",
+        "gt_id": "gt_6",
+        "reasoning": "Both call the portal veins patent, which does not deny the narrowing."
       }
     ],
     "unmatched_pred": [],

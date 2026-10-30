@@ -150,6 +150,36 @@ def match_findings(
     ctx: MatchingContext,
     indication: str = "",
 ) -> dict:
+    """`_match_aliased` on short ids (`p_1`, `gt_1`, as in the few-shot examples) mapped back to the finding ids:
+    the ids are long and every output row repeats two of them."""
+    pred_alias = {f["finding_id"]: f"p_{i}" for i, f in enumerate(pred_findings, start=1)}
+    gt_alias = {f["finding_id"]: f"gt_{i}" for i, f in enumerate(gt_findings, start=1)}
+    if len(pred_alias) < len(pred_findings) or len(gt_alias) < len(gt_findings):  # duplicate ids: no aliasing
+        return _match_aliased(pred_findings, gt_findings, series_uuid, ctx, indication)
+    result = _match_aliased(
+        [{**f, "finding_id": pred_alias[f["finding_id"]]} for f in pred_findings],
+        [{**f, "finding_id": gt_alias[f["finding_id"]]} for f in gt_findings],
+        series_uuid,
+        ctx,
+        indication,
+    )
+    pred_id = {v: k for k, v in pred_alias.items()}
+    gt_id = {v: k for k, v in gt_alias.items()}
+    return {
+        **result,
+        "matches": [{**m, "pred_id": pred_id[m["pred_id"]], "gt_id": gt_id[m["gt_id"]]} for m in result["matches"]],
+        "unmatched_pred": [pred_id[i] for i in result["unmatched_pred"]],
+        "unmatched_gt": [gt_id[i] for i in result["unmatched_gt"]],
+    }
+
+
+def _match_aliased(
+    pred_findings: list[dict],
+    gt_findings: list[dict],
+    series_uuid: str,
+    ctx: MatchingContext,
+    indication: str = "",
+) -> dict:
     """One LLM call per report pair, returning a `MatchingOutput` dict.
 
     Retries with a correction prompt on validation failure; once the budget is spent,
@@ -222,6 +252,7 @@ def _matching_config(llm_judge: str, fewshot: str | None, reasoning: str) -> dic
         "fewshot": fewshot,
         "reasoning": reasoning,
         "prompt_hash": prompts.prompt_fingerprint(prompts.PROMPT_MATCHING),
+        "fewshot_hash": io.fingerprint(prompts.matching_fewshot_messages(fewshot)),
         "schema_hash": io.fingerprint(MATCHING_SCHEMA),
     }
 
@@ -257,7 +288,8 @@ def match_dataset(
     retry_degraded: bool = False,
 ) -> None:
     """Match every series present in both findings dirs, writing
-    `output_dir/matching/<series>.json`. Pairs with an existing output are skipped.
+    `output_dir/matching/<series>.json`. A pair whose existing output carries the current
+    findings and config stamps is skipped.
 
     `series_allowlist` restricts the run to the given stems, so `--limit` against a
     directory holding a larger prior run does not pick up stale files.

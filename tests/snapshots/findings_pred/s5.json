@@ -3,6 +3,7 @@
     "finding_id": "s5_001",
     "text": "Liver is unremarkable.",
     "clinical_status": "normal",
+    "laterality": null,
     "clinical_significance": "routine",
     "comparison": null,
     "measurements": []

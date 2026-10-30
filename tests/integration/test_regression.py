@@ -4,7 +4,7 @@ Five hand-written series exercise every MUC category (COR / PAR / INC /
 MIS / SPU) and every clinical-significance tier. A scripted
 `FakeLLMClient` drives matching + attribute-error calls deterministically.
 The full `metrics_summary.json` is compared byte-for-byte against
-`expected_summary.json` (with timestamp/elapsed_s stripped and floats
+`expected_summary.json` (with timestamp/runtime stripped and floats
 rounded). Any change in the pipeline output — intentional or accidental
 — fires this test.
 

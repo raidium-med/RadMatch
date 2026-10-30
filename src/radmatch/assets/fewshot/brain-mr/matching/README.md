@@ -4,7 +4,7 @@ Three worked examples of the alignment patterns Stage 2 has to get right. Findin
 
 | File | Scenario |
 |------|----------|
-| `example_1.json` | Status flip on cortical sulci + SPU on sinus + merge of medulla/cerebellum |
+| `example_1.json` | Status flip on cortical sulci + sinus normal denying mucosal thickening + a one-region pred statement covering two gt statements (1:N) |
 | `example_2.json` | 1:N umbrella — pred parent-anatomy negative covering several GT rule-out atoms |
 | `example_3.json` | N:1 umbrella — atomic pred WMH findings covering one umbrella GT |
 
@@ -16,13 +16,15 @@ Each file is one example:
 {
   "scenario": "...",
   "description": "...",
-  "user":      { "pred_findings": [...], "gt_findings": [...] },
+  "user":      { "indication": "...", "pred_findings": [...], "gt_findings": [...] },
   "assistant": { "matches": [...], "unmatched_pred": [...], "unmatched_gt": [...] }
 }
 ```
 
 `radmatch.llm_utils.prompts.load_matching_fewshot` reads every `example_*.json` here and
 appends each `user` / `assistant` pair to the matching prompt as one user/assistant turn.
-Findings carry only the fields matching consumes — `finding_id`, `text`,
-`clinical_status`, `comparison`, `measurements` — since significance plays no part in
-aligning findings. `scenario` and `description` are documentation; the loader ignores them.
+Stage 2 sees only the `finding_id`, `text`, `clinical_status` and `laterality` of each finding
+(`radmatch.llm_utils.prompts.matching_view`) and each match row as `reasoning`, `pred_id`, `gt_id`;
+the `comparison` and `measurements` kept in the files are not sent. Each `reasoning` is one plain
+clause. `indication` is optional, as in live calls, where it is sent only when the study has one.
+`scenario` and `description` are documentation; the loader ignores them.

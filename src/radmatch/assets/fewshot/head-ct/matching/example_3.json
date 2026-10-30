@@ -7,6 +7,7 @@
         "finding_id": "p_1",
         "text": "Right mastoid air-cell opacification.",
         "clinical_status": "abnormal",
+        "laterality": "right",
         "comparison": null,
         "measurements": []
       },
@@ -14,6 +15,7 @@
         "finding_id": "p_2",
         "text": "Left mastoid air-cell opacification.",
         "clinical_status": "abnormal",
+        "laterality": "left",
         "comparison": null,
         "measurements": []
       },
@@ -21,6 +23,7 @@
         "finding_id": "p_3",
         "text": "Calvarium intact.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }
@@ -30,6 +33,7 @@
         "finding_id": "gt_1",
         "text": "Bilateral mastoid air-cell opacification.",
         "clinical_status": "abnormal",
+        "laterality": "bilateral",
         "comparison": null,
         "measurements": []
       },
@@ -37,6 +41,7 @@
         "finding_id": "gt_2",
         "text": "Calvarium intact.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }
@@ -47,12 +52,12 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "GT names pathology (mastoid opacification) + bilateral anatomy; covers the right side."
+        "reasoning": "The bilateral mastoid opacification of gt includes the right side."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_1",
-        "reasoning": "Same umbrella covers the left side — second row, same gt_id."
+        "reasoning": "The bilateral mastoid opacification of gt also includes the left side."
       },
       {
         "pred_id": "p_3",

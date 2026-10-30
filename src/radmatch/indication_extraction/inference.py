@@ -44,8 +44,8 @@ def _extract_one(
 ) -> tuple[str, str | None]:
     """Run the LLM on one report; return `(series_uuid, indication_or_None)`.
 
-    Returns `None` for indication on LLM / JSON failure — caller logs and
-    writes an empty file so the series is still listed in the output dir.
+    Returns `None` for indication on LLM / JSON failure; the caller writes no file,
+    so a later run retries the series.
     """
     series_uuid = report_path.stem
     report_text = io.read_text_file(report_path)

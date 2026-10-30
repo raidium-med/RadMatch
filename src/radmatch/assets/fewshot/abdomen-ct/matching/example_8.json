@@ -1,0 +1,147 @@
+{
+ "scenario": "Constructed: a nodule read as variant or disease, a variant beside a denial, diverticulosis beside 'no diverticulitis', SBO, leftovers across organs",
+ "description": "Constructed. A splenic hilar nodule read as a splenule on one side and as a lymph node on the other is one abnormality (one pair); a retroaortic renal vein is not denied by 'no lymphadenopathy'; 'no diverticulitis' denies inflammation, not diverticulosis; an obstruction matches the obstruction whatever transition point each side gives; a spine finding is never paired with a renal one.",
+ "user": {
+  "pred_findings": [
+   {
+    "finding_id": "p_1",
+    "text": "1.2 cm splenule at the splenic hilum.",
+    "clinical_status": "normal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": [
+     {
+      "value": 1.2,
+      "unit": "cm",
+      "category": "size"
+     }
+    ]
+   },
+   {
+    "finding_id": "p_2",
+    "text": "Retroaortic left renal vein.",
+    "clinical_status": "normal",
+    "laterality": "left",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_3",
+    "text": "Sigmoid diverticulosis.",
+    "clinical_status": "abnormal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_4",
+    "text": "Small bowel obstruction with a transition point in the right lower quadrant.",
+    "clinical_status": "abnormal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_5",
+    "text": "Mild L4-L5 degenerative disc disease.",
+    "clinical_status": "abnormal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_6",
+    "text": "Hepatic steatosis.",
+    "clinical_status": "abnormal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   }
+  ],
+  "gt_findings": [
+   {
+    "finding_id": "gt_1",
+    "text": "1.2 cm soft-tissue nodule at the splenic hilum, likely an enlarged lymph node.",
+    "clinical_status": "abnormal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": [
+     {
+      "value": 1.2,
+      "unit": "cm",
+      "category": "size"
+     }
+    ]
+   },
+   {
+    "finding_id": "gt_2",
+    "text": "No retroperitoneal lymphadenopathy.",
+    "clinical_status": "normal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_3",
+    "text": "No diverticulitis.",
+    "clinical_status": "normal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_4",
+    "text": "Small bowel obstruction; no discrete transition point identified.",
+    "clinical_status": "abnormal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_5",
+    "text": "Small simple cyst in the left kidney.",
+    "clinical_status": "abnormal",
+    "laterality": "left",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_6",
+    "text": "Diffuse fatty infiltration of the liver.",
+    "clinical_status": "abnormal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   }
+  ]
+ },
+ "assistant": {
+  "matches": [
+   {
+    "pred_id": "p_1",
+    "gt_id": "gt_1",
+    "reasoning": "One splenic hilar nodule read two ways."
+   },
+   {
+    "pred_id": "p_4",
+    "gt_id": "gt_4",
+    "reasoning": "Same small bowel obstruction, whatever transition point each side gives."
+   },
+   {
+    "pred_id": "p_6",
+    "gt_id": "gt_6",
+    "reasoning": "Fatty infiltration = steatosis."
+   }
+  ],
+  "unmatched_pred": [
+   "p_2",
+   "p_3",
+   "p_5"
+  ],
+  "unmatched_gt": [
+   "gt_2",
+   "gt_3",
+   "gt_5"
+  ]
+ }
+}

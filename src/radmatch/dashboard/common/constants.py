@@ -19,7 +19,13 @@ COMPARISON_COLORS: dict[str, str] = {
     "worsening": "#fca5a5",  # Light red
     "new": "#7dd3fc",  # Light sky
     "resolved": "#6ee7b7",  # Light emerald
-    "no": "#e5e7eb",  # Very light gray
+}
+
+# Side colors (the finding's `laterality`; no badge when it has none)
+LATERALITY_COLORS: dict[str, str] = {
+    "left": "#6366f1",  # Indigo
+    "right": "#14b8a6",  # Teal
+    "bilateral": "#a855f7",  # Purple
 }
 
 # ============================================================================
@@ -43,3 +49,18 @@ CONFIG_REPORTS_PRED_PATH = "eval_config_reports_pred_path"
 QUERY_PARAM_RESULTS = "results_dir"
 QUERY_PARAM_REPORTS_GT = "reports_gt_dir"
 QUERY_PARAM_REPORTS_PRED = "reports_pred_dir"
+
+# ============================================================================
+# Error tier selector (the tiers are radmatch.constants.ERROR_TIERS)
+# ============================================================================
+
+CONFIG_TIER = "eval_config_tier"
+DEFAULT_TIER = "actionable"
+# Metric abbreviations (after the tier prefix: aER, aFN, ...) and their full names.
+METRIC_NAMES: dict[str, str] = {
+    "ER": "Errors",
+    "FN": "False Negatives",
+    "FP": "False Positives",
+    "Rec": "Recall",
+    "Prec": "Precision",
+}

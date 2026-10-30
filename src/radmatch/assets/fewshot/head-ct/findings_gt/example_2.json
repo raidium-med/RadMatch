@@ -1,54 +1,35 @@
 [
   {
-    "text": "Slight decrease in the right temporal subdural hematoma.",
-    "measurements": [],
-    "comparison": "improving",
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
-  },
-  {
-    "text": "Anterior portion of the subdural hematoma shows decreased density with a maximum thickness of 10 mm.",
+    "text": "Slight decrease in the right temporal subdural hematoma: the anterior portion shows decreased density and a maximum thickness of 10 mm, the posterior portion is overall stable with a maximal thickness of 13 mm, and there is no significant mass effect on adjacent structures.",
     "measurements": [
       {
         "value": 10,
         "unit": "mm",
         "category": "size"
-      }
-    ],
-    "comparison": "improving",
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
-  },
-  {
-    "text": "Overall stable appearance of the posterior portion of the subdural hematoma with a maximal thickness of 13 mm.",
-    "measurements": [
+      },
       {
         "value": 13,
         "unit": "mm",
         "category": "size"
       }
     ],
-    "comparison": "stable",
+    "laterality": "right",
+    "comparison": "improving",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
   },
   {
     "text": "No evidence of recent hemorrhage.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "critical"
   },
   {
-    "text": "No significant mass effect on adjacent structures.",
-    "measurements": [],
-    "comparison": null,
-    "clinical_status": "normal",
-    "clinical_significance": "routine"
-  },
-  {
     "text": "Stable right temporo-occipital sequelae with tissue loss.",
     "measurements": [],
+    "laterality": "right",
     "comparison": "stable",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -56,6 +37,7 @@
   {
     "text": "Stable hypodense sequelae in the right anterior temporal region.",
     "measurements": [],
+    "laterality": "right",
     "comparison": "stable",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -63,27 +45,47 @@
   {
     "text": "Stable marked periventricular microangiopathic white matter changes.",
     "measurements": [],
+    "laterality": null,
     "comparison": "stable",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
   },
   {
-    "text": "Enlargement of intra- and pericerebral CSF spaces without signs of hydrocephalus.",
+    "text": "Enlargement of the intra- and pericerebral CSF spaces.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
-    "text": "No abnormal enhancement.",
+    "text": "No hydrocephalus.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
   },
   {
-    "text": "No abnormal spontaneous attenuation in the brainstem and cerebellum.",
+    "text": "No abnormal enhancement.",
     "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No abnormal spontaneous attenuation in the brainstem.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No abnormal spontaneous attenuation in the cerebellum.",
+    "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -91,6 +93,7 @@
   {
     "text": "Fourth ventricle midline, normal in size and morphology.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -98,6 +101,7 @@
   {
     "text": "Normal appearance of the basal cisterns.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"

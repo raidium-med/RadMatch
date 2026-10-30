@@ -87,6 +87,11 @@ def extraction_fewshot_messages(fewshot_name: str | None) -> tuple[dict, ...]:
     return tuple(messages)
 
 
+def matching_view(finding: dict) -> dict:
+    """The fields of a finding Stage 2 sees, the same for the few-shot examples and the live payload."""
+    return {k: finding.get(k) for k in constants.MATCHING_FINDING_FIELDS}
+
+
 @functools.lru_cache(maxsize=8)
 def matching_fewshot_messages(fewshot_name: str | None) -> tuple[dict, ...]:
     """Pre-serialized Stage 2 fewshot message prefix (user/assistant pairs).
@@ -96,8 +101,14 @@ def matching_fewshot_messages(fewshot_name: str | None) -> tuple[dict, ...]:
     """
     messages: list[dict] = []
     for ex in load_matching_fewshot(fewshot_name):
-        messages.append({"role": "user", "content": json.dumps(ex["user"], ensure_ascii=False)})
-        messages.append({"role": "assistant", "content": json.dumps(ex["assistant"], ensure_ascii=False)})
+        sides = ("pred_findings", "gt_findings")
+        user = {**ex["user"], **{k: [matching_view(f) for f in ex["user"][k]] for k in sides}}
+        assistant = {
+            **ex["assistant"],
+            "matches": [{k: m[k] for k in ("reasoning", "pred_id", "gt_id")} for m in ex["assistant"]["matches"]],
+        }
+        messages.append({"role": "user", "content": json.dumps(user, ensure_ascii=False)})
+        messages.append({"role": "assistant", "content": json.dumps(assistant, ensure_ascii=False)})
     return tuple(messages)
 
 
@@ -110,8 +121,14 @@ def attribute_errors_fewshot_messages(fewshot_name: str | None) -> tuple[dict, .
     """
     messages: list[dict] = []
     for ex in load_attribute_errors_fewshot(fewshot_name):
+        assistant = {
+            "errors_per_pair": [
+                {**p, "errors": [{k: e[k] for k in ("dimension", "reasoning", "severity")} for e in p["errors"]]}
+                for p in ex["assistant"]["errors_per_pair"]
+            ]
+        }
         messages.append({"role": "user", "content": json.dumps(ex["user"], ensure_ascii=False)})
-        messages.append({"role": "assistant", "content": json.dumps(ex["assistant"], ensure_ascii=False)})
+        messages.append({"role": "assistant", "content": json.dumps(assistant, ensure_ascii=False)})
     return tuple(messages)
 
 
@@ -127,11 +144,6 @@ def load_extraction_fewshot(fewshot_name: str | None) -> Sequence[dict[str, obje
     example_set_dir = fewshot_dir / fewshot_name
     reports_dir = example_set_dir / constants.REPORTS_GT_DIR
     findings_dir = example_set_dir / constants.FINDINGS_GT_DIR
-
-    if not reports_dir.exists():
-        reports_dir = example_set_dir / "reports"
-    if not findings_dir.exists():
-        findings_dir = example_set_dir / "findings"
 
     missing_dirs = [d for d in (reports_dir, findings_dir) if not d.exists()]
     if missing_dirs:
@@ -160,7 +172,7 @@ def load_extraction_fewshot(fewshot_name: str | None) -> Sequence[dict[str, obje
             continue
 
         filtered_findings = [
-            extract_utils.project_to_canonical_finding(finding)
+            extract_utils.project_to_canonical_finding(finding, with_id=False)
             for finding in findings_payload
             if isinstance(finding, dict)
         ]
@@ -207,7 +219,7 @@ def load_attribute_errors_fewshot(fewshot_name: str | None) -> Sequence[FewshotE
     """Load Stage 3b attribute-errors few-shot examples by bundle name.
 
     Files: ``assets/fewshot/<name>/attribute_errors/example_*.json`` shaped as
-    ``{user: {series_uuid, pairs}, assistant: {errors_per_match}}``.
+    ``{user: {series_uuid, pairs}, assistant: {errors_per_pair}}``.
     Returns raw dicts; the consuming builder JSON-serialises each side.
     Cached by ``fewshot_name``.
     """

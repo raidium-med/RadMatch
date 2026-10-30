@@ -1,0 +1,143 @@
+{
+  "scenario": "Constructed: certainty (also on the rule-out the indication asks for), added diagnosis",
+  "description": "Constructed. 'Possible minimally displaced right 6th rib fracture' vs 'Minimally displaced right 6th rib fracture': certainty major (possible vs definite right 6th rib fracture, two steps; a possible fracture is sent for more imaging); 'No definite pulmonary embolism' vs 'No pulmonary embolism': certainty minor (no definite vs no pulmonary embolism, one step; both still rule out the embolism); 'Enlarged mediastinal lymph nodes, suspicious for…' vs 'Mildly enlarged mediastinal lymph nodes, likely reactive': diagnosis major (suspicious for metastases vs likely reactive nodes; adds an oncologic workup), grade minor (pred leaves out the mild grade of the node enlargement; a low grade left out changes nothing); 'Mild emphysema' vs 'Mild centrilobular emphysema': diagnosis minor (pred leaves out the centrilobular subtype of emphysema; same management).",
+  "user": {
+    "series_uuid": "chest-ct_example_5",
+    "indication": "Acute dyspnea, pulmonary embolism workup.",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Possible minimally displaced right 6th rib fracture.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "Minimally displaced right 6th rib fracture.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "No definite pulmonary embolism.",
+          "clinical_status": "normal",
+          "clinical_significance": "critical",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "No pulmonary embolism.",
+          "clinical_status": "normal",
+          "clinical_significance": "critical",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 3,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "Enlarged mediastinal lymph nodes, suspicious for metastatic disease.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "Mildly enlarged mediastinal lymph nodes, likely reactive.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 4,
+        "pred_finding": {
+          "finding_id": "p_6",
+          "text": "Mild emphysema.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "bilateral",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_6",
+          "text": "Mild centrilobular emphysema.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "bilateral",
+          "comparison": null,
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "certainty",
+            "reasoning": "possible vs definite right 6th rib fracture, two steps; a possible fracture is sent for more imaging",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "certainty",
+            "reasoning": "no definite vs no pulmonary embolism, one step; both still rule out the embolism",
+            "severity": "minor"
+          }
+        ]
+      },
+      {
+        "pair_id": 3,
+        "errors": [
+          {
+            "dimension": "diagnosis",
+            "reasoning": "suspicious for metastases vs likely reactive nodes; adds an oncologic workup",
+            "severity": "major"
+          },
+          {
+            "dimension": "grade",
+            "reasoning": "pred leaves out the mild grade of the node enlargement; a low grade left out changes nothing",
+            "severity": "minor"
+          }
+        ]
+      },
+      {
+        "pair_id": 4,
+        "errors": [
+          {
+            "dimension": "diagnosis",
+            "reasoning": "pred leaves out the centrilobular subtype of emphysema; same management",
+            "severity": "minor"
+          }
+        ]
+      }
+    ]
+  }
+}
