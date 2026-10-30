@@ -296,7 +296,7 @@ Stage 1 keeps coronary artery calcification `notable` at any grade, split from a
 ```json
 {
   "metadata": {
-    "radmatch_version": "0.3.5",
+    "radmatch_version": "0.3.6",
     "llm_judge": "local:google/gemma-4-31B-it",
     "fewshot": "chest-ct",
     "n_reports": 100,
