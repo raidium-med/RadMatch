@@ -1,6 +1,6 @@
 {
-  "scenario": "Constructed: side differences left upstream, left-out site, size and grade (minor unless they change management), umbrella, more detail",
-  "description": "Constructed. A side the pred leaves out and one side vs both (a pred bilateral hydronephrosis for a gt left one) are scored upstream (Stage 3a `laterality`), so they carry no site or extent error; the left-out 'moderate' grade is a minor severity error. A size the pred leaves out is a major measurement error on a lesion followed by its size (a 1.4 cm adrenal nodule), minor on findings not followed by their size (sub-centimetre splenic hypodensities, a simple renal cyst); an umbrella pred that names no site has a minor site error on each located sub-centimetre splenic hypodensity (not followed, so the site guides nothing); a pred more detailed than the gt has no error; a bilateral pred matched to a left and a right gt has no error; a density word for a cystic pancreatic lesion is a minor character error (it does not contradict it). A left-out gas in a collection signals an abscess or a leak: a major character error. A change the pred invents on diverticulosis is no error (not followed by size). A hedge on the cause ('possibly related to hepatitis') leaves the finding definite: no error. A one-step grade difference (large vs moderate) is minor. A side only the pred gives: no error. The colon segment the pred leaves out for a mass is a major site error: it guides the procedure.",
+  "scenario": "Constructed: side differences left upstream, left-out site, size and grade (minor unless they change management), umbrella, more detail, left-out gas, colon segment",
+  "description": "Constructed. 'Bilateral hydronephrosis' vs 'Moderate left hydronephrosis': severity minor (pred leaves out the moderate grade of the left hydronephrosis; a middle grade left out changes nothing); 'Adrenal nodule' vs '1.4 cm left adrenal nodule': measurement major (pred leaves out the 1.4 cm size of an adrenal nodule; over the 1 cm threshold, it calls for workup); 'Multiple splenic hypodensities' vs '8 mm hypodensity in the splenic upper pole': site minor (pred names no site for the 8 mm hypodensity in the splenic upper pole; a sub-centimetre splenic hypodensity is not followed, so its site guides nothing), measurement minor (pred leaves out the 8 mm size of the splenic hypodensity; a sub-centimetre lesion too small to characterize is not followed by its size); 'Multiple splenic hypodensities' vs '5 mm hypodensity near the splenic hilum': site minor (pred names no site for the 5 mm hypodensity near the splenic hilum; a sub-centimetre splenic hypodensity is not followed, so its site guides nothing), measurement minor (pred leaves out the 5 mm size of the splenic hypodensity; a sub-centimetre lesion too small to characterize is not followed by its size); 'Hypodense lesion in the pancreatic tail' vs 'Cystic lesion in the pancreatic tail': character minor (pred leaves out that the pancreatic tail lesion is cystic; 'hypodense' does not contradict it and the lesion is worked up either way); 'Increased colonic diverticulosis' vs 'Colonic diverticulosis': no error (the comparison difference is scored upstream (Stage 3a)); 'Large hiatal hernia' vs 'Moderate hiatal hernia': severity minor (large vs moderate hiatal hernia; one step, same management); 'Left inguinal hernia containing fat' vs 'Inguinal hernia': no error (the side is scored upstream (Stage 3a laterality)); 'Right paracolic gutter fluid collection' vs 'Right paracolic gutter fluid collection with gas locules': character major (pred leaves out the gas locules; gas signals an abscess or a leak that may need drainage); 'Colonic mass' vs 'Sigmoid colon mass': site major (pred leaves out the sigmoid location of the colonic mass; the segment sets the endoscopic and surgical approach).",
   "user": {
     "series_uuid": "abdomen-ct_example_7",
     "pairs": [
@@ -115,51 +115,6 @@
       {
         "pair_id": 5,
         "pred_finding": {
-          "finding_id": "p_4",
-          "text": "Splenule at the splenic hilum.",
-          "clinical_status": "normal",
-          "clinical_significance": "routine",
-          "laterality": null,
-          "comparison": null,
-          "measurements": []
-        },
-        "gt_finding": {
-          "finding_id": "gt_5",
-          "text": "Splenule.",
-          "clinical_status": "normal",
-          "clinical_significance": "routine",
-          "laterality": null,
-          "comparison": null,
-          "measurements": []
-        }
-      },
-      {
-        "pair_id": 6,
-        "pred_finding": {
-          "finding_id": "p_5",
-          "text": "Bilateral ovarian cysts.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "notable",
-          "laterality": "bilateral",
-          "comparison": null,
-          "measurements": []
-        },
-        "gt_finding": {
-          "finding_id": "gt_6",
-          "text": "Left ovarian cyst.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "notable",
-          "laterality": "left",
-          "comparison": null,
-          "measurements": []
-        },
-        "same_group_gt": [
-          "Right ovarian cyst."
-        ]
-      },
-      {
-        "pair_id": 7,
-        "pred_finding": {
           "finding_id": "p_6",
           "text": "Hypodense lesion in the pancreatic tail.",
           "clinical_status": "abnormal",
@@ -179,34 +134,7 @@
         }
       },
       {
-        "pair_id": 8,
-        "pred_finding": {
-          "finding_id": "p_7",
-          "text": "Simple left renal cyst.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "routine",
-          "laterality": "left",
-          "comparison": null,
-          "measurements": []
-        },
-        "gt_finding": {
-          "finding_id": "gt_8",
-          "text": "2.4 cm simple left renal cyst.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "routine",
-          "laterality": "left",
-          "comparison": null,
-          "measurements": [
-            {
-              "value": 2.4,
-              "unit": "cm",
-              "category": "size"
-            }
-          ]
-        }
-      },
-      {
-        "pair_id": 9,
+        "pair_id": 6,
         "pred_finding": {
           "finding_id": "p_8",
           "text": "Increased colonic diverticulosis.",
@@ -227,28 +155,7 @@
         }
       },
       {
-        "pair_id": 10,
-        "pred_finding": {
-          "finding_id": "p_9",
-          "text": "Gallbladder wall thickening, possibly related to hepatitis.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "notable",
-          "laterality": null,
-          "comparison": null,
-          "measurements": []
-        },
-        "gt_finding": {
-          "finding_id": "gt_10",
-          "text": "Gallbladder wall thickening.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "notable",
-          "laterality": null,
-          "comparison": null,
-          "measurements": []
-        }
-      },
-      {
-        "pair_id": 11,
+        "pair_id": 7,
         "pred_finding": {
           "finding_id": "p_10",
           "text": "Large hiatal hernia.",
@@ -269,7 +176,7 @@
         }
       },
       {
-        "pair_id": 12,
+        "pair_id": 8,
         "pred_finding": {
           "finding_id": "p_11",
           "text": "Left inguinal hernia containing fat.",
@@ -290,7 +197,7 @@
         }
       },
       {
-        "pair_id": 13,
+        "pair_id": 9,
         "pred_finding": {
           "finding_id": "p_13",
           "text": "Right paracolic gutter fluid collection.",
@@ -311,7 +218,7 @@
         }
       },
       {
-        "pair_id": 14,
+        "pair_id": 10,
         "pred_finding": {
           "finding_id": "p_14",
           "text": "Colonic mass.",
@@ -387,14 +294,6 @@
       },
       {
         "pair_id": 5,
-        "errors": []
-      },
-      {
-        "pair_id": 6,
-        "errors": []
-      },
-      {
-        "pair_id": 7,
         "errors": [
           {
             "dimension": "character",
@@ -404,25 +303,11 @@
         ]
       },
       {
-        "pair_id": 8,
-        "errors": [
-          {
-            "dimension": "measurement",
-            "reasoning": "pred leaves out the 2.4 cm size of a simple renal cyst; its size changes nothing",
-            "severity": "minor"
-          }
-        ]
-      },
-      {
-        "pair_id": 9,
+        "pair_id": 6,
         "errors": []
       },
       {
-        "pair_id": 10,
-        "errors": []
-      },
-      {
-        "pair_id": 11,
+        "pair_id": 7,
         "errors": [
           {
             "dimension": "severity",
@@ -432,11 +317,11 @@
         ]
       },
       {
-        "pair_id": 12,
+        "pair_id": 8,
         "errors": []
       },
       {
-        "pair_id": 13,
+        "pair_id": 9,
         "errors": [
           {
             "dimension": "character",
@@ -446,7 +331,7 @@
         ]
       },
       {
-        "pair_id": 14,
+        "pair_id": 10,
         "errors": [
           {
             "dimension": "site",

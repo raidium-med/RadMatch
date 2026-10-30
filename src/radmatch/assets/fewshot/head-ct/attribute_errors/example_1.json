@@ -1,38 +1,64 @@
 {
-  "scenario": "Side flip on lateralized brain pathology left upstream + two normal rule-outs + clean pairs",
-  "description": "Stage 3b call derived from the matches in head-ct/matching/example_1.json. The temporal-sequelae pair differs only in side (right vs left temporal pole and lobe): the side is scored upstream (Stage 3a `laterality`), so it carries no site error. The hemorrhage rule-outs of the sequelae are two normal findings (critical under the head-trauma indication) that differ only in side: no error, and Stage 3a flags nothing on two normal findings. The remaining 2 matched pairs (left temporal horn ventricular traction and ventricular completeness) are identical.",
+  "scenario": "Side flip on lateralized brain pathology left upstream + two normal rule-outs",
+  "description": "Stage 3b call derived from the matches in head-ct/matching/example_1.json. 'Hypodense cortico-subcortical sequelae in the right…' vs 'Hypodense cortico-subcortical sequelae in the left…': no error (the side is scored upstream (Stage 3a laterality)); 'No spontaneous hyperdensity in the right temporal sequelae' vs 'No spontaneous hyperdensity in the left temporal sequelae': no error (two normal statements).",
   "user": {
     "series_uuid": "head-ct_example_1",
     "indication": "Head trauma with left frontotemporal hemorrhagic contusion, thin left temporal subdural hematoma.",
     "pairs": [
       {
         "pair_id": 1,
-        "pred_finding": {"finding_id": "p_1", "text": "Hypodense cortico-subcortical sequelae in the right temporal pole and right temporal lobe.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "right", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_1", "text": "Hypodense cortico-subcortical sequelae in the left temporal pole and left temporal lobe.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "left", "comparison": null, "measurements": []}
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Hypodense cortico-subcortical sequelae in the right temporal pole and right temporal lobe.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "Hypodense cortico-subcortical sequelae in the left temporal pole and left temporal lobe.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        }
       },
       {
         "pair_id": 2,
-        "pred_finding": {"finding_id": "p_2", "text": "Passive traction of the left temporal horn of the lateral ventricle.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "left", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_2", "text": "Passive traction of the left temporal horn of the lateral ventricle.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "left", "comparison": null, "measurements": []}
-      },
-      {
-        "pair_id": 3,
-        "pred_finding": {"finding_id": "p_3", "text": "Ventricular system normal in size and morphology.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": null, "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_3", "text": "Ventricular system normal in size and morphology.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": null, "comparison": null, "measurements": []}
-      },
-      {
-        "pair_id": 4,
-        "pred_finding": {"finding_id": "p_5", "text": "No spontaneous hyperdensity in the right temporal sequelae.", "clinical_status": "normal", "clinical_significance": "critical", "laterality": "right", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_4", "text": "No spontaneous hyperdensity in the left temporal sequelae.", "clinical_status": "normal", "clinical_significance": "critical", "laterality": "left", "comparison": null, "measurements": []}
+        "pred_finding": {
+          "finding_id": "p_5",
+          "text": "No spontaneous hyperdensity in the right temporal sequelae.",
+          "clinical_status": "normal",
+          "clinical_significance": "critical",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "No spontaneous hyperdensity in the left temporal sequelae.",
+          "clinical_status": "normal",
+          "clinical_significance": "critical",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        }
       }
     ]
   },
   "assistant": {
     "errors_per_pair": [
-      {"pair_id": 1, "errors": []},
-      {"pair_id": 2, "errors": []},
-      {"pair_id": 3, "errors": []},
-      {"pair_id": 4, "errors": []}
+      {
+        "pair_id": 1,
+        "errors": []
+      },
+      {
+        "pair_id": 2,
+        "errors": []
+      }
     ]
   }
 }

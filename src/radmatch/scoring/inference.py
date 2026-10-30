@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from typing import Sequence
 
 from radmatch import constants
@@ -19,6 +20,11 @@ logger = logging.getLogger(__name__)
 # Sized for reasoning models: the budget covers hidden reasoning tokens plus the
 # answer, and a heavy reasoner can burn >8k thinking before returning anything.
 _MAX_TOKENS_ATTRIBUTE_ERRORS: int = min(constants.MAX_TOKENS, 16384)
+_HEDGE = re.compile(
+    r"\b(possibl|probabl|may|might|cannot|can't|not (be )?(excluded|ruled out)|questionabl|equivocal|indeterminate|"
+    r"suspicious|likely|unlikely|no (definite|definitive|convincing))",
+    re.IGNORECASE,
+)
 
 # Extra attempts per chunk on a malformed or misaligned payload, each told what was
 # wrong. Once spent, or on a timeout, the chunk is split in half.
@@ -234,6 +240,16 @@ def _detect_attribute_errors_chunk(
     return output
 
 
+def needs_judge(pred: dict, gt: dict) -> bool:
+    """Whether a matched pair goes to the Stage 3b judge: not when the rules already fix its outcome (a status
+    inversion, scored upstream; two normal statements without a hedge on what is ruled out; identical texts)."""
+    if pred.get("clinical_status") != gt.get("clinical_status"):
+        return False
+    if pred.get("clinical_status") == "normal":
+        return bool(_HEDGE.search(pred.get("text", "")) or _HEDGE.search(gt.get("text", "")))
+    return " ".join(pred.get("text", "").lower().split()) != " ".join(gt.get("text", "").lower().split())
+
+
 def detect_attribute_errors(
     matches: Sequence[dict],
     findings_pred: dict[str, dict],
@@ -244,21 +260,21 @@ def detect_attribute_errors(
     indication: str = "",
     max_retries: int = DEFAULT_MAX_RETRIES,
 ) -> list[list[dict]]:
-    """Stage 3b over all matched pairs, in chunks of `_STAGE3B_CHUNK_SIZE`, returning one
-    error list per match in input order.
+    """Stage 3b over the matched pairs that need a judge (`needs_judge`), in chunks of `_STAGE3B_CHUNK_SIZE`,
+    returning one error list per match in input order (none for the pairs not judged).
 
     A chunk that times out or stays malformed is split in half and retried, down to a
     single pair; a pair that still fails raises, so the report is recorded as failed
     rather than scored as if the judge had found no attribute errors.
     """
-    if not matches:
-        return []
     contexts = _group_context(matches, findings_pred, findings_gt)
+    judged = [i for i, m in enumerate(matches) if needs_judge(findings_pred[m["pred_id"]], findings_gt[m["gt_id"]])]
+    sent, sent_contexts = [matches[i] for i in judged], [contexts[i] for i in judged]
 
     def run(lo: int, hi: int) -> list[list[dict]]:
         try:
             return _detect_attribute_errors_chunk(
-                matches=matches[lo:hi],
+                matches=sent[lo:hi],
                 findings_pred=findings_pred,
                 findings_gt=findings_gt,
                 series_uuid=series_uuid,
@@ -266,7 +282,7 @@ def detect_attribute_errors(
                 fewshot=fewshot,
                 indication=indication,
                 max_retries=max_retries,
-                contexts=contexts[lo:hi],
+                contexts=sent_contexts[lo:hi],
             )
         except ValueError as exc:
             if hi - lo <= 1:
@@ -275,7 +291,10 @@ def detect_attribute_errors(
             logger.warning("[Report %s] Stage 3b chunk [%d:%d] failed (%s); splitting", series_uuid, lo, hi, exc)
             return run(lo, mid) + run(mid, hi)
 
-    out: list[list[dict]] = []
-    for start in range(0, len(matches), _STAGE3B_CHUNK_SIZE):
-        out.extend(run(start, min(start + _STAGE3B_CHUNK_SIZE, len(matches))))
+    answers: list[list[dict]] = []
+    for start in range(0, len(sent), _STAGE3B_CHUNK_SIZE):
+        answers.extend(run(start, min(start + _STAGE3B_CHUNK_SIZE, len(sent))))
+    out: list[list[dict]] = [[] for _ in matches]
+    for i, errors in zip(judged, answers):
+        out[i] = errors
     return out

@@ -1,57 +1,94 @@
 {
   "scenario": "Merged completeness statements in 1:N groups + status inversions: no free-text errors",
-  "description": "Stage 3b call built from the matches in brain-mr/matching/example_1.json, every matched pair with the match-group context the pipeline attaches. The two 1:N groups (brainstem + cerebellum statements; orbits + sinuses statements) are merged completeness statements: a gt finding stated by another member of its group is not missing, so no pair has an error. The cortical-sulci pair (gt 'compatible with age' vs pred 'mildly prominent for age') and the sinus pair (gt 'paranasal sinuses are normal' vs pred 'mucosal thickening in the left maxillary sinus') are status inversions, scored upstream: no errors.",
+  "description": "Stage 3b call built from the matches in brain-mr/matching/example_1.json, every matched pair with the match-group context the pipeline attaches. 'Medulla oblongata, pons, mesencephalon, both cerebellar…' vs 'Medulla oblongata, pons, mesencephalon are normal': no error (two normal statements); 'Medulla oblongata, pons, mesencephalon, both cerebellar…' vs 'Both cerebellar hemispheres and vermis parenchyma are normal': no error (two normal statements); 'Hemispheric cortical sulcal widths are mildly prominent…' vs 'Hemispheric cortical sulcal widths are compatible with the…': no error (a status inversion, scored upstream).",
   "user": {
     "series_uuid": "brain-mr_example_1",
     "pairs": [
       {
         "pair_id": 1,
-        "pred_finding": {"finding_id": "p_1", "text": "Medulla oblongata, pons, mesencephalon, both cerebellar hemispheres, and vermis parenchyma are normal.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": "bilateral", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_1", "text": "Medulla oblongata, pons, mesencephalon are normal.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": null, "comparison": null, "measurements": []},
-        "same_group_gt": ["Both cerebellar hemispheres and vermis parenchyma are normal."]
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Medulla oblongata, pons, mesencephalon, both cerebellar hemispheres, and vermis parenchyma are normal.",
+          "clinical_status": "normal",
+          "clinical_significance": "routine",
+          "laterality": "bilateral",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "Medulla oblongata, pons, mesencephalon are normal.",
+          "clinical_status": "normal",
+          "clinical_significance": "routine",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "same_group_gt": [
+          "Both cerebellar hemispheres and vermis parenchyma are normal."
+        ]
       },
       {
         "pair_id": 2,
-        "pred_finding": {"finding_id": "p_1", "text": "Medulla oblongata, pons, mesencephalon, both cerebellar hemispheres, and vermis parenchyma are normal.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": "bilateral", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_2", "text": "Both cerebellar hemispheres and vermis parenchyma are normal.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": "bilateral", "comparison": null, "measurements": []},
-        "same_group_gt": ["Medulla oblongata, pons, mesencephalon are normal."]
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Medulla oblongata, pons, mesencephalon, both cerebellar hemispheres, and vermis parenchyma are normal.",
+          "clinical_status": "normal",
+          "clinical_significance": "routine",
+          "laterality": "bilateral",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "Both cerebellar hemispheres and vermis parenchyma are normal.",
+          "clinical_status": "normal",
+          "clinical_significance": "routine",
+          "laterality": "bilateral",
+          "comparison": null,
+          "measurements": []
+        },
+        "same_group_gt": [
+          "Medulla oblongata, pons, mesencephalon are normal."
+        ]
       },
       {
         "pair_id": 3,
-        "pred_finding": {"finding_id": "p_2", "text": "Hemispheric cortical sulcal widths are mildly prominent for the patient's age.", "clinical_status": "abnormal", "clinical_significance": "routine", "laterality": null, "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_3", "text": "Hemispheric cortical sulcal widths are compatible with the patient's age.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": null, "comparison": null, "measurements": []}
-      },
-      {
-        "pair_id": 4,
-        "pred_finding": {"finding_id": "p_3", "text": "Bilateral orbits and paranasal sinuses are normal.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": "bilateral", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_4", "text": "Bilateral orbits are normal.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": "bilateral", "comparison": null, "measurements": []},
-        "same_group_pred": ["Mucosal thickening in the left maxillary sinus."],
-        "same_group_gt": ["Paranasal sinuses are normal."]
-      },
-      {
-        "pair_id": 5,
-        "pred_finding": {"finding_id": "p_3", "text": "Bilateral orbits and paranasal sinuses are normal.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": "bilateral", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_5", "text": "Paranasal sinuses are normal.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": "bilateral", "comparison": null, "measurements": []},
-        "same_group_pred": ["Mucosal thickening in the left maxillary sinus."],
-        "same_group_gt": ["Bilateral orbits are normal."]
-      },
-      {
-        "pair_id": 6,
-        "pred_finding": {"finding_id": "p_4", "text": "Mucosal thickening in the left maxillary sinus.", "clinical_status": "abnormal", "clinical_significance": "routine", "laterality": "left", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_5", "text": "Paranasal sinuses are normal.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": "bilateral", "comparison": null, "measurements": []},
-        "same_group_pred": ["Bilateral orbits and paranasal sinuses are normal."],
-        "same_group_gt": ["Bilateral orbits are normal."]
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "Hemispheric cortical sulcal widths are mildly prominent for the patient's age.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "Hemispheric cortical sulcal widths are compatible with the patient's age.",
+          "clinical_status": "normal",
+          "clinical_significance": "routine",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        }
       }
     ]
   },
   "assistant": {
     "errors_per_pair": [
-      {"pair_id": 1, "errors": []},
-      {"pair_id": 2, "errors": []},
-      {"pair_id": 3, "errors": []},
-      {"pair_id": 4, "errors": []},
-      {"pair_id": 5, "errors": []},
-      {"pair_id": 6, "errors": []}
+      {
+        "pair_id": 1,
+        "errors": []
+      },
+      {
+        "pair_id": 2,
+        "errors": []
+      },
+      {
+        "pair_id": 3,
+        "errors": []
+      }
     ]
   }
 }

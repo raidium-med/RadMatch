@@ -1,40 +1,55 @@
 {
-  "scenario": "Diagnosis minor (a cyst is not actionable) + simple-cyst size minor + clean pairs; a prior size is not a measurement",
-  "description": "Stage 3b call built from abdomen-ct/findings_gt/example_3.json and findings_pred/example_3.json. On the hepatic-cyst pair, gt calls the lesion a 'cyst' and pred gives only the density ('small hypodense focus'): a minor diagnosis error (a simple cyst is not actionable); pred also leaves out the 9 mm size of a simple hepatic cyst, a minor measurement error. The comparison loss (gt unchanged, pred none) is scored deterministically upstream. The bile duct pair gives the same current 8 mm size and the same increase; the prior sizes the texts quote (5 vs 6 mm) are carried by `comparison`, not by `measurements`: no error.",
+  "scenario": "Diagnosis minor (a cyst is not actionable) + simple-cyst size minor",
+  "description": "Stage 3b call built from abdomen-ct/findings_gt/example_3.json and findings_pred/example_3.json. 'Small hypodense focus within the right hepatic lobe' vs 'Cyst in the right hepatic lobe measuring 9 mm unchanged': diagnosis minor (hypodense focus vs simple hepatic cyst; a cyst needs no action, same management), measurement minor (pred leaves out the 9 mm size of a simple hepatic cyst; its size changes nothing).",
   "user": {
     "series_uuid": "abdomen-ct_example_3",
     "pairs": [
       {
         "pair_id": 1,
-        "pred_finding": {"finding_id": "p_1", "text": "Small hypodense focus within the right hepatic lobe.", "clinical_status": "abnormal", "clinical_significance": "routine", "laterality": null, "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_1", "text": "Cyst in the right hepatic lobe measuring 9 mm unchanged.", "clinical_status": "abnormal", "clinical_significance": "routine", "laterality": null, "comparison": "stable", "measurements": [{"value": 9, "unit": "mm", "category": "size"}]}
-      },
-      {
-        "pair_id": 2,
-        "pred_finding": {"finding_id": "p_2", "text": "Mildly increased intrahepatic biliary and common bile duct dilatation, the common bile duct measuring up to 8 mm (previously 5 mm) and tapering distally.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": "worsening", "measurements": [{"value": 8, "unit": "mm", "category": "size"}]},
-        "gt_finding":   {"finding_id": "gt_2", "text": "Mildly increased intrahepatic biliary and common bile duct dilatation, the common bile duct measuring up to 8 mm (previously 6 mm) and tapering distally.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": "worsening", "measurements": [{"value": 8, "unit": "mm", "category": "size"}]}
-      },
-      {
-        "pair_id": 3,
-        "pred_finding": {"finding_id": "p_3", "text": "Focus of internal density within the common bile duct.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_3", "text": "Focus of internal density within the common bile duct.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": null, "measurements": []}
-      },
-      {
-        "pair_id": 4,
-        "pred_finding": {"finding_id": "p_4", "text": "2 cm structure with fecalized internal contents associated with the proximal jejunum, not identified on the prior study, causing approximately 50% luminal narrowing.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": "new", "measurements": [{"value": 2, "unit": "cm", "category": "size"}, {"value": 50, "unit": "pct", "category": "ratio"}]},
-        "gt_finding":   {"finding_id": "gt_4", "text": "Approximately 2 cm structure with fecalized internal contents associated with the proximal jejunum, not identified on the prior study, causing approximately 50% luminal narrowing.", "clinical_status": "abnormal", "clinical_significance": "urgent", "laterality": null, "comparison": "new", "measurements": [{"value": 2, "unit": "cm", "category": "size"}, {"value": 50, "unit": "pct", "category": "ratio"}]}
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Small hypodense focus within the right hepatic lobe.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "Cyst in the right hepatic lobe measuring 9 mm unchanged.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": null,
+          "comparison": "stable",
+          "measurements": [
+            {
+              "value": 9,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        }
       }
     ]
   },
   "assistant": {
     "errors_per_pair": [
-      {"pair_id": 1, "errors": [
-        {"dimension": "diagnosis", "reasoning": "hypodense focus vs simple hepatic cyst; a cyst needs no action, same management", "severity": "minor"},
-        {"dimension": "measurement", "reasoning": "pred leaves out the 9 mm size of a simple hepatic cyst; its size changes nothing", "severity": "minor"}
-      ]},
-      {"pair_id": 2, "errors": []},
-      {"pair_id": 3, "errors": []},
-      {"pair_id": 4, "errors": []}
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "diagnosis",
+            "reasoning": "hypodense focus vs simple hepatic cyst; a cyst needs no action, same management",
+            "severity": "minor"
+          },
+          {
+            "dimension": "measurement",
+            "reasoning": "pred leaves out the 9 mm size of a simple hepatic cyst; its size changes nothing",
+            "severity": "minor"
+          }
+        ]
+      }
     ]
   }
 }

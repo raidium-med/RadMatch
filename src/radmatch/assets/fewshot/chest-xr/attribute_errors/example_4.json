@@ -1,6 +1,6 @@
 {
   "scenario": "Constructed: certainty and different-diagnosis grading",
-  "description": "Constructed. A critical finding hedged ('possible pneumothorax' vs a definite one) is a major certainty error; a different diagnosis for the same opacity is a major diagnosis error; one certainty step ('probable' vs definite edema) is minor; synonyms carry no error.",
+  "description": "Constructed. 'Possible small left apical pneumothorax' vs 'Small left apical pneumothorax': certainty major (possible vs definite small apical pneumothorax, two steps; a definite one needs follow-up or drainage); 'Left basilar opacity, likely pneumonia' vs 'Left basilar opacity, likely atelectasis': diagnosis major (pneumonia vs atelectasis for the same basilar opacity; pneumonia needs antibiotics); 'Mild cardiomegaly' vs 'Mild enlargement of the cardiac silhouette': no error (same content in other words, or the pred adds detail).",
   "user": {
     "series_uuid": "chest-xr_example_4",
     "pairs": [
@@ -49,27 +49,6 @@
       {
         "pair_id": 3,
         "pred_finding": {
-          "finding_id": "p_3",
-          "text": "Probable mild pulmonary edema.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "urgent",
-          "laterality": "bilateral",
-          "comparison": null,
-          "measurements": []
-        },
-        "gt_finding": {
-          "finding_id": "gt_3",
-          "text": "Mild pulmonary edema.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "urgent",
-          "laterality": "bilateral",
-          "comparison": null,
-          "measurements": []
-        }
-      },
-      {
-        "pair_id": 4,
-        "pred_finding": {
           "finding_id": "p_4",
           "text": "Mild cardiomegaly.",
           "clinical_status": "abnormal",
@@ -114,16 +93,6 @@
       },
       {
         "pair_id": 3,
-        "errors": [
-          {
-            "dimension": "certainty",
-            "reasoning": "probable vs definite mild pulmonary edema; one step, same treatment",
-            "severity": "minor"
-          }
-        ]
-      },
-      {
-        "pair_id": 4,
         "errors": []
       }
     ]

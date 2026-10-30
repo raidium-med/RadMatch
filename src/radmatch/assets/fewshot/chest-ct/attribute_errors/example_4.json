@@ -1,6 +1,6 @@
 {
   "scenario": "Clinical long tail: different diagnosis for one abnormality, unilateral vs bilateral, synonyms",
-  "description": "Constructed; pairs from chest-ct/matching/example_4.json (status inversions excluded). Bulla vs pneumothorax for the same lucency is a major diagnosis error; a ground-glass opacity extended to the other lung carries no site or extent error: the side is scored upstream (Stage 3a `laterality`); scarring synonyms, a sub-threshold node vs 'no lymphadenopathy' and a lobectomy with its expected appearance have no error.",
+  "description": "Constructed; pairs from chest-ct/matching/example_4.json (status inversions excluded). 'Large bulla at the right lung apex' vs 'Small right apical pneumothorax': diagnosis major (bulla vs pneumothorax for the same apical lucency; a pneumothorax may need a chest tube); 'Linear fibrotic strands in both upper lobes' vs 'Biapical pleuroparenchymal scarring': no error (same content in other words, or the pred adds detail); 'Small non-enlarged subcarinal lymph node' vs 'No mediastinal lymphadenopathy': no error (two normal statements); 'Ground-glass opacities in both lower lobes' vs 'Ground-glass opacity in the right lower lobe': no error (the side is scored upstream (Stage 3a laterality)).",
   "user": {
     "series_uuid": "chest-ct_example_4",
     "pairs": [
@@ -70,27 +70,6 @@
       {
         "pair_id": 4,
         "pred_finding": {
-          "finding_id": "p_5",
-          "text": "Right lower lobectomy with staple line and volume loss.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "notable",
-          "laterality": "right",
-          "comparison": null,
-          "measurements": []
-        },
-        "gt_finding": {
-          "finding_id": "gt_5",
-          "text": "Post right lower lobectomy changes.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "notable",
-          "laterality": "right",
-          "comparison": null,
-          "measurements": []
-        }
-      },
-      {
-        "pair_id": 5,
-        "pred_finding": {
           "finding_id": "p_8",
           "text": "Ground-glass opacities in both lower lobes.",
           "clinical_status": "abnormal",
@@ -133,10 +112,6 @@
       },
       {
         "pair_id": 4,
-        "errors": []
-      },
-      {
-        "pair_id": 5,
         "errors": []
       }
     ]

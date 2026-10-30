@@ -1,6 +1,6 @@
 {
- "scenario": "Constructed: acute vs chronic, single vs multiple, attenuation, invasion, a variant vs a neoplasm, clot burden, diffuse pneumonia distribution and descriptors, a benign-lesion size",
- "description": "Constructed. Acute vs chronic emboli is a major diagnosis error (the age); a solitary vs multiple nodules and abutment vs invasion are major extent errors (the side is scored upstream); ground-glass vs solid attenuation is a major character error; a small vs large clot burden is a major severity error. Residual thymus (a normal variant) vs a suspected thymoma is a status inversion scored upstream: no Stage 3b error. A mild vs moderate grade of emphysema is minor; a vessel list that leaves out mild per-vessel grades is a minor severity error (low grades left out). For a diffuse viral pneumonia, a coarser distribution is a minor site error and septal thickening vs consolidation within the ground glass a minor character error; a size difference on a chest wall lipoma (benign, not followed by its size) is a minor measurement error.",
+ "scenario": "Constructed: acute vs chronic, single vs multiple, attenuation, invasion, a variant vs a neoplasm, diffuse pneumonia distribution and descriptors, a benign-lesion size",
+ "description": "Constructed. 'Acute pulmonary emboli in the right lower lobe segmental…' vs 'Chronic pulmonary emboli in the right lower lobe segmental…': diagnosis major (acute vs chronic segmental emboli; acute emboli call for anticoagulation now); 'Solitary 9 mm right lower lobe pulmonary nodule' vs 'Multiple bilateral pulmonary nodules, the largest 9 mm in…': extent major (solitary vs multiple nodules; primary vs metastatic workup); '8 mm ground-glass nodule in the left upper lobe' vs '8 mm solid nodule in the left upper lobe': character major (ground-glass vs solid 8 mm nodule; switches the Fleischner pathway); 'Right upper lobe mass abutting the mediastinal pleura' vs 'Right upper lobe mass invading the mediastinum': extent major (abutment vs invasion of the mediastinum; changes the T stage and resectability); 'Triangular soft tissue in the anterior mediastinum, likely…' vs 'Anterior mediastinal soft-tissue mass, suspicious for…': no error (a status inversion, scored upstream); 'Bilateral ground-glass opacities with interlobular septal…' vs 'Bilateral peripheral ground-glass opacities with…': site minor (both lungs vs peripheral lower-lobe ground glass; a coarser distribution of a diffuse pneumonia, same treatment), character minor (septal thickening vs consolidation within the ground glass; two descriptors of one diffuse pneumonia, same treatment); '4.2 cm lipoma in the left chest wall' vs '3.0 cm left chest wall lipoma': measurement minor (4.2 vs 3.0 cm chest wall lipoma, over 20 %; a lipoma is benign and not followed by its size).",
  "user": {
   "series_uuid": "chest-ct_example_6",
   "pairs": [
@@ -136,69 +136,6 @@
    {
     "pair_id": 6,
     "pred_finding": {
-     "finding_id": "p_6",
-     "text": "Pulmonary emboli in the left lower lobe segmental arteries with a large clot burden.",
-     "measurements": [],
-     "laterality": "left",
-     "comparison": null,
-     "clinical_status": "abnormal",
-     "clinical_significance": "critical"
-    },
-    "gt_finding": {
-     "finding_id": "gt_6",
-     "text": "Segmental pulmonary emboli in the left lower lobe, small clot burden.",
-     "measurements": [],
-     "laterality": "left",
-     "comparison": null,
-     "clinical_status": "abnormal",
-     "clinical_significance": "critical"
-    }
-   },
-   {
-    "pair_id": 7,
-    "pred_finding": {
-     "finding_id": "p_7",
-     "text": "Moderate centrilobular emphysema.",
-     "measurements": [],
-     "laterality": "bilateral",
-     "comparison": null,
-     "clinical_status": "abnormal",
-     "clinical_significance": "notable"
-    },
-    "gt_finding": {
-     "finding_id": "gt_7",
-     "text": "Mild centrilobular emphysema.",
-     "measurements": [],
-     "laterality": "bilateral",
-     "comparison": null,
-     "clinical_status": "abnormal",
-     "clinical_significance": "notable"
-    }
-   },
-   {
-    "pair_id": 8,
-    "pred_finding": {
-     "finding_id": "p_8",
-     "text": "Coronary artery calcification in the LAD and RCA.",
-     "measurements": [],
-     "laterality": null,
-     "comparison": null,
-     "clinical_status": "abnormal",
-     "clinical_significance": "notable"
-    },
-    "gt_finding": {
-     "finding_id": "gt_8",
-     "text": "Coronary artery calcium: left main none, LAD mild, circumflex none, RCA mild.",
-     "measurements": [],
-     "laterality": null,
-     "comparison": null,
-     "clinical_status": "abnormal",
-     "clinical_significance": "notable"
-    }
-   },
-   {
-    "pair_id": 9,
-    "pred_finding": {
      "finding_id": "p_9",
      "text": "Bilateral ground-glass opacities with interlobular septal thickening, consistent with viral pneumonia.",
      "measurements": [],
@@ -218,7 +155,7 @@
     }
    },
    {
-    "pair_id": 10,
+    "pair_id": 7,
     "pred_finding": {
      "finding_id": "p_10",
      "text": "4.2 cm lipoma in the left chest wall.",
@@ -302,36 +239,6 @@
     "pair_id": 6,
     "errors": [
      {
-      "dimension": "severity",
-      "reasoning": "large vs small clot burden, two steps; changes risk stratification and treatment",
-      "severity": "major"
-     }
-    ]
-   },
-   {
-    "pair_id": 7,
-    "errors": [
-     {
-      "dimension": "severity",
-      "reasoning": "moderate vs mild emphysema; one step, same management",
-      "severity": "minor"
-     }
-    ]
-   },
-   {
-    "pair_id": 8,
-    "errors": [
-     {
-      "dimension": "severity",
-      "reasoning": "pred leaves out the mild LAD and RCA calcium grades; low grades left out, same management",
-      "severity": "minor"
-     }
-    ]
-   },
-   {
-    "pair_id": 9,
-    "errors": [
-     {
       "dimension": "site",
       "reasoning": "both lungs vs peripheral lower-lobe ground glass; a coarser distribution of a diffuse pneumonia, same treatment",
       "severity": "minor"
@@ -344,7 +251,7 @@
     ]
    },
    {
-    "pair_id": 10,
+    "pair_id": 7,
     "errors": [
      {
       "dimension": "measurement",

@@ -1,32 +1,11 @@
 {
-  "scenario": "Constructed: left-out details, side differences left upstream, group, more detail, left-out growth",
-  "description": "Constructed. Bilateral vs one side, both ways, and a side the pred leaves out: the side is scored upstream (Stage 3a `laterality`), so it carries no site or extent error; a bilateral pred matched to a left and a right gt has no error on either pair; a pred more detailed than the gt has no error; a moderate grade the gt gives that the pred leaves out is a minor severity error. Growth the pred invents on a nodule is a major comparison error. A definite diagnosis for a gt 'possibly' is two certainty steps, a major certainty error. A side only the pred gives: no error. One enlarged hilum for gt enlarged hila: the side is scored upstream, no Stage 3b error. A growth the gt gives that the pred leaves out is a major comparison error on a nodule (followed by its size), no Stage 3b error on atelectasis (the upstream flag keeps it minor).",
+  "scenario": "Constructed: side differences left upstream, group, more detail, invented and left-out growth",
+  "description": "Constructed. 'Right lower lobe opacity' vs 'Bilateral lower lobe opacities': no error (the side is scored upstream (Stage 3a laterality)); 'Bilateral lower lobe consolidation' vs 'Left lower lobe consolidation': no error (the side is scored upstream (Stage 3a laterality)); 'Bilateral lower lobe consolidation' vs 'Right lower lobe consolidation': no error (the side is scored upstream (Stage 3a laterality)); 'Left lower lobe consolidation with air bronchograms' vs 'Left lower lobe consolidation': no error (same content in other words, or the pred adds detail); 'Right upper lobe nodule, increased in size' vs 'Right upper lobe nodule': comparison major (pred adds growth of a right upper lobe nodule the gt does not give; growth calls for CT workup); 'Right upper lobe nodule' vs 'Enlarging right upper lobe nodule': comparison major (pred leaves out the growth of the right upper lobe nodule; growth calls for CT workup); 'Bibasilar atelectasis' vs 'Increased bibasilar atelectasis': no error (the comparison difference is scored upstream (Stage 3a)).",
   "user": {
     "series_uuid": "chest-xr_example_5",
     "pairs": [
       {
         "pair_id": 1,
-        "pred_finding": {
-          "finding_id": "p_1",
-          "text": "Bibasilar atelectasis.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "routine",
-          "laterality": "bilateral",
-          "comparison": null,
-          "measurements": []
-        },
-        "gt_finding": {
-          "finding_id": "gt_1",
-          "text": "Left basilar atelectasis.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "routine",
-          "laterality": "left",
-          "comparison": null,
-          "measurements": []
-        }
-      },
-      {
-        "pair_id": 2,
         "pred_finding": {
           "finding_id": "p_2",
           "text": "Right lower lobe opacity.",
@@ -47,28 +26,7 @@
         }
       },
       {
-        "pair_id": 3,
-        "pred_finding": {
-          "finding_id": "p_3",
-          "text": "Basilar atelectasis.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "routine",
-          "laterality": null,
-          "comparison": null,
-          "measurements": []
-        },
-        "gt_finding": {
-          "finding_id": "gt_3",
-          "text": "Right basilar atelectasis.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "routine",
-          "laterality": "right",
-          "comparison": null,
-          "measurements": []
-        }
-      },
-      {
-        "pair_id": 4,
+        "pair_id": 2,
         "pred_finding": {
           "finding_id": "p_4",
           "text": "Bilateral lower lobe consolidation.",
@@ -92,7 +50,7 @@
         ]
       },
       {
-        "pair_id": 5,
+        "pair_id": 3,
         "pred_finding": {
           "finding_id": "p_4",
           "text": "Bilateral lower lobe consolidation.",
@@ -116,7 +74,7 @@
         ]
       },
       {
-        "pair_id": 6,
+        "pair_id": 4,
         "pred_finding": {
           "finding_id": "p_5",
           "text": "Left lower lobe consolidation with air bronchograms.",
@@ -137,28 +95,7 @@
         }
       },
       {
-        "pair_id": 7,
-        "pred_finding": {
-          "finding_id": "p_6",
-          "text": "Cardiomegaly.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "notable",
-          "laterality": null,
-          "comparison": null,
-          "measurements": []
-        },
-        "gt_finding": {
-          "finding_id": "gt_7",
-          "text": "Moderate cardiomegaly.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "notable",
-          "laterality": null,
-          "comparison": null,
-          "measurements": []
-        }
-      },
-      {
-        "pair_id": 8,
+        "pair_id": 5,
         "pred_finding": {
           "finding_id": "p_7",
           "text": "Right upper lobe nodule, increased in size.",
@@ -179,70 +116,7 @@
         }
       },
       {
-        "pair_id": 9,
-        "pred_finding": {
-          "finding_id": "p_8",
-          "text": "Right middle lobe pneumonia.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "urgent",
-          "laterality": "right",
-          "comparison": null,
-          "measurements": []
-        },
-        "gt_finding": {
-          "finding_id": "gt_9",
-          "text": "Right middle lobe opacity, possibly pneumonia.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "urgent",
-          "laterality": "right",
-          "comparison": null,
-          "measurements": []
-        }
-      },
-      {
-        "pair_id": 10,
-        "pred_finding": {
-          "finding_id": "p_9",
-          "text": "Right hilar enlargement.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "notable",
-          "laterality": "right",
-          "comparison": null,
-          "measurements": []
-        },
-        "gt_finding": {
-          "finding_id": "gt_10",
-          "text": "Hilar enlargement.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "notable",
-          "laterality": null,
-          "comparison": null,
-          "measurements": []
-        }
-      },
-      {
-        "pair_id": 11,
-        "pred_finding": {
-          "finding_id": "p_10",
-          "text": "Enlarged right hilum.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "notable",
-          "laterality": "right",
-          "comparison": null,
-          "measurements": []
-        },
-        "gt_finding": {
-          "finding_id": "gt_11",
-          "text": "Enlarged hila.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "notable",
-          "laterality": "bilateral",
-          "comparison": null,
-          "measurements": []
-        }
-      },
-      {
-        "pair_id": 12,
+        "pair_id": 6,
         "pred_finding": {
           "finding_id": "p_12",
           "text": "Right upper lobe nodule.",
@@ -263,7 +137,7 @@
         }
       },
       {
-        "pair_id": 13,
+        "pair_id": 7,
         "pred_finding": {
           "finding_id": "p_13",
           "text": "Bibasilar atelectasis.",
@@ -305,24 +179,6 @@
       },
       {
         "pair_id": 5,
-        "errors": []
-      },
-      {
-        "pair_id": 6,
-        "errors": []
-      },
-      {
-        "pair_id": 7,
-        "errors": [
-          {
-            "dimension": "severity",
-            "reasoning": "pred leaves out the moderate grade of the cardiomegaly; a middle grade left out changes nothing",
-            "severity": "minor"
-          }
-        ]
-      },
-      {
-        "pair_id": 8,
         "errors": [
           {
             "dimension": "comparison",
@@ -332,25 +188,7 @@
         ]
       },
       {
-        "pair_id": 9,
-        "errors": [
-          {
-            "dimension": "certainty",
-            "reasoning": "definite vs possible right middle lobe pneumonia, two steps; decides antibiotic treatment",
-            "severity": "major"
-          }
-        ]
-      },
-      {
-        "pair_id": 10,
-        "errors": []
-      },
-      {
-        "pair_id": 11,
-        "errors": []
-      },
-      {
-        "pair_id": 12,
+        "pair_id": 6,
         "errors": [
           {
             "dimension": "comparison",
@@ -360,7 +198,7 @@
         ]
       },
       {
-        "pair_id": 13,
+        "pair_id": 7,
         "errors": []
       }
     ]

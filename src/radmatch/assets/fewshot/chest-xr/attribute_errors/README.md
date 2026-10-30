@@ -1,13 +1,13 @@
 # Attribute-errors few-shot examples (chest-xr)
 
-Five Stage 3b examples: three derived from the matches of the corresponding `chest-xr/matching/example_N.json`, two constructed. A status-inversion pair reaches Stage 3b too and expects `[]` (prompt rule 1): the inversion is scored upstream.
+Five Stage 3b examples: three derived from the matches of the corresponding `chest-xr/matching/example_N.json`, two constructed. Live runs do not send the judge the pairs whose outcome the rules fix (a status inversion, two normal statements without a hedge, identical texts); a few such pairs stay here to show the rules (prompt rule 1), with no error.
 
 | File | Drawn from | Highlights |
 |------|------------|------------|
-| `example_1.json` | matching/example_1 (status-conflict pair excluded) | 1 minor severity error (cardiomegaly mild vs moderate) + 3 clean pairs |
-| `example_2.json` | findings_gt + findings_pred example_2 | Minor severity for the left-out moderate grade on the effusion, major severity for the left-out severe grade on the LLL consolidation + minor site (left basilar vs left lower lobe) + major site (device tip: CVL upper RA vs PICC lower SVC) + 1 clean pair |
-| `example_3.json` | findings_gt + findings_pred example_3 | 4 vs 6 mm surveillance nodule crosses the 6 mm threshold (major measurement); one nodule for a gt set of several on CT (major extent); the comparison flip stays in Stage 3a |
-| `example_4.json` | constructed | Certainty major for a hedged pneumothorax, minor for one step; pneumonia vs atelectasis major diagnosis |
-| `example_5.json` | constructed | Bilateral vs one side and a left-out side: no site or extent error, the side is Stage 3a `laterality`'s; a bilateral pred vs a left and a right gt no error, more detail no error, a left-out moderate grade minor, invented growth on a nodule major comparison, definite vs possible pneumonia major certainty; a side only the pred gives no error; one enlarged hilum vs both no Stage 3b error (Stage 3a `laterality`); left-out growth major comparison on a nodule, no error on atelectasis |
+| `example_1.json` | matching/example_1 (status-conflict pair excluded) | Moderate cardiomegaly vs Mild cardiomegaly, unchanged: severity minor; No focal airspace opacities; no… vs No concerning focal airspace…: no error |
+| `example_2.json` | findings_gt + findings_pred example_2 | Stable bilateral pleural effusion vs Moderate bilateral pleural…: severity minor; Left basilar opacity, likely… vs Severe left lower lobe…: severity major, site minor; Right PICC line ends in the lower… vs Right central venous line ends in…: site major |
+| `example_3.json` | findings_gt + findings_pred example_3 | A 6 mm pulmonary nodule in the… vs A 4 mm pulmonary nodule in the…: measurement major, extent major |
+| `example_4.json` | constructed | Possible small left apical… vs Small left apical pneumothorax: certainty major; Left basilar opacity, likely… vs Left basilar opacity, likely…: diagnosis major; Mild cardiomegaly vs Mild enlargement of the cardiac…: no error |
+| `example_5.json` | constructed | Right lower lobe opacity vs Bilateral lower lobe opacities: no error; Bilateral lower lobe consolidation vs Left lower lobe consolidation: no error; Bilateral lower lobe consolidation vs Right lower lobe consolidation: no error; Left lower lobe consolidation… vs Left lower lobe consolidation: no error; Right upper lobe nodule,… vs Right upper lobe nodule: comparison major; Right upper lobe nodule vs Enlarging right upper lobe nodule: comparison major; Bibasilar atelectasis vs Increased bibasilar atelectasis: no error |
 
 See `../../abdomen-ct/attribute_errors/README.md` for the file format and loader notes.

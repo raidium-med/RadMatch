@@ -163,3 +163,18 @@ def test_fingerprint_stable_for_same_indication(make_finding):
     fp1 = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="Trauma", stage3b_config={})
     fp2 = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="Trauma", stage3b_config={})
     assert fp1 == fp2
+
+
+@pytest.mark.parametrize(
+    "pred, gt, judged",
+    [
+        pytest.param(("normal", "No pneumothorax."), ("abnormal", "Small pneumothorax."), False, id="status-inversion"),
+        pytest.param(("normal", "No effusion."), ("normal", "No pleural effusion."), False, id="two-normal"),
+        pytest.param(("normal", "Possibly no embolism."), ("normal", "No embolism."), True, id="hedged-rule-out"),
+        pytest.param(("abnormal", "Small  effusion."), ("abnormal", "small effusion."), False, id="same-text"),
+        pytest.param(("abnormal", "Small effusion."), ("abnormal", "Large effusion."), True, id="different-text"),
+    ],
+)
+def test_needs_judge(pred, gt, judged):
+    finding = lambda status, text: {"clinical_status": status, "text": text}  # noqa: E731
+    assert inference.needs_judge(finding(*pred), finding(*gt)) is judged

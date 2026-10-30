@@ -1,35 +1,87 @@
 {
-  "scenario": "Constructed: diffuse-process distribution, benign-lesion size, two normal statements",
-  "description": "Constructed. A partly different distribution of microangiopathic white matter changes (a diffuse process) is a minor site error; a size difference on a maxillary mucous retention cyst (benign, not followed by its size) is a minor measurement error; two normal findings worded differently, one naming a structure and an age the other leaves out, differ only by template: no error.",
+  "scenario": "Constructed: diffuse-process distribution, benign-lesion size",
+  "description": "Constructed. 'Microangiopathic white matter changes in the centrum…' vs 'Periventricular and subcortical microangiopathic white…': site minor (centrum semiovale vs periventricular and subcortical white matter changes; a partly different distribution of a diffuse process, same management); '18 mm mucous retention cyst in the right maxillary sinus' vs '12 mm mucous retention cyst in the right maxillary sinus': measurement minor (18 vs 12 mm maxillary retention cyst, over 20 %; a benign retention cyst is not followed by its size).",
   "user": {
     "series_uuid": "head-ct_example_4",
     "pairs": [
       {
         "pair_id": 1,
-        "pred_finding": {"finding_id": "p_1", "text": "Microangiopathic white matter changes in the centrum semiovale.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": null, "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_1", "text": "Periventricular and subcortical microangiopathic white matter changes.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": null, "comparison": null, "measurements": []}
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Microangiopathic white matter changes in the centrum semiovale.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "Periventricular and subcortical microangiopathic white matter changes.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        }
       },
       {
         "pair_id": 2,
-        "pred_finding": {"finding_id": "p_2", "text": "18 mm mucous retention cyst in the right maxillary sinus.", "clinical_status": "abnormal", "clinical_significance": "routine", "laterality": "right", "comparison": null, "measurements": [{"value": 18, "unit": "mm", "category": "size"}]},
-        "gt_finding":   {"finding_id": "gt_2", "text": "12 mm mucous retention cyst in the right maxillary sinus.", "clinical_status": "abnormal", "clinical_significance": "routine", "laterality": "right", "comparison": null, "measurements": [{"value": 12, "unit": "mm", "category": "size"}]}
-      },
-      {
-        "pair_id": 3,
-        "pred_finding": {"finding_id": "p_3", "text": "No intracranial hemorrhage.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": null, "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_3", "text": "No acute subdural hematoma.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": null, "comparison": null, "measurements": []}
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "18 mm mucous retention cyst in the right maxillary sinus.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 18,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "12 mm mucous retention cyst in the right maxillary sinus.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 12,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        }
       }
     ]
   },
   "assistant": {
     "errors_per_pair": [
-      {"pair_id": 1, "errors": [
-        {"dimension": "site", "reasoning": "centrum semiovale vs periventricular and subcortical white matter changes; a partly different distribution of a diffuse process, same management", "severity": "minor"}
-      ]},
-      {"pair_id": 2, "errors": [
-        {"dimension": "measurement", "reasoning": "18 vs 12 mm maxillary retention cyst, over 20 %; a benign retention cyst is not followed by its size", "severity": "minor"}
-      ]},
-      {"pair_id": 3, "errors": []}
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "site",
+            "reasoning": "centrum semiovale vs periventricular and subcortical white matter changes; a partly different distribution of a diffuse process, same management",
+            "severity": "minor"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "measurement",
+            "reasoning": "18 vs 12 mm maxillary retention cyst, over 20 %; a benign retention cyst is not followed by its size",
+            "severity": "minor"
+          }
+        ]
+      }
     ]
   }
 }

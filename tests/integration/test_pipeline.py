@@ -84,28 +84,17 @@ def test_two_cor_pairs(fake_client, ok, make_finding):
     assert [r["muc_category"] for r in out["muc_records"]] == ["COR", "COR"]
 
 
-def test_inc_pair_still_runs_stage_3b(fake_client, ok, make_finding):
-    """INC pairs are evaluated by Stage 3b so the recorded errors are available
-    downstream for diagnostics. The Stage 3a status-inversion classification
-    is what makes the pair INC."""
+def test_status_inversion_is_not_sent_to_stage_3b(fake_client, ok, make_finding):
+    """The Stage 3a status inversion makes the pair INC; the rules leave the judge nothing to grade on it."""
     gt = [make_finding("gt_1", clinical_status="abnormal", clinical_significance="critical", text="Pneumothorax")]
     pred = [make_finding("p_1", clinical_status="normal", clinical_significance="critical", text="No pneumothorax")]
-    client = fake_client(
-        ok({"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}),
-        ok(
-            {
-                "errors_per_pair": [
-                    {"pair_id": 1, "errors": [{"dimension": "site", "severity": "minor", "reasoning": "x"}]}
-                ]
-            }
-        ),
-    )
+    client = fake_client(ok({"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}))
 
     out = _run_pair(gt, pred, "s_inc", client)
     record = out["muc_records"][0]
     assert record["muc_category"] == "INC"
-    assert len(client.calls) == 2  # Stage 2 match + Stage 3b attribute errors
-    assert any(e["dimension"] == "site" for e in record["text_errors"])
+    assert len(client.calls) == 1  # Stage 2 only
+    assert record["text_errors"] == []
 
 
 def test_par_with_major_error_internally_PAR(fake_client, ok, make_finding):
@@ -136,7 +125,7 @@ def test_par_with_major_error_internally_PAR(fake_client, ok, make_finding):
 def test_par_with_only_minor_errors_keeps_PAR(fake_client, ok, make_finding):
     """A PAR with no major attribute errors keeps the PAR label in the output."""
     gt = [make_finding("gt_1", clinical_significance="critical", text="lesion")]
-    pred = [make_finding("p_1", clinical_significance="critical", text="lesion")]
+    pred = [make_finding("p_1", clinical_significance="critical", text="small lesion")]
     client = fake_client(
         ok({"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}),
         ok(
@@ -315,7 +304,7 @@ def test_stage_3b_malformed_shape_surfaces(malformed_payload, fake_client, ok, m
     """Valid JSON of the wrong shape is unusable; after retries it must raise rather than
     silently score the report as having no attribute errors."""
     gt = [make_finding("gt_1", clinical_significance="critical", text="nodule")]
-    pred = [make_finding("p_1", clinical_significance="critical", text="nodule")]
+    pred = [make_finding("p_1", clinical_significance="critical", text="lung nodule")]
     client = fake_client(
         ok({"matches": [_match("p_1", "gt_1")], "unmatched_pred": [], "unmatched_gt": []}),
         *[malformed_payload] * (inference.DEFAULT_MAX_RETRIES + 1),
@@ -575,9 +564,11 @@ def test_score_pair_compares_sides_across_the_match_group(preds, gts, side_error
     pred = [make_finding(i, laterality=side, clinical_status=status) for i, side, status in preds]
     gt = [make_finding(i, laterality=side, clinical_status=status) for i, side, status in gts]
     matches = [_match(p, g) for p, _, _ in preds for g, _, _ in gts]
+    by_id = {f["finding_id"]: f for f in pred + gt}
+    judged = sum(inference.needs_judge(by_id[m["pred_id"]], by_id[m["gt_id"]]) for m in matches)
     client = fake_client(
         ok({"matches": matches, "unmatched_pred": [], "unmatched_gt": []}),
-        ok({"errors_per_pair": [{"pair_id": i, "errors": []} for i in range(1, len(matches) + 1)]}),
+        ok({"errors_per_pair": [{"pair_id": i, "errors": []} for i in range(1, judged + 1)]}),
     )
     out = _run_pair(gt, pred, "s_side", client)
     found = sum(e["dimension"] == "laterality" for r in out["muc_records"] for e in r["structured_errors"])

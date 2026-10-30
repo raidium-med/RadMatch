@@ -1,44 +1,111 @@
 {
-  "scenario": "Left-out moderate grade minor, left-out severe grade major, device tip site major, clean negation",
-  "description": "Stage 3b call built from chest-xr/findings_gt/example_2.json and findings_pred/example_2.json. The pleural-effusion pair has a comparison flip (Stage 3a deterministic) but no status conflict; the pred leaves out the moderate grade gt gives, a minor severity error (a middle grade left out changes nothing). The LLL consolidation pair has a major severity error (pred leaves out the 'severe' grade gt gives, a high grade that changes management; atelectasis and collapse are synonyms) and a minor site error (left basilar vs left lower lobe). The central line pair has a major site error (device tip: upper right atrium vs lower SVC — different management). The pneumothorax pair is clean.",
+  "scenario": "Left-out moderate grade minor, left-out severe grade major, device tip site major",
+  "description": "Stage 3b call built from chest-xr/findings_gt/example_2.json and findings_pred/example_2.json. 'Stable bilateral pleural effusion' vs 'Moderate bilateral pleural effusion has increased': severity minor (pred leaves out the moderate grade of the bilateral effusions; a middle grade left out changes nothing); 'Left basilar opacity, likely atelectasis' vs 'Severe left lower lobe consolidation, presumably collapse,…': severity major (pred leaves out the severe grade of the left lower lobe collapse; severe collapse may need bronchoscopy), site minor (left basilar vs left lower lobe; two words for the same site, same management); 'Right PICC line ends in the lower SVC' vs 'Right central venous line ends in the upper right atrium': site major (line tip in the lower SVC vs the upper right atrium; an atrial tip is pulled back).",
   "user": {
     "series_uuid": "chest-xr_example_2",
     "pairs": [
       {
         "pair_id": 1,
-        "pred_finding": {"finding_id": "p_1", "text": "Stable bilateral pleural effusion.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "bilateral", "comparison": "stable", "measurements": []},
-        "gt_finding":   {"finding_id": "gt_1", "text": "Moderate bilateral pleural effusion has increased.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "bilateral", "comparison": "worsening", "measurements": []}
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Stable bilateral pleural effusion.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "bilateral",
+          "comparison": "stable",
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "Moderate bilateral pleural effusion has increased.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "bilateral",
+          "comparison": "worsening",
+          "measurements": []
+        }
       },
       {
         "pair_id": 2,
-        "pred_finding": {"finding_id": "p_2", "text": "Left basilar opacity, likely atelectasis.", "clinical_status": "abnormal", "clinical_significance": "routine", "laterality": "left", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_2", "text": "Severe left lower lobe consolidation, presumably collapse, has not improved.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "left", "comparison": "stable", "measurements": []}
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "Left basilar opacity, likely atelectasis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "Severe left lower lobe consolidation, presumably collapse, has not improved.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": "stable",
+          "measurements": []
+        }
       },
       {
         "pair_id": 3,
-        "pred_finding": {"finding_id": "p_3", "text": "Right PICC line ends in the lower SVC.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": null, "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_3", "text": "Right central venous line ends in the upper right atrium.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": null, "comparison": null, "measurements": []}
-      },
-      {
-        "pair_id": 4,
-        "pred_finding": {"finding_id": "p_4", "text": "No pneumothorax.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": null, "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_4", "text": "No pneumothorax.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": null, "comparison": null, "measurements": []}
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "Right PICC line ends in the lower SVC.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "Right central venous line ends in the upper right atrium.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        }
       }
     ]
   },
   "assistant": {
     "errors_per_pair": [
-      {"pair_id": 1, "errors": [
-        {"dimension": "severity", "reasoning": "pred leaves out the moderate grade of the bilateral effusions; a middle grade left out changes nothing", "severity": "minor"}
-      ]},
-      {"pair_id": 2, "errors": [
-        {"dimension": "severity", "reasoning": "pred leaves out the severe grade of the left lower lobe collapse; severe collapse may need bronchoscopy", "severity": "major"},
-        {"dimension": "site", "reasoning": "left basilar vs left lower lobe; two words for the same site, same management", "severity": "minor"}
-      ]},
-      {"pair_id": 3, "errors": [
-        {"dimension": "site", "reasoning": "line tip in the lower SVC vs the upper right atrium; an atrial tip is pulled back", "severity": "major"}
-      ]},
-      {"pair_id": 4, "errors": []}
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "severity",
+            "reasoning": "pred leaves out the moderate grade of the bilateral effusions; a middle grade left out changes nothing",
+            "severity": "minor"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "severity",
+            "reasoning": "pred leaves out the severe grade of the left lower lobe collapse; severe collapse may need bronchoscopy",
+            "severity": "major"
+          },
+          {
+            "dimension": "site",
+            "reasoning": "left basilar vs left lower lobe; two words for the same site, same management",
+            "severity": "minor"
+          }
+        ]
+      },
+      {
+        "pair_id": 3,
+        "errors": [
+          {
+            "dimension": "site",
+            "reasoning": "line tip in the lower SVC vs the upper right atrium; an atrial tip is pulled back",
+            "severity": "major"
+          }
+        ]
+      }
     ]
   }
 }

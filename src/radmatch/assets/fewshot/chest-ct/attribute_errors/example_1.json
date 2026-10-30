@@ -1,41 +1,87 @@
 {
-  "scenario": "Side flip left upstream + minor severity + clean pair",
-  "description": "Stage 3b call derived from the matches in chest-ct/matching/example_1.json, with the heart-size status inversion (gt 'not enlarged' vs pred 'mildly enlarged') left out of this example (scored upstream). The bronchiectasis pair differs only in side (right vs left lung apex): the side is scored upstream (Stage 3a `laterality`, minor here: minimal bronchiectasis is routine), so it carries no site error. The coronary-calcification pair differs in severity (gt severe vs pred moderate), one step apart on the descriptor scale — minor. The aortic-arch pair (4.1 vs 3.6 cm) crosses the 4 cm thoracic-aorta threshold: a major measurement error. The hepatic-lesion pair is identical.",
+  "scenario": "Minor severity (one step) + aortic size across the 4 cm threshold (major)",
+  "description": "Stage 3b call derived from the matches in chest-ct/matching/example_1.json, with the heart-size status inversion (gt 'not enlarged' vs pred 'mildly enlarged') left out of this example (scored upstream). 'Moderate coronary artery calcifications' vs 'Severe coronary artery calcifications': severity minor (moderate vs severe coronary calcification; one step, same management); 'Mild widening of the anterior aortic arch diameter to 4.1 cm' vs 'Mild widening of the anterior aortic arch diameter to 3.6 cm': measurement major (4.1 vs 3.6 cm aortic arch, across the 4 cm threshold; dilated vs normal changes surveillance).",
   "user": {
     "series_uuid": "chest-ct_example_1",
     "pairs": [
       {
         "pair_id": 1,
-        "pred_finding": {"finding_id": "p_1", "text": "Minimal cylindrical bronchiectasis most apparent in the left lung apex.", "clinical_status": "abnormal", "clinical_significance": "routine", "laterality": "left", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_1", "text": "Minimal cylindrical bronchiectasis most apparent in the right lung apex.", "clinical_status": "abnormal", "clinical_significance": "routine", "laterality": "right", "comparison": null, "measurements": []}
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "Moderate coronary artery calcifications.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "Severe coronary artery calcifications.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        }
       },
       {
         "pair_id": 2,
-        "pred_finding": {"finding_id": "p_3", "text": "Moderate coronary artery calcifications.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": null, "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_3", "text": "Severe coronary artery calcifications.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": null, "comparison": null, "measurements": []}
-      },
-      {
-        "pair_id": 3,
-        "pred_finding": {"finding_id": "p_4", "text": "Mild widening of the anterior aortic arch diameter to 4.1 cm.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": null, "comparison": null, "measurements": [{"value": 4.1, "unit": "cm", "category": "size"}]},
-        "gt_finding":   {"finding_id": "gt_4", "text": "Mild widening of the anterior aortic arch diameter to 3.6 cm.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": null, "comparison": null, "measurements": [{"value": 3.6, "unit": "cm", "category": "size"}]}
-      },
-      {
-        "pair_id": 4,
-        "pred_finding": {"finding_id": "p_5", "text": "Small stable hypodense lesion in the right lobe of the liver consistent with incidental benign pathology.", "clinical_status": "abnormal", "clinical_significance": "routine", "laterality": null, "comparison": "stable", "measurements": []},
-        "gt_finding":   {"finding_id": "gt_5", "text": "Small stable hypodense lesion in the right lobe of the liver consistent with incidental benign pathology.", "clinical_status": "abnormal", "clinical_significance": "routine", "laterality": null, "comparison": "stable", "measurements": []}
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "Mild widening of the anterior aortic arch diameter to 4.1 cm.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": null,
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 4.1,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "Mild widening of the anterior aortic arch diameter to 3.6 cm.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": null,
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 3.6,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        }
       }
     ]
   },
   "assistant": {
     "errors_per_pair": [
-      {"pair_id": 1, "errors": []},
-      {"pair_id": 2, "errors": [
-        {"dimension": "severity", "reasoning": "moderate vs severe coronary calcification; one step, same management", "severity": "minor"}
-      ]},
-      {"pair_id": 3, "errors": [
-        {"dimension": "measurement", "reasoning": "4.1 vs 3.6 cm aortic arch, across the 4 cm threshold; dilated vs normal changes surveillance", "severity": "major"}
-      ]},
-      {"pair_id": 4, "errors": []}
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "severity",
+            "reasoning": "moderate vs severe coronary calcification; one step, same management",
+            "severity": "minor"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "measurement",
+            "reasoning": "4.1 vs 3.6 cm aortic arch, across the 4 cm threshold; dilated vs normal changes surveillance",
+            "severity": "major"
+          }
+        ]
+      }
     ]
   }
 }

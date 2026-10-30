@@ -1,6 +1,6 @@
 {
- "scenario": "Constructed: invented SBO complication, single vs multiple metastases, vascular encasement, acute vs chronic fracture, a variant vs a node, gas in a collection, steatosis distribution, a benign-lesion size",
- "description": "Constructed. A transition point or closed loop the reference does not give, solitary vs multiple liver metastases and SMA abutment vs encasement are major extent errors; an acute vs chronic fracture is a major diagnosis error (the age); gas in a collection is a major character error. A splenule (an anatomic variant, normal) vs a lymph node (abnormal) is a status inversion scored upstream: no Stage 3b error. The predominant segment of uncomplicated diverticulosis is a minor extent error; fluid the pred adds to a fat-containing umbilical hernia is no error (added detail). A right-lobe vs diffuse distribution of hepatic steatosis (a diffuse process) is a minor site error; a size difference on a hemangioma (benign, not followed by its size) is a minor measurement error.",
+ "scenario": "Constructed: invented SBO complication, single vs multiple metastases, acute vs chronic fracture, a variant vs a node, steatosis distribution, a benign-lesion size",
+ "description": "Constructed. 'Closed-loop small bowel obstruction with a transition…' vs 'Small bowel obstruction; no discrete transition point…': extent major (pred adds a closed loop and a transition point; a closed loop calls for urgent surgery); 'Solitary 2.1 cm hepatic metastasis in segment 7' vs 'Multiple hepatic metastases, the largest 2.1 cm in segment 7': extent major (solitary vs multiple liver metastases; decides resection or ablation vs systemic therapy); 'Acute L1 compression fracture' vs 'Chronic L1 compression deformity': diagnosis major (acute vs chronic L1 compression fracture; an acute fracture needs treatment, a chronic one does not); '1.2 cm splenule at the splenic hilum' vs '1.2 cm soft-tissue nodule at the splenic hilum, likely an…': no error (a status inversion, scored upstream); 'Patchy hepatic steatosis in the right lobe' vs 'Diffuse hepatic steatosis': site minor (right-lobe vs diffuse hepatic steatosis; a partly different distribution of a diffuse process, same management); '2.0 cm hemangioma in liver segment 6' vs '1.4 cm hemangioma in liver segment 6': measurement minor (2.0 vs 1.4 cm hepatic hemangioma, over 20 %; a benign hemangioma is not followed by its size).",
  "user": {
   "series_uuid": "abdomen-ct_example_6",
   "pairs": [
@@ -61,27 +61,6 @@
    {
     "pair_id": 3,
     "pred_finding": {
-     "finding_id": "p_3",
-     "text": "Pancreatic head mass abutting the superior mesenteric artery.",
-     "measurements": [],
-     "laterality": null,
-     "comparison": null,
-     "clinical_status": "abnormal",
-     "clinical_significance": "urgent"
-    },
-    "gt_finding": {
-     "finding_id": "gt_3",
-     "text": "Pancreatic head mass encasing the superior mesenteric artery.",
-     "measurements": [],
-     "laterality": null,
-     "comparison": null,
-     "clinical_status": "abnormal",
-     "clinical_significance": "urgent"
-    }
-   },
-   {
-    "pair_id": 4,
-    "pred_finding": {
      "finding_id": "p_4",
      "text": "Acute L1 compression fracture.",
      "measurements": [],
@@ -101,7 +80,7 @@
     }
    },
    {
-    "pair_id": 5,
+    "pair_id": 4,
     "pred_finding": {
      "finding_id": "p_5",
      "text": "1.2 cm splenule at the splenic hilum.",
@@ -134,70 +113,7 @@
     }
    },
    {
-    "pair_id": 6,
-    "pred_finding": {
-     "finding_id": "p_6",
-     "text": "Fluid collection in the gallbladder fossa with gas locules.",
-     "measurements": [],
-     "laterality": null,
-     "comparison": null,
-     "clinical_status": "abnormal",
-     "clinical_significance": "urgent"
-    },
-    "gt_finding": {
-     "finding_id": "gt_6",
-     "text": "Fluid collection in the gallbladder fossa without gas.",
-     "measurements": [],
-     "laterality": null,
-     "comparison": null,
-     "clinical_status": "abnormal",
-     "clinical_significance": "notable"
-    }
-   },
-   {
-    "pair_id": 7,
-    "pred_finding": {
-     "finding_id": "p_7",
-     "text": "Sigmoid-predominant diverticulosis.",
-     "measurements": [],
-     "laterality": null,
-     "comparison": null,
-     "clinical_status": "abnormal",
-     "clinical_significance": "routine"
-    },
-    "gt_finding": {
-     "finding_id": "gt_7",
-     "text": "Diverticulosis, most pronounced in the descending colon.",
-     "measurements": [],
-     "laterality": null,
-     "comparison": null,
-     "clinical_status": "abnormal",
-     "clinical_significance": "routine"
-    }
-   },
-   {
-    "pair_id": 8,
-    "pred_finding": {
-     "finding_id": "p_8",
-     "text": "Small umbilical hernia containing fat and a little fluid.",
-     "measurements": [],
-     "laterality": null,
-     "comparison": null,
-     "clinical_status": "abnormal",
-     "clinical_significance": "routine"
-    },
-    "gt_finding": {
-     "finding_id": "gt_8",
-     "text": "Small fat-containing umbilical hernia.",
-     "measurements": [],
-     "laterality": null,
-     "comparison": null,
-     "clinical_status": "abnormal",
-     "clinical_significance": "routine"
-    }
-   },
-   {
-    "pair_id": 9,
+    "pair_id": 5,
     "pred_finding": {
      "finding_id": "p_9",
      "text": "Patchy hepatic steatosis in the right lobe.",
@@ -218,7 +134,7 @@
     }
    },
    {
-    "pair_id": 10,
+    "pair_id": 6,
     "pred_finding": {
      "finding_id": "p_10",
      "text": "2.0 cm hemangioma in liver segment 6.",
@@ -278,16 +194,6 @@
     "pair_id": 3,
     "errors": [
      {
-      "dimension": "extent",
-      "reasoning": "SMA abutment vs encasement; resectable vs locally advanced pancreatic cancer",
-      "severity": "major"
-     }
-    ]
-   },
-   {
-    "pair_id": 4,
-    "errors": [
-     {
       "dimension": "diagnosis",
       "reasoning": "acute vs chronic L1 compression fracture; an acute fracture needs treatment, a chronic one does not",
       "severity": "major"
@@ -295,35 +201,11 @@
     ]
    },
    {
+    "pair_id": 4,
+    "errors": []
+   },
+   {
     "pair_id": 5,
-    "errors": []
-   },
-   {
-    "pair_id": 6,
-    "errors": [
-     {
-      "dimension": "character",
-      "reasoning": "gas vs no gas in a gallbladder fossa collection; gas suggests infection or a leak and may need drainage",
-      "severity": "major"
-     }
-    ]
-   },
-   {
-    "pair_id": 7,
-    "errors": [
-     {
-      "dimension": "extent",
-      "reasoning": "sigmoid vs descending colon predominance of uncomplicated diverticulosis; same management",
-      "severity": "minor"
-     }
-    ]
-   },
-   {
-    "pair_id": 8,
-    "errors": []
-   },
-   {
-    "pair_id": 9,
     "errors": [
      {
       "dimension": "site",
@@ -333,7 +215,7 @@
     ]
    },
    {
-    "pair_id": 10,
+    "pair_id": 6,
     "errors": [
      {
       "dimension": "measurement",

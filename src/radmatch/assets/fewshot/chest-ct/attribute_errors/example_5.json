@@ -1,6 +1,6 @@
 {
   "scenario": "Constructed: certainty (also on the rule-out the indication asks for), added diagnosis, structured category",
-  "description": "Constructed. Hedging a definite fracture, or the definite negative that answers the indication ('possibly no pulmonary embolism' vs 'no pulmonary embolism' in a pulmonary embolism workup, critical on both sides), is two certainty steps, a major certainty error; turning nodes called reactive into nodes suspicious for metastases is a major diagnosis error (an added actionable diagnosis), while leaving out the gt 'mildly' grade is only a minor severity error (a low grade left out changes no management); a Lung-RADS class change across management buckets is a major severity error; one certainty step is minor; a subtype the pred leaves out is a minor diagnosis error (not actionable).",
+  "description": "Constructed. 'Possible minimally displaced right 6th rib fracture' vs 'Minimally displaced right 6th rib fracture': certainty major (possible vs definite right 6th rib fracture, two steps; a possible fracture is sent for more imaging); 'Possibly no pulmonary embolism' vs 'No pulmonary embolism': certainty major (possibly vs definitely no pulmonary embolism, two steps; a hedged negative leaves an embolism to rule out); 'Enlarged mediastinal lymph nodes, suspicious for…' vs 'Mildly enlarged mediastinal lymph nodes, likely reactive': diagnosis major (suspicious for metastases vs likely reactive nodes; adds an oncologic workup), severity minor (pred leaves out the mild grade of the node enlargement; a low grade left out changes nothing); '7 mm solid right upper lobe nodule, Lung-RADS 4A' vs '7 mm solid right upper lobe nodule, Lung-RADS 3': severity major (Lung-RADS 4A vs 3; 3-month vs 6-month low-dose CT); 'Mild emphysema' vs 'Mild centrilobular emphysema': diagnosis minor (pred leaves out the centrilobular subtype of emphysema; same management).",
   "user": {
     "series_uuid": "chest-ct_example_5",
     "indication": "Acute dyspnea, pulmonary embolism workup.",
@@ -104,27 +104,6 @@
       {
         "pair_id": 5,
         "pred_finding": {
-          "finding_id": "p_5",
-          "text": "Probable right lower lobe pneumonia.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "urgent",
-          "laterality": "right",
-          "comparison": null,
-          "measurements": []
-        },
-        "gt_finding": {
-          "finding_id": "gt_5",
-          "text": "Right lower lobe pneumonia.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "urgent",
-          "laterality": "right",
-          "comparison": null,
-          "measurements": []
-        }
-      },
-      {
-        "pair_id": 6,
-        "pred_finding": {
           "finding_id": "p_6",
           "text": "Mild emphysema.",
           "clinical_status": "abnormal",
@@ -194,16 +173,6 @@
       },
       {
         "pair_id": 5,
-        "errors": [
-          {
-            "dimension": "certainty",
-            "reasoning": "probable vs definite right lower lobe pneumonia; one step, same treatment",
-            "severity": "minor"
-          }
-        ]
-      },
-      {
-        "pair_id": 6,
         "errors": [
           {
             "dimension": "diagnosis",

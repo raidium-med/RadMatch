@@ -1,6 +1,6 @@
 {
-  "scenario": "Clinical long tail: group context, density for a non-actionable cyst, different diagnosis, two-step severity",
-  "description": "Constructed; pairs from abdomen-ct/matching/example_6.json. A stone stated with its size and consequence has no error against either gt; 'hypodense' for a hepatic cyst is a minor diagnosis error (not actionable); diverticulosis vs diverticulitis is a major diagnosis error; small vs large ascites is a major severity error; 'no aneurysm' vs 'normal caliber', aortic calcification vs atherosclerotic calcification and the cholecystectomy pair have none.",
+  "scenario": "Clinical long tail: group context, different diagnosis, synonyms, two-step severity",
+  "description": "Constructed; pairs from abdomen-ct/matching/example_6.json. '4 mm left UVJ stone causing mild hydroureteronephrosis' vs '4 mm left UVJ calculus': no error (the match group gives the detail); '4 mm left UVJ stone causing mild hydroureteronephrosis' vs 'Mild left hydroureteronephrosis': no error (the match group gives the detail); 'Sigmoid diverticulosis' vs 'Sigmoid diverticulitis with pericolic fat stranding': diagnosis major (diverticulosis vs diverticulitis; pred misses an acute inflammation that needs treatment); 'Aortic calcification' vs 'Atherosclerotic calcification of the abdominal aorta': no error (same content in other words, or the pred adds detail); 'Small amount of ascites' vs 'Large-volume ascites': severity major (small vs large-volume ascites, two steps; large ascites may need paracentesis).",
   "user": {
     "series_uuid": "abdomen-ct_example_4",
     "pairs": [
@@ -73,27 +73,6 @@
       {
         "pair_id": 3,
         "pred_finding": {
-          "finding_id": "p_2",
-          "text": "Hypodense lesion in liver segment 4.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "notable",
-          "laterality": null,
-          "comparison": null,
-          "measurements": []
-        },
-        "gt_finding": {
-          "finding_id": "gt_3",
-          "text": "Segment 4 hepatic cyst.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "routine",
-          "laterality": null,
-          "comparison": null,
-          "measurements": []
-        }
-      },
-      {
-        "pair_id": 4,
-        "pred_finding": {
           "finding_id": "p_3",
           "text": "Sigmoid diverticulosis.",
           "clinical_status": "abnormal",
@@ -113,7 +92,7 @@
         }
       },
       {
-        "pair_id": 5,
+        "pair_id": 4,
         "pred_finding": {
           "finding_id": "p_4",
           "text": "Aortic calcification.",
@@ -134,49 +113,7 @@
         }
       },
       {
-        "pair_id": 6,
-        "pred_finding": {
-          "finding_id": "p_5",
-          "text": "No aortic aneurysm.",
-          "clinical_status": "normal",
-          "clinical_significance": "routine",
-          "laterality": null,
-          "comparison": null,
-          "measurements": []
-        },
-        "gt_finding": {
-          "finding_id": "gt_6",
-          "text": "Abdominal aorta normal in caliber.",
-          "clinical_status": "normal",
-          "clinical_significance": "routine",
-          "laterality": null,
-          "comparison": null,
-          "measurements": []
-        }
-      },
-      {
-        "pair_id": 7,
-        "pred_finding": {
-          "finding_id": "p_7",
-          "text": "Status post cholecystectomy.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "routine",
-          "laterality": null,
-          "comparison": null,
-          "measurements": []
-        },
-        "gt_finding": {
-          "finding_id": "gt_8",
-          "text": "Cholecystectomy clips.",
-          "clinical_status": "abnormal",
-          "clinical_significance": "routine",
-          "laterality": null,
-          "comparison": null,
-          "measurements": []
-        }
-      },
-      {
-        "pair_id": 8,
+        "pair_id": 5,
         "pred_finding": {
           "finding_id": "p_8",
           "text": "Small amount of ascites.",
@@ -213,35 +150,17 @@
         "errors": [
           {
             "dimension": "diagnosis",
-            "reasoning": "hypodense lesion vs segment 4 hepatic cyst; a cyst needs no action, same management",
-            "severity": "minor"
-          }
-        ]
-      },
-      {
-        "pair_id": 4,
-        "errors": [
-          {
-            "dimension": "diagnosis",
             "reasoning": "diverticulosis vs diverticulitis; pred misses an acute inflammation that needs treatment",
             "severity": "major"
           }
         ]
       },
       {
+        "pair_id": 4,
+        "errors": []
+      },
+      {
         "pair_id": 5,
-        "errors": []
-      },
-      {
-        "pair_id": 6,
-        "errors": []
-      },
-      {
-        "pair_id": 7,
-        "errors": []
-      },
-      {
-        "pair_id": 8,
         "errors": [
           {
             "dimension": "severity",

@@ -1,34 +1,61 @@
 {
-  "scenario": "Site and measurement minor on a benign finding + clean pairs",
-  "description": "Stage 3b call built from brain-mr/findings_gt/example_3.json and findings_pred/example_3.json. The falx-calcification pair differs in site (frontal vs parietal) and size (14 vs 11 mm: more than 20 % and 3 mm), but a falx calcification is a benign finding that needs no follow-up and is not followed by its size: both errors are minor. The remaining 2 matched pairs are two normal sinus statements worded differently (a template difference, no error) and an identical suboccipital mass.",
+  "scenario": "Site and measurement minor on a benign finding",
+  "description": "Stage 3b call built from brain-mr/findings_gt/example_3.json and findings_pred/example_3.json. 'A 14 mm long diameter hypointense appearance on T2…' vs 'An 11 mm long diameter hypointense appearance on T2…': site minor (falx calcification in the parietal vs frontal region; a benign calcification needs no follow-up, so its site changes nothing), measurement minor (14 vs 11 mm falx calcification, more than 20 % and 3 mm apart; a benign calcification is not followed by its size).",
   "user": {
     "series_uuid": "brain-mr_example_3",
     "pairs": [
       {
         "pair_id": 1,
-        "pred_finding": {"finding_id": "p_1", "text": "A 14 mm long diameter hypointense appearance on T2 sequence in the parietal region at the interhemispheric fissure location, consistent with falx calcification.", "clinical_status": "abnormal", "clinical_significance": "routine", "laterality": null, "comparison": null, "measurements": [{"value": 14, "unit": "mm", "category": "size"}]},
-        "gt_finding":   {"finding_id": "gt_1", "text": "An 11 mm long diameter hypointense appearance on T2 sequence in the frontal region at the interhemispheric fissure location, consistent with falx calcification.", "clinical_status": "abnormal", "clinical_significance": "routine", "laterality": null, "comparison": null, "measurements": [{"value": 11, "unit": "mm", "category": "size"}]}
-      },
-      {
-        "pair_id": 2,
-        "pred_finding": {"finding_id": "p_2", "text": "Paranasal sinuses are intact.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": "bilateral", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_2", "text": "Paranasal sinus aeration is intact.", "clinical_status": "normal", "clinical_significance": "routine", "laterality": "bilateral", "comparison": null, "measurements": []}
-      },
-      {
-        "pair_id": 3,
-        "pred_finding": {"finding_id": "p_4", "text": "Well-defined 12x10 mm mass lesion within the left suboccipital fatty tissue, hypointense on T1 and hyperintense on T2.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "left", "comparison": null, "measurements": [{"value": 12, "unit": "mm", "category": "size"}, {"value": 10, "unit": "mm", "category": "size"}]},
-        "gt_finding":   {"finding_id": "gt_4", "text": "Well-defined 12x10 mm mass lesion within the left suboccipital fatty tissue, hypointense on T1 and hyperintense on T2.", "clinical_status": "abnormal", "clinical_significance": "notable", "laterality": "left", "comparison": null, "measurements": [{"value": 12, "unit": "mm", "category": "size"}, {"value": 10, "unit": "mm", "category": "size"}]}
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "A 14 mm long diameter hypointense appearance on T2 sequence in the parietal region at the interhemispheric fissure location, consistent with falx calcification.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": null,
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 14,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "An 11 mm long diameter hypointense appearance on T2 sequence in the frontal region at the interhemispheric fissure location, consistent with falx calcification.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": null,
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 11,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        }
       }
     ]
   },
   "assistant": {
     "errors_per_pair": [
-      {"pair_id": 1, "errors": [
-        {"dimension": "site", "reasoning": "falx calcification in the parietal vs frontal region; a benign calcification needs no follow-up, so its site changes nothing", "severity": "minor"},
-        {"dimension": "measurement", "reasoning": "14 vs 11 mm falx calcification, more than 20 % and 3 mm apart; a benign calcification is not followed by its size", "severity": "minor"}
-      ]},
-      {"pair_id": 2, "errors": []},
-      {"pair_id": 3, "errors": []}
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "site",
+            "reasoning": "falx calcification in the parietal vs frontal region; a benign calcification needs no follow-up, so its site changes nothing",
+            "severity": "minor"
+          },
+          {
+            "dimension": "measurement",
+            "reasoning": "14 vs 11 mm falx calcification, more than 20 % and 3 mm apart; a benign calcification is not followed by its size",
+            "severity": "minor"
+          }
+        ]
+      }
     ]
   }
 }
