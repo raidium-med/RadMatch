@@ -1,6 +1,6 @@
 {
-  "scenario": "Constructed: certainty, left-out character and grade, structured category, a hedge between two routine findings, expected post-surgical state",
-  "description": "Constructed. Small bowel dilatation whose air-fluid levels and 'mild' grade the pred leaves out carries a major character and a major severity error, and the obstruction the pred adds without gt support a major diagnosis error; a hedged fracture is a major certainty error; 'possibly malignant' vs 'consistent with renal cell carcinoma' is two certainty steps (major); a Bosniak class change across follow-up buckets is a major severity error; 'possibly' on a definite negative is two certainty steps, but both findings are routine, so it is minor; a 9 mm bile duct after cholecystectomy is the expected effect of the procedure (normal on both sides): no error.",
+  "scenario": "Constructed: certainty, left-out character and grade (minor), structured category, a hedge between two routine findings, expected post-surgical state",
+  "description": "Constructed. Small bowel dilatation whose air-fluid levels and 'mild' grade the pred leaves out carries a minor character error (the pred already calls an obstruction, so nothing urgent is hidden) and a minor severity error (a low grade), and the obstruction the pred adds without gt support a major diagnosis error; a hedged fracture is a major certainty error; 'possibly malignant' vs 'consistent with renal cell carcinoma' is two certainty steps (major); a Bosniak class change across follow-up buckets is a major severity error; 'possibly' on a definite negative is two certainty steps, but both findings are routine, so it is minor; a 9 mm bile duct after cholecystectomy is the expected effect of the procedure (normal on both sides): no error.",
   "user": {
     "series_uuid": "abdomen-ct_example_5",
     "pairs": [
@@ -163,13 +163,13 @@
         "errors": [
           {
             "dimension": "character",
-            "reasoning": "pred leaves out the air-fluid levels of the dilated small bowel; they shift the differential toward obstruction",
-            "severity": "major"
+            "reasoning": "pred leaves out the air-fluid levels but already calls an obstruction, so nothing urgent is hidden",
+            "severity": "minor"
           },
           {
             "dimension": "severity",
-            "reasoning": "pred leaves out the mild grade of the dilatation; the grade weighs observation vs intervention",
-            "severity": "major"
+            "reasoning": "pred leaves out the mild grade of the dilatation; a low grade left out changes nothing",
+            "severity": "minor"
           },
           {
             "dimension": "diagnosis",

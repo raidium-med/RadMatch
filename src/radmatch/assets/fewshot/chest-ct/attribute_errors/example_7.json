@@ -1,6 +1,6 @@
 {
-  "scenario": "Constructed: umbrella that leaves out sites, left-out lobe and subtype, side differences left upstream, more detail",
-  "description": "Constructed. An umbrella pred that names no station has a major site error on each located gt node it was matched to; a lobe the pred leaves out is a major site error and a subtype it leaves out a minor diagnosis error (not actionable); a pred more detailed than the gt has no error; bilateral vs one side: the side is scored upstream (Stage 3a `laterality`), so it carries no site error; a bilateral pred matched to a left and a right gt has no site error. A size the pred leaves out is not an error when a size class covers the gt value ('enlarged' for the 12 and 15 mm nodes, 'subcentimeter' for 7 mm). A hedge on the cause ('likely reactive') leaves the finding definite and adds detail: no error. Growth the pred invents on a mass is a major comparison error. Naming the diagnosis of what the gt describes ('bronchiectasis' for dilated bronchi) is more detail: no error. A side only the gt gives: the side is scored upstream (Stage 3a `laterality`), so it carries no site error.",
+  "scenario": "Constructed: left-out station major, left-out lobe or subtype minor, a left-out high grade and mass effect major, a followed nodule in another lobe, side differences left upstream, more detail",
+  "description": "Constructed. An umbrella pred that names no station has a major site error on each located gt node it was matched to (the station sets the stage and the sampling); the lobe the pred leaves out for bronchiectasis is a minor site error (a chronic airway disease) and a subtype it leaves out a minor diagnosis error (not actionable); a pred more detailed than the gt has no error; bilateral vs one side: the side is scored upstream (Stage 3a `laterality`), so it carries no site or extent error; a bilateral pred matched to a left and a right gt has no site error. A size the pred leaves out is not an error when a size class covers the gt value ('enlarged' for the 12 and 15 mm nodes; the 7 mm hilar node pair is two normal findings anyway). A hedge on the cause ('likely reactive') leaves the finding definite and adds detail: no error. Growth the pred invents on a mass is a major comparison error. Naming the diagnosis of what the gt describes ('bronchiectasis' for dilated bronchi) is more detail: no error. A side only the gt gives: the side is scored upstream (Stage 3a `laterality`), so it carries no site error. A left-out 'large' grade and a left-out mediastinal shift change management (chest tube, tension): major severity and extent errors. A followed nodule placed in another lobe is a major site error, whereas the left-out lobe of bronchiectasis is minor. A size left out on a mass (staged by its size) is a major measurement error; an actionable pneumonia given only as its consolidation is a major diagnosis error.",
   "user": {
     "series_uuid": "chest-ct_example_7",
     "pairs": [
@@ -261,6 +261,108 @@
           "comparison": null,
           "measurements": []
         }
+      },
+      {
+        "pair_id": 12,
+        "pred_finding": {
+          "finding_id": "p_12",
+          "text": "Right pneumothorax.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "critical",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_12",
+          "text": "Large right pneumothorax with mediastinal shift.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "critical",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 13,
+        "pred_finding": {
+          "finding_id": "p_13",
+          "text": "6 mm solid nodule in the left upper lobe.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 6,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_13",
+          "text": "6 mm solid nodule in the left lower lobe.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 6,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 14,
+        "pred_finding": {
+          "finding_id": "p_14",
+          "text": "Right upper lobe mass.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_14",
+          "text": "4.2 cm right upper lobe mass.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 4.2,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 15,
+        "pred_finding": {
+          "finding_id": "p_15",
+          "text": "Left lower lobe consolidation.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_15",
+          "text": "Left lower lobe consolidation consistent with pneumonia.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        }
       }
     ]
   },
@@ -271,7 +373,7 @@
         "errors": [
           {
             "dimension": "site",
-            "reasoning": "pred names no station for the 12 mm right paratracheal node; nodes are followed and sampled by station",
+            "reasoning": "pred names no station for the 12 mm right paratracheal node; the station sets the N stage and where it is sampled",
             "severity": "major"
           }
         ]
@@ -281,7 +383,7 @@
         "errors": [
           {
             "dimension": "site",
-            "reasoning": "pred names no station for the 15 mm subcarinal node; nodes are followed and sampled by station",
+            "reasoning": "pred names no station for the 15 mm subcarinal node; the station sets the N stage and where it is sampled",
             "severity": "major"
           }
         ]
@@ -291,8 +393,8 @@
         "errors": [
           {
             "dimension": "site",
-            "reasoning": "left lung vs left lower lobe bronchiectasis; pred leaves out the lobe that follow-up compares",
-            "severity": "major"
+            "reasoning": "left lung vs left lower lobe bronchiectasis; pred leaves out the lobe of a chronic airway disease, same management",
+            "severity": "minor"
           },
           {
             "dimension": "diagnosis",
@@ -338,6 +440,51 @@
       {
         "pair_id": 11,
         "errors": []
+      },
+      {
+        "pair_id": 12,
+        "errors": [
+          {
+            "dimension": "severity",
+            "reasoning": "pred leaves out the large grade of the pneumothorax; a large one needs a chest tube now",
+            "severity": "major"
+          },
+          {
+            "dimension": "extent",
+            "reasoning": "pred leaves out the mediastinal shift; mass effect signals tension physiology",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 13,
+        "errors": [
+          {
+            "dimension": "site",
+            "reasoning": "left upper vs left lower lobe nodule; the follow-up CT targets another lobe",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 14,
+        "errors": [
+          {
+            "dimension": "measurement",
+            "reasoning": "pred leaves out the 4.2 cm size of the mass; the size sets the T stage",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 15,
+        "errors": [
+          {
+            "dimension": "diagnosis",
+            "reasoning": "pred gives only the consolidation of an actionable pneumonia, which calls for antibiotics",
+            "severity": "major"
+          }
+        ]
       }
     ]
   }

@@ -1,6 +1,6 @@
 {
-  "scenario": "Constructed: side differences left upstream, left-out site and grade, umbrella, more detail, density vs composition",
-  "description": "Constructed. Bilateral vs one side and a side the pred leaves out: the side is scored upstream (Stage 3a `laterality`), so it carries no site error; a left-out grade is major; an umbrella pred that names no site has a major site error on each located gt lesion; a pred more detailed than the gt has no error; a bilateral pred matched to a left and a right gt has no site error; a density word for a cystic pancreatic lesion is a major character error. A size the pred leaves out is a major measurement error, minor on a simple renal cyst. A change the pred invents on diverticulosis is no error (not followed by size). A hedge on the cause ('possibly related to hepatitis') leaves the finding definite: no error. A one-step grade difference (large vs moderate) is minor. A side only the pred gives: the side is scored upstream (Stage 3a `laterality`), so it carries no site error.",
+  "scenario": "Constructed: side differences left upstream, left-out site, size and grade (minor unless they change management), umbrella, more detail",
+  "description": "Constructed. A side the pred leaves out and one side vs both (a pred bilateral hydronephrosis for a gt left one) are scored upstream (Stage 3a `laterality`), so they carry no site or extent error; the left-out 'moderate' grade is a minor severity error. A size the pred leaves out is a major measurement error on a lesion followed by its size (a 1.4 cm adrenal nodule), minor on findings not followed by their size (sub-centimetre splenic hypodensities, a simple renal cyst); an umbrella pred that names no site has a minor site error on each located sub-centimetre splenic hypodensity (not followed, so the site guides nothing); a pred more detailed than the gt has no error; a bilateral pred matched to a left and a right gt has no error; a density word for a cystic pancreatic lesion is a minor character error (it does not contradict it). A left-out gas in a collection signals an abscess or a leak: a major character error. A change the pred invents on diverticulosis is no error (not followed by size). A hedge on the cause ('possibly related to hepatitis') leaves the finding definite: no error. A one-step grade difference (large vs moderate) is minor. A side only the pred gives: no error. The colon segment the pred leaves out for a mass is a major site error: it guides the procedure.",
   "user": {
     "series_uuid": "abdomen-ct_example_7",
     "pairs": [
@@ -288,6 +288,48 @@
           "comparison": null,
           "measurements": []
         }
+      },
+      {
+        "pair_id": 13,
+        "pred_finding": {
+          "finding_id": "p_13",
+          "text": "Right paracolic gutter fluid collection.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_13",
+          "text": "Right paracolic gutter fluid collection with gas locules.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 14,
+        "pred_finding": {
+          "finding_id": "p_14",
+          "text": "Colonic mass.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_14",
+          "text": "Sigmoid colon mass.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        }
       }
     ]
   },
@@ -298,8 +340,8 @@
         "errors": [
           {
             "dimension": "severity",
-            "reasoning": "pred leaves out the moderate grade of the left hydronephrosis; the grade weighs how urgently it is decompressed",
-            "severity": "major"
+            "reasoning": "pred leaves out the moderate grade of the left hydronephrosis; a middle grade left out changes nothing",
+            "severity": "minor"
           }
         ]
       },
@@ -308,7 +350,7 @@
         "errors": [
           {
             "dimension": "measurement",
-            "reasoning": "pred leaves out the 1.4 cm size of an adrenal nodule; over 1 cm calls for workup",
+            "reasoning": "pred leaves out the 1.4 cm size of an adrenal nodule; over the 1 cm threshold, it calls for workup",
             "severity": "major"
           }
         ]
@@ -318,13 +360,13 @@
         "errors": [
           {
             "dimension": "site",
-            "reasoning": "pred names no site for the 8 mm hypodensity in the splenic upper pole; a follow-up cannot locate it",
-            "severity": "major"
+            "reasoning": "pred names no site for the 8 mm hypodensity in the splenic upper pole; a sub-centimetre splenic hypodensity is not followed, so its site guides nothing",
+            "severity": "minor"
           },
           {
             "dimension": "measurement",
-            "reasoning": "pred leaves out the 8 mm size of the splenic hypodensity; its size is what a follow-up compares",
-            "severity": "major"
+            "reasoning": "pred leaves out the 8 mm size of the splenic hypodensity; a sub-centimetre lesion too small to characterize is not followed by its size",
+            "severity": "minor"
           }
         ]
       },
@@ -333,13 +375,13 @@
         "errors": [
           {
             "dimension": "site",
-            "reasoning": "pred names no site for the 5 mm hypodensity near the splenic hilum; a follow-up cannot locate it",
-            "severity": "major"
+            "reasoning": "pred names no site for the 5 mm hypodensity near the splenic hilum; a sub-centimetre splenic hypodensity is not followed, so its site guides nothing",
+            "severity": "minor"
           },
           {
             "dimension": "measurement",
-            "reasoning": "pred leaves out the 5 mm size of the splenic hypodensity; its size is what a follow-up compares",
-            "severity": "major"
+            "reasoning": "pred leaves out the 5 mm size of the splenic hypodensity; a sub-centimetre lesion too small to characterize is not followed by its size",
+            "severity": "minor"
           }
         ]
       },
@@ -356,8 +398,8 @@
         "errors": [
           {
             "dimension": "character",
-            "reasoning": "hypodense vs cystic pancreatic tail lesion; cystic vs solid changes the workup",
-            "severity": "major"
+            "reasoning": "pred leaves out that the pancreatic tail lesion is cystic; 'hypodense' does not contradict it and the lesion is worked up either way",
+            "severity": "minor"
           }
         ]
       },
@@ -392,6 +434,26 @@
       {
         "pair_id": 12,
         "errors": []
+      },
+      {
+        "pair_id": 13,
+        "errors": [
+          {
+            "dimension": "character",
+            "reasoning": "pred leaves out the gas locules; gas signals an abscess or a leak that may need drainage",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 14,
+        "errors": [
+          {
+            "dimension": "site",
+            "reasoning": "pred leaves out the sigmoid location of the colonic mass; the segment sets the endoscopic and surgical approach",
+            "severity": "major"
+          }
+        ]
       }
     ]
   }

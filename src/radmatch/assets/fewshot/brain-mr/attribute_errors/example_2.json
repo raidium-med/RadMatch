@@ -1,6 +1,6 @@
 {
   "scenario": "Side flip left upstream + major measurement and extent errors",
-  "description": "Stage 3b call built from brain-mr/findings_gt/example_2.json and findings_pred/example_2.json. The putamen-metastasis pair differs only in side (right vs left putamen): the side is scored upstream (Stage 3a `laterality`), so it carries no site error. The pituitary pair has a comparison disagreement (gt worsening vs pred stable) that Stage 3a scores; Stage 3b does NOT re-emit comparison errors, but the pred leaves out the growth into a mass pressing on the optic chiasm, a major extent error (mass effect). The leptomeningeal tentorial mass is one finding with its edema on each side; it has a major measurement error (thickness 1.5 vs 2 cm: more than 20 % and 5 mm).",
+  "description": "Stage 3b call built from brain-mr/findings_gt/example_2.json and findings_pred/example_2.json. The putamen-metastasis pair differs only in side (right vs left putamen): the side is scored upstream (Stage 3a `laterality`), so it carries no site error. The pituitary pair has a comparison disagreement (gt worsening vs pred stable) that Stage 3a scores; opposite changes are Stage 3a's, not Stage 3b's, but the pred leaves out the growth into a mass pressing on the optic chiasm, a major extent error (mass effect). The leptomeningeal tentorial mass is one finding with its edema on each side; it has a major measurement error (thickness 1.5 vs 2 cm: more than 20 % and 5 mm).",
   "user": {
     "series_uuid": "brain-mr_example_2",
     "pairs": [

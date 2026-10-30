@@ -1,6 +1,6 @@
 {
   "scenario": "Clinical long tail: different diagnosis for one abnormality, unilateral vs bilateral, synonyms",
-  "description": "Constructed; pairs from chest-ct/matching/example_4.json (status inversions excluded). Bulla vs pneumothorax for the same lucency is a major diagnosis error; a ground-glass opacity extended to the other lung carries no site error, the side is scored upstream (Stage 3a `laterality`); scarring synonyms, a sub-threshold node vs 'no lymphadenopathy' and a lobectomy with its expected appearance have no error.",
+  "description": "Constructed; pairs from chest-ct/matching/example_4.json (status inversions excluded). Bulla vs pneumothorax for the same lucency is a major diagnosis error; a ground-glass opacity extended to the other lung carries no site or extent error: the side is scored upstream (Stage 3a `laterality`); scarring synonyms, a sub-threshold node vs 'no lymphadenopathy' and a lobectomy with its expected appearance have no error.",
   "user": {
     "series_uuid": "chest-ct_example_4",
     "pairs": [

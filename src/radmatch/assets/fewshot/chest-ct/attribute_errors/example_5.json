@@ -1,6 +1,6 @@
 {
   "scenario": "Constructed: certainty (also on the rule-out the indication asks for), added diagnosis, structured category",
-  "description": "Constructed. Hedging a definite fracture, or the definite negative that answers the indication ('possibly no pulmonary embolism' vs 'no pulmonary embolism' in a pulmonary embolism workup, critical on both sides), is two certainty steps, a major certainty error; turning nodes called reactive into nodes suspicious for metastases is a major diagnosis error (an added actionable diagnosis), and leaving out the gt 'mildly' grade a major severity error; a Lung-RADS class change across management buckets is a major severity error; one certainty step is minor; a subtype the pred leaves out is a minor diagnosis error (not actionable).",
+  "description": "Constructed. Hedging a definite fracture, or the definite negative that answers the indication ('possibly no pulmonary embolism' vs 'no pulmonary embolism' in a pulmonary embolism workup, critical on both sides), is two certainty steps, a major certainty error; turning nodes called reactive into nodes suspicious for metastases is a major diagnosis error (an added actionable diagnosis), while leaving out the gt 'mildly' grade is only a minor severity error (a low grade left out changes no management); a Lung-RADS class change across management buckets is a major severity error; one certainty step is minor; a subtype the pred leaves out is a minor diagnosis error (not actionable).",
   "user": {
     "series_uuid": "chest-ct_example_5",
     "indication": "Acute dyspnea, pulmonary embolism workup.",
@@ -177,8 +177,8 @@
           },
           {
             "dimension": "severity",
-            "reasoning": "pred leaves out the mild grade of the node enlargement; the grade weighs reactive vs malignant nodes",
-            "severity": "major"
+            "reasoning": "pred leaves out the mild grade of the node enlargement; a low grade left out changes nothing",
+            "severity": "minor"
           }
         ]
       },

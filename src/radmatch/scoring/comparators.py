@@ -121,21 +121,19 @@ def classify_comparison_conflict(
 
     ACTIVE={worsening, new}, benign = the other values.
     Cross-bucket → major; same-bucket → minor; identical → no error;
-    one-sided mention (one side None) → minor, except a pred that drops an
-    ACTIVE gt comparison, which misleads about disease activity exactly as
-    much as contradicting it → major. An invented active change is minor here;
-    the Stage 3b judge grades it major on a finding followed over time.
+    one-sided mention (one side None) → minor: an active change the pred
+    invents or drops is graded major by the Stage 3b judge on a finding
+    followed over time.
     """
     if pred_comparison == gt_comparison:
         return None
     if pred_comparison is None or gt_comparison is None:
-        dropped_active = pred_comparison is None and gt_comparison in constants.ACTIVE_COMPARISONS
         return _error(
             dimension="comparison",
-            severity="major" if dropped_active else "minor",
+            severity="minor",
             pred_value=pred_comparison,
             gt_value=gt_comparison,
-            reasoning="pred drops an active gt comparison" if dropped_active else "one-sided comparison mention",
+            reasoning="one-sided comparison mention",
         )
     pred_active = pred_comparison in constants.ACTIVE_COMPARISONS
     gt_active = gt_comparison in constants.ACTIVE_COMPARISONS

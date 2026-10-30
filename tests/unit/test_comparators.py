@@ -48,6 +48,7 @@ def test_status_conflict(pred, gt, expect_inc):
         pytest.param("stable", "improving", "minor", id="same-bucket-benign"),
         pytest.param("worsening", "new", "minor", id="same-bucket-active"),
         pytest.param(None, "stable", "minor", id="pred-none-gt-mention"),
+        pytest.param(None, "worsening", "minor", id="pred-drops-an-active-change"),
         pytest.param("stable", None, "minor", id="gt-none-pred-mention"),
     ],
 )
@@ -67,21 +68,22 @@ def test_comparison_no_conflict(value):
 
 
 @pytest.mark.parametrize(
-    "pred, gt, group_sides, is_error",
+    "pred, gt, group_sides, severity",
     [
-        pytest.param("left", "right", None, True, id="flip"),
-        pytest.param("bilateral", "left", None, True, id="bilateral-vs-one-side"),
-        pytest.param(None, "left", None, True, id="pred-leaves-out-the-side"),
-        pytest.param("left", None, None, False, id="pred-adds-a-side"),
-        pytest.param(None, "bilateral", None, False, id="no-side-vs-bilateral"),
-        pytest.param("left", None, ("left", "right"), False, id="own-gt-gives-no-side"),
-        pytest.param("bilateral", "left", ("bilateral", "bilateral"), False, id="group-gives-the-other-side"),
-        pytest.param(None, None, None, False, id="no-side"),
+        pytest.param("left", "right", None, "major", id="flip"),
+        pytest.param("bilateral", "left", None, "major", id="bilateral-vs-one-side"),
+        pytest.param("right", "bilateral", None, "major", id="one-side-vs-bilateral"),
+        pytest.param(None, "left", None, "major", id="pred-leaves-out-the-side"),
+        pytest.param("left", None, None, None, id="pred-adds-a-side"),
+        pytest.param(None, "bilateral", None, None, id="no-side-vs-bilateral"),
+        pytest.param("left", None, ("left", "right"), None, id="own-gt-gives-no-side"),
+        pytest.param("bilateral", "left", ("bilateral", "bilateral"), None, id="group-gives-the-other-side"),
+        pytest.param(None, None, None, None, id="no-side"),
     ],
 )
-def test_laterality_conflict(pred, gt, group_sides, is_error):
+def test_laterality_conflict(pred, gt, group_sides, severity):
     err = comparators.classify_laterality_conflict(pred, gt, *(group_sides or (pred, gt)))
-    assert (err is not None) == is_error
+    assert (err and err["severity"]) == severity
 
 
 def test_side_union():

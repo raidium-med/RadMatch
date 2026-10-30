@@ -1,6 +1,6 @@
 {
-  "scenario": "Severity major + site major + clean negation",
-  "description": "Stage 3b call built from chest-xr/findings_gt/example_2.json and findings_pred/example_2.json. The pleural-effusion pair has a comparison flip (Stage 3a deterministic) but no status conflict; the pred leaves out the moderate grade gt gives, a major severity error. The LLL consolidation pair has a major severity error (pred leaves out the 'severe' grade gt gives; atelectasis and collapse are synonyms) and a minor site error (left basilar vs left lower lobe). The central line pair has a major site error (device tip: upper right atrium vs lower SVC — different management). The pneumothorax pair is clean.",
+  "scenario": "Left-out moderate grade minor, left-out severe grade major, device tip site major, clean negation",
+  "description": "Stage 3b call built from chest-xr/findings_gt/example_2.json and findings_pred/example_2.json. The pleural-effusion pair has a comparison flip (Stage 3a deterministic) but no status conflict; the pred leaves out the moderate grade gt gives, a minor severity error (a middle grade left out changes nothing). The LLL consolidation pair has a major severity error (pred leaves out the 'severe' grade gt gives, a high grade that changes management; atelectasis and collapse are synonyms) and a minor site error (left basilar vs left lower lobe). The central line pair has a major site error (device tip: upper right atrium vs lower SVC — different management). The pneumothorax pair is clean.",
   "user": {
     "series_uuid": "chest-xr_example_2",
     "pairs": [
@@ -29,7 +29,7 @@
   "assistant": {
     "errors_per_pair": [
       {"pair_id": 1, "errors": [
-        {"dimension": "severity", "reasoning": "pred leaves out the moderate grade of the bilateral effusions; the grade weighs drainage vs observation", "severity": "major"}
+        {"dimension": "severity", "reasoning": "pred leaves out the moderate grade of the bilateral effusions; a middle grade left out changes nothing", "severity": "minor"}
       ]},
       {"pair_id": 2, "errors": [
         {"dimension": "severity", "reasoning": "pred leaves out the severe grade of the left lower lobe collapse; severe collapse may need bronchoscopy", "severity": "major"},

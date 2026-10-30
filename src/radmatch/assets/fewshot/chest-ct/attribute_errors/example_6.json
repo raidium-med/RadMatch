@@ -1,6 +1,6 @@
 {
  "scenario": "Constructed: acute vs chronic, single vs multiple, attenuation, invasion, a variant vs a neoplasm, clot burden, diffuse pneumonia distribution and descriptors, a benign-lesion size",
- "description": "Constructed. Acute vs chronic emboli is a major diagnosis error (the age); a solitary vs multiple nodules and abutment vs invasion are major extent errors (the side is scored upstream); ground-glass vs solid attenuation is a major character error; a small vs large clot burden is a major severity error. Residual thymus (a normal variant) vs a suspected thymoma is a status inversion scored upstream: no Stage 3b error. A mild vs moderate grade of emphysema is minor; a vessel list that leaves out the per-vessel grades is a major severity error. For a diffuse viral pneumonia, a coarser distribution is a minor site error and septal thickening vs consolidation within the ground glass a minor character error; a size difference on a chest wall lipoma (benign, not followed by its size) is a minor measurement error.",
+ "description": "Constructed. Acute vs chronic emboli is a major diagnosis error (the age); a solitary vs multiple nodules and abutment vs invasion are major extent errors (the side is scored upstream); ground-glass vs solid attenuation is a major character error; a small vs large clot burden is a major severity error. Residual thymus (a normal variant) vs a suspected thymoma is a status inversion scored upstream: no Stage 3b error. A mild vs moderate grade of emphysema is minor; a vessel list that leaves out mild per-vessel grades is a minor severity error (low grades left out). For a diffuse viral pneumonia, a coarser distribution is a minor site error and septal thickening vs consolidation within the ground glass a minor character error; a size difference on a chest wall lipoma (benign, not followed by its size) is a minor measurement error.",
  "user": {
   "series_uuid": "chest-ct_example_6",
   "pairs": [
@@ -323,8 +323,8 @@
     "errors": [
      {
       "dimension": "severity",
-      "reasoning": "pred leaves out the mild LAD and RCA calcium grades gt gives; the grade sets the cardiovascular risk",
-      "severity": "major"
+      "reasoning": "pred leaves out the mild LAD and RCA calcium grades; low grades left out, same management",
+      "severity": "minor"
      }
     ]
    },
