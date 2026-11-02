@@ -1,6 +1,6 @@
 [project]
 name = "radmatch"
-version = "0.2.2"
+version = "0.3.7"
 description = "Auditable Radiology Report Evaluation via Finding-Level Matching"
 authors = [{ name = "Raidium" }]
 license = "Apache-2.0"
@@ -26,12 +26,11 @@ dependencies = [
     "mistralai>=1.9.11,<2",
     "anthropic>=0.77.0",
     "tenacity>=9.0.0",
-    "python-dotenv>=1.0.1,<2",
 ]
 
 [project.optional-dependencies]
 dashboard = [
-    "streamlit>=1.30.0",
+    "streamlit>=1.51.0",
     "plotly>=5.18.0",
     "pandas>=2.0.0",
     "pyarrow>=14.0.0",
@@ -50,7 +49,6 @@ radmatch = "radmatch.cli:main"
 radmatch-dashboard = "radmatch.dashboard.launch:main"
 
 # Assets live at src/radmatch/assets/, so hatchling ships them with the package.
-# A top-level assets/ dir does not survive a wheel build under `packages = [...]`.
 [tool.hatch.build.targets.wheel]
 packages = ["src/radmatch"]
 
