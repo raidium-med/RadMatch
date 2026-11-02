@@ -1,0 +1,201 @@
+{
+ "scenario": "Constructed: negatives matched only to what they deny (chest CT)",
+ "description": "Constructed. 'No pulmonary mass' does not deny millimetric nodules, a normal aortic calibre does not deny wall plaque, 'no pleural effusion' does not deny a pericardial effusion, 'no suspicious nodule' does not deny a benign granuloma, 'no consolidation' does not deny airway wall thickening, 'no nodular lesion' and 'no infiltrative lesion' deny neither apical blebs nor interlobular septal thickening (all left unmatched); 'no pleural effusion' is contradicted by a pleural effusion, the unqualified 'no nodular lesion' by the millimetric nodules and the calcified granuloma that the qualified negatives leave unmatched, and a normal cardiothoracic ratio is 'no cardiomegaly'.",
+ "user": {
+  "pred_findings": [
+   {
+    "finding_id": "p_1",
+    "text": "Few 3-4 mm nodules in the right upper lobe.",
+    "clinical_status": "abnormal",
+    "laterality": "right",
+    "comparison": null,
+    "measurements": [
+     {
+      "value": 3,
+      "unit": "mm",
+      "category": "size"
+     },
+     {
+      "value": 4,
+      "unit": "mm",
+      "category": "size"
+     }
+    ]
+   },
+   {
+    "finding_id": "p_2",
+    "text": "Calcified atherosclerotic plaque of the aortic arch.",
+    "clinical_status": "abnormal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_3",
+    "text": "Small pericardial effusion.",
+    "clinical_status": "abnormal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_4",
+    "text": "Stable 4 mm calcified granuloma in the left lower lobe.",
+    "clinical_status": "abnormal",
+    "laterality": "left",
+    "comparison": "stable",
+    "measurements": [
+     {
+      "value": 4,
+      "unit": "mm",
+      "category": "size"
+     }
+    ]
+   },
+   {
+    "finding_id": "p_5",
+    "text": "Small right pleural effusion.",
+    "clinical_status": "abnormal",
+    "laterality": "right",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_6",
+    "text": "Cardiothoracic ratio within normal limits.",
+    "clinical_status": "normal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_7",
+    "text": "Mild bronchial wall thickening.",
+    "clinical_status": "abnormal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_8",
+    "text": "Small subpleural blebs at both lung apices.",
+    "clinical_status": "abnormal",
+    "laterality": "bilateral",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_9",
+    "text": "Smooth interlobular septal thickening in both lower lobes.",
+    "clinical_status": "abnormal",
+    "laterality": "bilateral",
+    "comparison": null,
+    "measurements": []
+   }
+  ],
+  "gt_findings": [
+   {
+    "finding_id": "gt_1",
+    "text": "No pulmonary mass.",
+    "clinical_status": "normal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_2",
+    "text": "Thoracic aorta of normal calibre.",
+    "clinical_status": "normal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_3",
+    "text": "No pleural effusion.",
+    "clinical_status": "normal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_4",
+    "text": "No suspicious pulmonary nodule.",
+    "clinical_status": "normal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_5",
+    "text": "No cardiomegaly.",
+    "clinical_status": "normal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_6",
+    "text": "No consolidation.",
+    "clinical_status": "normal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_7",
+    "text": "No nodular lesion in the lungs.",
+    "clinical_status": "normal",
+    "laterality": "bilateral",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_8",
+    "text": "No infiltrative lesion in the lungs.",
+    "clinical_status": "normal",
+    "laterality": "bilateral",
+    "comparison": null,
+    "measurements": []
+   }
+  ]
+ },
+ "assistant": {
+  "matches": [
+   {
+    "pred_id": "p_5",
+    "gt_id": "gt_3",
+    "reasoning": "Pleural effusion that gt denies."
+   },
+   {
+    "pred_id": "p_6",
+    "gt_id": "gt_5",
+    "reasoning": "Normal cardiothoracic ratio = no cardiomegaly."
+   },
+   {
+    "pred_id": "p_1",
+    "gt_id": "gt_7",
+    "reasoning": "'no nodular lesion' denies the right upper lobe nodules."
+   },
+   {
+    "pred_id": "p_4",
+    "gt_id": "gt_7",
+    "reasoning": "A calcified granuloma is a nodular lesion the unqualified negative denies."
+   }
+  ],
+  "unmatched_pred": [
+   "p_2",
+   "p_3",
+   "p_7",
+   "p_8",
+   "p_9"
+  ],
+  "unmatched_gt": [
+   "gt_1",
+   "gt_2",
+   "gt_4",
+   "gt_6",
+   "gt_8"
+  ]
+ }
+}

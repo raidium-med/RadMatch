@@ -1,0 +1,332 @@
+{
+  "scenario": "Constructed: left-out station major, left-out lobe or subtype minor, a left-out high grade and mass effect major, a followed nodule in another lobe, a left-out mass size, an unnamed pneumonia, more detail",
+  "description": "Constructed. 'Enlarged mediastinal lymph nodes' vs '12 mm right paratracheal lymph node': location major (pred names no station for the 12 mm right paratracheal node; the station sets the N stage and where it is sampled); 'Enlarged mediastinal lymph nodes' vs '15 mm subcarinal lymph node': location major (pred names no station for the 15 mm subcarinal node; the station sets the N stage and where it is sampled); 'Bronchiectasis in the left lung' vs 'Cylindrical bronchiectasis in the left lower lobe': location minor (left lung vs left lower lobe bronchiectasis; pred leaves out the lobe of a chronic airway disease, same management), diagnosis minor (pred leaves out the cylindrical subtype of bronchiectasis; same management); 'Consolidation in the posterior basal segment of the right…' vs 'Right lower lobe consolidation': no error (same content in other words, or the pred adds detail); 'Enlarging right upper lobe mass' vs 'Right upper lobe mass': comparison major (pred adds growth of a right upper lobe mass the gt does not give; growth changes staging and treatment); 'Right pneumothorax' vs 'Large right pneumothorax with mediastinal shift': grade major (pred leaves out the large grade of the pneumothorax; a large one needs a chest tube now), extent major (pred leaves out the mediastinal shift; mass effect signals tension physiology); '6 mm solid nodule in the left upper lobe' vs '6 mm solid nodule in the left lower lobe': location major (left upper vs left lower lobe nodule; the follow-up CT targets another lobe); 'Right upper lobe mass' vs '4.2 cm right upper lobe mass': measurement major (pred leaves out the 4.2 cm size of the mass; the size sets the T stage); 'Left lower lobe consolidation' vs 'Left lower lobe consolidation consistent with pneumonia': diagnosis major (pred gives only the consolidation of an actionable pneumonia, which calls for antibiotics).",
+  "user": {
+    "series_uuid": "chest-ct_example_7",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Enlarged mediastinal lymph nodes.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "12 mm right paratracheal lymph node.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 12,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "same_group_gt": [
+          "15 mm subcarinal lymph node."
+        ]
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Enlarged mediastinal lymph nodes.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "15 mm subcarinal lymph node.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": null,
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 15,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "same_group_gt": [
+          "12 mm right paratracheal lymph node."
+        ]
+      },
+      {
+        "pair_id": 3,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "Bronchiectasis in the left lung.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "Cylindrical bronchiectasis in the left lower lobe.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 4,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "Consolidation in the posterior basal segment of the right lower lobe.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "Right lower lobe consolidation.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 5,
+        "pred_finding": {
+          "finding_id": "p_8",
+          "text": "Enlarging right upper lobe mass.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": "worsening",
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_9",
+          "text": "Right upper lobe mass.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 6,
+        "pred_finding": {
+          "finding_id": "p_12",
+          "text": "Right pneumothorax.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "critical",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_12",
+          "text": "Large right pneumothorax with mediastinal shift.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "critical",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 7,
+        "pred_finding": {
+          "finding_id": "p_13",
+          "text": "6 mm solid nodule in the left upper lobe.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 6,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_13",
+          "text": "6 mm solid nodule in the left lower lobe.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 6,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 8,
+        "pred_finding": {
+          "finding_id": "p_14",
+          "text": "Right upper lobe mass.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_14",
+          "text": "4.2 cm right upper lobe mass.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 4.2,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 9,
+        "pred_finding": {
+          "finding_id": "p_15",
+          "text": "Left lower lobe consolidation.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_15",
+          "text": "Left lower lobe consolidation consistent with pneumonia.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "location",
+            "reasoning": "pred names no station for the 12 mm right paratracheal node; the station sets the N stage and where it is sampled",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "location",
+            "reasoning": "pred names no station for the 15 mm subcarinal node; the station sets the N stage and where it is sampled",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 3,
+        "errors": [
+          {
+            "dimension": "location",
+            "reasoning": "left lung vs left lower lobe bronchiectasis; pred leaves out the lobe of a chronic airway disease, same management",
+            "severity": "minor"
+          },
+          {
+            "dimension": "diagnosis",
+            "reasoning": "pred leaves out the cylindrical subtype of bronchiectasis; same management",
+            "severity": "minor"
+          }
+        ]
+      },
+      {
+        "pair_id": 4,
+        "errors": []
+      },
+      {
+        "pair_id": 5,
+        "errors": [
+          {
+            "dimension": "comparison",
+            "reasoning": "pred adds growth of a right upper lobe mass the gt does not give; growth changes staging and treatment",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 6,
+        "errors": [
+          {
+            "dimension": "grade",
+            "reasoning": "pred leaves out the large grade of the pneumothorax; a large one needs a chest tube now",
+            "severity": "major"
+          },
+          {
+            "dimension": "extent",
+            "reasoning": "pred leaves out the mediastinal shift; mass effect signals tension physiology",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 7,
+        "errors": [
+          {
+            "dimension": "location",
+            "reasoning": "left upper vs left lower lobe nodule; the follow-up CT targets another lobe",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 8,
+        "errors": [
+          {
+            "dimension": "measurement",
+            "reasoning": "pred leaves out the 4.2 cm size of the mass; the size sets the T stage",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 9,
+        "errors": [
+          {
+            "dimension": "diagnosis",
+            "reasoning": "pred gives only the consolidation of an actionable pneumonia, which calls for antibiotics",
+            "severity": "major"
+          }
+        ]
+      }
+    ]
+  }
+}

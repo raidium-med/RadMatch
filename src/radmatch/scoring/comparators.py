@@ -1,20 +1,22 @@
 """Stage 3a — deterministic comparators over the structured fields of a matched pair.
 
-`clinical_status` (inversion → INC downstream), `comparison` (cross-bucket → major)
-and `measurement` (per-category thresholds). No LLM call; the free-text dimensions
-are Stage 3b's job (`scoring.inference`).
+`clinical_status` (inversion → INC downstream), `laterality` (a side difference the
+match groups do not resolve → major), `comparison` (cross-bucket → major) and
+`measurement` (ratio, count and attenuation thresholds; sizes are flagged minor for the
+Stage 3b judge). No LLM call; the free-text dimensions are Stage 3b's job
+(`scoring.inference`).
 """
 
 from __future__ import annotations
 
 from itertools import permutations
-from typing import Callable, Sequence
+from typing import Callable, Iterable, Sequence
 
 from radmatch import constants
 
 # Modality-agnostic. Anatomy-specific cliffs (spleen 130 mm, AAA 55 mm, Fleischner
 # bands) need covariates the measurement lacks, so they are left to the LLM path.
-_SIZE_REL_DIFF_MAJOR: float = 0.2  # rel-diff above which `size` diff is `major`
+_SIZE_REL_DIFF_FLAG: float = 0.2  # rel-diff above which a `size` diff is flagged (the Stage 3b judge grades it)
 _ATTENUATION_ABS_DIFF_MAJOR: float = 20.0  # abs HU diff above which `attenuation` diff is `major`
 _RATIO_REL_DIFF_MAJOR: float = 0.3  # rel-diff above which `ratio` diff is `major`
 
@@ -71,6 +73,42 @@ def classify_status_conflict(pred_status: str, gt_status: str) -> dict | None:
 
 
 # ============================================================================
+# laterality
+# ============================================================================
+
+
+def side_union(sides: Iterable[str | None]) -> str | None:
+    """The side several findings cover together: left and right make bilateral."""
+    given = {s for s in sides if s}
+    if "bilateral" in given or {"left", "right"} <= given:
+        return "bilateral"
+    return next(iter(given), None)
+
+
+def classify_laterality_conflict(
+    pred_side: str | None,
+    gt_side: str | None,
+    pred_group_side: str | None,
+    gt_group_side: str | None,
+) -> dict | None:
+    """A side difference is `major`: left vs right, bilateral vs one side, a gt side the pred leaves out. None when
+    the two match groups cover the same side together ("bilateral hydronephrosis" vs a left and a right one), when
+    only the pred gives a side (more detail), or when the pred gives none for a gt on both sides: a diffuse process
+    is often called bilateral by inference only ("pulmonary vascular engorgement"), and either wording places it."""
+    if pred_side == gt_side or gt_side is None or pred_group_side == gt_group_side:
+        return None
+    if pred_group_side is None and gt_group_side == "bilateral":
+        return None
+    return _error(
+        dimension="laterality",
+        severity="major",
+        pred_value=pred_side,
+        gt_value=gt_side,
+        reasoning=f"side differs: pred={pred_side!r} vs gt={gt_side!r}",
+    )
+
+
+# ============================================================================
 # comparison
 # ============================================================================
 
@@ -81,22 +119,21 @@ def classify_comparison_conflict(
 ) -> dict | None:
     """Bucket-based comparison conflict severity.
 
-    BENIGN={stable, improving, resolved}, ACTIVE={worsening, new}.
+    ACTIVE={worsening, new}, benign = the other values.
     Cross-bucket → major; same-bucket → minor; identical → no error;
-    one-sided mention (one side None) → minor, except a pred that drops an
-    ACTIVE gt comparison, which misleads about disease activity exactly as
-    much as contradicting it → major.
+    one-sided mention (one side None) → minor: an active change the pred
+    invents or drops is graded major by the Stage 3b judge on a finding
+    followed over time.
     """
     if pred_comparison == gt_comparison:
         return None
     if pred_comparison is None or gt_comparison is None:
-        dropped_active = pred_comparison is None and gt_comparison in constants.ACTIVE_COMPARISONS
         return _error(
             dimension="comparison",
-            severity="major" if dropped_active else "minor",
+            severity="minor",
             pred_value=pred_comparison,
             gt_value=gt_comparison,
-            reasoning="pred drops an active gt comparison" if dropped_active else "one-sided comparison mention",
+            reasoning="one-sided comparison mention",
         )
     pred_active = pred_comparison in constants.ACTIVE_COMPARISONS
     gt_active = gt_comparison in constants.ACTIVE_COMPARISONS
@@ -132,8 +169,7 @@ def _canonical_value(measurement: dict) -> float:
     """Value rescaled to the per-category base unit (mm for size, HU for attenuation, …).
 
     Falls back to the raw value when the unit is missing or unknown to
-    `constants.MEASUREMENT_UNIT_CONVERSION` — preserves current behaviour for
-    out-of-table units while making known-unit pairs comparable.
+    `constants.MEASUREMENT_UNIT_CONVERSION`.
     """
     value = float(measurement.get("value", 0))
     unit = measurement.get("unit")
@@ -144,7 +180,7 @@ def _canonical_value(measurement: dict) -> float:
     return value
 
 
-def _size_or_ratio_rel_diff_major(pred: dict, gt: dict, threshold: float) -> bool:
+def _rel_diff_exceeds(pred: dict, gt: dict, threshold: float) -> bool:
     pv = _canonical_value(pred)
     gv = _canonical_value(gt)
     if gv == 0:
@@ -158,33 +194,38 @@ def _crosses_cliff(pv: float, gv: float, boundaries: tuple[float, ...]) -> bool:
     return any((pv <= b) != (gv <= b) for b in boundaries)
 
 
+def _align_categories(pred_measurements: Sequence[dict], gt_measurements: Sequence[dict]) -> list[dict]:
+    """Pred measurements, each relabelled with the category of a gt measurement carrying the same value and unit:
+    the two sides label categories independently, so a label disagreement on one quantity is not a difference."""
+    out = []
+    for m in pred_measurements:
+        same = next(
+            (g for g in gt_measurements if g.get("value") == m.get("value") and g.get("unit") == m.get("unit")), None
+        )
+        out.append({**m, "category": same.get("category", "other")} if same else m)
+    return out
+
+
 def classify_measurement_asymmetry(
     pred_measurements: Sequence[dict],
     gt_measurements: Sequence[dict],
+    size_given_elsewhere: bool = False,
 ) -> list[dict]:
     """Per-category measurement comparison.
 
-    An addition (pred-only) or omission (gt-only) is minor, a category mismatch is
-    major; same-category pairs are compared against the thresholds above.
+    A measurement only the pred gives is no error (added detail). A gt measurement the pred omits is a minor flag
+    (none for a size another pred of the match group gives, `size_given_elsewhere`); the Stage 3b judge grades the
+    omissions that matter. Same-category pairs go through `_MEASUREMENT_COMPARATORS`; a pred measurement with the
+    value and unit of a gt one takes its category.
     """
     if not pred_measurements and not gt_measurements:
         return []
+    pred_measurements = _align_categories(pred_measurements, gt_measurements)
 
     if not gt_measurements:
-        # Pred added measurements gt did not record → minor each
-        return [
-            _error(
-                "measurement",
-                "minor",
-                pred_value=m,
-                gt_value=None,
-                reasoning=f"pred added a {m.get('category', 'other')} measurement gt omits",
-            )
-            for m in pred_measurements
-        ]
+        return []
 
     if not pred_measurements:
-        # Pred omits measurements gt recorded → minor each
         return [
             _error(
                 "measurement",
@@ -194,40 +235,18 @@ def classify_measurement_asymmetry(
                 reasoning=f"pred omits a {m.get('category', 'other')} measurement gt records",
             )
             for m in gt_measurements
+            if not (size_given_elsewhere and m.get("category") == "size")
         ]
 
     pred_by_cat = _by_category(pred_measurements)
     gt_by_cat = _by_category(gt_measurements)
     shared_cats = set(pred_by_cat) & set(gt_by_cat)
 
-    # If there is no category overlap, emit a single category-mismatch
-    # error rather than separate "added" + "omitted" entries.
-    if not shared_cats:
-        return [
-            _error(
-                "measurement",
-                "major",
-                pred_value=sorted(pred_by_cat.keys()),
-                gt_value=sorted(gt_by_cat.keys()),
-                reasoning="measurement categories differ between pred and gt",
-            )
-        ]
-
     errors: list[dict] = []
 
-    # For categories present on only one side, emit per-category asymmetry errors.
-    for cat in set(pred_by_cat) - shared_cats:
-        for m in pred_by_cat[cat]:
-            errors.append(
-                _error(
-                    "measurement",
-                    "minor",
-                    pred_value=m,
-                    gt_value=None,
-                    reasoning=f"pred added a {cat} measurement gt omits",
-                )
-            )
     for cat in set(gt_by_cat) - shared_cats:
+        if size_given_elsewhere and cat == "size":
+            continue
         for m in gt_by_cat[cat]:
             errors.append(
                 _error(
@@ -249,16 +268,6 @@ def classify_measurement_asymmetry(
             error = comparator(pm, gm, cat)
             if error is not None:
                 errors.append(error)
-        for pm in extras_pred:
-            errors.append(
-                _error(
-                    "measurement",
-                    "minor",
-                    pred_value=pm,
-                    gt_value=None,
-                    reasoning=f"pred added an extra {cat} measurement gt omits",
-                )
-            )
         for gm in extras_gt:
             errors.append(
                 _error(
@@ -324,18 +333,31 @@ def _best_measurement_pairing(
 # ============================================================================
 
 
+def _size_unit_kind(measurement: dict) -> str | None:
+    """`length` / `volume` for a known unit, the unit itself for an unknown one, None when there is no unit."""
+    unit = measurement.get("unit")
+    if not isinstance(unit, str) or not unit:
+        return None
+    return constants.MEASUREMENT_SIZE_UNIT_KIND.get(unit.lower(), unit.lower())
+
+
 def _compare_size(pm: dict, gm: dict, _cat: str) -> dict | None:
-    if _size_or_ratio_rel_diff_major(pm, gm, _SIZE_REL_DIFF_MAJOR) and (
+    pk, gk = _size_unit_kind(pm), _size_unit_kind(gm)
+    if pk and gk and pk != gk:
+        return _error(
+            "measurement", "minor", pred_value=pm, gt_value=gm, reasoning="sizes given in units that cannot be compared"
+        )
+    if _rel_diff_exceeds(pm, gm, _SIZE_REL_DIFF_FLAG) and (
         abs(_canonical_value(pm) - _canonical_value(gm)) >= _SIZE_ABS_FLOOR_MM
     ):
         return _error(
-            "measurement", "major", pred_value=pm, gt_value=gm, reasoning="size relative difference > 20% (≥2mm)"
+            "measurement", "minor", pred_value=pm, gt_value=gm, reasoning="size relative difference > 20% (≥2mm)"
         )
     return None
 
 
 def _compare_ratio(pm: dict, gm: dict, _cat: str) -> dict | None:
-    if _size_or_ratio_rel_diff_major(pm, gm, _RATIO_REL_DIFF_MAJOR):
+    if _rel_diff_exceeds(pm, gm, _RATIO_REL_DIFF_MAJOR):
         return _error("measurement", "major", pred_value=pm, gt_value=gm, reasoning="ratio relative difference > 30%")
     return None
 
@@ -381,28 +403,34 @@ _MEASUREMENT_COMPARATORS: dict[str, Callable[[dict, dict, str], "dict | None"]] 
 # ============================================================================
 
 
-def compute_structured_errors(pred: dict, gt: dict) -> list[dict]:
-    """Aggregate Stage 3a errors across status, comparison, measurement."""
+def compute_structured_errors(
+    pred: dict,
+    gt: dict,
+    size_given_elsewhere: bool = False,
+    group_sides: tuple[str | None, str | None] | None = None,
+) -> list[dict]:
+    """Aggregate Stage 3a errors across status, laterality, comparison, measurement. `size_given_elsewhere`: another
+    pred matched to the same gt gives a size, so this pred omitting one is not an omission of the group.
+    `group_sides`: the sides the abnormal findings of the pair's pred and gt match groups cover together."""
     errors: list[dict] = []
-
-    status_err = classify_status_conflict(
-        pred.get("clinical_status", ""),
-        gt.get("clinical_status", ""),
-    )
+    status_err = classify_status_conflict(pred.get("clinical_status", ""), gt.get("clinical_status", ""))
     if status_err is not None:
-        errors.append(status_err)
-
-    comparison_err = classify_comparison_conflict(
-        pred.get("comparison"),
-        gt.get("comparison"),
-    )
+        return [status_err]  # the inversion is the error; sizes or changes of an absent finding are not compared
+    if pred.get("clinical_status") == gt.get("clinical_status") == "normal":
+        return []  # two normal statements differ only by template
+    if pred.get("clinical_status") == gt.get("clinical_status") == "abnormal":
+        pred_side, gt_side = pred.get("laterality"), gt.get("laterality")
+        laterality_err = classify_laterality_conflict(pred_side, gt_side, *(group_sides or (pred_side, gt_side)))
+        if laterality_err is not None:
+            if gt.get("clinical_significance") == pred.get("clinical_significance") == "routine":
+                laterality_err["severity"] = "minor"  # the side of findings nobody follows up changes nothing
+            errors.append(laterality_err)
+    comparison_err = classify_comparison_conflict(pred.get("comparison"), gt.get("comparison"))
     if comparison_err is not None:
         errors.append(comparison_err)
-
-    measurement_errs = classify_measurement_asymmetry(
-        pred.get("measurements", []),
-        gt.get("measurements", []),
+    errors.extend(
+        classify_measurement_asymmetry(
+            pred.get("measurements", []), gt.get("measurements", []), size_given_elsewhere=size_given_elsewhere
+        )
     )
-    errors.extend(measurement_errs)
-
     return errors

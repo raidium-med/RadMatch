@@ -1,0 +1,159 @@
+{
+  "scenario": "Constructed: certainty, left-out appearance and grade (minor), structured category, a hedge between two routine findings",
+  "description": "Constructed. 'Small bowel dilatation up to 3.8 cm compatible with…' vs 'Mild small bowel dilatation up to 3.8 cm with air-fluid…': appearance minor (pred leaves out the air-fluid levels but already calls an obstruction, so nothing urgent is hidden), grade minor (pred leaves out the mild grade of the dilatation; a low grade left out changes nothing), diagnosis major (pred adds a small bowel obstruction the gt does not state; obstruction calls for surgical review); 'Possible minimally displaced right inferior pubic ramus…' vs 'Minimally displaced right inferior pubic ramus fracture': certainty major (possible vs definite pubic ramus fracture, two steps; a possible fracture is sent for more imaging); 'Bosniak IIF left renal cyst' vs 'Bosniak II left renal cyst': grade major (Bosniak IIF vs II cyst; IIF needs imaging follow-up, II does not); 'No definite gallstones' vs 'No gallstones': certainty minor (no definite vs no gallstones, one step; two routine completeness statements, the hedge changes no management).",
+  "user": {
+    "series_uuid": "abdomen-ct_example_5",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Small bowel dilatation up to 3.8 cm compatible with developing small bowel obstruction.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": null,
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 3.8,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "Mild small bowel dilatation up to 3.8 cm with air-fluid levels.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": null,
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 3.8,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "Possible minimally displaced right inferior pubic ramus fracture.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "Minimally displaced right inferior pubic ramus fracture.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 3,
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "Bosniak IIF left renal cyst.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "Bosniak II left renal cyst.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 4,
+        "pred_finding": {
+          "finding_id": "p_5",
+          "text": "No definite gallstones.",
+          "clinical_status": "normal",
+          "clinical_significance": "routine",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_5",
+          "text": "No gallstones.",
+          "clinical_status": "normal",
+          "clinical_significance": "routine",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "appearance",
+            "reasoning": "pred leaves out the air-fluid levels but already calls an obstruction, so nothing urgent is hidden",
+            "severity": "minor"
+          },
+          {
+            "dimension": "grade",
+            "reasoning": "pred leaves out the mild grade of the dilatation; a low grade left out changes nothing",
+            "severity": "minor"
+          },
+          {
+            "dimension": "diagnosis",
+            "reasoning": "pred adds a small bowel obstruction the gt does not state; obstruction calls for surgical review",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "certainty",
+            "reasoning": "possible vs definite pubic ramus fracture, two steps; a possible fracture is sent for more imaging",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 3,
+        "errors": [
+          {
+            "dimension": "grade",
+            "reasoning": "Bosniak IIF vs II cyst; IIF needs imaging follow-up, II does not",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 4,
+        "errors": [
+          {
+            "dimension": "certainty",
+            "reasoning": "no definite vs no gallstones, one step; two routine completeness statements, the hedge changes no management",
+            "severity": "minor"
+          }
+        ]
+      }
+    ]
+  }
+}

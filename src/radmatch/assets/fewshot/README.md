@@ -31,7 +31,8 @@ warning and falls back to zero-shot prompting rather than failing.
 └── attribute_errors/   # Stage 3b examples: per-pair attribute errors
 ```
 
-`reports_*` are context for a human reading the bundle; the prompts consume
-`findings_*`, `matching/` and `attribute_errors/`. Bundles installed from the wheel live
+Stage 1 pairs each `reports_gt/` report with its `findings_gt/` answer; Stage 2 reads
+`matching/` and Stage 3b `attribute_errors/`. `reports_pred/` and `findings_pred/` are not
+loaded: they are the source the matching and attribute-errors examples were built from. Bundles installed from the wheel live
 under `radmatch/assets/fewshot/` in site-packages, so a bundle of your own is easiest to
 add in a source checkout.

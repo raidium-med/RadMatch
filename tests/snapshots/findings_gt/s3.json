@@ -4,6 +4,7 @@
     "text": "Small left apical pneumothorax.",
     "clinical_status": "abnormal",
     "clinical_significance": "critical",
+    "laterality": "left",
     "comparison": "new",
     "measurements": []
   }

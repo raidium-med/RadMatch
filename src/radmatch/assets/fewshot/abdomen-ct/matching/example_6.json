@@ -1,0 +1,208 @@
+{
+  "scenario": "Clinical long tail: cause and consequence, two readings of one abnormality, bowel segments",
+  "description": "Constructed example of clinical long-tail patterns: a renal pelvis stone stated with the hydronephrosis it causes in the same kidney covers both gt findings (1:N); a hypodense lesion and a cyst at the same segment, and diverticulosis vs diverticulitis of the same sigmoid, are two readings of one abnormality (matched); 'no aneurysm' matches 'normal caliber'; a small bowel statement does not cover a rectal finding (both unmatched).",
+  "user": {
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "6 mm left renal pelvis stone causing moderate hydronephrosis.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 6,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_2",
+        "text": "Hypodense lesion in liver segment 4.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_3",
+        "text": "Sigmoid diverticulosis.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_4",
+        "text": "Aortic calcification.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_5",
+        "text": "No aortic aneurysm.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_6",
+        "text": "Small bowel normal in caliber.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_7",
+        "text": "Status post cholecystectomy.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_8",
+        "text": "Small amount of ascites.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "6 mm calculus in the left renal pelvis.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 6,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "Moderate left hydronephrosis.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "Segment 4 hepatic cyst.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "Sigmoid diverticulitis with pericolic fat stranding.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_5",
+        "text": "Atherosclerotic calcification of the abdominal aorta.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_6",
+        "text": "Abdominal aorta normal in caliber.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_7",
+        "text": "Rectal wall thickening.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_8",
+        "text": "Cholecystectomy clips.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_9",
+        "text": "Large-volume ascites.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "Same left renal pelvis stone."
+      },
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_2",
+        "reasoning": "Pred states the hydronephrosis as the stone's consequence in the same kidney."
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_3",
+        "reasoning": "Same segment 4 liver lesion, described by its density vs called a cyst."
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_4",
+        "reasoning": "Same sigmoid diverticular disease, read as diverticulosis vs diverticulitis."
+      },
+      {
+        "pred_id": "p_4",
+        "gt_id": "gt_5",
+        "reasoning": "Same aortic calcification."
+      },
+      {
+        "pred_id": "p_5",
+        "gt_id": "gt_6",
+        "reasoning": "Both assess the aortic caliber as normal."
+      },
+      {
+        "pred_id": "p_7",
+        "gt_id": "gt_8",
+        "reasoning": "Same cholecystectomy, the clips being its expected appearance."
+      },
+      {
+        "pred_id": "p_8",
+        "gt_id": "gt_9",
+        "reasoning": "Same ascites, different volume."
+      }
+    ],
+    "unmatched_pred": [
+      "p_6"
+    ],
+    "unmatched_gt": [
+      "gt_7"
+    ]
+  }
+}

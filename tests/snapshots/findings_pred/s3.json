@@ -4,6 +4,7 @@
     "text": "No pneumothorax identified.",
     "clinical_status": "normal",
     "clinical_significance": "critical",
+    "laterality": null,
     "comparison": null,
     "measurements": []
   }

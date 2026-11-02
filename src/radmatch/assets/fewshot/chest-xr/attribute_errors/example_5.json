@@ -1,0 +1,206 @@
+{
+  "scenario": "Constructed: side differences left upstream, group, more detail, invented and left-out growth",
+  "description": "Constructed. 'Right lower lobe opacity' vs 'Bilateral lower lobe opacities': no error (the side is scored upstream (Stage 3a laterality)); 'Bilateral lower lobe consolidation' vs 'Left lower lobe consolidation': no error (the side is scored upstream (Stage 3a laterality)); 'Bilateral lower lobe consolidation' vs 'Right lower lobe consolidation': no error (the side is scored upstream (Stage 3a laterality)); 'Left lower lobe consolidation with air bronchograms' vs 'Left lower lobe consolidation': no error (same content in other words, or the pred adds detail); 'Right upper lobe nodule, increased in size' vs 'Right upper lobe nodule': comparison major (pred adds growth of a right upper lobe nodule the gt does not give; growth calls for CT workup); 'Right upper lobe nodule' vs 'Enlarging right upper lobe nodule': comparison major (pred leaves out the growth of the right upper lobe nodule; growth calls for CT workup); 'Bibasilar atelectasis' vs 'Increased bibasilar atelectasis': no error (the comparison difference is scored upstream (Stage 3a)).",
+  "user": {
+    "series_uuid": "chest-xr_example_5",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "Right lower lobe opacity.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "Bilateral lower lobe opacities.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "bilateral",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "Bilateral lower lobe consolidation.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "bilateral",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "Left lower lobe consolidation.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        },
+        "same_group_gt": [
+          "Right lower lobe consolidation."
+        ]
+      },
+      {
+        "pair_id": 3,
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "Bilateral lower lobe consolidation.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "bilateral",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_5",
+          "text": "Right lower lobe consolidation.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "same_group_gt": [
+          "Left lower lobe consolidation."
+        ]
+      },
+      {
+        "pair_id": 4,
+        "pred_finding": {
+          "finding_id": "p_5",
+          "text": "Left lower lobe consolidation with air bronchograms.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_6",
+          "text": "Left lower lobe consolidation.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 5,
+        "pred_finding": {
+          "finding_id": "p_7",
+          "text": "Right upper lobe nodule, increased in size.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": "worsening",
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_8",
+          "text": "Right upper lobe nodule.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 6,
+        "pred_finding": {
+          "finding_id": "p_12",
+          "text": "Right upper lobe nodule.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_12",
+          "text": "Enlarging right upper lobe nodule.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": "worsening",
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 7,
+        "pred_finding": {
+          "finding_id": "p_13",
+          "text": "Bibasilar atelectasis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "bilateral",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_13",
+          "text": "Increased bibasilar atelectasis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "bilateral",
+          "comparison": "worsening",
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": []
+      },
+      {
+        "pair_id": 2,
+        "errors": []
+      },
+      {
+        "pair_id": 3,
+        "errors": []
+      },
+      {
+        "pair_id": 4,
+        "errors": []
+      },
+      {
+        "pair_id": 5,
+        "errors": [
+          {
+            "dimension": "comparison",
+            "reasoning": "pred adds growth of a right upper lobe nodule the gt does not give; growth calls for CT workup",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 6,
+        "errors": [
+          {
+            "dimension": "comparison",
+            "reasoning": "pred leaves out the growth of the right upper lobe nodule; growth calls for CT workup",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 7,
+        "errors": []
+      }
+    ]
+  }
+}

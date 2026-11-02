@@ -48,6 +48,7 @@ def test_status_conflict(pred, gt, expect_inc):
         pytest.param("stable", "improving", "minor", id="same-bucket-benign"),
         pytest.param("worsening", "new", "minor", id="same-bucket-active"),
         pytest.param(None, "stable", "minor", id="pred-none-gt-mention"),
+        pytest.param(None, "worsening", "minor", id="pred-drops-an-active-change"),
         pytest.param("stable", None, "minor", id="gt-none-pred-mention"),
     ],
 )
@@ -62,6 +63,47 @@ def test_comparison_no_conflict(value):
 
 
 # ============================================================================
+# laterality
+# ============================================================================
+
+
+@pytest.mark.parametrize(
+    "pred, gt, group_sides, severity",
+    [
+        pytest.param("left", "right", None, "major", id="flip"),
+        pytest.param("bilateral", "left", None, "major", id="bilateral-vs-one-side"),
+        pytest.param("right", "bilateral", None, "major", id="one-side-vs-bilateral"),
+        pytest.param(None, "left", None, "major", id="pred-leaves-out-the-side"),
+        pytest.param("left", None, None, None, id="pred-adds-a-side"),
+        pytest.param(None, "bilateral", None, None, id="no-side-vs-bilateral"),
+        pytest.param("left", None, ("left", "right"), None, id="own-gt-gives-no-side"),
+        pytest.param("bilateral", "left", ("bilateral", "bilateral"), None, id="group-gives-the-other-side"),
+        pytest.param(None, None, None, None, id="no-side"),
+    ],
+)
+def test_laterality_conflict(pred, gt, group_sides, severity):
+    err = comparators.classify_laterality_conflict(pred, gt, *(group_sides or (pred, gt)))
+    assert (err and err["severity"]) == severity
+
+
+def test_side_union():
+    assert comparators.side_union(["left", "right", None]) == "bilateral"
+    assert comparators.side_union(["left", None]) == "left"
+    assert comparators.side_union([None]) is None
+
+
+@pytest.mark.parametrize(
+    "pred_sig, gt_sig, severity",
+    [("routine", "routine", "minor"), ("urgent", "routine", "major"), ("notable", "notable", "major")],
+)
+def test_side_difference_is_minor_only_between_routine_findings(pred_sig, gt_sig, severity):
+    pred = {"clinical_status": "abnormal", "laterality": "left", "clinical_significance": pred_sig}
+    gt = {"clinical_status": "abnormal", "laterality": "right", "clinical_significance": gt_sig}
+    [err] = comparators.compute_structured_errors(pred, gt)
+    assert (err["dimension"], err["severity"]) == ("laterality", severity)
+
+
+# ============================================================================
 # classify_measurement_asymmetry
 # ============================================================================
 
@@ -71,13 +113,14 @@ def test_comparison_no_conflict(value):
     [
         pytest.param([], [], 0, None, id="both-empty"),
         pytest.param([_m(10, "mm", "size")], [_m(10.5, "mm", "size")], 0, None, id="size-within-20pct-threshold"),
-        pytest.param([_m(7, "mm", "size")], [_m(9, "mm", "size")], 1, "major", id="size-above-20pct-threshold"),
+        pytest.param([_m(7, "mm", "size")], [_m(9, "mm", "size")], 1, "minor", id="size-above-20pct-threshold"),
         # Tiny structures: +50% relative but only 1mm absolute — below the 2mm
         # reproducibility floor, so no error (was a false positive before).
         pytest.param([_m(2, "mm", "size")], [_m(3, "mm", "size")], 0, None, id="size-tiny-below-abs-floor"),
-        pytest.param([_m(2, "mm", "size")], [_m(5, "mm", "size")], 1, "major", id="size-tiny-above-abs-floor"),
-        pytest.param([_m(7, "mm", "size")], [], 1, "minor", id="pred-has-gt-omits"),
-        pytest.param([], [_m(7, "mm", "size")], 1, "minor", id="gt-has-pred-omits"),
+        pytest.param([_m(2, "mm", "size")], [_m(5, "mm", "size")], 1, "minor", id="size-tiny-above-abs-floor"),
+        pytest.param([_m(7, "mm", "size")], [], 0, None, id="pred-has-gt-omits"),
+        pytest.param([], [_m(7, "mm", "size")], 1, "minor", id="gt-has-pred-omits-size"),
+        pytest.param([], [_m(3, None, "count")], 1, "minor", id="gt-has-pred-omits-count"),
         pytest.param([_m(2, None, "count")], [_m(3, None, "count")], 1, "major", id="count-different"),
         pytest.param([_m(3, None, "count")], [_m(3, None, "count")], 0, None, id="count-same"),
         pytest.param(
@@ -111,7 +154,9 @@ def test_comparison_no_conflict(value):
             "major",
             id="attenuation-crosses-20hu-cliff",
         ),
-        pytest.param([_m(7, "mm", "size")], [_m(7, None, "count")], 1, "major", id="category-mismatch"),
+        pytest.param([_m(7, "mm", "size")], [_m(7, None, "count")], 1, "minor", id="category-mismatch"),
+        pytest.param([_m(12, "mm", "other")], [_m(12, "mm", "size")], 0, None, id="same-value-other-label"),
+        pytest.param([_m(498, "ml", "size")], [_m(14.4, "cm", "size")], 1, "minor", id="size-volume-vs-length"),
     ],
 )
 def test_measurement_asymmetry(pred_m, gt_m, expected_count, expected_severity):
@@ -122,11 +167,19 @@ def test_measurement_asymmetry(pred_m, gt_m, expected_count, expected_severity):
         assert errs[0]["dimension"] == "measurement"
 
 
+@pytest.mark.parametrize("elsewhere, expected", [(False, ["minor"]), (True, [])])
+def test_measurement_omitted_size_is_flagged_unless_given_elsewhere_in_group(elsewhere, expected):
+    errs = comparators.classify_measurement_asymmetry(
+        [_m(3, None, "count")], [_m(12, "mm", "size")], size_given_elsewhere=elsewhere
+    )
+    assert sorted(e["severity"] for e in errs) == expected
+
+
 @pytest.mark.parametrize(
     "pred_m, gt_m, id_",
     [
         pytest.param([_m(1, "cm", "size")], [_m(10, "mm", "size")], "size-cm-vs-mm"),
-        pytest.param([_m(0.1, "m", "size")], [_m(100, "mm", "size")], "size-m-vs-mm"),
+        pytest.param([_m(500, "ml", "size")], [_m(0.5, "l", "size")], "size-ml-vs-l"),
         pytest.param([_m(1, "inch", "size")], [_m(25.4, "mm", "size")], "size-inch-vs-mm"),
     ],
 )
@@ -169,17 +222,15 @@ def test_measurement_asymmetry_compares_every_pair_in_shared_category():
     gt = [_m(3.8, "cm", "size"), _m(3.0, "cm", "size")]
     errs = comparators.classify_measurement_asymmetry(pred, gt)
     assert len(errs) == 1
-    assert errs[0]["severity"] == "major"
+    assert errs[0]["severity"] == "minor"
     assert errs[0]["dimension"] == "measurement"
 
 
 def test_measurement_asymmetry_handles_extra_measurement_on_pred_side():
-    """Pred adding a third size dimension that GT omits → minor error per extra."""
+    """Pred adding a third size dimension that GT omits → no error (added detail)."""
     pred = [_m(3.8, "cm", "size"), _m(3.0, "cm", "size"), _m(2.1, "cm", "size")]
     gt = [_m(3.8, "cm", "size"), _m(3.0, "cm", "size")]
-    errs = comparators.classify_measurement_asymmetry(pred, gt)
-    assert len(errs) == 1
-    assert errs[0]["severity"] == "minor"
+    assert comparators.classify_measurement_asymmetry(pred, gt) == []
 
 
 def test_measurement_asymmetry_handles_extra_measurement_on_gt_side():
@@ -199,14 +250,33 @@ def test_measurement_asymmetry_handles_extra_measurement_on_gt_side():
 
 
 def test_compute_structured_errors_aggregates_all_dimensions():
-    pred = {"clinical_status": "normal", "comparison": "stable", "measurements": []}
+    pred = {"clinical_status": "abnormal", "laterality": "left", "comparison": "stable", "measurements": []}
     gt = {
         "clinical_status": "abnormal",
+        "laterality": "right",
         "comparison": "worsening",
         "measurements": [_m(7, "mm", "size")],
     }
     dims = {e["dimension"] for e in comparators.compute_structured_errors(pred, gt)}
-    assert dims == {"clinical_status", "comparison", "measurement"}
+    assert dims == {"laterality", "comparison", "measurement"}
+
+
+@pytest.mark.parametrize(
+    "gt_status, expected",
+    [
+        pytest.param("abnormal", ["clinical_status"], id="status-inversion-only-status"),
+        pytest.param("normal", [], id="two-normal-none"),
+    ],
+)
+def test_compute_structured_errors_skips_the_other_dimensions(gt_status, expected):
+    pred = {"clinical_status": "normal", "laterality": "left", "comparison": "stable", "measurements": []}
+    gt = {
+        "clinical_status": gt_status,
+        "laterality": "right",
+        "comparison": "worsening",
+        "measurements": [_m(7, "mm", "size")],
+    }
+    assert [e["dimension"] for e in comparators.compute_structured_errors(pred, gt)] == expected
 
 
 def test_compute_structured_errors_identical_pair_is_empty():

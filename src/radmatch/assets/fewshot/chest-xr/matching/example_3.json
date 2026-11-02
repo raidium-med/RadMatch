@@ -7,6 +7,7 @@
         "finding_id": "p_1",
         "text": "Small left pleural effusion.",
         "clinical_status": "abnormal",
+        "laterality": "left",
         "comparison": null,
         "measurements": []
       },
@@ -14,6 +15,7 @@
         "finding_id": "p_2",
         "text": "Small right pleural effusion.",
         "clinical_status": "abnormal",
+        "laterality": "right",
         "comparison": null,
         "measurements": []
       },
@@ -21,6 +23,7 @@
         "finding_id": "p_3",
         "text": "Heart size normal.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }
@@ -30,6 +33,7 @@
         "finding_id": "gt_1",
         "text": "Bilateral small pleural effusions.",
         "clinical_status": "abnormal",
+        "laterality": "bilateral",
         "comparison": null,
         "measurements": []
       },
@@ -37,6 +41,7 @@
         "finding_id": "gt_2",
         "text": "Cardiac silhouette within normal limits.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }
@@ -47,17 +52,17 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "GT names pathology (pleural effusion) + bilateral anatomy; covers the left atom."
+        "reasoning": "The bilateral effusions of gt include this left effusion."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_1",
-        "reasoning": "Same umbrella covers the right atom — second row, same gt_id."
+        "reasoning": "The bilateral effusions of gt also include this right effusion."
       },
       {
         "pred_id": "p_3",
         "gt_id": "gt_2",
-        "reasoning": "Heart size normal ≈ cardiac silhouette WNL."
+        "reasoning": "Both state the heart size is normal."
       }
     ],
     "unmatched_pred": [],

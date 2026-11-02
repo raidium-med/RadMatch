@@ -1,6 +1,6 @@
 [
   {
-    "text": "Leptomeningeal metastasis on the left inferior surface of the tentorium, now forming a mass 2.5 cm in diameter and 2 cm in thickness, previously punctate.",
+    "text": "Leptomeningeal metastasis on the left inferior surface of the tentorium, now forming a mass 2.5 cm in diameter and 2 cm in thickness, previously punctate, with associated massive edema extending to the brainstem and cerebellum.",
     "measurements": [
       {
         "value": 2.5,
@@ -13,20 +13,15 @@
         "category": "size"
       }
     ],
+    "laterality": "left",
     "comparison": "worsening",
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
   },
   {
-    "text": "Massive edema extending to the brainstem and cerebellum associated with the left tentorial mass.",
-    "measurements": [],
-    "comparison": null,
-    "clinical_status": "abnormal",
-    "clinical_significance": "critical"
-  },
-  {
     "text": "Cerebellar metastases that enhanced on the previous examination have disappeared or transformed into cystic focal areas.",
     "measurements": [],
+    "laterality": null,
     "comparison": "improving",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -40,6 +35,7 @@
         "category": "size"
       }
     ],
+    "laterality": "right",
     "comparison": "stable",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -47,9 +43,10 @@
   {
     "text": "No new metastatic foci in the posterior fossa.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "routine"
+    "clinical_significance": "notable"
   },
   {
     "text": "New metastasis measuring 17 mm in diameter in the left putamen with extensive perilesional edema.",
@@ -60,6 +57,7 @@
         "category": "size"
       }
     ],
+    "laterality": "left",
     "comparison": "new",
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
@@ -73,6 +71,7 @@
         "category": "size"
       }
     ],
+    "laterality": "left",
     "comparison": "new",
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
@@ -86,6 +85,7 @@
         "category": "size"
       }
     ],
+    "laterality": "left",
     "comparison": "new",
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
@@ -93,6 +93,7 @@
   {
     "text": "Plaque-like leptomeningeal metastasis at the vertex on the right parasagittal region shows no growth.",
     "measurements": [],
+    "laterality": "right",
     "comparison": "stable",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -106,6 +107,7 @@
         "category": "size"
       }
     ],
+    "laterality": "left",
     "comparison": "new",
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
@@ -119,6 +121,7 @@
         "category": "size"
       }
     ],
+    "laterality": "left",
     "comparison": "new",
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
@@ -132,6 +135,7 @@
         "category": "count"
       }
     ],
+    "laterality": "left",
     "comparison": "new",
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
@@ -139,13 +143,15 @@
   {
     "text": "Pituitary metastasis infiltrating the anterior lobe and stalk is progressively growing and forming a mass, exerting pressure on the optic chiasm and left optic tract.",
     "measurements": [],
+    "laterality": null,
     "comparison": "worsening",
     "clinical_status": "abnormal",
-    "clinical_significance": "critical"
+    "clinical_significance": "urgent"
   },
   {
     "text": "Bone metastases in the clivus, cervical vertebrae, and bilateral mandibular condyles.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "urgent"
@@ -153,8 +159,9 @@
   {
     "text": "No bone metastasis in the cranium.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "routine"
+    "clinical_significance": "notable"
   }
 ]

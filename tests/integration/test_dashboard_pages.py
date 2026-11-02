@@ -22,7 +22,10 @@ pytest.importorskip("streamlit", reason="dashboard extra not installed")
 from streamlit.testing.v1 import AppTest  # noqa: E402
 
 import radmatch.dashboard as dashboard_pkg  # noqa: E402
+from radmatch import constants  # noqa: E402
 from radmatch.dashboard.build_dashboard_data import build_report_index  # noqa: E402
+from radmatch.scoring import metrics  # noqa: E402
+from tests.fakes.fake_outputs import tier_block  # noqa: E402
 
 DASHBOARD_DIR = Path(dashboard_pkg.__file__).parent
 PAGE_SCRIPTS = [
@@ -49,6 +52,7 @@ def results_dir(tmp_path: Path) -> Path:
             "text": "Small left pleural effusion.",
             "clinical_status": "abnormal",
             "clinical_significance": "urgent",
+            "laterality": "left",
             "comparison": None,
             "measurements": [],
         }
@@ -59,8 +63,21 @@ def results_dir(tmp_path: Path) -> Path:
             "text": "Small effusion on the left.",
             "clinical_status": "abnormal",
             "clinical_significance": "urgent",
+            "laterality": "left",
             "comparison": None,
             "measurements": [],
+        }
+    ]
+    muc_records = [
+        {
+            "pred_id": "pred_001",
+            "gt_id": "gt_001",
+            "muc_category": "COR",
+            "structured_errors": [],
+            "text_errors": [],
+            "inc_triggered": False,
+            "gt_significance": "urgent",
+            "pred_significance": "urgent",
         }
     ]
     _write(radmatch_dir / "findings_gt" / "s1.json", gt)
@@ -79,7 +96,7 @@ def results_dir(tmp_path: Path) -> Path:
             "matches": [{"pred_id": "pred_001", "gt_id": "gt_001"}],
             "structured_errors_per_pair": [[]],
             "text_errors_per_pair": [[]],
-            "muc_records": [{"pred_id": "pred_001", "gt_id": "gt_001", "category": "COR", "errors": []}],
+            "muc_records": muc_records,
         },
     )
     _write(
@@ -87,49 +104,24 @@ def results_dir(tmp_path: Path) -> Path:
         {
             "metadata": {"series_uuid": "s1", "total_gt_findings": 1, "total_pred_findings": 1},
             "muc_counts": {"COR": 1, "PAR": 0, "INC": 0, "MIS": 0, "SPU": 0},
-            "actionable_errors_total": 0,
-            "clinical_safety_summary": {
-                "triage_recall": 1.0,
-                "actionable_recall": 1.0,
-                "triage_precision": 1.0,
-                "actionable_precision": 1.0,
-                "triage_gt_total": 1,
-                "actionable_gt_total": 1,
-                "triage_pred_total": 1,
-                "actionable_pred_total": 1,
-                "triage_mis_count": 0,
-                "triage_inc_count": 0,
-                "actionable_mis_count": 0,
-                "actionable_inc_count": 0,
-            },
-            "attribute_breakdown": {},
+            "tiers": {tier: tier_block() for tier in ("actionable", "triage", "critical")},
+            "attribute_breakdown": metrics.compute_attribute_breakdown(muc_records),
         },
     )
     _write(
         radmatch_dir / "metrics_summary.json",
         {
             "metadata": {"n_reports": 1, "total_gt_findings": 1, "total_pred_findings": 1},
-            "actionable_errors_per_report": 0.0,
-            "actionable_errors_total": 0,
-            "actionable_errors_per_finding": 0.0,
-            "actionable_findings_total": 1,
+            "tiers": {tier: tier_block(n_reports=1) for tier in ("actionable", "triage", "critical")},
             "muc_counts": {"COR": 1, "PAR": 0, "INC": 0, "MIS": 0, "SPU": 0},
-            "clinical_safety_summary": {
-                "triage_recall": 1.0,
-                "actionable_recall": 1.0,
-                "triage_precision": 1.0,
-                "actionable_precision": 1.0,
-                "triage_gt_total": 1,
-                "actionable_gt_total": 1,
-                "triage_pred_total": 1,
-                "actionable_pred_total": 1,
-                "triage_mis_count": 0,
-                "triage_inc_count": 0,
-                "actionable_mis_count": 0,
-                "actionable_inc_count": 0,
+            "attribute_breakdown": metrics.compute_attribute_breakdown(muc_records),
+            "subsets": {
+                name: {
+                    "tiers": {tier: tier_block(n_reports=1) for tier in ("actionable", "triage", "critical")},
+                    "muc_counts": {"COR": 1, "PAR": 0, "INC": 0, "MIS": 0, "SPU": 0},
+                }
+                for name in constants.SUBSETS
             },
-            "attribute_breakdown": {},
-            "subsets": {},
         },
     )
     build_report_index(radmatch_dir)

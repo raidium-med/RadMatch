@@ -1,14 +1,24 @@
 [
   {
-    "text": "Hypodense cortico-subcortical sequelae in the left temporal pole and left temporal lobe, without spontaneous hyperdensity.",
+    "text": "Hypodense cortico-subcortical sequelae in the left temporal pole and left temporal lobe.",
     "measurements": [],
+    "laterality": "left",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
   },
   {
+    "text": "No spontaneous hyperdensity in the left temporal sequelae.",
+    "measurements": [],
+    "laterality": "left",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "critical"
+  },
+  {
     "text": "Passive traction of the left temporal horn of the lateral ventricle.",
     "measurements": [],
+    "laterality": "left",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -16,13 +26,23 @@
   {
     "text": "Ventricular system normal in size and morphology.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
   },
   {
-    "text": "No spontaneous density abnormality in the brainstem or cerebellum.",
+    "text": "No spontaneous density abnormality in the brainstem.",
     "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No spontaneous density abnormality in the cerebellum.",
+    "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -30,6 +50,7 @@
   {
     "text": "Midline fourth ventricle normal in size and morphology.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -37,6 +58,7 @@
   {
     "text": "Normal appearance of the basal cisterns.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
