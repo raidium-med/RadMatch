@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import itertools
+import random
+
 import pytest
 
 from radmatch.scoring import comparators
@@ -286,3 +289,20 @@ def test_compute_structured_errors_identical_pair_is_empty():
         "measurements": [_m(7, "mm", "size")],
     }
     assert comparators.compute_structured_errors(f, f) == []
+
+
+def test_sorted_alignment_reaches_the_brute_force_minimum():
+    rng = random.Random(0)
+    for _ in range(200):
+        small = [rng.uniform(0, 50) for _ in range(rng.randint(1, 5))]
+        large = [rng.uniform(0, 50) for _ in range(rng.randint(len(small), 7))]
+        best = min(
+            sum(abs(s - large[j]) for s, j in zip(small, idx))
+            for idx in itertools.permutations(range(len(large)), len(small))
+        )
+        idx = comparators._sorted_alignment(small, large)
+        assert len(set(idx)) == len(small)
+        assert sum(abs(s - large[j]) for s, j in zip(small, idx)) == pytest.approx(best)
+    sizes = [{"category": "size", "value": float(v), "unit": "mm"} for v in range(20)]
+    pairs, extra_pred, extra_gt = comparators._best_measurement_pairing(sizes, sizes[::-1])
+    assert all(p["value"] == g["value"] for p, g in pairs) and not extra_pred and not extra_gt

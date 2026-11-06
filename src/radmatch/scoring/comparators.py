@@ -10,6 +10,7 @@ Stage 3b judge). No LLM call; the free-text dimensions are Stage 3b's job
 from __future__ import annotations
 
 from itertools import permutations
+from math import perm
 from typing import Callable, Iterable, Sequence
 
 from radmatch import constants
@@ -282,6 +283,32 @@ def classify_measurement_asymmetry(
     return errors
 
 
+def _sorted_alignment(small_vals: list[float], large_vals: list[float]) -> tuple[int, ...]:
+    """Index in `large_vals` of each small value, at the minimum total |difference|.
+
+    On a line some optimal alignment keeps both sorted orders, so a dynamic
+    program over the two sorted lists finds it in O(n·m).
+    """
+    si = sorted(range(len(small_vals)), key=small_vals.__getitem__)
+    li = sorted(range(len(large_vals)), key=large_vals.__getitem__)
+    n, m = len(si), len(li)
+    # cost[a][b]: the a smallest small values aligned within the b smallest large values
+    cost = [[0.0] * (m + 1)] + [[float("inf")] * (m + 1) for _ in range(n)]
+    for a in range(1, n + 1):
+        for b in range(a, m + 1):
+            pair = cost[a - 1][b - 1] + abs(small_vals[si[a - 1]] - large_vals[li[b - 1]])
+            cost[a][b] = min(cost[a][b - 1], pair)
+    out = [0] * n
+    a, b = n, m
+    while a:
+        if b > a and cost[a][b] == cost[a][b - 1]:
+            b -= 1
+        else:
+            out[si[a - 1]] = li[b - 1]
+            a, b = a - 1, b - 1
+    return tuple(out)
+
+
 def _best_measurement_pairing(
     pred_ms: Sequence[dict],
     gt_ms: Sequence[dict],
@@ -291,7 +318,9 @@ def _best_measurement_pairing(
     Brute-forces all ways to align `min(len(pred), len(gt))` items between the
     two lists, picking the alignment that minimizes total canonical-value
     distance. The unmatched items on the longer side become "extras". For the
-    typical n ≤ 5 measurements per category in radiology this is microseconds.
+    typical n ≤ 5 measurements per category in radiology this is microseconds;
+    past 8! alignments (a list of ten nodes with two dimensions each) the same
+    minimum comes from `_sorted_alignment`.
     """
     pred_list = list(pred_ms)
     gt_list = list(gt_ms)
@@ -313,11 +342,14 @@ def _best_measurement_pairing(
     # ensures n_small ≥ 1, so permutations() yields at least one tuple, and any
     # finite cost beats the float('inf') sentinel on the first iteration.
     best_indices: tuple[int, ...] = ()
-    for indices in permutations(range(len(larger)), n_small):
-        cost = sum(abs(small_vals[i] - large_vals[indices[i]]) for i in range(n_small))
-        if cost < best_cost:
-            best_cost = cost
-            best_indices = indices
+    if perm(len(larger), n_small) > 40320:
+        best_indices = _sorted_alignment(small_vals, large_vals)
+    else:
+        for indices in permutations(range(len(larger)), n_small):
+            cost = sum(abs(small_vals[i] - large_vals[indices[i]]) for i in range(n_small))
+            if cost < best_cost:
+                best_cost = cost
+                best_indices = indices
 
     used = set(best_indices)
     extras_large = [larger[j] for j in range(len(larger)) if j not in used]
