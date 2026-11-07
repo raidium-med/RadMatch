@@ -1,0 +1,121 @@
+{
+  "scenario": "Missed fracture as a status flip + grade diff + SPU variant + MIS",
+  "description": "Built from msk-xr/findings_{gt,pred}/example_1 (constructed hip radiographs after a fall). The pred pertinent negative 'No acute fracture' is matched to the femoral neck fracture it denies (status flip, INC downstream), not left unmatched; the hip osteoarthritis is matched however each side grades it; a bone island the gt never mentions is SPU and the vascular calcifications the pred leaves out are MIS.",
+  "user": {
+    "indication": "82-year-old woman with left hip pain and inability to bear weight after a fall. Evaluate for fracture.",
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "No acute fracture.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "No hip dislocation.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_3",
+        "text": "Moderate osteoarthritis of both hips with joint space narrowing and osteophytes.",
+        "clinical_status": "abnormal",
+        "laterality": "bilateral",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_4",
+        "text": "Diffuse osteopenia.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_5",
+        "text": "Bone island in the left femoral head.",
+        "clinical_status": "normal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Acute nondisplaced fracture of the left femoral neck.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "No hip dislocation.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "Mild osteoarthritis of both hips with joint space narrowing.",
+        "clinical_status": "abnormal",
+        "laterality": "bilateral",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "Diffuse osteopenia.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_5",
+        "text": "Vascular calcifications.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "'No acute fracture' denies the acute femoral neck fracture."
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_2",
+        "reasoning": "Identical rule-out of hip dislocation."
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_3",
+        "reasoning": "Same osteoarthritis of both hips, graded moderate vs mild."
+      },
+      {
+        "pred_id": "p_4",
+        "gt_id": "gt_4",
+        "reasoning": "Identical diffuse osteopenia."
+      }
+    ],
+    "unmatched_pred": [
+      "p_5"
+    ],
+    "unmatched_gt": [
+      "gt_5"
+    ]
+  }
+}

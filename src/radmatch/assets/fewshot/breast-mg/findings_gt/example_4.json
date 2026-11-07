@@ -1,0 +1,58 @@
+[
+  {
+    "text": "Almost entirely fatty breasts (ACR breast density a).",
+    "measurements": [],
+    "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Bilateral subpectoral silicone implants.",
+    "measurements": [],
+    "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No mammographic evidence of extracapsular implant rupture.",
+    "measurements": [],
+    "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Stable postlumpectomy changes in the right breast upper outer quadrant with architectural distortion, skin thickening and dystrophic calcifications at the surgical site.",
+    "measurements": [],
+    "laterality": "right",
+    "comparison": "stable",
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Biopsy marker clip in the left breast at 6 o'clock, posterior depth, at the site of a prior benign biopsy.",
+    "measurements": [],
+    "laterality": "left",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Stable focal asymmetry in the left breast lower inner quadrant.",
+    "measurements": [],
+    "laterality": "left",
+    "comparison": "stable",
+    "clinical_status": "abnormal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Benign-appearing intramammary lymph node in the left breast upper outer quadrant.",
+    "measurements": [],
+    "laterality": "left",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  }
+]

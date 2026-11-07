@@ -88,7 +88,7 @@ A report can also *degrade* rather than fail: Stage 2 falling back to the valid 
 
 ### Few-shot examples
 
-Pass `--fewshot <bundle>` to any subcommand to adapt the LLM to a dataset's report style. Bundles shipped: `abdomen-ct`, `brain-mr`, `chest-ct`, `chest-xr`, `head-ct`. See [`src/radmatch/assets/fewshot/README.md`](https://github.com/raidium-med/RadMatch/blob/main/src/radmatch/assets/fewshot/README.md) to add your own.
+Pass `--fewshot <bundle>` to any subcommand to adapt the LLM to a dataset's report style. Bundles shipped: `abdomen-ct`, `abdomen-us`, `brain-mr`, `breast-mg`, `chest-ct`, `chest-xr`, `head-ct`, `msk-xr`. See [`src/radmatch/assets/fewshot/README.md`](https://github.com/raidium-med/RadMatch/blob/main/src/radmatch/assets/fewshot/README.md) to add your own.
 
 ## Per-stage usage
 

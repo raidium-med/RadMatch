@@ -1,0 +1,84 @@
+[
+  {
+    "text": "Diffusely increased hepatic echogenicity, compatible with hepatic steatosis.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No focal liver lesion.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Main portal vein patent with hepatopetal flow, peak velocity 25 cm/s.",
+    "measurements": [
+      {
+        "value": 25,
+        "unit": "cm/s",
+        "category": "other"
+      }
+    ],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Acute calculous cholecystitis with multiple shadowing gallstones, gallbladder wall thickening to 5 mm, pericholecystic fluid and a positive sonographic Murphy sign.",
+    "measurements": [
+      {
+        "value": 5,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "No intrahepatic biliary dilatation.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Common bile duct measures 4 mm.",
+    "measurements": [
+      {
+        "value": 4,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Visualized pancreas unremarkable.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Right kidney unremarkable.",
+    "measurements": [],
+    "laterality": "right",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  }
+]

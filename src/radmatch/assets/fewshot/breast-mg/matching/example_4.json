@@ -1,0 +1,146 @@
+{
+  "scenario": "Constructed: a normal statement about a breast surgically removed, fibroadenoma umbrella 1:N, mass vs focal asymmetry, node negative vs an enlarged node, 'no suspicious calcifications' vs dystrophic calcifications",
+  "description": "Constructed (surveillance mammogram of the left breast after a right mastectomy). A normal statement about the right breast contradicts its surgical absence (matched); one sentence on two calcified fibroadenomas covers both gt fibroadenomas (1:N); an oval mass and a focal asymmetry at the same site are two readings of one finding (matched); 'no left axillary lymphadenopathy' denies the enlarged node; 'no suspicious calcifications' is a qualified negative and does not deny dystrophic calcifications (both left unmatched).",
+  "user": {
+    "indication": "History of right mastectomy for breast cancer. Surveillance.",
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "No suspicious findings in the right breast.",
+        "clinical_status": "normal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "Two degenerating fibroadenomas with coarse popcorn-like calcifications in the left breast at 2 and 4 o'clock.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_3",
+        "text": "1.2 cm oval circumscribed mass in the left breast at 9 o'clock, middle depth, BI-RADS 3.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 1.2,
+            "unit": "cm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_4",
+        "text": "No left axillary lymphadenopathy.",
+        "clinical_status": "normal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_5",
+        "text": "No suspicious calcifications in the left breast.",
+        "clinical_status": "normal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Status post right mastectomy.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "Degenerating fibroadenoma with coarse popcorn-like calcifications in the left breast at 2 o'clock.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "Degenerating fibroadenoma with coarse popcorn-like calcifications in the left breast at 4 o'clock.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "Focal asymmetry in the left breast at 9 o'clock, middle depth, BI-RADS 3.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_5",
+        "text": "Enlarged dense left axillary lymph node measuring 2.0 cm with loss of the fatty hilum, suspicious for metastasis.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 2.0,
+            "unit": "cm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_6",
+        "text": "Dystrophic calcifications in the left breast upper outer quadrant, at a prior benign biopsy site.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "A normal right breast statement contradicts the right mastectomy."
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_2",
+        "reasoning": "The two fibroadenomas include the one at 2 o'clock."
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_3",
+        "reasoning": "The two fibroadenomas also include the one at 4 o'clock."
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_4",
+        "reasoning": "One finding at 9 o'clock, read as an oval mass vs a focal asymmetry."
+      },
+      {
+        "pred_id": "p_4",
+        "gt_id": "gt_5",
+        "reasoning": "'No left axillary lymphadenopathy' denies the enlarged left axillary node."
+      }
+    ],
+    "unmatched_pred": [
+      "p_5"
+    ],
+    "unmatched_gt": [
+      "gt_6"
+    ]
+  }
+}

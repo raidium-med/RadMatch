@@ -1,0 +1,15 @@
+EXAMINATION: DIAGNOSTIC MAMMOGRAM, BILATERAL, WITH TOMOSYNTHESIS AND MAGNIFICATION VIEWS
+
+INDICATION: 52-year-old woman with biopsy-proven invasive ductal carcinoma of the left breast. Evaluate extent of disease before surgery.
+
+COMPARISON: Diagnostic mammogram [DATE].
+
+FINDINGS:
+Breast composition: The breasts are extremely dense, which lowers the sensitivity of mammography (ACR breast density d).
+Left breast: The biopsy-proven malignancy at 1 o'clock, upper outer quadrant, 6 cm from the nipple, is an irregular mass with spiculated margins measuring 1.9 x 1.8 cm, with the biopsy clip within it.
+Right breast: Grouped round calcifications in the upper outer quadrant.
+Axillae: No axillary lymphadenopathy.
+
+IMPRESSION:
+1. Biopsy-proven malignancy in the left breast at 1 o'clock, 1.9 cm. BI-RADS 6.
+2. Grouped round calcifications in the right breast upper outer quadrant, probably benign. BI-RADS 3. Follow-up mammogram in 6 months is recommended.

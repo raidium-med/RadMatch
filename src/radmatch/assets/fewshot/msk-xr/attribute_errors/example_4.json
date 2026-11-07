@@ -1,0 +1,274 @@
+{
+  "scenario": "Constructed: left-out and added intra-articular extension, aggressive appearance, acute vs healed, hedge, laterality only, group, more detail",
+  "description": "Constructed. '…tibial shaft' vs '…tibial shaft + extending into the tibial plafond': extent major (pred leaves out the extension into the tibial plafond; joint involvement changes the fixation); '…distal radius + extending into the radiocarpal joint' vs '…distal radius': extent major (pred adds an extension into the radiocarpal joint that the gt does not support; an intra-articular fracture changes the fixation); 'Lytic lesion in the right femoral diaphysis' vs 'Permeative lytic lesion with lamellated periosteal…': appearance major (pred leaves out the permeative pattern and periosteal reaction, which signal an aggressive lesion needing urgent workup); 'Healed fracture of the base of the left fifth…' vs 'Acute fracture of the base of the left fifth metatarsal': diagnosis major (healed vs acute fracture of the fifth metatarsal base; an acute fracture is immobilized and followed); 'Probable nondisplaced fracture of the right scaphoid…' vs 'Nondisplaced fracture of the right scaphoid waist': certainty minor (probable vs definite scaphoid waist fracture, one step; it is immobilized either way); 'Nondisplaced fracture of the right distal fibula' vs 'Nondisplaced fracture of the left distal fibula': no error (a laterality difference is scored upstream (Stage 3a laterality)); 'Nondisplaced fractures of the right fourth and fifth…' vs 'Nondisplaced fracture of the right fourth metatarsal…': no error (the match group gives the detail); 'Nondisplaced fractures of the right fourth and fifth…' vs 'Nondisplaced fracture of the right fifth metatarsal…': no error (the match group gives the detail); 'Moderate medial compartment osteoarthritis of the…' vs 'Moderate osteoarthritis of the right knee': no error (the pred is more detailed (rule 3)).",
+  "user": {
+    "series_uuid": "msk-xr_example_4",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Fracture of the left tibial shaft.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "Fracture of the left tibial shaft extending into the tibial plafond.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "Fracture of the right distal radius extending into the radiocarpal joint.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "Fracture of the right distal radius.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 3,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "Lytic lesion in the right femoral diaphysis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "Permeative lytic lesion with lamellated periosteal reaction in the right femoral diaphysis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 4,
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "Healed fracture of the base of the left fifth metatarsal.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "Acute fracture of the base of the left fifth metatarsal.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 5,
+        "pred_finding": {
+          "finding_id": "p_5",
+          "text": "Probable nondisplaced fracture of the right scaphoid waist.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_5",
+          "text": "Nondisplaced fracture of the right scaphoid waist.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 6,
+        "pred_finding": {
+          "finding_id": "p_6",
+          "text": "Nondisplaced fracture of the right distal fibula.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_6",
+          "text": "Nondisplaced fracture of the left distal fibula.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 7,
+        "pred_finding": {
+          "finding_id": "p_7",
+          "text": "Nondisplaced fractures of the right fourth and fifth metatarsal shafts.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_7",
+          "text": "Nondisplaced fracture of the right fourth metatarsal shaft.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "same_group_gt": [
+          "Nondisplaced fracture of the right fifth metatarsal shaft."
+        ]
+      },
+      {
+        "pair_id": 8,
+        "pred_finding": {
+          "finding_id": "p_7",
+          "text": "Nondisplaced fractures of the right fourth and fifth metatarsal shafts.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_8",
+          "text": "Nondisplaced fracture of the right fifth metatarsal shaft.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "same_group_gt": [
+          "Nondisplaced fracture of the right fourth metatarsal shaft."
+        ]
+      },
+      {
+        "pair_id": 9,
+        "pred_finding": {
+          "finding_id": "p_8",
+          "text": "Moderate medial compartment osteoarthritis of the right knee.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_9",
+          "text": "Moderate osteoarthritis of the right knee.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "extent",
+            "reasoning": "pred leaves out the extension into the tibial plafond; joint involvement changes the fixation",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "extent",
+            "reasoning": "pred adds an extension into the radiocarpal joint that the gt does not support; an intra-articular fracture changes the fixation",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 3,
+        "errors": [
+          {
+            "dimension": "appearance",
+            "reasoning": "pred leaves out the permeative pattern and periosteal reaction, which signal an aggressive lesion needing urgent workup",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 4,
+        "errors": [
+          {
+            "dimension": "diagnosis",
+            "reasoning": "healed vs acute fracture of the fifth metatarsal base; an acute fracture is immobilized and followed",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 5,
+        "errors": [
+          {
+            "dimension": "certainty",
+            "reasoning": "probable vs definite scaphoid waist fracture, one step; it is immobilized either way",
+            "severity": "minor"
+          }
+        ]
+      },
+      {
+        "pair_id": 6,
+        "errors": []
+      },
+      {
+        "pair_id": 7,
+        "errors": []
+      },
+      {
+        "pair_id": 8,
+        "errors": []
+      },
+      {
+        "pair_id": 9,
+        "errors": []
+      }
+    ]
+  }
+}

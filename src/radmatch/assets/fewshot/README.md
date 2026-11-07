@@ -1,20 +1,27 @@
 # Few-shot bundles
 
 Pass `--fewshot <bundle>` to any subcommand to adapt the LLM to a dataset's report
-style. Five bundles ship with RadMatch:
+style. Eight bundles ship with RadMatch:
 
 | Bundle | Modality |
 |---|---|
 | `abdomen-ct` | Abdominal CT |
+| `abdomen-us` | Abdominal, renal and bladder, pelvic and early obstetric ultrasound |
 | `brain-mr` | Brain MR |
+| `breast-mg` | Mammography, screening and diagnostic (its BI-RADS conventions also apply to breast MRI and ultrasound) |
 | `chest-ct` | Chest CT |
 | `chest-xr` | Chest X-ray |
 | `head-ct` | Head CT |
+| `msk-xr` | Musculoskeletal radiographs (extremities, hip and pelvis) |
 
-The report text in these bundles is de-identified: dates, names, and institutions are
-replaced with `[DATE]`, `[NAME]`, `[HOSPITAL]` placeholders. Where the source de-identifier
-mis-tagged a series/image number as a date, the tag is left in place (e.g. `S301- [DATE:440]`
-is series 301, image 440) — those are intra-study coordinates, not identifiers.
+The report text of the five dataset bundles (`abdomen-ct`, `brain-mr`, `chest-ct`, `chest-xr`,
+`head-ct`) is de-identified: dates, names, and institutions are replaced with `[DATE]`, `[NAME]`,
+`[HOSPITAL]` placeholders. Where the source de-identifier mis-tagged a series/image number as a
+date, the tag is left in place (e.g. `S301- [DATE:440]` is series 301, image 440) — those are
+intra-study coordinates, not identifiers.
+
+`abdomen-us`, `breast-mg` and `msk-xr` are constructed for these bundles (written from scratch,
+no dataset text); their `[DATE]` and `[NAME]` tags only imitate the de-identified style.
 
 ## Adding a bundle
 

@@ -1,0 +1,32 @@
+[
+  {
+    "text": "Acute fracture of the right fifth metacarpal neck with approximately 35 degrees of volar angulation of the distal fragment.",
+    "measurements": [
+      {
+        "value": 35,
+        "unit": "degrees",
+        "category": "other"
+      }
+    ],
+    "laterality": "right",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "No dislocation.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "Normal bone mineralization.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  }
+]
