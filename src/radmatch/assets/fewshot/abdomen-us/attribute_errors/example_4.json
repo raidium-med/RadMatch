@@ -1,0 +1,285 @@
+{
+  "scenario": "Constructed: single vs multiple liver lesions, hydronephrosis grade, solid component, torsion, left-out growth, group, more detail",
+  "description": "Constructed. '2.1 cm hypoechoic lesion in the right hepatic lobe' vs 'Multiple hypoechoic liver lesions, the largest 2.1 cm…': extent major (one vs multiple hypoechoic liver lesions; multiple solid lesions raise concern for metastases and change the workup); 'Mild left hydronephrosis' vs 'Severe left hydronephrosis': grade major (mild vs severe left hydronephrosis, two steps; severe obstruction calls for prompt decompression); '4.5 cm unilocular cyst in the right ovary' vs '4.5 cm cystic lesion with an irregular solid component…': appearance major (unilocular cyst vs a cystic lesion with a vascularized irregular solid component, which raises concern for malignancy); 'Enlarged edematous right ovary with peripheral…' vs 'Right ovarian torsion, with an enlarged edematous…': diagnosis major (pred describes the enlarged ovary without naming torsion, an actionable diagnosis that calls for emergency surgery); '3.8 cm endometrioma in the right ovary' vs 'Enlarging 3.8 cm endometrioma in the right ovary': comparison major (pred leaves out the growth of the right ovarian endometrioma; an endometrioma is followed by its size and growth prompts gynecologic referral); 'Nonobstructing stones in both kidneys' vs 'Nonobstructing stone in the right kidney': no error (the match group gives the detail); 'Nonobstructing stones in both kidneys' vs 'Nonobstructing stone in the left kidney': no error (the match group gives the detail); 'Small simple cyst in the upper pole of the right kidney' vs 'Small simple right renal cyst': no error (the pred is more detailed (rule 3)).",
+  "user": {
+    "series_uuid": "abdomen-us_example_4",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "2.1 cm hypoechoic lesion in the right hepatic lobe.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": null,
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 2.1,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "Multiple hypoechoic liver lesions, the largest 2.1 cm in the right hepatic lobe.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": null,
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 2.1,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "Mild left hydronephrosis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "Severe left hydronephrosis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 3,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "4.5 cm unilocular cyst in the right ovary.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 4.5,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "4.5 cm cystic lesion with an irregular solid component with internal flow in the right ovary.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 4.5,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 4,
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "Enlarged edematous right ovary with peripheral follicles.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "Right ovarian torsion, with an enlarged edematous ovary, peripheral follicles and no detectable venous flow.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 5,
+        "pred_finding": {
+          "finding_id": "p_5",
+          "text": "3.8 cm endometrioma in the right ovary.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 3.8,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_5",
+          "text": "Enlarging 3.8 cm endometrioma in the right ovary.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": "worsening",
+          "measurements": [
+            {
+              "value": 3.8,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 6,
+        "pred_finding": {
+          "finding_id": "p_6",
+          "text": "Nonobstructing stones in both kidneys.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "bilateral",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_6",
+          "text": "Nonobstructing stone in the right kidney.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "same_group_gt": [
+          "Nonobstructing stone in the left kidney."
+        ]
+      },
+      {
+        "pair_id": 7,
+        "pred_finding": {
+          "finding_id": "p_6",
+          "text": "Nonobstructing stones in both kidneys.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "bilateral",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_7",
+          "text": "Nonobstructing stone in the left kidney.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        },
+        "same_group_gt": [
+          "Nonobstructing stone in the right kidney."
+        ]
+      },
+      {
+        "pair_id": 8,
+        "pred_finding": {
+          "finding_id": "p_7",
+          "text": "Small simple cyst in the upper pole of the right kidney.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_8",
+          "text": "Small simple right renal cyst.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "extent",
+            "reasoning": "one vs multiple hypoechoic liver lesions; multiple solid lesions raise concern for metastases and change the workup",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "grade",
+            "reasoning": "mild vs severe left hydronephrosis, two steps; severe obstruction calls for prompt decompression",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 3,
+        "errors": [
+          {
+            "dimension": "appearance",
+            "reasoning": "unilocular cyst vs a cystic lesion with a vascularized irregular solid component, which raises concern for malignancy",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 4,
+        "errors": [
+          {
+            "dimension": "diagnosis",
+            "reasoning": "pred describes the enlarged ovary without naming torsion, an actionable diagnosis that calls for emergency surgery",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 5,
+        "errors": [
+          {
+            "dimension": "comparison",
+            "reasoning": "pred leaves out the growth of the right ovarian endometrioma; an endometrioma is followed by its size and growth prompts gynecologic referral",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 6,
+        "errors": []
+      },
+      {
+        "pair_id": 7,
+        "errors": []
+      },
+      {
+        "pair_id": 8,
+        "errors": []
+      }
+    ]
+  }
+}

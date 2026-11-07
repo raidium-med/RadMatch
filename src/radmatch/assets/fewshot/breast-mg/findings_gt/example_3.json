@@ -1,0 +1,69 @@
+[
+  {
+    "text": "Extremely dense breasts (ACR breast density d).",
+    "measurements": [],
+    "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Biopsy-proven malignancy in the left breast at 1 o'clock, upper outer quadrant, 6 cm from the nipple, seen as a 2.2 x 1.8 cm irregular mass with spiculated margins containing the biopsy clip, BI-RADS 6.",
+    "measurements": [
+      {
+        "value": 2.2,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 1.8,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 6,
+        "unit": "cm",
+        "category": "other"
+      }
+    ],
+    "laterality": "left",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "1.2 cm group of fine pleomorphic calcifications in the left breast at 4 o'clock, lower outer quadrant, 3 cm from the nipple, separate from the index malignancy, BI-RADS 4C.",
+    "measurements": [
+      {
+        "value": 1.2,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 3,
+        "unit": "cm",
+        "category": "other"
+      }
+    ],
+    "laterality": "left",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "Right breast negative for malignancy, with no suspicious mass, calcifications or architectural distortion.",
+    "measurements": [],
+    "laterality": "right",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "No enlarged axillary lymph nodes on either side.",
+    "measurements": [],
+    "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "notable"
+  }
+]

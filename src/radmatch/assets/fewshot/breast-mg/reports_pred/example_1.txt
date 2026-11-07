@@ -1,0 +1,15 @@
+EXAMINATION: DIAGNOSTIC MAMMOGRAM, BILATERAL, WITH TOMOSYNTHESIS AND MAGNIFICATION VIEWS OF THE LEFT BREAST
+
+INDICATION: 47-year-old woman with a palpable lump in the left breast.
+
+COMPARISON: Screening mammogram [DATE].
+
+FINDINGS:
+Breast composition: The breasts are heterogeneously dense, which may obscure small masses (ACR breast density c).
+Left breast: At the site of the palpable lump, at 10 o'clock in the upper inner quadrant, middle depth, 5 cm from the nipple, there is an irregular mass with spiculated margins measuring 1.6 x 1.4 cm, without associated calcifications. It is new compared with the prior mammogram. At 6 o'clock, 4 cm from the nipple, magnification views show new grouped punctate calcifications spanning 5 mm.
+Left axilla: No suspicious lymph nodes.
+Right breast: No mammographic evidence of malignancy.
+
+IMPRESSION:
+1. New 1.6 cm irregular spiculated mass in the left breast at 10 o'clock, corresponding to the palpable lump, highly suggestive of malignancy. BI-RADS 5. Ultrasound-guided core biopsy is recommended.
+2. New grouped punctate calcifications in the left breast at 6 o'clock. BI-RADS 3. Follow-up diagnostic mammogram in 6 months is recommended.

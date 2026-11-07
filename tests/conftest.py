@@ -35,9 +35,10 @@ def make_finding():
     def _make(fid: str, **overrides) -> dict:
         base: dict[str, object] = {
             "finding_id": fid,
-            "text": "x",
+            "text": f"finding {fid}",
             "clinical_status": "abnormal",
             "clinical_significance": "notable",
+            "laterality": None,
             "comparison": None,
             "measurements": [],
         }

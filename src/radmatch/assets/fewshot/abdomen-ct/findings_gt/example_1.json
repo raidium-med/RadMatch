@@ -2,13 +2,15 @@
   {
     "text": "Bibasilar dependent atelectasis.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Liver normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -16,6 +18,7 @@
   {
     "text": "Biliary tree normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -23,6 +26,7 @@
   {
     "text": "Hepatic veins patent.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -30,6 +34,7 @@
   {
     "text": "Portal veins patent.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -37,6 +42,7 @@
   {
     "text": "No intrahepatic biliary dilatation.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -44,6 +50,7 @@
   {
     "text": "Gallbladder normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -57,6 +64,7 @@
         "category": "size"
       }
     ],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -64,6 +72,7 @@
   {
     "text": "Spleen normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -71,6 +80,7 @@
   {
     "text": "Pancreas normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -78,6 +88,7 @@
   {
     "text": "Adrenal glands normal.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -85,20 +96,23 @@
   {
     "text": "Multiple subcentimeter hypodense lesions in the bilateral kidneys, likely small cysts.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "No hydronephrosis.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
   },
   {
-    "text": "No obstructing renal calculi.",
+    "text": "No nephrolithiasis or obstructing renal calculi.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -106,13 +120,15 @@
   {
     "text": "Gastrointestinal tract normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
   },
   {
-    "text": "Appendix normal.",
+    "text": "Appendix normal, without appendicitis.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -120,6 +136,7 @@
   {
     "text": "No significant diverticulosis.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -127,6 +144,7 @@
   {
     "text": "No evidence of diverticulitis.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -134,6 +152,7 @@
   {
     "text": "No evidence of obstruction.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -141,6 +160,7 @@
   {
     "text": "No free fluid.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -148,6 +168,7 @@
   {
     "text": "Bladder normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -155,6 +176,7 @@
   {
     "text": "Uterus normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -162,37 +184,34 @@
   {
     "text": "Ovaries normal.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
   },
   {
-    "text": "Atherosclerosis present.",
+    "text": "Atherosclerosis.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "No aneurysm.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
   },
   {
-    "text": "Prominent inguinal lymph nodes, but not enlarged by size criteria.",
+    "text": "Prominent inguinal and left paraaortic lymph nodes, but not enlarged by size criteria.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
-  },
-  {
-    "text": "Prominent left paraaortic lymph nodes, but not enlarged by size criteria.",
-    "measurements": [],
-    "comparison": null,
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
   },
   {
     "text": "Three mesenteric lymph nodes measuring up to 12 mm, unchanged compared to prior CT.",
@@ -208,6 +227,7 @@
         "category": "size"
       }
     ],
+    "laterality": null,
     "comparison": "stable",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -215,23 +235,18 @@
   {
     "text": "Abdominal wall normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
   },
   {
-    "text": "Multilevel degenerative changes of the lower thoracic spine, unchanged compared to prior imaging.",
+    "text": "Multilevel degenerative changes of the lower thoracic and lumbar spine, unchanged compared to prior imaging.",
     "measurements": [],
+    "laterality": null,
     "comparison": "stable",
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
-  },
-  {
-    "text": "Multilevel degenerative changes of the lumbar spine, unchanged compared to prior imaging.",
-    "measurements": [],
-    "comparison": "stable",
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Main portal vein demonstrates approximately 60% luminal narrowing at the porta hepatis.",
@@ -242,15 +257,9 @@
         "category": "ratio"
       }
     ],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "urgent"
-  },
-  {
-    "text": "No evidence of obstruction, diverticulitis, appendicitis, nephrolithiasis, or other acute findings to explain the patient's clinical symptoms.",
-    "measurements": [],
-    "comparison": null,
-    "clinical_status": "normal",
-    "clinical_significance": "routine"
+    "clinical_significance": "notable"
   }
 ]

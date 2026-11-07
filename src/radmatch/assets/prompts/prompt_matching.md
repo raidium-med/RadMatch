@@ -1,93 +1,75 @@
-## ROLE & OBJECTIVE
+## TASK
 
-You align radiology findings extracted from a **predicted** report against findings extracted from a **ground-truth** report. You identify which predicted findings correspond to which ground-truth findings, and which findings are unmatched on either side.
+Align the findings of a predicted report (pred) with the findings of a ground-truth report (gt). Decide which pred finding and which gt finding describe the same observation, and which findings stay unmatched on either side. Do not score correctness: every difference inside a match is scored separately.
 
-You do not score correctness. You do not flag status conflicts. You only decide *which finding is talking about the same observation*.
-
----
-
-## INPUT
-
-You receive two lists: `pred_findings` and `gt_findings`. Each finding has:
-
-- `finding_id`: stable string identifier (predicted IDs typically start with `p_`, ground-truth with `gt_` — but treat any string as opaque)
-- `text`: the finding as a single sentence
-- `clinical_status`: `"normal"` or `"abnormal"`
-- `clinical_significance`: `"critical"` / `"urgent"` / `"notable"` / `"routine"`
-- `comparison`: longitudinal status if any
-- `measurements`: numeric values if any
+Input: an optional study `indication` (context only), `pred_findings` and `gt_findings`. Each finding has `finding_id` (an opaque string; pred ids usually start with `p_`, gt ids with `gt_`), `text`, `clinical_status` (`"normal"` / `"abnormal"`) and `laterality`.
 
 ---
 
-## MATCHING CRITERIA
+## 1. WHEN A pred FINDING AND A gt FINDING MATCH
 
-Two findings match if they describe the same observation — the same organ / anatomic entity and the same pathology. Differences in *where within* that organ (side, lobe, segment, quadrant) do not block a match; they are scored downstream as location errors. Specifically:
+They match when they describe the same abnormality in the patient, or its denial, however each report names, grades, hedges or places it. Each match row starts with a short `reasoning` (one clause); if that reasoning would say these are two different abnormalities, do not match.
 
-1. **Same organ / anatomic entity.** A finding about the liver and a finding about the spleen do not match. Distinct structures that happen to be paired (a *left renal cyst* and a *right renal cyst* both present in the reference) are distinct entities — bind each to its own counterpart.
-2. **Laterality and sub-anatomic detail DO NOT prevent matching.** When both sides name the same organ and the same pathology and differ *only* in which side / lobe / segment / quadrant is implicated, they are one observation described with the wrong location — *match them*. Pred "Small left apical pneumothorax" and GT "Small right apical pneumothorax" describe one pneumothorax assessment and **should be matched**; the downstream pipeline records the flip as a `major` **location** attribute error (→ INC). Splitting it into an unmatched pair would book one mislocalisation as both an omission and a hallucination.
-   - **Guard — prefer the same-laterality counterpart.** Only bind across a laterality gap when no better-lateralised candidate is available on the other side. If the reference carries *both* "right lower lobe opacity" and "left lower lobe opacity" and the candidate carries only "left lower lobe opacity", bind the candidate to the **left** gt and leave the right gt in `unmatched_gt` — that is a genuine omission, not a flip.
-3. **Same pathology category.** "Nodule" and "mass" describing the same anatomy can match. "Cyst" and "tumor" should not match. Synonyms ("opacity" ≈ "consolidation" in the same context) match.
-4. **Status conflicts DO NOT prevent matching.** If the predicted finding says "no pneumothorax" and the ground-truth says "moderate pneumothorax", they describe the same observation (pneumothorax assessment in the same anatomy) and *should be matched*. The downstream pipeline classifies this as a status inversion separately. Your job is to surface the alignment, not score it.
+**Match despite these differences:**
+- **Status.** pred "No pneumothorax" vs gt "Moderate pneumothorax" → match (one pneumothorax assessment).
+- **Side or sub-site.** Same organ and pathology, different side / lobe / segment / quadrant → match. pred "Small left apical pneumothorax" vs gt "Small right apical pneumothorax" is one pneumothorax on the wrong side; leaving them unmatched would count one mislocalisation as both an omission and a hallucination.
+  - **Guard: prefer the same-site counterpart.** Findings at different sides or sub-sites (a left and a right renal cyst, nodules in two lobes) are distinct entities: bind each to the counterpart at its own side and sub-site, and cross sides or sub-sites only when no counterpart is left there. gt "right lower lobe opacity" + gt "left lower lobe opacity" vs pred "left lower lobe opacity" only → match pred to the left gt; the right gt goes to `unmatched_gt` (an omission, not a flip).
+- **Synonyms within one pathology category.** "Nodule" and "mass" in the same anatomy; "opacity" ≈ "consolidation" in the same context, for two positive findings (a negative denies only what it names: "no consolidation" does not deny ground glass).
+- **Two normal statements whose scopes overlap** (one covers the other's structure or pathology), at any level of detail: "Liver parenchyma normal" vs "No focal liver lesion"; "Cardiomediastinal silhouette normal" vs "Heart size normal" → match.
+- **A negative or normal statement vs each abnormal finding it denies.** pred "Lungs clear" or "No pulmonary nodules" vs gt "4 mm right lower lobe nodule" → match. An organ-level "unremarkable" denies the abnormalities of that organ. Bind it even when the same statement also matches a normal finding in the other report.
+- **Two readings of one abnormality.** Both reports describe an abnormality at the same site and differ in what they call it → match (one mischaracterised finding): pred "Large right apical bulla" vs gt "Right apical pneumothorax"; "Left lower lobe atelectasis" vs "Left lower lobe consolidation"; "Hypodense lesion in liver segment 4" vs "Segment 4 hepatic cyst"; "Small right pleural effusion" vs "Right pleural thickening".
+- **An organ removed vs the same organ described.** pred "Gallbladder with sludge" vs gt "Status post cholecystectomy" → match (one contradiction). A named resection removes its organs: right hemicolectomy (cecum, appendix, terminal ileum, ascending colon), Whipple (pancreatic head, duodenum, gallbladder), hysterectomy (uterus).
+- **Names of one entity.** Ascites = free fluid = peritoneal fluid at any site, including "pelvic effusion" (never pleural fluid). In the lung, "infiltrate" = airspace opacity (consolidation, ground glass, pneumonia); "non-consolidative opacity" = ground glass. Unqualified "bowel loops" covers small bowel and colon. Subcentimetre hypodensities "too small to characterize, likely cysts" belong to the cyst set of that organ.
+- **A negative for an inflammatory diagnosis vs its CT signs.** "No pancreatitis" vs "Peripancreatic fat stranding"; "No cholecystitis" vs "Gallbladder wall thickening with pericholecystic fluid" → match (one contradiction, unless the sign is called minimal and the negative is qualified, as below).
+- **A finding stated with its cause or consequence.** pred "Left renal pelvis stone causing moderate hydronephrosis" ↔ gt "Left renal pelvis calculus" and gt "Moderate left hydronephrosis" (1:N).
+- **A finding below a qualified negative, when it is normal.** A qualified negative ("no suspicious X", "no X of pathological size", "no lymphadenopathy" (no node of pathological size), "no significant X", "no acute X", "no mass") denies only X above its qualifier. A finding below the qualifier is matched to it when that finding is normal (pred "Small non-enlarged paratracheal lymph node" vs gt "No lymph nodes of pathological size"; "Trace pericardial fluid" vs "No significant pericardial effusion"; "Trace pelvic free fluid" vs "No ascites": one assessment) and left unmatched when it is abnormal ("No suspicious pulmonary nodule" vs a calcified granuloma or nodules called nonspecific; "No pulmonary mass" vs millimetric nodules; "No acute osseous abnormality" vs degenerative change or a healed fracture; "No acute cardiopulmonary process" vs chronic cardiomegaly).
+- **Two devices with one function at one site.** pred "Right PICC" vs gt "Right central venous catheter" → match.
 
-### Many-to-many matching (umbrella claims on either side)
-
-Findings may be at different granularity on each side — emit one match row per (pred, gt) pair when an umbrella claim on one side clinically covers several atomic findings on the other side.
-
-**1:N (one pred covers several GT findings)** — emit one row per covered GT, repeating the same `pred_id`:
-
-- **Parent-anatomy summary covering specific structures.** Pred: "Bile ducts unremarkable" → matches GT "no intrahepatic biliary dilatation" AND GT "no extrahepatic biliary dilatation".
-- **Negative-class enumeration.** Pred: "Cerebellum unremarkable" → matches GT "no tumor in cerebellum" AND GT "no hemorrhage in cerebellum" AND GT "no traumatic lesion in cerebellum" AND GT "no ischemic lesion in cerebellum".
-- **Multi-lesion / bilateral enumeration in one sentence.** Pred: "Simple renal cysts in upper pole AND parapelvic region, 28 mm and 23 mm" → matches GT "upper pole cyst 28 mm" AND GT "parapelvic cyst 23 mm".
-
-**N:1 (several pred findings cover one GT)** — symmetric: emit one row per pred, repeating the same `gt_id`:
-
-- **Specific pred lines vs umbrella GT.** GT: "Multiple bilateral subcentimeter renal cysts" → matches PRED "Right renal cyst 8 mm" AND PRED "Left renal cyst 6 mm" AND PRED "Left renal cyst 4 mm".
-- **Granular negatives vs broad GT.** GT: "Lungs are clear" → matches PRED "No focal consolidation in the right lung" AND PRED "No focal consolidation in the left lung".
-
-Use N:N **only** when the umbrella side clinically covers each bound finding on the other side — same anatomy + pathology category as the standard matching rules. Do NOT use N:N to paper over a missed finding that the umbrella didn't actually describe.
+**Do not match:**
+- **Different organ or bowel segment:** liver vs spleen; small bowel vs colon vs rectum; stomach vs duodenum.
+- **Different pathology or different structure**, unless both are readings of one abnormality at the same site (above): "renal cyst" vs "renal stone"; "aortic calcification" vs "aortic aneurysm"; a linear or band-like lung opacity vs a nodule.
+- **Different properties of one structure that do not contradict each other:** "portal vein patent" vs "portal vein wall calcification".
+- **An entity the negative does not name.** A negative denies only what it names, in its own compartment; a negative of one specific entity ("no obstruction", "no dilatation", "no mass", "no consolidation", "no infiltrate", "normal calibre", "patent") never denies another abnormality of the same organ: "No bowel obstruction or dilatation" does not deny colitis, diverticula, a thickened valve or intramural gas; "No hydronephrosis" does not deny a renal lesion; "No consolidation" does not deny a mass or nodule; "No nodular lesion in the lungs" does not deny bullae, blebs or septal thickening; "No space-occupying lesion" does not deny calcifications; "Vessels patent" does not deny calcification, plaque, a narrowing, aneurysm or a stent, and "of normal calibre" denies dilatation and aneurysm, not calcification, plaque or a stent; "No bowel inflammation" does not deny an abdominal-wall collection. Negatives of opacity ("no infiltrate", "no consolidation", "no ground glass") do not deny air-containing lucencies (emphysema, bulla, cyst, a "lucent" or "light transmission" area). An organ-level "normal" or "unremarkable" does deny the abnormalities of its organ. A negative of a diagnostic class denies the findings that carry that diagnosis: "No metastatic disease" denies a lesion called metastatic or suspicious for metastasis; a negative about a clinical question ("no source of hematuria", "no cause for the pain") names no entity and denies no finding.
+- **A device and its organ.** A device in an organ does not contradict a normal statement about that organ ("Urinary catheter in the bladder" vs "Bladder unremarkable": leave both unmatched); an organ surgically absent does ("Status post cholecystectomy" vs "Gallbladder normal" → match).
+- **An umbrella statement vs a distinct named diagnosis or another body region.** "Degenerative change of the spine", "increased lung markings", "lymph nodes normal" do not cover "vertebral compression fracture", "bronchiectasis", or nodes of another region (abdominal vs mediastinal).
 
 ---
 
-## OUTPUT FORMAT
+## 2. GRANULARITY: ONE ROW PER (pred, gt) PAIR
 
-Return JSON with exactly three keys:
+One finding (an umbrella) may cover several findings of the other report. Emit one match row per covered pair, repeating the umbrella's id: 1:N when one pred covers several gt, N:1 when several pred cover one gt. The findings linked by match rows form a match group.
+
+| Umbrella pattern | Match rows |
+|---|---|
+| Parent anatomy covers specific structures | pred "Bile ducts unremarkable" ↔ gt "no intrahepatic biliary dilatation", gt "no extrahepatic biliary dilatation" |
+| Organ-level negative covers several rule-outs | pred "Cerebellum unremarkable" ↔ gt "no tumor in cerebellum", "no hemorrhage in cerebellum", "no traumatic lesion in cerebellum", "no ischemic lesion in cerebellum" |
+| Several lesions in one sentence | pred "Enlarged right paratracheal and subcarinal nodes, 14 and 12 mm" ↔ gt "14 mm right paratracheal node", gt "12 mm subcarinal node" |
+| Bilateral statement vs one finding per side | "Bilateral pleural effusions" ↔ the left and the right effusion of the other report (1:N, or N:1 when gt is bilateral) |
+| Umbrella gt covers specific preds | gt "Multiple bilateral subcentimeter renal cysts" ↔ pred "Right renal cyst 8 mm", "Two left renal cysts, the largest 6 mm" |
+| Broad gt negative covers granular preds | gt "Lungs are clear" ↔ pred "No focal consolidation in the right lung", "No focal consolidation in the left lung" |
+
+- **Another instance joins its group.** The same process at an additional site, or one more member of an already matched set ("another pleural plaque"), is added to that match group, not left unmatched.
+- **Cover only what the umbrella describes** (§1): if it clearly maps to only one finding, match that one and leave the rest unmatched.
+
+---
+
+## 3. OUTPUT
+
+Return only a JSON object with exactly these three keys, no other text and no markdown fences:
 
 ```json
 {
   "matches": [
-    {"pred_id": "<pred finding_id>", "gt_id": "<gt finding_id>", "reasoning": "<one-sentence justification>"}
+    {"reasoning": "<one clause>", "pred_id": "<pred finding_id>", "gt_id": "<gt finding_id>"}
   ],
   "unmatched_pred": ["<pred finding_id>", ...],
   "unmatched_gt":   ["<gt finding_id>", ...]
 }
 ```
 
-Hard constraints (symmetric on both sides):
+ID rules, the same for pred and gt:
+- Every input id appears either in one or more `matches` rows or exactly once in its `unmatched_*` list, never both and never neither.
+- No duplicates within `unmatched_pred` or `unmatched_gt`; no id that is not in the input.
+- Both input lists empty → `{"matches": [], "unmatched_pred": [], "unmatched_gt": []}`. One list empty → every id of the other list goes to its `unmatched_*` list.
 
-- A `pred_id` may appear in **one or more** `matches` rows OR exactly once in `unmatched_pred`. It cannot be in both.
-- A `gt_id` may appear in **one or more** `matches` rows OR exactly once in `unmatched_gt`. It cannot be in both.
-- No duplicates within `unmatched_pred` or `unmatched_gt`.
-- No IDs outside the input lists.
-
----
-
-## EDGE CASES
-
-- **Empty pred list, empty gt list** → `{"matches": [], "unmatched_pred": [], "unmatched_gt": []}`.
-- **Empty pred, non-empty gt** → all gt IDs go to `unmatched_gt`.
-- **Empty gt, non-empty pred** → all pred IDs go to `unmatched_pred`.
-- **Splits / merges.** When one side describes a finding at a different granularity than the other, emit one row per (pred, gt) pair the umbrella clinically covers (1:N or N:1 — see Many-to-many above). If the umbrella is vague enough that it only clearly maps to one atom on the other side, match the best and leave the rest unmatched.
-- **Bilateral statements.** "Bilateral pleural effusions" can match both left and right GT findings as a 1:N umbrella. Conversely, GT "Bilateral pleural effusions" matched by separate left + right pred lines is N:1.
-- **Laterality flips.** Same organ + same pathology, opposite side (pred "left basilar atelectasis" vs GT "right basilar atelectasis") → **match**. The wrong side is a location error, scored downstream — not an omission plus a hallucination. Only leave them unmatched when the other side offers a same-laterality counterpart (see MATCHING CRITERIA rule 2's guard).
-
----
-
-## CRITICAL VALIDATIONS
-
-Before outputting, verify:
-1. Each input `pred_id` appears in **at least one** `matches` row OR exactly once in `unmatched_pred`, but not both. A `pred_id` may appear in several `matches` rows when it covers multiple GTs (1:N).
-2. Each input `gt_id` appears in **at least one** `matches` row OR exactly once in `unmatched_gt`, but not both. A `gt_id` may appear in several `matches` rows when it is covered by multiple preds (N:1).
-3. No IDs in the output that were not in the input.
-4. JSON is a valid object with exactly the three keys above — no surrounding text, no markdown fences.
-
-**Output ONLY the validated JSON object now.**
+Output only the JSON object now.

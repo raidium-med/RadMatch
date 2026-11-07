@@ -1,0 +1,113 @@
+{
+  "scenario": "Constructed: pubic rami fractures on the other side 1:N, a hip negative denying a fracture, a variant below a qualified negative, a degenerative umbrella vs a vertebral fracture",
+  "description": "Constructed (pelvis and hip radiographs). The pred places the pubic rami fractures on the right; the gt has a left superior and a left inferior ramus fracture and nothing on the right, so the pred sentence matches both (1:N across sides); 'no hip fracture' denies the femoral neck fracture; 'no suspicious osseous lesion' is a qualified negative, so it matches the bone island (a normal variant below the qualifier); 'degenerative changes of the lower lumbar spine' does not cover the L5 compression fracture (both left unmatched).",
+  "user": {
+    "indication": "79-year-old woman with pelvic pain after a fall.",
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Nondisplaced fractures of the right superior and inferior pubic rami.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "No hip fracture.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_3",
+        "text": "No suspicious osseous lesion.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_4",
+        "text": "Degenerative changes of the lower lumbar spine.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Nondisplaced fracture of the left superior pubic ramus.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "Minimally displaced fracture of the left inferior pubic ramus.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "Nondisplaced fracture of the right femoral neck.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "Bone island in the right ilium.",
+        "clinical_status": "normal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_5",
+        "text": "Acute compression fracture of the L5 vertebral body.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "Same pubic rami fractures, on the other side; the pred sentence covers the superior ramus."
+      },
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_2",
+        "reasoning": "The pred sentence also covers the inferior ramus."
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_3",
+        "reasoning": "'No hip fracture' denies the femoral neck fracture."
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_4",
+        "reasoning": "A bone island is a normal variant below the 'no suspicious' qualifier."
+      }
+    ],
+    "unmatched_pred": [
+      "p_4"
+    ],
+    "unmatched_gt": [
+      "gt_5"
+    ]
+  }
+}

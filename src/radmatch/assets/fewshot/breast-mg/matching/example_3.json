@@ -1,0 +1,152 @@
+{
+  "scenario": "Size difference on a known cancer + a qualified negative that does not deny probably benign calcifications (SPU) + a missed second lesion (MIS)",
+  "description": "Built from breast-mg/findings_{gt,pred}/example_3 (constructed diagnostic mammogram for extent of a known cancer). The index malignancy is matched despite its smaller pred size; two axillary negatives match; gt 'no suspicious mass, calcifications or architectural distortion' in the right breast is a qualified negative, so it does not deny the pred calcifications called probably benign: the pred calcifications stay unmatched (SPU) and so does the gt negative; the fine pleomorphic calcifications in another left quadrant, which the pred leaves out, are MIS.",
+  "user": {
+    "indication": "52-year-old woman with biopsy-proven invasive ductal carcinoma of the left breast. Evaluate extent of disease before surgery.",
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Extremely dense breasts (ACR breast density d).",
+        "clinical_status": "normal",
+        "laterality": "bilateral",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "Biopsy-proven malignancy in the left breast at 1 o'clock, upper outer quadrant, 6 cm from the nipple, seen as a 1.9 x 1.8 cm irregular mass with spiculated margins containing the biopsy clip, BI-RADS 6.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 1.9,
+            "unit": "cm",
+            "category": "size"
+          },
+          {
+            "value": 1.8,
+            "unit": "cm",
+            "category": "size"
+          },
+          {
+            "value": 6,
+            "unit": "cm",
+            "category": "other"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_3",
+        "text": "Grouped round calcifications in the right breast upper outer quadrant, probably benign, BI-RADS 3.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_4",
+        "text": "No axillary lymphadenopathy.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Extremely dense breasts (ACR breast density d).",
+        "clinical_status": "normal",
+        "laterality": "bilateral",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "Biopsy-proven malignancy in the left breast at 1 o'clock, upper outer quadrant, 6 cm from the nipple, seen as a 2.2 x 1.8 cm irregular mass with spiculated margins containing the biopsy clip, BI-RADS 6.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 2.2,
+            "unit": "cm",
+            "category": "size"
+          },
+          {
+            "value": 1.8,
+            "unit": "cm",
+            "category": "size"
+          },
+          {
+            "value": 6,
+            "unit": "cm",
+            "category": "other"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "1.2 cm group of fine pleomorphic calcifications in the left breast at 4 o'clock, lower outer quadrant, 3 cm from the nipple, separate from the index malignancy, BI-RADS 4C.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 1.2,
+            "unit": "cm",
+            "category": "size"
+          },
+          {
+            "value": 3,
+            "unit": "cm",
+            "category": "other"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "Right breast negative for malignancy, with no suspicious mass, calcifications or architectural distortion.",
+        "clinical_status": "normal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_5",
+        "text": "No enlarged axillary lymph nodes on either side.",
+        "clinical_status": "normal",
+        "laterality": "bilateral",
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "Identical breast density statement."
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_2",
+        "reasoning": "Same biopsy-proven left breast malignancy, sized differently."
+      },
+      {
+        "pred_id": "p_4",
+        "gt_id": "gt_5",
+        "reasoning": "Both deny enlarged axillary lymph nodes."
+      }
+    ],
+    "unmatched_pred": [
+      "p_3"
+    ],
+    "unmatched_gt": [
+      "gt_3",
+      "gt_4"
+    ]
+  }
+}
