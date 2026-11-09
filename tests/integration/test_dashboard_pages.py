@@ -104,7 +104,7 @@ def results_dir(tmp_path: Path) -> Path:
         {
             "metadata": {"series_uuid": "s1", "total_gt_findings": 1, "total_pred_findings": 1},
             "muc_counts": {"COR": 1, "PAR": 0, "INC": 0, "MIS": 0, "SPU": 0},
-            "tiers": {tier: tier_block() for tier in ("actionable", "triage", "critical")},
+            "tiers": {tier: tier_block() for tier in ("significant", "triage", "critical")},
             "attribute_breakdown": metrics.compute_attribute_breakdown(muc_records),
         },
     )
@@ -112,12 +112,12 @@ def results_dir(tmp_path: Path) -> Path:
         radmatch_dir / "metrics_summary.json",
         {
             "metadata": {"n_reports": 1, "total_gt_findings": 1, "total_pred_findings": 1},
-            "tiers": {tier: tier_block(n_reports=1) for tier in ("actionable", "triage", "critical")},
+            "tiers": {tier: tier_block(n_reports=1) for tier in ("significant", "triage", "critical")},
             "muc_counts": {"COR": 1, "PAR": 0, "INC": 0, "MIS": 0, "SPU": 0},
             "attribute_breakdown": metrics.compute_attribute_breakdown(muc_records),
             "subsets": {
                 name: {
-                    "tiers": {tier: tier_block(n_reports=1) for tier in ("actionable", "triage", "critical")},
+                    "tiers": {tier: tier_block(n_reports=1) for tier in ("significant", "triage", "critical")},
                     "muc_counts": {"COR": 1, "PAR": 0, "INC": 0, "MIS": 0, "SPU": 0},
                 }
                 for name in constants.SUBSETS

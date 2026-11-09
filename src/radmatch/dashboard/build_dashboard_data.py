@@ -34,8 +34,8 @@ def _per_finding_attributes(*finding_sets: list[dict]) -> dict[str, list[str]]:
     """Distinct clinical_significance / measurement category / comparison values
     across one or more finding lists (typically GT + Pred). Empty lists are kept
     rather than None so pyarrow serialises them as list<string>; the dashboard
-    filter treats empty as "no match". Predicted-side hallucinations with an
-    actionable significance or a measurement must show up in the filters too,
+    filter treats empty as "no match". Unsupported predicted findings with a
+    significant tier or a measurement must show up in the filters too,
     so both sides feed in."""
     significances: set[str] = set()
     measurements: set[str] = set()

@@ -5,7 +5,7 @@ Pure functions over the Stages 3a/3b outputs, called by `scoring.pipeline`.
 Matched pairs are tagged COR (no errors), PAR (some errors) or INC (status
 inverted). `reclassify_to_effective_category` then promotes any PAR holding a major
 error to INC, and the five surviving categories (COR/PAR/INC/MIS/SPU) are what the
-output reports. Errors are then counted per significance tier (actionable, triage, critical) and
+output reports. Errors are then counted per significance tier (all, significant, triage, critical) and
 split by side: FN on the reference, FP on the prediction. See README.md for the metric
 definitions.
 """
@@ -101,7 +101,7 @@ def build_muc_record(
 
 
 # ============================================================================
-# Effective MUC counts + actionable errors
+# Effective MUC counts + significant errors
 # ============================================================================
 
 
@@ -178,7 +178,7 @@ def compute_tier_errors(
       is credited by another pred (`_contradicted_preds`).
 
     The side is relative to the pool: a notable GT contradicted by an urgent pred
-    is an actionable FN but a triage FP.
+    is a significant FN but a triage FP.
     """
     pool = set(significance_pool)
     inc_gts = [b for b in _per_gt_safety_outcomes(records).values() if b["all_inc"]]

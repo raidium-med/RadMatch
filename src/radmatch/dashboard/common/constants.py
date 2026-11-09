@@ -55,7 +55,7 @@ QUERY_PARAM_REPORTS_PRED = "reports_pred_dir"
 # ============================================================================
 
 CONFIG_TIER = "eval_config_tier"
-DEFAULT_TIER = "actionable"
+DEFAULT_TIER = "significant"
 # Metric abbreviations (after the tier prefix: aER, aFN, ...) and their full names.
 METRIC_NAMES: dict[str, str] = {
     "ER": "Errors",

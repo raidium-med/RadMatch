@@ -29,7 +29,7 @@ def fake_per_report_metrics() -> dict:
         "metadata": {"series_uuid": "s1", "total_gt_findings": 4, "total_pred_findings": 3},
         "muc_counts": {"COR": 2, "PAR": 0, "INC": 1, "MIS": 1, "SPU": 0},
         "tiers": {
-            "actionable": tier_block(errors=2, fn=1, recall=0.6, precision=0.75, gt_total=5, pred_total=4),
+            "significant": tier_block(errors=2, fn=1, recall=0.6, precision=0.75, gt_total=5, pred_total=4),
             "triage": tier_block(errors=1, fn=1, recall=0.5, precision=2 / 3, gt_total=2, pred_total=3),
             "critical": tier_block(),
         },
@@ -39,7 +39,7 @@ def fake_per_report_metrics() -> dict:
 
 def test_flatten_extracts_dashboard_columns(fake_per_report_metrics):
     row = _flatten(fake_per_report_metrics)
-    assert (row["actionable_errors"], row["triage_errors"], row["critical_errors"]) == (2, 1, 0)
+    assert (row["significant_errors"], row["triage_errors"], row["critical_errors"]) == (2, 1, 0)
     assert row["muc_cor"] == 2
     assert row["muc_inc"] == 1
 
@@ -71,7 +71,7 @@ def test_build_report_index_writes_one_row_per_series(tmp_path, fake_per_report_
     assert isinstance(df, pd.DataFrame)
     assert len(df) == 2
     assert set(df["report_id"]) == {"s1", "s2"}
-    assert {"actionable_errors", "triage_errors", "critical_errors", "muc_cor"}.issubset(df.columns)
+    assert {"significant_errors", "triage_errors", "critical_errors", "muc_cor"}.issubset(df.columns)
     assert {"clinical_significances", "measurement_types", "comparisons"}.issubset(df.columns)
     assert df.loc[df["report_id"] == "s1", "measurement_types"].iloc[0] == ["size"]
 

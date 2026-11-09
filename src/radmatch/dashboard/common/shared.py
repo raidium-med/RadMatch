@@ -532,14 +532,14 @@ def render_metric_card(
 
 def current_tier(key: str) -> str:
     """The error tier before its radio renders: the radio's own state (`key`), else the
-    tier last chosen on any page, else actionable."""
+    tier last chosen on any page, else significant."""
     return st.session_state.get(key) or st.session_state.get(
         dashboard_constants.CONFIG_TIER, dashboard_constants.DEFAULT_TIER
     )
 
 
 def select_tier(key: str) -> str:
-    """Horizontal error-tier radio (actionable by default); the choice carries across pages."""
+    """Horizontal error-tier radio (significant by default); the choice carries across pages."""
     options = list(constants.ERROR_TIERS)
     tier = st.radio(
         "Error tier",
@@ -558,7 +558,7 @@ def tier_metric_label(
     tier: str, metric: str, *, suffix: str = "", with_tier: bool = True, with_abbrev: bool = True
 ) -> str:
     """Full metric name, optionally with its abbreviation in parentheses, e.g.
-    "Actionable Errors per Report (aER)" for `("actionable", "ER", suffix=" per Report")`."""
+    "Significant Errors per Report (sER)" for `("significant", "ER", suffix=" per Report")`."""
     name = dashboard_constants.METRIC_NAMES[metric]
     if with_tier:
         name = f"{tier.capitalize()} {name}"
@@ -597,7 +597,7 @@ MATCH_OUTCOMES_HELP = (
     "(wrong side / wrong location / wrong diagnosis / wrong comparison / ...). Counts as a "
     "miss in safety recalls.\n\n"
     "MIS — missed: a GT finding with no pred counterpart.\n\n"
-    "SPU — spurious: a predicted finding with no GT counterpart (hallucination)."
+    "SPU — unsupported: a predicted finding with no GT counterpart."
 )
 
 

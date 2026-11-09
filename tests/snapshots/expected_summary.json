@@ -116,7 +116,7 @@
         "SPU": 0
       },
       "tiers": {
-        "actionable": {
+        "significant": {
           "errors_per_finding": 0.5,
           "errors_total": 1,
           "findings_total": 2,
@@ -213,7 +213,7 @@
         "SPU": 0
       },
       "tiers": {
-        "actionable": {
+        "significant": {
           "errors_per_finding": 1.0,
           "errors_total": 2,
           "findings_total": 2,
@@ -310,7 +310,7 @@
         "SPU": 0
       },
       "tiers": {
-        "actionable": {
+        "significant": {
           "errors_per_finding": 1.0,
           "errors_total": 1,
           "findings_total": 1,
@@ -407,7 +407,7 @@
         "SPU": 1
       },
       "tiers": {
-        "actionable": {
+        "significant": {
           "errors_per_finding": 0.0,
           "errors_total": 0,
           "findings_total": 0,
@@ -497,7 +497,7 @@
     }
   },
   "tiers": {
-    "actionable": {
+    "significant": {
       "errors_per_finding": 0.75,
       "errors_per_report": 0.6,
       "errors_total": 3,

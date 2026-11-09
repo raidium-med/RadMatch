@@ -219,7 +219,7 @@ def _conclusion_header(info: shared.PerPairMatchInfo, n_total: int) -> str:
     if category == "MIS":
         return "Not predicted → <b>MIS</b>"
     if category == "SPU":
-        return "Hallucinated, no GT counterpart → <b>SPU</b>"
+        return "Unsupported, no GT counterpart → <b>SPU</b>"
     if n_total <= 1:
         if category == "COR":
             return "Matched, no attribute errors → <b>COR</b>"

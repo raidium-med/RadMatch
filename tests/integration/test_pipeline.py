@@ -210,13 +210,13 @@ def test_dataset_five_pairs_one_per_muc_category(tmp_path, fake_client, ok, make
     # Triage pool (critical+urgent) GT here: s1 (urgent, COR) + s2 (critical, reclassified INC)
     # + s3 (critical, INC) = 3. Hits (effective COR or PAR) = 1 (s1) → recall = 1/3.
     assert tiers["triage"]["recall"] == pytest.approx(1 / 3)
-    # Actionable errors: s2 reclassified INC (critical) + s3 INC (critical) + s4 MIS (notable) = 3,
-    # all on the reference side (s5 SPU is routine, dropped): aER = aFN + aFP = 3 + 0.
-    actionable = tiers["actionable"]
-    assert (actionable["errors_total"], actionable["fn_total"], actionable["fp_total"]) == (3, 3, 0)
-    assert (actionable["fn_mis_total"], actionable["fn_inc_total"]) == (1, 2)
-    assert actionable["errors_per_report"] == pytest.approx(3 / 5)
-    assert actionable["fn_per_report"] + actionable["fp_per_report"] == pytest.approx(3 / 5)
+    # Significant errors: s2 reclassified INC (critical) + s3 INC (critical) + s4 MIS (notable) = 3,
+    # all on the reference side (s5 SPU is routine, dropped): sER = sFN + sFP = 3 + 0.
+    significant = tiers["significant"]
+    assert (significant["errors_total"], significant["fn_total"], significant["fp_total"]) == (3, 3, 0)
+    assert (significant["fn_mis_total"], significant["fn_inc_total"]) == (1, 2)
+    assert significant["errors_per_report"] == pytest.approx(3 / 5)
+    assert significant["fn_per_report"] + significant["fp_per_report"] == pytest.approx(3 / 5)
     # Triage drops the notable MIS: tER = tFN = 2.
     assert (tiers["triage"]["errors_total"], tiers["triage"]["fn_total"]) == (2, 2)
     assert (out_dir / "metrics_summary.json").exists()
@@ -265,9 +265,9 @@ def test_template_predictor_fails_safety_gate(tmp_path, fake_client, ok, make_fi
     )
 
     summary = _run_dataset(gt_dir, pred_dir, out_dir, client)
-    # 5 reports × (1 critical MIS + 0 actionable SPU since pred is routine) = 5 actionable errors
+    # 5 reports × (1 critical MIS + 0 significant SPU since pred is routine) = 5 significant errors
     # Routine pred SPUs don't count; routine GT MISes don't count. Critical GT MIS counts.
-    assert summary["tiers"]["actionable"]["errors_per_report"] >= 1.0
+    assert summary["tiers"]["significant"]["errors_per_report"] >= 1.0
     assert summary["tiers"]["triage"]["recall"] < 0.2
 
 
@@ -471,7 +471,7 @@ def test_score_pair_writes_per_report_metrics(tmp_path, fake_client, ok, make_fi
     # PAR-with-major reclassifies to INC; output has 5 keys including PAR (=0 here).
     assert per_report["muc_counts"] == {"COR": 0, "PAR": 0, "INC": 1, "MIS": 0, "SPU": 0}
     triage = per_report["tiers"]["triage"]
-    assert per_report["tiers"]["actionable"]["errors_total"] == 1
+    assert per_report["tiers"]["significant"]["errors_total"] == 1
     assert (triage["gt_total"], triage["fn_inc_total"]) == (1, 1)
     assert triage["recall"] == 0.0  # major attr error → miss
     # New per-pair fields: attribute_breakdown is included (dataset-symmetric).

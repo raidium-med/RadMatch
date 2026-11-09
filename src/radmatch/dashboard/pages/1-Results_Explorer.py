@@ -261,7 +261,7 @@ def _matches_errors(
         in_pool = finding.get("clinical_significance") in pool
         return in_pool and (info.category == "MIS" or metrics.is_unsupported_claim(finding))
     # `info.category` is best-of-pairs, so a COR finding can still hold a per-pair
-    # INC on an actionable counterpart. Check each pair individually.
+    # INC on a significant counterpart. Check each pair individually.
     side_in_pool = finding.get("clinical_significance") in pool
     for cp in info.counterparts:
         if cp.category != "INC":
@@ -467,7 +467,7 @@ def main() -> None:
                         "Fade out findings to the chosen error tier. "
                         "A finding passes only if its match is INC / MIS / SPU (i.e. an error) AND "
                         "its clinical significance is in the tier. "
-                        "`actionable` = critical + urgent + notable, `triage` = critical + urgent, "
+                        "`significant` = critical + urgent + notable, `triage` = critical + urgent, "
                         "`critical` = critical."
                     ),
                 )
