@@ -228,7 +228,7 @@ def _highlight_sets_for_selection(
 
 
 _SUBSET_FILTER_OPTIONS = ["all", "abnormal-regular", "normal-regular", "measurement", "comparison"]
-_ERRORS_FILTER_OPTIONS = ["all", *radmatch_constants.ERROR_TIERS]
+_ERRORS_FILTER_OPTIONS = list(radmatch_constants.ERROR_TIERS)
 
 
 def _matches_subset(finding: dict[str, object], subset: str) -> bool:
