@@ -1,0 +1,69 @@
+[
+  {
+    "text": "Heterogeneously dense breasts (ACR breast density c).",
+    "measurements": [],
+    "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "New irregular mass with spiculated margins and no associated calcifications in the left breast at 10 o'clock, upper inner quadrant, middle depth, 5 cm from the nipple, measuring 1.6 x 1.4 cm, corresponding to the palpable lump, highly suggestive of malignancy, BI-RADS 5.",
+    "measurements": [
+      {
+        "value": 1.6,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 1.4,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 5,
+        "unit": "cm",
+        "category": "other"
+      }
+    ],
+    "laterality": "left",
+    "comparison": "new",
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "New grouped punctate calcifications spanning 5 mm in the left breast at 6 o'clock, 4 cm from the nipple, BI-RADS 3.",
+    "measurements": [
+      {
+        "value": 5,
+        "unit": "mm",
+        "category": "size"
+      },
+      {
+        "value": 4,
+        "unit": "cm",
+        "category": "other"
+      }
+    ],
+    "laterality": "left",
+    "comparison": "new",
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "No suspicious left axillary lymph nodes.",
+    "measurements": [],
+    "laterality": "left",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "No mammographic evidence of malignancy in the right breast.",
+    "measurements": [],
+    "laterality": "right",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "notable"
+  }
+]

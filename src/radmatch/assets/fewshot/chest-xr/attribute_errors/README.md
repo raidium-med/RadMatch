@@ -1,11 +1,13 @@
 # Attribute-errors few-shot examples (chest-xr)
 
-Three Stage 3b examples, each derived from the matches of the corresponding `chest-xr/matching/example_N.json`. INC pairs (status conflicts) are excluded — Stage 3b never sees them in production.
+Five Stage 3b examples: one derived from the matches of `chest-xr/matching/example_1.json`, two built from the chest-xr findings files, two constructed. Live runs do not send the judge the pairs whose outcome the rules fix (a status inversion, two normal statements without a hedge, identical texts); a few such pairs stay here to show the rules (prompt rule 1), with no error.
 
 | File | Drawn from | Highlights |
 |------|------------|------------|
-| `example_1.json` | matching/example_1 (status-conflict pair excluded) | 1 minor severity error (cardiomegaly mild vs moderate) + 3 clean pairs |
-| `example_2.json` | matching/example_2 | Major severity (LLL collapse vs basilar atelectasis) + major sub-anatomic location (CVL upper RA vs PICC lower SVC) + 2 clean pairs |
-| `example_3.json` | matching/example_3 | No free-text attribute errors — the size + comparison deltas on the surveillance nodule live in Stage 3a deterministic comparators and are intentionally NOT re-emitted at Stage 3b |
+| `example_1.json` | matching/example_1 (status-conflict pair excluded) | Moderate cardiomegaly vs Mild cardiomegaly, unchanged: grade minor; No focal airspace opacities; no… vs No concerning focal airspace…: no error |
+| `example_2.json` | findings_gt + findings_pred example_2 | Stable bilateral pleural effusion vs Moderate bilateral pleural…: grade minor; Left basilar opacity, likely… vs Severe left lower lobe…: grade major, location minor; Right PICC line ends in the lower… vs Right central venous line ends in…: location major |
+| `example_3.json` | findings_gt + findings_pred example_3 | A 6 mm pulmonary nodule in the… vs A 4 mm pulmonary nodule in the…: measurement major |
+| `example_4.json` | constructed | Possible small left apical… vs Small left apical pneumothorax: certainty major; Left basilar opacity, likely… vs Left basilar opacity, likely…: diagnosis major; Mild cardiomegaly vs Mild enlargement of the cardiac…: no error |
+| `example_5.json` | constructed | Right lower lobe opacity vs Bilateral lower lobe opacities: no error; Bilateral lower lobe consolidation vs Left lower lobe consolidation: no error; Bilateral lower lobe consolidation vs Right lower lobe consolidation: no error; Left lower lobe consolidation… vs Left lower lobe consolidation: no error; Right upper lobe nodule,… vs Right upper lobe nodule: comparison major; Right upper lobe nodule vs Enlarging right upper lobe nodule: comparison major; Bibasilar atelectasis vs Increased bibasilar atelectasis: no error |
 
 See `../../abdomen-ct/attribute_errors/README.md` for the file format and loader notes.

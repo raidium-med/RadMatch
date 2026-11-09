@@ -1,0 +1,163 @@
+{
+  "scenario": "Constructed: an organ-level normal denying a lesion and matching a size statement, pole shift, bladder wall, ureteral jets vs a stone",
+  "description": "Constructed (renal and bladder ultrasound). 'Left kidney unremarkable' denies the echogenic left renal lesion and also matches the gt normal-size statement (1:N); a simple cyst in the lower vs upper pole of the same kidney is one cyst (matched); 'bladder unremarkable' denies diffuse wall thickening; 'bilateral ureteral jets present' denies an absent right jet but not the ureterovesical junction stone, which stays unmatched (the pred hydronephrosis names no cause).",
+  "user": {
+    "indication": "Right flank pain and hematuria.",
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Mild right hydronephrosis.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "Left kidney unremarkable.",
+        "clinical_status": "normal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_3",
+        "text": "Simple cyst in the lower pole of the right kidney.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_4",
+        "text": "Bladder unremarkable.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_5",
+        "text": "Bilateral ureteral jets present.",
+        "clinical_status": "normal",
+        "laterality": "bilateral",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Moderate right hydronephrosis.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "6 mm shadowing stone at the right ureterovesical junction.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 6,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "Absent right ureteral jet.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "2.0 cm echogenic lesion in the upper pole of the left kidney, possibly an angiomyolipoma.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 2.0,
+            "unit": "cm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_5",
+        "text": "Simple cyst in the upper pole of the right kidney.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_6",
+        "text": "Diffuse bladder wall thickening with trabeculation.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_7",
+        "text": "Left kidney normal in size, measuring 11.2 cm.",
+        "clinical_status": "normal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 11.2,
+            "unit": "cm",
+            "category": "size"
+          }
+        ]
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "Same right hydronephrosis, graded mild vs moderate."
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_4",
+        "reasoning": "An unremarkable left kidney denies the echogenic left renal lesion."
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_7",
+        "reasoning": "Both describe a normal-sized left kidney."
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_5",
+        "reasoning": "One simple right renal cyst, placed in the lower vs upper pole."
+      },
+      {
+        "pred_id": "p_4",
+        "gt_id": "gt_6",
+        "reasoning": "An unremarkable bladder denies the wall thickening."
+      },
+      {
+        "pred_id": "p_5",
+        "gt_id": "gt_3",
+        "reasoning": "Jets present on both sides contradict the absent right jet."
+      }
+    ],
+    "unmatched_pred": [],
+    "unmatched_gt": [
+      "gt_2"
+    ]
+  }
+}

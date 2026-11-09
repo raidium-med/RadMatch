@@ -1,0 +1,155 @@
+{
+  "scenario": "Clock position location major, BI-RADS category grade major, 'no suspicious' is not a hedge",
+  "description": "Stage 3b call derived from the matches in breast-mg/matching/example_1.json. '…breast at 10 o'clock, upper inner quadrant, middle…' vs '…breast at 2 o'clock, upper outer quadrant, middle…': location major (10 vs 2 o'clock in the left breast, upper inner vs upper outer quadrant; the biopsy would target another site); '…nipple, BI-RADS 3' vs '…nipple, BI-RADS 4A': grade major (BI-RADS 3 vs 4A for the same new calcifications; 6-month follow-up mammogram vs biopsy); '…right breast' vs '…right breast + with no suspicious mass calcifications or…': no error (two normal statements; 'no suspicious' qualifies what is ruled out, it is not a hedge on it).",
+  "user": {
+    "series_uuid": "breast-mg_example_1",
+    "indication": "47-year-old woman with a palpable lump in the left breast.",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "New irregular mass with spiculated margins and no associated calcifications in the left breast at 10 o'clock, upper inner quadrant, middle depth, 5 cm from the nipple, measuring 1.6 x 1.4 cm, corresponding to the palpable lump, highly suggestive of malignancy, BI-RADS 5.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "left",
+          "comparison": "new",
+          "measurements": [
+            {
+              "value": 1.6,
+              "unit": "cm",
+              "category": "size"
+            },
+            {
+              "value": 1.4,
+              "unit": "cm",
+              "category": "size"
+            },
+            {
+              "value": 5,
+              "unit": "cm",
+              "category": "other"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "New irregular mass with spiculated margins and no associated calcifications in the left breast at 2 o'clock, upper outer quadrant, middle depth, 5 cm from the nipple, measuring 1.6 x 1.4 cm, corresponding to the palpable lump, highly suggestive of malignancy, BI-RADS 5.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "left",
+          "comparison": "new",
+          "measurements": [
+            {
+              "value": 1.6,
+              "unit": "cm",
+              "category": "size"
+            },
+            {
+              "value": 1.4,
+              "unit": "cm",
+              "category": "size"
+            },
+            {
+              "value": 5,
+              "unit": "cm",
+              "category": "other"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "New grouped punctate calcifications spanning 5 mm in the left breast at 6 o'clock, 4 cm from the nipple, BI-RADS 3.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": "new",
+          "measurements": [
+            {
+              "value": 5,
+              "unit": "mm",
+              "category": "size"
+            },
+            {
+              "value": 4,
+              "unit": "cm",
+              "category": "other"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "New grouped punctate calcifications spanning 5 mm in the left breast at 6 o'clock, 4 cm from the nipple, BI-RADS 4A.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "left",
+          "comparison": "new",
+          "measurements": [
+            {
+              "value": 5,
+              "unit": "mm",
+              "category": "size"
+            },
+            {
+              "value": 4,
+              "unit": "cm",
+              "category": "other"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 3,
+        "pred_finding": {
+          "finding_id": "p_5",
+          "text": "No mammographic evidence of malignancy in the right breast.",
+          "clinical_status": "normal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_5",
+          "text": "No mammographic evidence of malignancy in the right breast, with no suspicious mass, calcifications or architectural distortion.",
+          "clinical_status": "normal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "location",
+            "reasoning": "10 vs 2 o'clock in the left breast, upper inner vs upper outer quadrant; the biopsy would target another site",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "grade",
+            "reasoning": "BI-RADS 3 vs 4A for the same new calcifications; 6-month follow-up mammogram vs biopsy",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 3,
+        "errors": []
+      }
+    ]
+  }
+}

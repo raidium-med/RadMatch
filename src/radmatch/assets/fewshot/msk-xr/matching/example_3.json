@@ -1,0 +1,146 @@
+{
+  "scenario": "1:1 matches on an arthroplasty follow-up: a device, a measured lucency, a dropped change",
+  "description": "Built from msk-xr/findings_{gt,pred}/example_3 (constructed hip arthroplasty radiographs). The device, the lucency at the femoral stem and the trochanteric osteolysis each have one counterpart and are matched however each side measures them or reports their change; the differences are scored downstream.",
+  "user": {
+    "indication": "71-year-old woman 8 years after right total hip arthroplasty. Routine follow-up.",
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Right total hip arthroplasty with the femoral and acetabular components in expected position, unchanged.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": "stable",
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "New 1 mm radiolucent line at the bone-cement interface of the right femoral stem in Gruen zone 1.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": "new",
+        "measurements": [
+          {
+            "value": 1,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_3",
+        "text": "2.4 cm osteolytic lesion in the right greater trochanter adjacent to the femoral stem.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 2.4,
+            "unit": "cm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_4",
+        "text": "No periprosthetic fracture.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_5",
+        "text": "Mild osteoarthritis of the left hip.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Right total hip arthroplasty with the femoral and acetabular components in expected position, unchanged.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": "stable",
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "New 3 mm radiolucent line at the bone-cement interface of the right femoral stem in Gruen zone 1.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": "new",
+        "measurements": [
+          {
+            "value": 3,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "Enlarging 2.4 cm osteolytic lesion in the right greater trochanter adjacent to the femoral stem.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": "worsening",
+        "measurements": [
+          {
+            "value": 2.4,
+            "unit": "cm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "No periprosthetic fracture.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_5",
+        "text": "Mild osteoarthritis of the left hip.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "Identical right hip arthroplasty statement."
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_2",
+        "reasoning": "Same new radiolucent line at the femoral stem, measured differently."
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_3",
+        "reasoning": "Same osteolytic lesion of the right greater trochanter."
+      },
+      {
+        "pred_id": "p_4",
+        "gt_id": "gt_4",
+        "reasoning": "Identical periprosthetic fracture negative."
+      },
+      {
+        "pred_id": "p_5",
+        "gt_id": "gt_5",
+        "reasoning": "Identical left hip osteoarthritis."
+      }
+    ],
+    "unmatched_pred": [],
+    "unmatched_gt": []
+  }
+}

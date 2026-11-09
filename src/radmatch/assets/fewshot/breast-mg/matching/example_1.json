@@ -1,0 +1,182 @@
+{
+  "scenario": "Clock position shift + BI-RADS category change + node negative as a status flip + two right breast negatives",
+  "description": "Built from breast-mg/findings_{gt,pred}/example_1 (constructed diagnostic mammogram for a palpable lump). The spiculated mass is matched although the pred places it at 10 instead of 2 o'clock (no gt mass at 10 o'clock); the calcifications are matched whatever category each side gives; the pred node negative is matched to the suspicious node it denies (status flip, INC downstream); two right breast negatives match.",
+  "user": {
+    "indication": "47-year-old woman with a palpable lump in the left breast.",
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Heterogeneously dense breasts (ACR breast density c).",
+        "clinical_status": "normal",
+        "laterality": "bilateral",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "New irregular mass with spiculated margins and no associated calcifications in the left breast at 10 o'clock, upper inner quadrant, middle depth, 5 cm from the nipple, measuring 1.6 x 1.4 cm, corresponding to the palpable lump, highly suggestive of malignancy, BI-RADS 5.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": "new",
+        "measurements": [
+          {
+            "value": 1.6,
+            "unit": "cm",
+            "category": "size"
+          },
+          {
+            "value": 1.4,
+            "unit": "cm",
+            "category": "size"
+          },
+          {
+            "value": 5,
+            "unit": "cm",
+            "category": "other"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_3",
+        "text": "New grouped punctate calcifications spanning 5 mm in the left breast at 6 o'clock, 4 cm from the nipple, BI-RADS 3.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": "new",
+        "measurements": [
+          {
+            "value": 5,
+            "unit": "mm",
+            "category": "size"
+          },
+          {
+            "value": 4,
+            "unit": "cm",
+            "category": "other"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_4",
+        "text": "No suspicious left axillary lymph nodes.",
+        "clinical_status": "normal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_5",
+        "text": "No mammographic evidence of malignancy in the right breast.",
+        "clinical_status": "normal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Heterogeneously dense breasts (ACR breast density c).",
+        "clinical_status": "normal",
+        "laterality": "bilateral",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "New irregular mass with spiculated margins and no associated calcifications in the left breast at 2 o'clock, upper outer quadrant, middle depth, 5 cm from the nipple, measuring 1.6 x 1.4 cm, corresponding to the palpable lump, highly suggestive of malignancy, BI-RADS 5.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": "new",
+        "measurements": [
+          {
+            "value": 1.6,
+            "unit": "cm",
+            "category": "size"
+          },
+          {
+            "value": 1.4,
+            "unit": "cm",
+            "category": "size"
+          },
+          {
+            "value": 5,
+            "unit": "cm",
+            "category": "other"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "New grouped punctate calcifications spanning 5 mm in the left breast at 6 o'clock, 4 cm from the nipple, BI-RADS 4A.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": "new",
+        "measurements": [
+          {
+            "value": 5,
+            "unit": "mm",
+            "category": "size"
+          },
+          {
+            "value": 4,
+            "unit": "cm",
+            "category": "other"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "Enlarged dense left axillary lymph node measuring 2.1 cm with loss of the fatty hilum, suspicious for metastasis.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 2.1,
+            "unit": "cm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_5",
+        "text": "No mammographic evidence of malignancy in the right breast, with no suspicious mass, calcifications or architectural distortion.",
+        "clinical_status": "normal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "Identical breast density statement."
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_2",
+        "reasoning": "One new spiculated left breast mass at the palpable lump, placed at 10 vs 2 o'clock."
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_3",
+        "reasoning": "Same new grouped punctate calcifications at 6 o'clock, assessed differently."
+      },
+      {
+        "pred_id": "p_4",
+        "gt_id": "gt_4",
+        "reasoning": "'No suspicious left axillary lymph nodes' denies the enlarged suspicious node."
+      },
+      {
+        "pred_id": "p_5",
+        "gt_id": "gt_5",
+        "reasoning": "Both rule out malignancy in the right breast."
+      }
+    ],
+    "unmatched_pred": [],
+    "unmatched_gt": []
+  }
+}

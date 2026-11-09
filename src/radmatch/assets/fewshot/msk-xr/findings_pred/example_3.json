@@ -1,0 +1,54 @@
+[
+  {
+    "text": "Right total hip arthroplasty with the femoral and acetabular components in expected position, unchanged.",
+    "measurements": [],
+    "laterality": "right",
+    "comparison": "stable",
+    "clinical_status": "abnormal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "New 1 mm radiolucent line at the bone-cement interface of the right femoral stem in Gruen zone 1.",
+    "measurements": [
+      {
+        "value": 1,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "laterality": "right",
+    "comparison": "new",
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "2.4 cm osteolytic lesion in the right greater trochanter adjacent to the femoral stem.",
+    "measurements": [
+      {
+        "value": 2.4,
+        "unit": "cm",
+        "category": "size"
+      }
+    ],
+    "laterality": "right",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "No periprosthetic fracture.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Mild osteoarthritis of the left hip.",
+    "measurements": [],
+    "laterality": "left",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "routine"
+  }
+]

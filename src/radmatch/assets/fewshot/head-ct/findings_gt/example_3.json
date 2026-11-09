@@ -2,27 +2,47 @@
   {
     "text": "Congenital hypoplasia of the paranasal sinuses with agenesis of the frontal sinuses.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
   },
   {
     "text": "No nasal septal deviation.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
   },
   {
-    "text": "Good aeration of the paranasal sinuses and mastoid air cells.",
+    "text": "Good aeration of the paranasal sinuses.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
   },
   {
-    "text": "No mucosal thickening or visible air-fluid level.",
+    "text": "Good aeration of the mastoid air cells.",
     "measurements": [],
+    "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No paranasal sinus mucosal thickening.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No paranasal sinus air-fluid level.",
+    "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -30,6 +50,7 @@
   {
     "text": "No dental material visualized in the floors of the maxillary sinuses.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -37,6 +58,7 @@
   {
     "text": "Sphenoid ostia are patent.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -44,6 +66,7 @@
   {
     "text": "Maxillary infundibula are patent.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -51,6 +74,7 @@
   {
     "text": "No periapical odontogenic disease identified.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -58,6 +82,7 @@
   {
     "text": "No dehiscence of the cribriform plate of the ethmoid.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -65,33 +90,34 @@
   {
     "text": "No visible carotid canal protrusion.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
   },
   {
-    "text": "Stable nonspecific micronodule of the right upper lobe measuring 4.4 mm.",
+    "text": "Stable nonspecific micronodules, the right upper lobe micronodule measuring 4.4 mm and a few others less than 4 mm, particularly in the right lower lobe; no progressive lesion detected.",
     "measurements": [
       {
         "value": 4.4,
         "unit": "mm",
         "category": "size"
+      },
+      {
+        "value": 4,
+        "unit": "mm",
+        "category": "size"
       }
     ],
+    "laterality": "right",
     "comparison": "stable",
-    "clinical_status": "abnormal",
-    "clinical_significance": "notable"
-  },
-  {
-    "text": "A few other nonspecific micronodules less than 4 mm, particularly in the right lower lobe.",
-    "measurements": [],
-    "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
   },
   {
     "text": "Stable right posterobasal ground-glass focus.",
     "measurements": [],
+    "laterality": "right",
     "comparison": "stable",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -99,6 +125,7 @@
   {
     "text": "Stable early centrilobular emphysema predominant at the apices.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": "stable",
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -106,6 +133,7 @@
   {
     "text": "No lymphadenopathy of significant size.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -113,13 +141,23 @@
   {
     "text": "Normal appearance of the proximal tracheobronchial tree.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
   },
   {
-    "text": "No pleural or pericardial effusion.",
+    "text": "No pleural effusion.",
     "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No pericardial effusion.",
+    "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -127,6 +165,7 @@
   {
     "text": "No abnormal density across all pulmonary segments.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -134,6 +173,7 @@
   {
     "text": "No proximal or distal bronchial dilatation.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"

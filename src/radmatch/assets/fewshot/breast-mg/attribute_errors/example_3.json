@@ -1,0 +1,102 @@
+{
+  "scenario": "Size under the T1/T2 threshold, two normal statements",
+  "description": "Stage 3b call derived from the matches in breast-mg/matching/example_3.json. '…as a 1.9 x 1.8 cm irregular mass with spiculated…' vs '…as a 2.2 x 1.8 cm irregular mass with spiculated…': measurement major (1.9 vs 2.2 cm known breast cancer; 2 cm separates T1 from T2, which changes the stage and can change the choice of neoadjuvant therapy); 'No axillary lymphadenopathy' vs 'No enlarged axillary lymph nodes on either side': no error (two normal statements; not sent to the judge in live runs, kept to show prompt rule 1).",
+  "user": {
+    "series_uuid": "breast-mg_example_3",
+    "indication": "52-year-old woman with biopsy-proven invasive ductal carcinoma of the left breast. Evaluate extent of disease before surgery.",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "Biopsy-proven malignancy in the left breast at 1 o'clock, upper outer quadrant, 6 cm from the nipple, seen as a 1.9 x 1.8 cm irregular mass with spiculated margins containing the biopsy clip, BI-RADS 6.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 1.9,
+              "unit": "cm",
+              "category": "size"
+            },
+            {
+              "value": 1.8,
+              "unit": "cm",
+              "category": "size"
+            },
+            {
+              "value": 6,
+              "unit": "cm",
+              "category": "other"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "Biopsy-proven malignancy in the left breast at 1 o'clock, upper outer quadrant, 6 cm from the nipple, seen as a 2.2 x 1.8 cm irregular mass with spiculated margins containing the biopsy clip, BI-RADS 6.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 2.2,
+              "unit": "cm",
+              "category": "size"
+            },
+            {
+              "value": 1.8,
+              "unit": "cm",
+              "category": "size"
+            },
+            {
+              "value": 6,
+              "unit": "cm",
+              "category": "other"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "No axillary lymphadenopathy.",
+          "clinical_status": "normal",
+          "clinical_significance": "notable",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_5",
+          "text": "No enlarged axillary lymph nodes on either side.",
+          "clinical_status": "normal",
+          "clinical_significance": "notable",
+          "laterality": "bilateral",
+          "comparison": null,
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "measurement",
+            "reasoning": "1.9 vs 2.2 cm known breast cancer; 2 cm separates T1 from T2, which changes the stage and can change the choice of neoadjuvant therapy",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": []
+      }
+    ]
+  }
+}

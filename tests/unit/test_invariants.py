@@ -15,19 +15,17 @@ def test_clinical_significance_keys_consistent():
     assert constants.DEFAULT_CLINICAL_SIGNIFICANCE in constants.CLINICAL_SIGNIFICANCE_VALUES
 
 
-def test_actionable_tiers_excludes_default():
-    assert set(constants.ACTIONABLE_SIGNIFICANCE_TIERS).issubset(constants.CLINICAL_SIGNIFICANCE_VALUES)
-    assert constants.DEFAULT_CLINICAL_SIGNIFICANCE not in constants.ACTIONABLE_SIGNIFICANCE_TIERS
+def test_significant_tiers_excludes_default():
+    assert set(constants.SIGNIFICANT_SIGNIFICANCE_TIERS).issubset(constants.CLINICAL_SIGNIFICANCE_VALUES)
+    assert constants.DEFAULT_CLINICAL_SIGNIFICANCE not in constants.SIGNIFICANT_SIGNIFICANCE_TIERS
 
 
-def test_triage_is_subset_of_actionable():
-    assert set(constants.TRIAGE_SIGNIFICANCE_TIERS).issubset(set(constants.ACTIONABLE_SIGNIFICANCE_TIERS))
+def test_triage_is_subset_of_significant():
+    assert set(constants.TRIAGE_SIGNIFICANCE_TIERS).issubset(set(constants.SIGNIFICANT_SIGNIFICANCE_TIERS))
 
 
-def test_comparison_buckets_partition_comparison_values():
-    union = constants.BENIGN_COMPARISONS | constants.ACTIVE_COMPARISONS
-    assert union == constants.COMPARISON_VALUES
-    assert constants.BENIGN_COMPARISONS.isdisjoint(constants.ACTIVE_COMPARISONS)
+def test_active_comparisons_are_comparison_values():
+    assert constants.ACTIVE_COMPARISONS < constants.COMPARISON_VALUES
 
 
 def test_muc_categories_set():

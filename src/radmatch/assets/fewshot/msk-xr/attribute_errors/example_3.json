@@ -1,0 +1,100 @@
+{
+  "scenario": "Lucency width across a loosening threshold, left-out growth of periprosthetic osteolysis",
+  "description": "Stage 3b call derived from the matches in msk-xr/matching/example_3.json. 'New 1 mm radiolucent line at the bone-cement interface…' vs 'New 3 mm radiolucent line at the bone-cement interface…': measurement major (1 vs 3 mm radiolucent line at the bone-cement interface; a new lucency over 2 mm at the bone-cement interface suggests loosening and prompts closer follow-up); '2.4 cm osteolytic lesion in the right greater…' vs 'Enlarging 2.4 cm osteolytic lesion in the right…': comparison major (pred leaves out the growth of the periprosthetic osteolysis; progressive osteolysis prompts revision planning).",
+  "user": {
+    "series_uuid": "msk-xr_example_3",
+    "indication": "71-year-old woman 8 years after right total hip arthroplasty. Routine follow-up.",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "New 1 mm radiolucent line at the bone-cement interface of the right femoral stem in Gruen zone 1.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": "new",
+          "measurements": [
+            {
+              "value": 1,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "New 3 mm radiolucent line at the bone-cement interface of the right femoral stem in Gruen zone 1.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": "new",
+          "measurements": [
+            {
+              "value": 3,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "2.4 cm osteolytic lesion in the right greater trochanter adjacent to the femoral stem.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 2.4,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "Enlarging 2.4 cm osteolytic lesion in the right greater trochanter adjacent to the femoral stem.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": "worsening",
+          "measurements": [
+            {
+              "value": 2.4,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "measurement",
+            "reasoning": "1 vs 3 mm radiolucent line at the bone-cement interface; a new lucency over 2 mm at the bone-cement interface suggests loosening and prompts closer follow-up",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "comparison",
+            "reasoning": "pred leaves out the growth of the periprosthetic osteolysis; progressive osteolysis prompts revision planning",
+            "severity": "major"
+          }
+        ]
+      }
+    ]
+  }
+}

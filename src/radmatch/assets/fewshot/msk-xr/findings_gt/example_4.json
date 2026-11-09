@@ -1,0 +1,72 @@
+[
+  {
+    "text": "Left total knee arthroplasty with the components in expected alignment.",
+    "measurements": [],
+    "laterality": "left",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No periprosthetic lucency in the left knee.",
+    "measurements": [],
+    "laterality": "left",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No periprosthetic fracture in the left knee.",
+    "measurements": [],
+    "laterality": "left",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Moderate medial compartment osteoarthritis of the right knee with joint space narrowing, marginal osteophytes and subchondral sclerosis.",
+    "measurements": [],
+    "laterality": "right",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Chondrocalcinosis of the right knee menisci.",
+    "measurements": [],
+    "laterality": "right",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Small right suprapatellar joint effusion.",
+    "measurements": [],
+    "laterality": "right",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "8 mm osseous loose body in the right suprapatellar recess.",
+    "measurements": [
+      {
+        "value": 8,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "laterality": "right",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Fabella in the right knee, a normal variant.",
+    "measurements": [],
+    "laterality": "right",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  }
+]

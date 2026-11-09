@@ -1,0 +1,15 @@
+EXAMINATION: ULTRASOUND ABDOMEN, RIGHT UPPER QUADRANT
+
+INDICATION: 45-year-old woman with right upper quadrant pain and fever. Evaluate for cholecystitis.
+
+COMPARISON: None.
+
+FINDINGS:
+LIVER: Diffusely increased echogenicity, consistent with hepatic steatosis. No focal liver lesion. The main portal vein is patent with hepatofugal flow.
+GALLBLADDER: Multiple shadowing gallstones. The gallbladder wall is thickened to 5 mm, with pericholecystic fluid. Positive sonographic Murphy sign.
+BILE DUCTS: No intrahepatic biliary dilatation. The common bile duct is normal in caliber, measuring 5 mm.
+RIGHT KIDNEY: Unremarkable.
+
+IMPRESSION:
+1. Cholelithiasis with gallbladder wall thickening, pericholecystic fluid and a positive sonographic Murphy sign, suspicious for acute cholecystitis.
+2. Hepatofugal flow in the main portal vein.

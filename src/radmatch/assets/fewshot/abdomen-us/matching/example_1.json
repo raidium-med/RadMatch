@@ -1,0 +1,204 @@
+{
+  "scenario": "Status flip on portal flow direction + hedged diagnosis + MIS",
+  "description": "Built from abdomen-us/findings_{gt,pred}/example_1 (constructed right upper quadrant ultrasound). Hepatofugal portal flow (abnormal) is matched to the gt patent portal vein with hepatopetal flow (status flip, INC downstream); the cholecystitis is matched although the pred hedges it; two normal common bile duct statements match whatever size each gives; the pancreas statement the pred leaves out is MIS.",
+  "user": {
+    "indication": "45-year-old woman with right upper quadrant pain and fever. Evaluate for cholecystitis.",
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Diffusely increased hepatic echogenicity, consistent with hepatic steatosis.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "No focal liver lesion.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_3",
+        "text": "Main portal vein patent with hepatofugal flow.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_4",
+        "text": "Cholelithiasis with multiple shadowing gallstones, gallbladder wall thickening to 5 mm, pericholecystic fluid and a positive sonographic Murphy sign, suspicious for acute cholecystitis.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 5,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_5",
+        "text": "No intrahepatic biliary dilatation.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_6",
+        "text": "Common bile duct normal in caliber, measuring 5 mm.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 5,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_7",
+        "text": "Right kidney unremarkable.",
+        "clinical_status": "normal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Diffusely increased hepatic echogenicity, compatible with hepatic steatosis.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "No focal liver lesion.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "Main portal vein patent with hepatopetal flow, peak velocity 25 cm/s.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 25,
+            "unit": "cm/s",
+            "category": "other"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "Acute calculous cholecystitis with multiple shadowing gallstones, gallbladder wall thickening to 5 mm, pericholecystic fluid and a positive sonographic Murphy sign.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 5,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_5",
+        "text": "No intrahepatic biliary dilatation.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_6",
+        "text": "Common bile duct measures 4 mm.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 4,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_7",
+        "text": "Visualized pancreas unremarkable.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_8",
+        "text": "Right kidney unremarkable.",
+        "clinical_status": "normal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "Same echogenic liver read as steatosis."
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_2",
+        "reasoning": "Identical negative for a focal liver lesion."
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_3",
+        "reasoning": "One main portal vein flow assessment, hepatofugal vs hepatopetal."
+      },
+      {
+        "pred_id": "p_4",
+        "gt_id": "gt_4",
+        "reasoning": "Same gallstones with wall thickening, pericholecystic fluid and Murphy sign, hedged in pred."
+      },
+      {
+        "pred_id": "p_5",
+        "gt_id": "gt_5",
+        "reasoning": "Identical negative for intrahepatic biliary dilatation."
+      },
+      {
+        "pred_id": "p_6",
+        "gt_id": "gt_6",
+        "reasoning": "Both describe a normal common bile duct."
+      },
+      {
+        "pred_id": "p_7",
+        "gt_id": "gt_8",
+        "reasoning": "Identical right kidney statement."
+      }
+    ],
+    "unmatched_pred": [],
+    "unmatched_gt": [
+      "gt_7"
+    ]
+  }
+}
