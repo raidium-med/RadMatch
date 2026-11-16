@@ -1,0 +1,40 @@
+[
+  {
+    "text": "Acute fracture of the right fourth metacarpal neck with approximately 35 degrees of volar angulation of the distal fragment.",
+    "measurements": [
+      {
+        "value": 35,
+        "unit": "degrees",
+        "category": "other"
+      }
+    ],
+    "laterality": "right",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "Normal alignment at the carpometacarpal and metacarpophalangeal joints.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "Radiopaque foreign body in the dorsal soft tissues over the right fifth metacarpophalangeal joint.",
+    "measurements": [],
+    "laterality": "right",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Normal bone mineralization.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  }
+]

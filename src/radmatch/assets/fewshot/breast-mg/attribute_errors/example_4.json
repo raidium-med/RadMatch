@@ -1,0 +1,351 @@
+{
+  "scenario": "Constructed: skin ulceration, left-out BI-RADS category, routine grade cap, spiculated vs circumscribed, mastitis vs inflammatory cancer, hedged implant rupture, left-out growth, group, more detail",
+  "description": "Constructed. '…biopsy clip, BI-RADS 6' vs '…biopsy clip, with ulceration of the overlying skin…': extent major (pred leaves out the skin ulceration, which makes the tumor T4b (locally advanced) and calls for neoadjuvant therapy); '…inner quadrant' vs '…inner quadrant + BI-RADS 4B': grade major (pred leaves out the BI-RADS 4B category, which calls for biopsy; the description alone does not say whether the calcifications are biopsied or followed); 'Large oil cyst at the right lumpectomy site' vs 'Small oil cyst at the right lumpectomy site': grade minor (large vs small oil cyst, two steps; both routine, fat necrosis needs no follow-up); '1.4 cm equal-density mass with circumscribed margins…' vs '1.4 cm equal-density mass with spiculated margins in…': appearance major (circumscribed vs spiculated margins; spiculation is highly suspicious for malignancy and calls for biopsy); '…left breast, consistent with mastitis' vs '…left breast, concerning for inflammatory breast cancer': diagnosis major (mastitis vs inflammatory breast cancer; antibiotics and reassessment vs urgent skin biopsy, the hedges belong to the two diagnoses); 'Possible extracapsular rupture of the left silicone…' vs 'Extracapsular rupture of the left silicone implant': certainty major (possible vs definite implant rupture, two steps; a definite rupture is referred for implant removal, a possible one is first confirmed by MRI); '1.3 cm oval circumscribed mass in the left breast at 5…' vs 'Enlarging 1.3 cm oval circumscribed mass in the left…': comparison major (pred leaves out the growth of the mass; growth of a circumscribed mass prompts biopsy); 'Benign vascular calcifications in both breasts' vs 'Benign vascular calcifications in the left breast': no error (the match group gives the detail); 'Benign vascular calcifications in both breasts' vs 'Benign vascular calcifications in the right breast': no error (the match group gives the detail); 'Focal asymmetry in the right breast at 10 o'clock…' vs 'Focal asymmetry in the right breast upper outer…': no error (the pred is more detailed (rule 3)).",
+  "user": {
+    "series_uuid": "breast-mg_example_4",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Biopsy-proven invasive ductal carcinoma in the right breast at 6 o'clock with a biopsy clip, BI-RADS 6.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "Biopsy-proven invasive ductal carcinoma in the right breast at 6 o'clock with a biopsy clip, with ulceration of the overlying skin, BI-RADS 6.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "Grouped amorphous calcifications in the left breast upper inner quadrant.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "Grouped amorphous calcifications in the left breast upper inner quadrant, BI-RADS 4B.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 3,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "Large oil cyst at the right lumpectomy site.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "Small oil cyst at the right lumpectomy site.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 4,
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "1.4 cm equal-density mass with circumscribed margins in the right breast at 11 o'clock, 6 cm from the nipple.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 1.4,
+              "unit": "cm",
+              "category": "size"
+            },
+            {
+              "value": 6,
+              "unit": "cm",
+              "category": "other"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "1.4 cm equal-density mass with spiculated margins in the right breast at 11 o'clock, 6 cm from the nipple.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 1.4,
+              "unit": "cm",
+              "category": "size"
+            },
+            {
+              "value": 6,
+              "unit": "cm",
+              "category": "other"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 5,
+        "pred_finding": {
+          "finding_id": "p_5",
+          "text": "Diffuse skin and trabecular thickening of the left breast, consistent with mastitis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_5",
+          "text": "Diffuse skin and trabecular thickening of the left breast, concerning for inflammatory breast cancer.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 6,
+        "pred_finding": {
+          "finding_id": "p_6",
+          "text": "Possible extracapsular rupture of the left silicone implant.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_6",
+          "text": "Extracapsular rupture of the left silicone implant.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 7,
+        "pred_finding": {
+          "finding_id": "p_7",
+          "text": "1.3 cm oval circumscribed mass in the left breast at 5 o'clock.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 1.3,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_7",
+          "text": "Enlarging 1.3 cm oval circumscribed mass in the left breast at 5 o'clock.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "left",
+          "comparison": "worsening",
+          "measurements": [
+            {
+              "value": 1.3,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 8,
+        "pred_finding": {
+          "finding_id": "p_8",
+          "text": "Benign vascular calcifications in both breasts.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "bilateral",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_8",
+          "text": "Benign vascular calcifications in the left breast.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        },
+        "same_group_gt": [
+          "Benign vascular calcifications in the right breast."
+        ]
+      },
+      {
+        "pair_id": 9,
+        "pred_finding": {
+          "finding_id": "p_8",
+          "text": "Benign vascular calcifications in both breasts.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "bilateral",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_9",
+          "text": "Benign vascular calcifications in the right breast.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "same_group_gt": [
+          "Benign vascular calcifications in the left breast."
+        ]
+      },
+      {
+        "pair_id": 10,
+        "pred_finding": {
+          "finding_id": "p_9",
+          "text": "Focal asymmetry in the right breast at 10 o'clock, middle depth, 6 cm from the nipple.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 6,
+              "unit": "cm",
+              "category": "other"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_10",
+          "text": "Focal asymmetry in the right breast upper outer quadrant.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "extent",
+            "reasoning": "pred leaves out the skin ulceration, which makes the tumor T4b (locally advanced) and calls for neoadjuvant therapy",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "grade",
+            "reasoning": "pred leaves out the BI-RADS 4B category, which calls for biopsy; the description alone does not say whether the calcifications are biopsied or followed",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 3,
+        "errors": [
+          {
+            "dimension": "grade",
+            "reasoning": "large vs small oil cyst, two steps; both routine, fat necrosis needs no follow-up",
+            "severity": "minor"
+          }
+        ]
+      },
+      {
+        "pair_id": 4,
+        "errors": [
+          {
+            "dimension": "appearance",
+            "reasoning": "circumscribed vs spiculated margins; spiculation is highly suspicious for malignancy and calls for biopsy",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 5,
+        "errors": [
+          {
+            "dimension": "diagnosis",
+            "reasoning": "mastitis vs inflammatory breast cancer; antibiotics and reassessment vs urgent skin biopsy, the hedges belong to the two diagnoses",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 6,
+        "errors": [
+          {
+            "dimension": "certainty",
+            "reasoning": "possible vs definite implant rupture, two steps; a definite rupture is referred for implant removal, a possible one is first confirmed by MRI",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 7,
+        "errors": [
+          {
+            "dimension": "comparison",
+            "reasoning": "pred leaves out the growth of the mass; growth of a circumscribed mass prompts biopsy",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 8,
+        "errors": []
+      },
+      {
+        "pair_id": 9,
+        "errors": []
+      },
+      {
+        "pair_id": 10,
+        "errors": []
+      }
+    ]
+  }
+}

@@ -62,7 +62,7 @@ jobs:
           ):
               assert len(prompts.load_prompt(name)) > 500, name
           bundles = sorted(d.name for d in (prompts._ASSETS_DIR / constants.FEWSHOT_DIR).iterdir() if d.is_dir())
-          assert bundles == ["abdomen-ct", "brain-mr", "chest-ct", "chest-xr", "head-ct"], bundles
+          assert bundles == ["abdomen-ct", "abdomen-us", "brain-mr", "breast-mg", "chest-ct", "chest-xr", "head-ct", "msk-xr"], bundles
           for bundle in bundles:
               assert prompts.load_extraction_fewshot(bundle), bundle
               assert prompts.load_matching_fewshot(bundle), bundle

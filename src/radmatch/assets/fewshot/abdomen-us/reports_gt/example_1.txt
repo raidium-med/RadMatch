@@ -1,0 +1,15 @@
+EXAMINATION: ULTRASOUND ABDOMEN, RIGHT UPPER QUADRANT
+
+INDICATION: 45-year-old woman with right upper quadrant pain and fever. Evaluate for cholecystitis.
+
+COMPARISON: None.
+
+FINDINGS:
+LIVER: Diffusely increased echogenicity, compatible with hepatic steatosis. No focal liver lesion. The main portal vein is patent with hepatopetal flow, peak velocity 25 cm/s.
+GALLBLADDER: Multiple shadowing gallstones. The gallbladder wall is thickened to 5 mm, with pericholecystic fluid. Positive sonographic Murphy sign.
+BILE DUCTS: No intrahepatic biliary dilatation. The common bile duct measures 4 mm.
+PANCREAS: The visualized pancreas is unremarkable. The pancreatic tail is obscured by bowel gas.
+RIGHT KIDNEY: Unremarkable.
+
+IMPRESSION:
+Acute calculous cholecystitis.

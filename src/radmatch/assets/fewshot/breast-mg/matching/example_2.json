@@ -1,0 +1,125 @@
+{
+  "scenario": "Laterality flip (no same-side counterpart) + new vs stable + left-out quadrant",
+  "description": "Built from breast-mg/findings_{gt,pred}/example_2 (constructed screening mammogram). The pred places the new calcifications in the right breast; the right breast has no gt calcifications (the mass and the distortion are other findings), so they are matched to the left ones (laterality flip, scored downstream); the mass is matched although the pred calls it new and the gt stable; the distortion is matched without its quadrant.",
+  "user": {
+    "indication": "58-year-old woman. Screening.",
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Scattered areas of fibroglandular density in both breasts (ACR breast density b).",
+        "clinical_status": "normal",
+        "laterality": "bilateral",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "New 6 mm group of amorphous calcifications in the right breast upper outer quadrant, middle depth, BI-RADS 0.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": "new",
+        "measurements": [
+          {
+            "value": 6,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_3",
+        "text": "New 0.9 cm oval circumscribed mass in the right breast at 7 o'clock, posterior depth.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": "new",
+        "measurements": [
+          {
+            "value": 0.9,
+            "unit": "cm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_4",
+        "text": "Postsurgical architectural distortion in the right breast.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Scattered areas of fibroglandular density in both breasts (ACR breast density b).",
+        "clinical_status": "normal",
+        "laterality": "bilateral",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "New 6 mm group of amorphous calcifications in the left breast upper outer quadrant, middle depth, BI-RADS 0.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": "new",
+        "measurements": [
+          {
+            "value": 6,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "Stable 0.9 cm oval circumscribed mass in the right breast at 7 o'clock, posterior depth.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": "stable",
+        "measurements": [
+          {
+            "value": 0.9,
+            "unit": "cm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "Stable postsurgical architectural distortion in the right breast upper inner quadrant.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": "stable",
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "Identical breast density statement."
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_2",
+        "reasoning": "Same new group of amorphous calcifications, placed in the right instead of the left breast."
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_3",
+        "reasoning": "Same right breast mass at 7 o'clock, called new vs stable."
+      },
+      {
+        "pred_id": "p_4",
+        "gt_id": "gt_4",
+        "reasoning": "Same postsurgical architectural distortion in the right breast."
+      }
+    ],
+    "unmatched_pred": [],
+    "unmatched_gt": []
+  }
+}

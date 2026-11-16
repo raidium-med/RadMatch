@@ -1,0 +1,51 @@
+{
+  "scenario": "Laterality difference left upstream",
+  "description": "Stage 3b call derived from the matches in abdomen-us/matching/example_3.json. '…of the left kidney' vs '…of the right kidney': no error (a laterality difference is scored upstream (Stage 3a laterality)).",
+  "user": {
+    "series_uuid": "abdomen-us_example_3",
+    "indication": "74-year-old man with acute kidney injury and difficulty voiding.",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "2.4 cm complex cyst with a thick septation in the upper pole of the left kidney.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 2.4,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "2.4 cm complex cyst with a thick septation in the upper pole of the right kidney.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 2.4,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": []
+      }
+    ]
+  }
+}

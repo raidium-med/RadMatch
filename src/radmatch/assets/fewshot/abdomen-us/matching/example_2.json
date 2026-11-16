@@ -1,0 +1,190 @@
+{
+  "scenario": "1:1 matches on a pelvic ultrasound: fibroid layer, cyst size, two normal statements",
+  "description": "Built from abdomen-us/findings_{gt,pred}/example_2 (constructed pelvic ultrasound for postmenopausal bleeding). The fibroid is matched although the pred places it in another layer of the uterine wall, and the ovarian cyst whatever size each side gives; 'right ovary not visualized' is an examination-quality hedge, dropped in Stage 1 on both sides.",
+  "user": {
+    "indication": "58-year-old woman with postmenopausal bleeding.",
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Anteverted uterus measuring 8.2 x 4.5 x 4.0 cm.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 8.2,
+            "unit": "cm",
+            "category": "size"
+          },
+          {
+            "value": 4.5,
+            "unit": "cm",
+            "category": "size"
+          },
+          {
+            "value": 4.0,
+            "unit": "cm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_2",
+        "text": "2.1 cm subserosal fibroid in the posterior uterine body.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 2.1,
+            "unit": "cm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_3",
+        "text": "Thickened endometrium measuring 9 mm.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 9,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_4",
+        "text": "2.8 cm simple cyst in the left ovary, O-RADS US 2.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 2.8,
+            "unit": "cm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_5",
+        "text": "No pelvic free fluid.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Anteverted uterus measuring 8.2 x 4.5 x 4.0 cm.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 8.2,
+            "unit": "cm",
+            "category": "size"
+          },
+          {
+            "value": 4.5,
+            "unit": "cm",
+            "category": "size"
+          },
+          {
+            "value": 4.0,
+            "unit": "cm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "2.1 cm submucosal fibroid in the posterior uterine body.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 2.1,
+            "unit": "cm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "Thickened endometrium measuring 9 mm.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 9,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "3.2 cm simple cyst in the left ovary, O-RADS US 2.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 3.2,
+            "unit": "cm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_5",
+        "text": "No free fluid in the pelvis.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "Identical uterus statement."
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_2",
+        "reasoning": "One posterior uterine body fibroid, called subserosal vs submucosal."
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_3",
+        "reasoning": "Identical thickened endometrium."
+      },
+      {
+        "pred_id": "p_4",
+        "gt_id": "gt_4",
+        "reasoning": "Same simple left ovarian cyst, sized differently."
+      },
+      {
+        "pred_id": "p_5",
+        "gt_id": "gt_5",
+        "reasoning": "Both deny pelvic free fluid."
+      }
+    ],
+    "unmatched_pred": [],
+    "unmatched_gt": []
+  }
+}

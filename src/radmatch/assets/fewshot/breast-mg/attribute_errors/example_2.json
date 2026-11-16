@@ -1,0 +1,119 @@
+{
+  "scenario": "Laterality only, two different changes left upstream, left-out quadrant of a post-surgical state minor",
+  "description": "Stage 3b call derived from the matches in breast-mg/matching/example_2.json. 'New 6 mm group of amorphous calcifications in the…' vs 'New 6 mm group of amorphous calcifications in the left…': no error (a laterality difference is scored upstream (Stage 3a laterality)); 'New 0.9 cm oval circumscribed mass in the right breast…' vs 'Stable 0.9 cm oval circumscribed mass in the right…': no error (two different changes over time are scored upstream (Stage 3a comparison)); 'Postsurgical architectural distortion in the right…' vs 'Stable postsurgical architectural distortion in the…': location minor (pred leaves out the upper inner quadrant of the postsurgical distortion; an expected post-treatment state, the quadrant changes nothing).",
+  "user": {
+    "series_uuid": "breast-mg_example_2",
+    "indication": "58-year-old woman. Screening.",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "New 6 mm group of amorphous calcifications in the right breast upper outer quadrant, middle depth, BI-RADS 0.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": "new",
+          "measurements": [
+            {
+              "value": 6,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "New 6 mm group of amorphous calcifications in the left breast upper outer quadrant, middle depth, BI-RADS 0.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": "new",
+          "measurements": [
+            {
+              "value": 6,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "New 0.9 cm oval circumscribed mass in the right breast at 7 o'clock, posterior depth.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": "new",
+          "measurements": [
+            {
+              "value": 0.9,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "Stable 0.9 cm oval circumscribed mass in the right breast at 7 o'clock, posterior depth.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "right",
+          "comparison": "stable",
+          "measurements": [
+            {
+              "value": 0.9,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 3,
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "Postsurgical architectural distortion in the right breast.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "Stable postsurgical architectural distortion in the right breast upper inner quadrant.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "right",
+          "comparison": "stable",
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": []
+      },
+      {
+        "pair_id": 2,
+        "errors": []
+      },
+      {
+        "pair_id": 3,
+        "errors": [
+          {
+            "dimension": "location",
+            "reasoning": "pred leaves out the upper inner quadrant of the postsurgical distortion; an expected post-treatment state, the quadrant changes nothing",
+            "severity": "minor"
+          }
+        ]
+      }
+    ]
+  }
+}
