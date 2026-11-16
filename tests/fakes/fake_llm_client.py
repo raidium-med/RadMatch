@@ -29,11 +29,6 @@ class FakeLLMClient(llm_clients.Client):
         self.script: list[object] = list(script or [])
         self.calls: list[dict] = []  # records (messages, response_format, max_tokens) per call
 
-    def push(self, *items: object) -> "FakeLLMClient":
-        """Append items to the script. Returns self for chaining."""
-        self.script.extend(items)
-        return self
-
     def complete(
         self,
         messages: Sequence[Mapping[str, object]],

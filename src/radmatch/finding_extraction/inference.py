@@ -14,7 +14,7 @@ from radmatch.llm_utils import llm_clients, prompts
 logger = logging.getLogger(__name__)
 
 
-# Deliberately soft on enum values (open `string` for clinical_*, comparison,
+# Deliberately soft on enum values (open `string` for clinical_*, laterality, comparison,
 # measurement.category) — `extract_utils.validate_and_normalize_finding` normalizes
 # them downstream, as Stage 3b does after its own soft schema.
 _FINDINGS_SCHEMA = {
@@ -32,6 +32,7 @@ _FINDINGS_SCHEMA = {
                             "text": {"type": "string"},
                             "clinical_status": {"type": "string"},
                             "clinical_significance": {"type": "string"},
+                            "laterality": {"type": ["string", "null"]},
                             "comparison": {"type": ["string", "null"]},
                             "measurements": {
                                 "type": "array",
@@ -51,6 +52,7 @@ _FINDINGS_SCHEMA = {
                             "text",
                             "clinical_status",
                             "clinical_significance",
+                            "laterality",
                             "comparison",
                             "measurements",
                         ],
@@ -368,6 +370,7 @@ def extract_findings(
         "fewshot": fewshot,
         "reasoning": reasoning,
         "prompt_hash": prompts.prompt_fingerprint(prompts.PROMPT_FINDING_EXTRACTION),
+        "fewshot_hash": io.fingerprint(fewshot_messages),
         "schema_hash": io.fingerprint(_FINDINGS_SCHEMA),
     }
 

@@ -7,6 +7,7 @@
         "finding_id": "p_1",
         "text": "Circumferential wall thickening of the sigmoid colon.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -14,6 +15,7 @@
         "finding_id": "p_2",
         "text": "Liver parenchyma is normal.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }
@@ -23,6 +25,7 @@
         "finding_id": "gt_1",
         "text": "Liver shows no focal lesion.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       },
@@ -30,6 +33,7 @@
         "finding_id": "gt_2",
         "text": "Mild pancreatic duct dilatation.",
         "clinical_status": "abnormal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }
@@ -40,7 +44,7 @@
       {
         "pred_id": "p_2",
         "gt_id": "gt_1",
-        "reasoning": "Both state the liver is unremarkable; same anatomy, same status."
+        "reasoning": "Organ-level 'liver parenchyma normal' covers 'no focal lesion'."
       }
     ],
     "unmatched_pred": [

@@ -1,0 +1,283 @@
+{
+ "scenario": "Constructed: acute vs chronic, single vs multiple, attenuation, invasion, diffuse pneumonia distribution and descriptors, a benign-lesion size, a structured category",
+ "description": "Constructed. 'Acute pulmonary emboli in the right lower lobe segmental…' vs 'Chronic pulmonary emboli in the right lower lobe segmental…': diagnosis major (acute vs chronic segmental emboli; acute emboli call for anticoagulation now); 'Solitary 9 mm right lower lobe pulmonary nodule' vs 'Multiple right lower lobe pulmonary nodules, the largest 9…': extent major (solitary vs multiple nodules; primary vs metastatic workup); '8 mm ground-glass nodule in the left upper lobe' vs '8 mm solid nodule in the left upper lobe': appearance major (ground-glass vs solid 8 mm nodule; switches the Fleischner pathway); 'Right upper lobe mass abutting the mediastinal pleura' vs 'Right upper lobe mass invading the mediastinum': extent major (abutment vs invasion of the mediastinum; changes the T stage and resectability); 'Bilateral ground-glass opacities with interlobular septal…' vs 'Bilateral peripheral ground-glass opacities with…': location minor (both lungs vs peripheral ground glass; a coarser distribution of a diffuse pneumonia, same treatment), appearance minor (septal thickening vs consolidation within the ground glass; two descriptors of one diffuse pneumonia, same treatment); '4.2 cm lipoma in the left chest wall' vs '3.0 cm left chest wall lipoma': measurement minor (4.2 vs 3.0 cm chest wall lipoma, over 20 %; a lipoma is benign and not followed by its size); '7 mm solid right upper lobe nodule, Lung-RADS 4A' vs '7 mm solid right upper lobe nodule, Lung-RADS 3': grade major (Lung-RADS 4A vs 3; 3-month vs 6-month low-dose CT).",
+ "user": {
+  "series_uuid": "chest-ct_example_6",
+  "pairs": [
+   {
+    "pair_id": 1,
+    "pred_finding": {
+     "finding_id": "p_1",
+     "text": "Acute pulmonary emboli in the right lower lobe segmental arteries.",
+     "measurements": [],
+     "laterality": "right",
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "critical"
+    },
+    "gt_finding": {
+     "finding_id": "gt_1",
+     "text": "Chronic pulmonary emboli in the right lower lobe segmental arteries.",
+     "measurements": [],
+     "laterality": "right",
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "notable"
+    }
+   },
+   {
+    "pair_id": 2,
+    "pred_finding": {
+     "finding_id": "p_2",
+     "text": "Solitary 9 mm right lower lobe pulmonary nodule.",
+     "measurements": [
+      {
+       "value": 9,
+       "unit": "mm",
+       "category": "size"
+      }
+     ],
+     "laterality": "right",
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "notable"
+    },
+    "gt_finding": {
+     "finding_id": "gt_2",
+     "text": "Multiple right lower lobe pulmonary nodules, the largest 9 mm.",
+     "measurements": [
+      {
+       "value": 9,
+       "unit": "mm",
+       "category": "size"
+      }
+     ],
+     "laterality": "right",
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "notable"
+    }
+   },
+   {
+    "pair_id": 3,
+    "pred_finding": {
+     "finding_id": "p_3",
+     "text": "8 mm ground-glass nodule in the left upper lobe.",
+     "measurements": [
+      {
+       "value": 8,
+       "unit": "mm",
+       "category": "size"
+      }
+     ],
+     "laterality": "left",
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "notable"
+    },
+    "gt_finding": {
+     "finding_id": "gt_3",
+     "text": "8 mm solid nodule in the left upper lobe.",
+     "measurements": [
+      {
+       "value": 8,
+       "unit": "mm",
+       "category": "size"
+      }
+     ],
+     "laterality": "left",
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "notable"
+    }
+   },
+   {
+    "pair_id": 4,
+    "pred_finding": {
+     "finding_id": "p_4",
+     "text": "Right upper lobe mass abutting the mediastinal pleura.",
+     "measurements": [],
+     "laterality": "right",
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "urgent"
+    },
+    "gt_finding": {
+     "finding_id": "gt_4",
+     "text": "Right upper lobe mass invading the mediastinum.",
+     "measurements": [],
+     "laterality": "right",
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "urgent"
+    }
+   },
+   {
+    "pair_id": 5,
+    "pred_finding": {
+     "finding_id": "p_9",
+     "text": "Bilateral ground-glass opacities with interlobular septal thickening, consistent with viral pneumonia.",
+     "measurements": [],
+     "laterality": "bilateral",
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "urgent"
+    },
+    "gt_finding": {
+     "finding_id": "gt_9",
+     "text": "Bilateral peripheral ground-glass opacities with consolidation in the lower lobes, consistent with viral pneumonia.",
+     "measurements": [],
+     "laterality": "bilateral",
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "urgent"
+    }
+   },
+   {
+    "pair_id": 6,
+    "pred_finding": {
+     "finding_id": "p_10",
+     "text": "4.2 cm lipoma in the left chest wall.",
+     "measurements": [
+      {
+       "value": 4.2,
+       "unit": "cm",
+       "category": "size"
+      }
+     ],
+     "laterality": "left",
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "routine"
+    },
+    "gt_finding": {
+     "finding_id": "gt_10",
+     "text": "3.0 cm left chest wall lipoma.",
+     "measurements": [
+      {
+       "value": 3.0,
+       "unit": "cm",
+       "category": "size"
+      }
+     ],
+     "laterality": "left",
+     "comparison": null,
+     "clinical_status": "abnormal",
+     "clinical_significance": "routine"
+    }
+   },
+   {
+    "pair_id": 7,
+    "pred_finding": {
+     "finding_id": "p_11",
+     "text": "7 mm solid right upper lobe nodule, Lung-RADS 4A.",
+     "clinical_status": "abnormal",
+     "clinical_significance": "urgent",
+     "laterality": "right",
+     "comparison": null,
+     "measurements": [
+      {
+       "value": 7,
+       "unit": "mm",
+       "category": "size"
+      }
+     ]
+    },
+    "gt_finding": {
+     "finding_id": "gt_11",
+     "text": "7 mm solid right upper lobe nodule, Lung-RADS 3.",
+     "clinical_status": "abnormal",
+     "clinical_significance": "notable",
+     "laterality": "right",
+     "comparison": null,
+     "measurements": [
+      {
+       "value": 7,
+       "unit": "mm",
+       "category": "size"
+      }
+     ]
+    }
+   }
+  ]
+ },
+ "assistant": {
+  "errors_per_pair": [
+   {
+    "pair_id": 1,
+    "errors": [
+     {
+      "dimension": "diagnosis",
+      "reasoning": "acute vs chronic segmental emboli; acute emboli call for anticoagulation now",
+      "severity": "major"
+     }
+    ]
+   },
+   {
+    "pair_id": 2,
+    "errors": [
+     {
+      "dimension": "extent",
+      "reasoning": "solitary vs multiple nodules; primary vs metastatic workup",
+      "severity": "major"
+     }
+    ]
+   },
+   {
+    "pair_id": 3,
+    "errors": [
+     {
+      "dimension": "appearance",
+      "reasoning": "ground-glass vs solid 8 mm nodule; switches the Fleischner pathway",
+      "severity": "major"
+     }
+    ]
+   },
+   {
+    "pair_id": 4,
+    "errors": [
+     {
+      "dimension": "extent",
+      "reasoning": "abutment vs invasion of the mediastinum; changes the T stage and resectability",
+      "severity": "major"
+     }
+    ]
+   },
+   {
+    "pair_id": 5,
+    "errors": [
+     {
+      "dimension": "location",
+      "reasoning": "both lungs vs peripheral ground glass; a coarser distribution of a diffuse pneumonia, same treatment",
+      "severity": "minor"
+     },
+     {
+      "dimension": "appearance",
+      "reasoning": "septal thickening vs consolidation within the ground glass; two descriptors of one diffuse pneumonia, same treatment",
+      "severity": "minor"
+     }
+    ]
+   },
+   {
+    "pair_id": 6,
+    "errors": [
+     {
+      "dimension": "measurement",
+      "reasoning": "4.2 vs 3.0 cm chest wall lipoma, over 20 %; a lipoma is benign and not followed by its size",
+      "severity": "minor"
+     }
+    ]
+   },
+   {
+    "pair_id": 7,
+    "errors": [
+     {
+      "dimension": "grade",
+      "reasoning": "Lung-RADS 4A vs 3; 3-month vs 6-month low-dose CT",
+      "severity": "major"
+     }
+    ]
+   }
+  ]
+ }
+}

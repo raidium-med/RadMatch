@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+
 import pytest
 
 from radmatch.scoring import inference, pipeline
@@ -12,7 +14,7 @@ def test_detect_attribute_errors_includes_indication(fake_client, ok, make_findi
     gt = [make_finding("g1")]
     pred = [make_finding("p1")]
     matches = [{"pred_id": "p1", "gt_id": "g1", "reasoning": ""}]
-    client = fake_client(ok({"errors_per_match": [[]]}))
+    client = fake_client(ok({"errors_per_pair": [{"pair_id": 1, "errors": []}]}))
     inference.detect_attribute_errors(
         matches=matches,
         findings_pred={"p1": pred[0]},
@@ -31,7 +33,7 @@ def test_detect_attribute_errors_accepts_measurement_dimension(fake_client, ok, 
     pred = [make_finding("p1")]
     matches = [{"pred_id": "p1", "gt_id": "g1", "reasoning": ""}]
     meas_err = {"dimension": "measurement", "severity": "major", "reasoning": "13.0 cm normal vs 13.5 cm splenomegaly"}
-    client = fake_client(ok({"errors_per_match": [[meas_err]]}))
+    client = fake_client(ok({"errors_per_pair": [{"pair_id": 1, "errors": [meas_err]}]}))
     out = inference.detect_attribute_errors(
         matches=matches,
         findings_pred={"p1": pred[0]},
@@ -42,19 +44,17 @@ def test_detect_attribute_errors_accepts_measurement_dimension(fake_client, ok, 
     assert out[0] == [meas_err]
 
 
-def test_detect_attribute_errors_raises_on_length_mismatch(fake_client, ok, make_finding):
-    """A per-match array whose length != number of matches is untrustworthy —
-    positional realignment would mis-attribute errors — so after retries it raises
-    rather than degrading the report to no attribute errors."""
+def test_detect_attribute_errors_raises_on_unasked_pair_id(fake_client, ok, make_finding):
+    """An answer for a pair_id that was not asked is untrustworthy, so after retries it
+    raises rather than degrading the report to no attribute errors."""
     gt = [make_finding("g1")]
     pred = [make_finding("p1")]
     matches = [{"pred_id": "p1", "gt_id": "g1", "reasoning": ""}]
-    # 2 error-lists returned for 1 match → length mismatch on every attempt.
     bad = ok(
         {
-            "errors_per_match": [
-                [{"dimension": "location", "severity": "major", "reasoning": "x"}],
-                [{"dimension": "severity", "severity": "minor", "reasoning": "y"}],
+            "errors_per_pair": [
+                {"pair_id": 1, "errors": [{"dimension": "location", "severity": "major", "reasoning": "x"}]},
+                {"pair_id": 2, "errors": [{"dimension": "grade", "severity": "minor", "reasoning": "y"}]},
             ]
         }
     )
@@ -71,15 +71,49 @@ def test_detect_attribute_errors_raises_on_length_mismatch(fake_client, ok, make
     assert len(client.calls) == 2  # initial + 1 retry, per max_retries
 
 
+def test_detect_attribute_errors_places_answers_by_pair_id(fake_client, ok, make_finding):
+    """Answers are placed by the pair_id they name, whatever order they come in."""
+    findings_gt = {"g1": make_finding("g1"), "g2": make_finding("g2")}
+    findings_pred = {"p1": make_finding("p1"), "p2": make_finding("p2")}
+    matches = [{"pred_id": "p1", "gt_id": "g1", "reasoning": ""}, {"pred_id": "p2", "gt_id": "g2", "reasoning": ""}]
+    loc_err = {"dimension": "location", "severity": "major", "reasoning": "upper vs lower lobe"}
+    client = fake_client(ok({"errors_per_pair": [{"pair_id": 2, "errors": [loc_err]}, {"pair_id": 1, "errors": []}]}))
+    out = inference.detect_attribute_errors(
+        matches=matches, findings_pred=findings_pred, findings_gt=findings_gt, series_uuid="s1", client=client
+    )
+    assert out == [[], [loc_err]]
+    sent = json.loads(client.calls[0]["messages"][-1]["content"])
+    assert [p["pair_id"] for p in sent["pairs"]] == [1, 2]
+
+
+def test_detect_attribute_errors_sends_group_context(fake_client, ok, make_finding):
+    """A pair inside a 1:N group carries the texts of the group's other findings; a 1:1 pair carries none."""
+    findings_gt = {"g1": make_finding("g1"), "g2": make_finding("g2"), "g3": make_finding("g3")}
+    findings_pred = {"p1": make_finding("p1"), "p2": make_finding("p2")}
+    matches = [
+        {"pred_id": "p1", "gt_id": "g1", "reasoning": ""},
+        {"pred_id": "p1", "gt_id": "g2", "reasoning": ""},
+        {"pred_id": "p2", "gt_id": "g3", "reasoning": ""},
+    ]
+    client = fake_client(ok({"errors_per_pair": [{"pair_id": i, "errors": []} for i in (1, 2, 3)]}))
+    inference.detect_attribute_errors(
+        matches=matches, findings_pred=findings_pred, findings_gt=findings_gt, series_uuid="s1", client=client
+    )
+    pairs = json.loads(client.calls[0]["messages"][-1]["content"])["pairs"]
+    assert pairs[0]["same_group_gt"] == [findings_gt["g2"]["text"]]
+    assert pairs[1]["same_group_gt"] == [findings_gt["g1"]["text"]]
+    assert "same_group_gt" not in pairs[2] and "same_group_pred" not in pairs[2]
+
+
 def test_detect_attribute_errors_retries_malformed_then_recovers(fake_client, ok, make_finding):
     """A malformed Stage 3b response is retried; a well-formed retry is used
     instead of degrading the report to empty text errors."""
     gt = [make_finding("g1")]
     pred = [make_finding("p1")]
     matches = [{"pred_id": "p1", "gt_id": "g1", "reasoning": ""}]
-    loc_err = {"dimension": "location", "severity": "major", "reasoning": "left vs right"}
-    bad = ok({"errors_per_match": [[], [loc_err]]})
-    good = ok({"errors_per_match": [[loc_err]]})
+    loc_err = {"dimension": "location", "severity": "major", "reasoning": "upper vs lower lobe"}
+    bad = ok({"errors_per_pair": [{"pair_id": 1, "errors": []}, {"pair_id": 2, "errors": [loc_err]}]})
+    good = ok({"errors_per_pair": [{"pair_id": 1, "errors": [loc_err]}]})
     client = fake_client(bad, good)
     out = inference.detect_attribute_errors(
         matches=matches,
@@ -96,7 +130,7 @@ def test_detect_attribute_errors_omits_empty_indication(fake_client, ok, make_fi
     gt = [make_finding("g1")]
     pred = [make_finding("p1")]
     matches = [{"pred_id": "p1", "gt_id": "g1", "reasoning": ""}]
-    client = fake_client(ok({"errors_per_match": [[]]}))
+    client = fake_client(ok({"errors_per_pair": [{"pair_id": 1, "errors": []}]}))
     inference.detect_attribute_errors(
         matches=matches,
         findings_pred={"p1": pred[0]},
@@ -113,9 +147,11 @@ def test_fingerprint_changes_with_indication(make_finding):
     pred_by_id = {"p1": make_finding("p1", text="lesion")}
     gt_by_id = {"g1": make_finding("g1", text="lesion")}
     matches = [{"pred_id": "p1", "gt_id": "g1"}]
-    fp_empty = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="")
-    fp_a = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="Trauma")
-    fp_b = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="Follow-up")
+    fp_empty = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="", stage3b_config={})
+    fp_a = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="Trauma", stage3b_config={})
+    fp_b = pipeline._fingerprint_matched_findings(
+        matches, pred_by_id, gt_by_id, indication="Follow-up", stage3b_config={}
+    )
     assert fp_empty != fp_a
     assert fp_a != fp_b
 
@@ -124,6 +160,21 @@ def test_fingerprint_stable_for_same_indication(make_finding):
     pred_by_id = {"p1": make_finding("p1", text="lesion")}
     gt_by_id = {"g1": make_finding("g1", text="lesion")}
     matches = [{"pred_id": "p1", "gt_id": "g1"}]
-    fp1 = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="Trauma")
-    fp2 = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="Trauma")
+    fp1 = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="Trauma", stage3b_config={})
+    fp2 = pipeline._fingerprint_matched_findings(matches, pred_by_id, gt_by_id, indication="Trauma", stage3b_config={})
     assert fp1 == fp2
+
+
+@pytest.mark.parametrize(
+    "pred, gt, judged",
+    [
+        pytest.param(("normal", "No pneumothorax."), ("abnormal", "Small pneumothorax."), False, id="status-inversion"),
+        pytest.param(("normal", "No effusion."), ("normal", "No pleural effusion."), False, id="two-normal"),
+        pytest.param(("normal", "Possibly no embolism."), ("normal", "No embolism."), True, id="hedged-rule-out"),
+        pytest.param(("abnormal", "Small  effusion."), ("abnormal", "small effusion."), False, id="same-text"),
+        pytest.param(("abnormal", "Small effusion."), ("abnormal", "Large effusion."), True, id="different-text"),
+    ],
+)
+def test_needs_judge(pred, gt, judged):
+    finding = lambda status, text: {"clinical_status": status, "text": text}  # noqa: E731
+    assert inference.needs_judge(finding(*pred), finding(*gt)) is judged

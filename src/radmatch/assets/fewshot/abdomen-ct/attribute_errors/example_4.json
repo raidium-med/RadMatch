@@ -1,0 +1,174 @@
+{
+  "scenario": "Clinical long tail: group context, different diagnosis, synonyms, two-step grade",
+  "description": "Constructed; pairs from abdomen-ct/matching/example_6.json. '6 mm left renal pelvis stone causing moderate…' vs '6 mm calculus in the left renal pelvis': no error (the match group gives the detail); '6 mm left renal pelvis stone causing moderate…' vs 'Moderate left hydronephrosis': no error (the match group gives the detail); 'Sigmoid diverticulosis' vs 'Sigmoid diverticulitis with pericolic fat stranding': diagnosis major (diverticulosis vs diverticulitis; pred misses an acute inflammation that needs treatment); 'Aortic calcification' vs 'Atherosclerotic calcification of the abdominal aorta': no error (same content in other words, or the pred adds detail); 'Small amount of ascites' vs 'Large-volume ascites': grade major (small vs large-volume ascites, two steps; large ascites may need paracentesis).",
+  "user": {
+    "series_uuid": "abdomen-ct_example_4",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "6 mm left renal pelvis stone causing moderate hydronephrosis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 6,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "6 mm calculus in the left renal pelvis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 6,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "same_group_gt": [
+          "Moderate left hydronephrosis."
+        ]
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "6 mm left renal pelvis stone causing moderate hydronephrosis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 6,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "Moderate left hydronephrosis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": []
+        },
+        "same_group_gt": [
+          "6 mm calculus in the left renal pelvis."
+        ]
+      },
+      {
+        "pair_id": 3,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "Sigmoid diverticulosis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "Sigmoid diverticulitis with pericolic fat stranding.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 4,
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "Aortic calcification.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_5",
+          "text": "Atherosclerotic calcification of the abdominal aorta.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 5,
+        "pred_finding": {
+          "finding_id": "p_8",
+          "text": "Small amount of ascites.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_9",
+          "text": "Large-volume ascites.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": []
+      },
+      {
+        "pair_id": 2,
+        "errors": []
+      },
+      {
+        "pair_id": 3,
+        "errors": [
+          {
+            "dimension": "diagnosis",
+            "reasoning": "diverticulosis vs diverticulitis; pred misses an acute inflammation that needs treatment",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 4,
+        "errors": []
+      },
+      {
+        "pair_id": 5,
+        "errors": [
+          {
+            "dimension": "grade",
+            "reasoning": "small vs large-volume ascites, two steps; large ascites may need paracentesis",
+            "severity": "major"
+          }
+        ]
+      }
+    ]
+  }
+}

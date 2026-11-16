@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 import shutil
-from typing import TYPE_CHECKING, Literal, Sequence, TypedDict
+from typing import TYPE_CHECKING, Sequence
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -14,24 +14,13 @@ from radmatch import constants, io
 logger = logging.getLogger(__name__)
 
 
-class Finding(TypedDict):
-    """A single radiology finding, after extraction + normalisation."""
-
-    finding_id: str
-    text: str
-    clinical_status: Literal["normal", "abnormal"]
-    clinical_significance: Literal["critical", "urgent", "notable", "routine"]
-    comparison: Literal["stable", "improving", "worsening", "new", "resolved"] | None
-    measurements: list[dict]
-
-
 # ============================================================================
 # Measurement Parsing Utilities
 # ============================================================================
 
 
-def _normalize_unit(unit_str: str, category: str) -> str | None:
-    """Normalize unit string to standard form."""
+def _normalize_unit(unit_str: str) -> str | None:
+    """Lower-cased unit, spelled-out and symbol forms mapped by exact match to their canonical unit."""
     if unit_str is None:
         return None
     if not isinstance(unit_str, str):
@@ -43,22 +32,7 @@ def _normalize_unit(unit_str: str, category: str) -> str | None:
     if not unit_lower:
         return None
 
-    # Handle percentage symbol - convert to "pct"
-    if unit_lower == "%":
-        return "pct"
-
-    # Check against known units for this category
-    category_units = constants.MEASUREMENT_UNIT_PATTERNS.get(category, [])
-    for known_unit in category_units:
-        if unit_lower == known_unit or unit_lower.startswith(known_unit):
-            return known_unit
-
-    # Check against all known units
-    for known_unit in constants.MEASUREMENT_UNIT_CONVERSION:
-        if unit_lower == known_unit or unit_lower.startswith(known_unit):
-            return known_unit
-
-    return unit_lower
+    return constants.MEASUREMENT_UNIT_ALIASES.get(unit_lower, unit_lower)
 
 
 # ============================================================================
@@ -74,8 +48,8 @@ def validate_and_normalize_finding(finding: dict) -> dict:
     `normal + critical` rule-out is left alone. Everything else passes through, and
     the input is never mutated.
 
-    Applied both to fresh LLM output and to findings loaded from disk, which defends
-    against schema drift and hand-edited annotations.
+    Applied both to fresh LLM output (the response schemas are not strict) and to
+    findings loaded from disk (`--findings-gt`, hand-edited annotations).
     """
     out = dict(finding)
     label = out.get("finding_id") or (out.get("text") or "")[:40]
@@ -117,26 +91,33 @@ def validate_and_normalize_finding(finding: dict) -> dict:
         logger.warning("finding %r has invalid comparison %r; falling back to None", label, comparison)
         out["comparison"] = None
 
+    laterality = out.get("laterality")
+    if isinstance(laterality, str):
+        laterality = out["laterality"] = laterality.strip().lower() or None
+    if laterality is not None and (not isinstance(laterality, str) or laterality not in constants.LATERALITY_VALUES):
+        logger.warning("finding %r has invalid laterality %r; falling back to None", label, laterality)
+        out["laterality"] = None
+
     return out
 
 
-_CANONICAL_FINDING_FIELDS = (
-    "finding_id",
+EXTRACTED_FINDING_FIELDS = (
     "text",
     "clinical_status",
     "clinical_significance",
+    "laterality",
     "comparison",
     "measurements",
 )
 
 
-def project_to_canonical_finding(finding: dict[str, object]) -> dict[str, object]:
-    """Validate + normalize then project to the canonical 6-field schema.
-    Used when serializing findings into LLM prompts (few-shot examples) so
-    the wire format stays minimal."""
+def project_to_canonical_finding(finding: dict[str, object], with_id: bool = True) -> dict[str, object]:
+    """Validate + normalize, then keep `finding_id` and the six fields Stage 1 extracts
+    (only the six with `with_id=False`: the few-shot answers of the Stage 1 prompt)."""
     normalized = validate_and_normalize_finding(finding)
-    defaults = {"finding_id": "", "text": "", "measurements": []}
-    return {k: normalized.get(k, defaults.get(k)) for k in _CANONICAL_FINDING_FIELDS}
+    defaults = {"text": "", "measurements": []}
+    fields = ("finding_id", *EXTRACTED_FINDING_FIELDS) if with_id else EXTRACTED_FINDING_FIELDS
+    return {k: normalized.get(k, defaults.get(k)) for k in fields}
 
 
 # ============================================================================
@@ -146,8 +127,6 @@ def project_to_canonical_finding(finding: dict[str, object]) -> dict[str, object
 
 def create_output_directories(output_dir: Path) -> tuple[Path, Path]:
     """Create findings_gt and findings_pred directories."""
-    from radmatch import constants
-
     output_dir.mkdir(parents=True, exist_ok=True)
     findings_gt_dir = output_dir / constants.FINDINGS_GT_DIR
     findings_pred_dir = output_dir / constants.FINDINGS_PRED_DIR
@@ -198,7 +177,7 @@ def extract_findings_list(
                     continue
 
                 unit_raw = m.get("unit")
-                normalized_unit = _normalize_unit(unit_raw, normalized_category) if unit_raw else None
+                normalized_unit = _normalize_unit(unit_raw) if unit_raw else None
 
                 measurements.append({"value": numeric_value, "unit": normalized_unit, "category": normalized_category})
 
@@ -208,6 +187,7 @@ def extract_findings_list(
                 "text": finding.get("text", ""),
                 "clinical_status": finding.get("clinical_status"),
                 "clinical_significance": finding.get("clinical_significance"),
+                "laterality": finding.get("laterality"),
                 "comparison": finding.get("comparison"),
                 "measurements": measurements,
             }
@@ -246,7 +226,10 @@ def copy_findings_from_directory(
             if not isinstance(findings_list, list):
                 logger.warning("Skipping %s: not a list", findings_file.name)
                 continue
-            filtered = [project_to_canonical_finding(f) for f in findings_list if isinstance(f, dict)]
+            if not all(isinstance(f, dict) and f.get("finding_id") for f in findings_list):
+                logger.warning("Skipping %s: every finding needs a finding_id", findings_file.name)
+                continue
+            filtered = [project_to_canonical_finding(f) for f in findings_list]
             io.save_json(filtered, target_file)
             copied_count += 1
         except (OSError, ValueError, KeyError, TypeError) as exc:

@@ -1,16 +1,17 @@
 {
   "scenario": "N:1 umbrella — atomic pred pulmonary nodules covering one umbrella GT",
-  "description": "GT 'Multiple bilateral pulmonary nodules, the largest 6 mm.' is a real clinical aggregation. The predictor specified two atomic nodules; both pred rows bind to it.",
+  "description": "GT 'Multiple bilateral solid pulmonary nodules, the largest 8 mm.' is a real clinical aggregation. The predictor specified two atomic nodules; both pred rows bind to it.",
   "user": {
     "pred_findings": [
       {
         "finding_id": "p_1",
-        "text": "5 mm right upper lobe pulmonary nodule.",
+        "text": "8 mm solid right upper lobe pulmonary nodule.",
         "clinical_status": "abnormal",
+        "laterality": "right",
         "comparison": null,
         "measurements": [
           {
-            "value": 5,
+            "value": 8,
             "unit": "mm",
             "category": "size"
           }
@@ -18,12 +19,13 @@
       },
       {
         "finding_id": "p_2",
-        "text": "4 mm left lower lobe pulmonary nodule.",
+        "text": "7 mm solid left lower lobe pulmonary nodule.",
         "clinical_status": "abnormal",
+        "laterality": "left",
         "comparison": null,
         "measurements": [
           {
-            "value": 4,
+            "value": 7,
             "unit": "mm",
             "category": "size"
           }
@@ -33,6 +35,7 @@
         "finding_id": "p_3",
         "text": "No pleural effusion.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }
@@ -40,12 +43,13 @@
     "gt_findings": [
       {
         "finding_id": "gt_1",
-        "text": "Multiple bilateral pulmonary nodules, the largest 6 mm.",
+        "text": "Multiple bilateral solid pulmonary nodules, the largest 8 mm.",
         "clinical_status": "abnormal",
+        "laterality": "bilateral",
         "comparison": null,
         "measurements": [
           {
-            "value": 6,
+            "value": 8,
             "unit": "mm",
             "category": "size"
           }
@@ -55,6 +59,7 @@
         "finding_id": "gt_2",
         "text": "No pleural effusion.",
         "clinical_status": "normal",
+        "laterality": null,
         "comparison": null,
         "measurements": []
       }
@@ -65,12 +70,12 @@
       {
         "pred_id": "p_1",
         "gt_id": "gt_1",
-        "reasoning": "GT names pathology (pulmonary nodules) + bilateral anatomy; covers the RUL atom."
+        "reasoning": "The bilateral pulmonary nodules of gt include this right upper lobe nodule."
       },
       {
         "pred_id": "p_2",
         "gt_id": "gt_1",
-        "reasoning": "Same umbrella covers the LLL atom — second row, same gt_id."
+        "reasoning": "The bilateral pulmonary nodules of gt also include this left lower lobe nodule."
       },
       {
         "pred_id": "p_3",
