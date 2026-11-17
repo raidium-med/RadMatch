@@ -1,0 +1,80 @@
+[
+  {
+    "text": "Single live intrauterine pregnancy with a crown-rump length of 2.1 cm, concordant with dates, and a fetal heart rate of 158 beats per minute.",
+    "measurements": [
+      {
+        "value": 2.1,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 158,
+        "unit": "bpm",
+        "category": "other"
+      }
+    ],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Small subchorionic hemorrhage.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "2.3 cm corpus luteum cyst in the right ovary.",
+    "measurements": [
+      {
+        "value": 2.3,
+        "unit": "cm",
+        "category": "size"
+      }
+    ],
+    "laterality": "right",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Left ovary normal, measuring 3.0 x 2.0 x 1.7 cm with a volume of 5.3 ml.",
+    "measurements": [
+      {
+        "value": 3.0,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 2.0,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 1.7,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 5.3,
+        "unit": "ml",
+        "category": "size"
+      }
+    ],
+    "laterality": "left",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No free fluid.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  }
+]

@@ -1,0 +1,157 @@
+{
+  "scenario": "Pertinent negative as a status flip + laterality flip + SPU + MIS",
+  "description": "Built from abdomen-us/findings_{gt,pred}/example_3 (constructed renal and bladder ultrasound for kidney injury). The pred pertinent negative 'no hydronephrosis' is matched to the bilateral hydronephrosis it denies (status flip); the complex cyst on the opposite side is matched (no left renal cyst in gt); the bladder stone the gt never mentions is SPU (the bladder wall statement does not deny it) and the enlarged prostate the pred leaves out is MIS.",
+  "user": {
+    "indication": "74-year-old man with acute kidney injury and difficulty voiding.",
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "No hydronephrosis.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "2.4 cm complex cyst with a thick septation in the upper pole of the left kidney.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 2.4,
+            "unit": "cm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_3",
+        "text": "Distended bladder with diffuse wall thickening and trabeculation.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_4",
+        "text": "8 mm echogenic shadowing focus in the bladder lumen, consistent with a bladder stone.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 8,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_5",
+        "text": "Post-void residual of 650 ml.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 650,
+            "unit": "ml",
+            "category": "other"
+          }
+        ]
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Moderate bilateral hydronephrosis.",
+        "clinical_status": "abnormal",
+        "laterality": "bilateral",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "2.4 cm complex cyst with a thick septation in the upper pole of the right kidney.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 2.4,
+            "unit": "cm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "Distended bladder with diffuse wall thickening and trabeculation.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "Post-void residual of 650 ml.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 650,
+            "unit": "ml",
+            "category": "other"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_5",
+        "text": "Enlarged prostate with a volume of 62 ml.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 62,
+            "unit": "ml",
+            "category": "size"
+          }
+        ]
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "'No hydronephrosis' denies the bilateral hydronephrosis."
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_2",
+        "reasoning": "Same complex upper-pole renal cyst, on the opposite side."
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_3",
+        "reasoning": "Identical bladder wall statement."
+      },
+      {
+        "pred_id": "p_5",
+        "gt_id": "gt_4",
+        "reasoning": "Identical post-void residual."
+      }
+    ],
+    "unmatched_pred": [
+      "p_4"
+    ],
+    "unmatched_gt": [
+      "gt_5"
+    ]
+  }
+}

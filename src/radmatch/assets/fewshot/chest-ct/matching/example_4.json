@@ -1,0 +1,195 @@
+{
+  "scenario": "Clinical long tail: two readings of one abnormality, synonyms, thresholds, post-surgical state",
+  "description": "Constructed example of clinical long-tail patterns: two readings of one abnormality (bulla vs pneumothorax at the same apex) are matched; scarring synonyms match; a sub-threshold node matches 'no lymphadenopathy'; 'no pulmonary nodules' denies a nodule; a lobectomy matches its post-surgical description; 'No consolidation' denies neither an enlarged hilar node nor ground-glass opacity, and a subcarinal node does not cover a hilar one (the hilar node and 'No consolidation' stay unmatched); a ground-glass opacity extended to the other lung still matches.",
+  "user": {
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Large bulla at the right lung apex.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_2",
+        "text": "Linear fibrotic strands in both upper lobes.",
+        "clinical_status": "abnormal",
+        "laterality": "bilateral",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_3",
+        "text": "Small non-enlarged subcarinal lymph node.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_4",
+        "text": "No pulmonary nodules.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_5",
+        "text": "Right lower lobectomy with staple line and volume loss.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_6",
+        "text": "No pleural effusion.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_7",
+        "text": "No consolidation.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_8",
+        "text": "Ground-glass opacities in both lower lobes.",
+        "clinical_status": "abnormal",
+        "laterality": "bilateral",
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Small right apical pneumothorax.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "Biapical pleuroparenchymal scarring.",
+        "clinical_status": "abnormal",
+        "laterality": "bilateral",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "No mediastinal lymphadenopathy.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "4 mm left upper lobe nodule.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 4,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_5",
+        "text": "Post right lower lobectomy changes.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_6",
+        "text": "Small left pleural effusion.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_7",
+        "text": "Enlarged right hilar lymph node, 14 mm.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 14,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_8",
+        "text": "Ground-glass opacity in the right lower lobe.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "One right apical lucency, read as a bulla vs a pneumothorax."
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_2",
+        "reasoning": "Fibrotic strands and pleuroparenchymal scarring of both apices are the same chronic scarring."
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_3",
+        "reasoning": "A non-enlarged subcarinal node lies below 'no mediastinal lymphadenopathy'."
+      },
+      {
+        "pred_id": "p_4",
+        "gt_id": "gt_4",
+        "reasoning": "'No pulmonary nodules' denies the left upper lobe nodule."
+      },
+      {
+        "pred_id": "p_5",
+        "gt_id": "gt_5",
+        "reasoning": "Same right lower lobectomy, the staple line and volume loss being its expected appearance."
+      },
+      {
+        "pred_id": "p_6",
+        "gt_id": "gt_6",
+        "reasoning": "One pleural effusion assessment, denied vs present."
+      },
+      {
+        "pred_id": "p_8",
+        "gt_id": "gt_8",
+        "reasoning": "Same lower lobe ground-glass opacity, extended to the left lung in pred."
+      }
+    ],
+    "unmatched_pred": [
+      "p_7"
+    ],
+    "unmatched_gt": [
+      "gt_7"
+    ]
+  }
+}

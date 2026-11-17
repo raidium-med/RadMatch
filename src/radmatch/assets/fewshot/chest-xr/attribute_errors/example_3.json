@@ -1,33 +1,56 @@
 {
-  "scenario": "No free-text attribute errors — restraint",
-  "description": "Stage 3b call derived from the matches in chest-xr/matching/example_3.json. The pulmonary-nodule pair carries a major measurement discrepancy (4 mm vs 6 mm) AND a comparison flip (stable vs worsening), but both differences are handled by Stage 3a deterministic comparators — measurement/comparison errors are NOT free-text attribute dimensions, so this stage does not re-emit them. All matched pairs end up with empty error lists. This is the canonical 'don't invent errors that already have a deterministic owner' example.",
+  "scenario": "Size across a threshold; the comparison flip stays upstream",
+  "description": "Stage 3b call built from chest-xr/findings_gt/example_3.json and findings_pred/example_3.json. 'A 6 mm pulmonary nodule in the peripheral right upper lobe…' vs 'A 4 mm pulmonary nodule in the peripheral right upper…': measurement major (6 vs 4 mm nodule, across the 6 mm Fleischner threshold; adds a follow-up CT); the other nodules, seen only on CT, are not left out by a radiograph report.",
   "user": {
     "series_uuid": "chest-xr_example_3",
     "pairs": [
       {
-        "pred_finding": {"finding_id": "p_1", "text": "Clear lungs without focal consolidation.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_1", "text": "Clear lungs without focal consolidation.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []}
-      },
-      {
-        "pred_finding": {"finding_id": "p_2", "text": "No pneumothorax.", "clinical_status": "normal", "clinical_significance": "critical", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_3", "text": "No pneumothorax.", "clinical_status": "normal", "clinical_significance": "critical", "comparison": null, "measurements": []}
-      },
-      {
-        "pred_finding": {"finding_id": "p_3", "text": "A 6 mm pulmonary nodule in the peripheral right upper lobe has slightly increased compared to the preceding radiograph.", "clinical_status": "abnormal", "clinical_significance": "urgent", "comparison": "worsening", "measurements": [{"value": 6, "unit": "mm", "category": "size"}]},
-        "gt_finding":   {"finding_id": "gt_4", "text": "A 4 mm pulmonary nodule in the peripheral right upper lobe is unchanged from the preceding radiograph.", "clinical_status": "abnormal", "clinical_significance": "notable", "comparison": "stable", "measurements": [{"value": 4, "unit": "mm", "category": "size"}]}
-      },
-      {
-        "pred_finding": {"finding_id": "p_4", "text": "Cardiac silhouette is normal in size.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []},
-        "gt_finding":   {"finding_id": "gt_6", "text": "Cardiac silhouette is normal in size.", "clinical_status": "normal", "clinical_significance": "routine", "comparison": null, "measurements": []}
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "A 6 mm pulmonary nodule in the peripheral right upper lobe has slightly increased compared to the preceding radiograph.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": "worsening",
+          "measurements": [
+            {
+              "value": 6,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "A 4 mm pulmonary nodule in the peripheral right upper lobe, unchanged from the preceding radiograph, is one of several pulmonary nodules shown on recent CT and not appreciated by radiography.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "right",
+          "comparison": "stable",
+          "measurements": [
+            {
+              "value": 4,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        }
       }
     ]
   },
   "assistant": {
-    "errors_per_match": [
-      [],
-      [],
-      [],
-      []
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "measurement",
+            "reasoning": "6 vs 4 mm nodule, across the 6 mm Fleischner threshold; adds a follow-up CT",
+            "severity": "major"
+          }
+        ]
+      }
     ]
   }
 }

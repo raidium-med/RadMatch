@@ -1,7 +1,16 @@
 [
   {
-    "text": "Medulla oblongata, pons, midbrain, both cerebellar hemispheres and vermis, cerebellar folia are normal.",
+    "text": "Medulla oblongata, pons and midbrain are normal.",
     "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Both cerebellar hemispheres, the vermis and the cerebellar folia are normal.",
+    "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -9,16 +18,34 @@
   {
     "text": "The 4th ventricle is midline and of normal width.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
   },
   {
-    "text": "Basal cisterns, cerebellopontine angle cisterns, internal acoustic canal widths, 5th, 7th-8th cranial nerves are normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "routine"
+    "clinical_significance": "routine",
+    "text": "Basal cisterns and cerebellopontine angle cisterns are normal."
+  },
+  {
+    "measurements": [],
+    "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine",
+    "text": "Internal acoustic canal widths are normal."
+  },
+  {
+    "measurements": [],
+    "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine",
+    "text": "The 5th and 7th-8th cranial nerves are normal."
   },
   {
     "text": "An 11 mm long diameter hypointense appearance on T2 sequence in the frontal region at the interhemispheric fissure location, consistent with falx calcification.",
@@ -29,13 +56,15 @@
         "category": "size"
       }
     ],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "abnormal",
-    "clinical_significance": "notable"
+    "clinical_significance": "routine"
   },
   {
     "text": "Cavum septum pellucidum et vergae variation.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -43,6 +72,7 @@
   {
     "text": "Bilateral basal ganglia, internal and external capsules, both thalami, corpus callosum, corona radiata are normal.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -50,6 +80,7 @@
   {
     "text": "No pathological intensity change detected within the cerebral parenchyma.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -57,13 +88,15 @@
   {
     "text": "No area of restriction compatible with acute infarct on Diffusion-ADC mapping.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
-    "clinical_significance": "critical"
+    "clinical_significance": "routine"
   },
   {
     "text": "No space-occupying lesion detected in the cerebral parenchyma.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -71,6 +104,7 @@
   {
     "text": "The third and both lateral ventricles are midline and of normal width.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -78,6 +112,7 @@
   {
     "text": "Hemispheric cortical sulcus and gyrus structure is normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -85,20 +120,63 @@
   {
     "text": "Main cerebral vascular structures are patent.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
   },
   {
-    "text": "Cranium bone structures, both globes, retrobulbar fat tissue, optic nerves, and optic chiasm are normal.",
+    "text": "Cranium bone structures are normal.",
     "measurements": [],
+    "laterality": null,
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
   },
   {
-    "text": "Paranasal sinuses and mastoid air cell aeration are intact.",
+    "text": "Both globes are normal.",
     "measurements": [],
+    "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Retrobulbar fat tissue is normal.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Optic nerves are normal.",
+    "measurements": [],
+    "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Optic chiasm is normal.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Paranasal sinus aeration is intact.",
+    "measurements": [],
+    "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Mastoid air cell aeration is intact.",
+    "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "normal",
     "clinical_significance": "routine"
@@ -106,6 +184,7 @@
   {
     "text": "Multiple oval-shaped lymphadenopathy in both cervical chains.",
     "measurements": [],
+    "laterality": "bilateral",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"
@@ -124,6 +203,7 @@
         "category": "size"
       }
     ],
+    "laterality": "left",
     "comparison": null,
     "clinical_status": "abnormal",
     "clinical_significance": "notable"

@@ -1,0 +1,82 @@
+{
+  "scenario": "Hedged diagnosis one step, same content in other words",
+  "description": "Stage 3b call derived from the matches in abdomen-us/matching/example_1.json. 'Diffusely increased hepatic echogenicity, consistent…' vs 'Diffusely increased hepatic echogenicity, compatible…': no error (same content in other words); 'Cholelithiasis with multiple shadowing gallstones…' vs 'Acute calculous cholecystitis with multiple shadowing…': certainty minor ('suspicious for' vs definite acute cholecystitis, one step; the same signs are reported and the treatment is the same).",
+  "user": {
+    "series_uuid": "abdomen-us_example_1",
+    "indication": "45-year-old woman with right upper quadrant pain and fever. Evaluate for cholecystitis.",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Diffusely increased hepatic echogenicity, consistent with hepatic steatosis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "Diffusely increased hepatic echogenicity, compatible with hepatic steatosis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        }
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "Cholelithiasis with multiple shadowing gallstones, gallbladder wall thickening to 5 mm, pericholecystic fluid and a positive sonographic Murphy sign, suspicious for acute cholecystitis.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": null,
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 5,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "Acute calculous cholecystitis with multiple shadowing gallstones, gallbladder wall thickening to 5 mm, pericholecystic fluid and a positive sonographic Murphy sign.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": null,
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 5,
+              "unit": "mm",
+              "category": "size"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": []
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "certainty",
+            "reasoning": "'suspicious for' vs definite acute cholecystitis, one step; the same signs are reported and the treatment is the same",
+            "severity": "minor"
+          }
+        ]
+      }
+    ]
+  }
+}

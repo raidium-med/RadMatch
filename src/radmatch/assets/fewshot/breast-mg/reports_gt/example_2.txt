@@ -1,0 +1,13 @@
+EXAMINATION: SCREENING MAMMOGRAM, BILATERAL, WITH TOMOSYNTHESIS
+
+INDICATION: 58-year-old woman. Screening.
+
+COMPARISON: Screening mammograms [DATE] and [DATE].
+
+FINDINGS:
+Breast composition: There are scattered areas of fibroglandular density (ACR breast density b).
+Left breast: New 6 mm group of amorphous calcifications in the upper outer quadrant, middle depth.
+Right breast: 0.9 cm oval circumscribed mass at 7 o'clock, posterior depth, stable since [DATE]. Stable postsurgical architectural distortion in the upper inner quadrant.
+
+IMPRESSION:
+New group of amorphous calcifications in the left breast upper outer quadrant. BI-RADS 0: Incomplete. Recall for magnification views of the left breast.

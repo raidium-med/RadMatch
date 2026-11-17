@@ -1,12 +1,16 @@
 # Matching few-shot examples (chest-ct)
 
-Three worked examples of the alignment patterns Stage 2 has to get right. Findings use placeholder ids (`p_1`, `gt_1`) rather than real report ids, so each example is self-contained.
+Worked examples of the alignment patterns Stage 2 has to get right. Findings use placeholder ids (`p_1`, `gt_1`) rather than real report ids, so each example is self-contained.
 
 | File | Scenario |
 |------|----------|
-| `example_1.json` | Laterality flip + status flip + severity flip + measurement diff |
-| `example_2.json` | 1:N umbrella — pred enumerates spinal levels covering multiple GT atoms |
+| `example_1.json` | Laterality flip + status flip + grade flip + measurement diff |
+| `example_2.json` | 1:N umbrella — pred gives a range of spinal levels covering multiple GT atoms |
 | `example_3.json` | N:1 umbrella — atomic pred pulmonary nodules covering one umbrella GT |
+| `example_4.json` | Constructed clinical long tail — bulla vs pneumothorax (two readings of one abnormality), scarring synonyms, sub-threshold node, post-lobectomy state, a negative that does not deny other entities |
+| `example_5.json` | Constructed — translated vocabulary (light transmission area, density and cord-like shadows), 'no obvious abnormal density shadow' denies the opacity, strands and nodule (1:N) but not the bulla or the emphysema, 'no metastatic disease' denies the suspicious nodules |
+| `example_6.json` | Constructed — aortic segments matched segment to segment, per-vessel calcium statement as one finding, clot burden inside the PE finding, residual thymus vs thymoma (two readings), leftovers across systems not paired |
+| `example_7.json` | Constructed — negatives matched only to what they deny ('no mass' vs millimetric nodules, calibre vs plaque, pleural vs pericardial, qualified 'no suspicious nodule', 'no nodular lesion' and 'no infiltrative lesion' vs blebs and septal thickening), real denials (a pleural effusion; the nodules and the granuloma under the unqualified 'no nodular lesion') and a cardiothoracic-ratio equivalence |
 
 ## Format
 
@@ -16,13 +20,15 @@ Each file is one example:
 {
   "scenario": "...",
   "description": "...",
-  "user":      { "pred_findings": [...], "gt_findings": [...] },
+  "user":      { "indication": "...", "pred_findings": [...], "gt_findings": [...] },
   "assistant": { "matches": [...], "unmatched_pred": [...], "unmatched_gt": [...] }
 }
 ```
 
 `radmatch.llm_utils.prompts.load_matching_fewshot` reads every `example_*.json` here and
 appends each `user` / `assistant` pair to the matching prompt as one user/assistant turn.
-Findings carry only the fields matching consumes — `finding_id`, `text`,
-`clinical_status`, `comparison`, `measurements` — since significance plays no part in
-aligning findings. `scenario` and `description` are documentation; the loader ignores them.
+Stage 2 sees only the `finding_id`, `text`, `clinical_status` and `laterality` of each finding
+(`radmatch.llm_utils.prompts.matching_view`) and each match row as `reasoning`, `pred_id`, `gt_id`;
+the `comparison` and `measurements` kept in the files are not sent. Each `reasoning` is one plain
+clause. `indication` is optional, as in live calls, where it is sent only when the study has one.
+`scenario` and `description` are documentation; the loader ignores them.

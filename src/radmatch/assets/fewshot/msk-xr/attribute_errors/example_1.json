@@ -1,0 +1,45 @@
+{
+  "scenario": "Routine grade one step apart",
+  "description": "Stage 3b call derived from the matches in msk-xr/matching/example_1.json. 'Moderate osteoarthritis of both hips with joint space…' vs 'Mild osteoarthritis of both hips with joint space…': grade minor (moderate vs mild osteoarthritis of both hips; one step, both routine).",
+  "user": {
+    "series_uuid": "msk-xr_example_1",
+    "indication": "82-year-old woman with left hip pain and inability to bear weight after a fall. Evaluate for fracture.",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_3",
+          "text": "Moderate osteoarthritis of both hips with joint space narrowing and osteophytes.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "bilateral",
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_3",
+          "text": "Mild osteoarthritis of both hips with joint space narrowing.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "bilateral",
+          "comparison": null,
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "grade",
+            "reasoning": "moderate vs mild osteoarthritis of both hips; one step, both routine",
+            "severity": "minor"
+          }
+        ]
+      }
+    ]
+  }
+}

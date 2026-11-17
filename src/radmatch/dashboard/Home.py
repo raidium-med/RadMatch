@@ -42,7 +42,7 @@ def main() -> None:
 
     st.write(
         "RadMatch scores a report by extracting its findings, matching them against the "
-        "ground truth, and judging each matched pair on seven attribute dimensions. Every "
+        "ground truth, and judging each matched pair on ten attribute dimensions. Every "
         "step is recorded, so a score is never a black box — this dashboard reads those "
         "records back. Start from the dataset-level numbers, then drill into the individual "
         "report, finding pair and attribute error that produced them."
@@ -63,8 +63,8 @@ def main() -> None:
     shared.render_hero_row(
         "📊",
         "Performance Summary",
-        "Dataset-level view: actionable errors, safety precision and recall, the match-outcome "
-        "breakdown, and the same metrics per finding subset.",
+        "Dataset-level view on the selected error tier: errors per report split into FN + FP, "
+        "precision and recall, the match-outcome breakdown, and the same metrics per finding subset.",
         "pages/2-Performance_Summary.py",
         "open_ss",
     )

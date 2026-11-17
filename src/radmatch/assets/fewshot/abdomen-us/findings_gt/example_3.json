@@ -1,0 +1,60 @@
+[
+  {
+    "text": "Moderate bilateral hydronephrosis.",
+    "measurements": [],
+    "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "2.4 cm complex cyst with a thick septation in the upper pole of the right kidney.",
+    "measurements": [
+      {
+        "value": 2.4,
+        "unit": "cm",
+        "category": "size"
+      }
+    ],
+    "laterality": "right",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Distended bladder with diffuse wall thickening and trabeculation.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Post-void residual of 650 ml.",
+    "measurements": [
+      {
+        "value": 650,
+        "unit": "ml",
+        "category": "other"
+      }
+    ],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "Enlarged prostate with a volume of 62 ml.",
+    "measurements": [
+      {
+        "value": 62,
+        "unit": "ml",
+        "category": "size"
+      }
+    ],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  }
+]

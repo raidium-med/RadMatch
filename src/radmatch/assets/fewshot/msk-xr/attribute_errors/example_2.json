@@ -1,0 +1,82 @@
+{
+  "scenario": "Bone of a fracture location major, two normal statements",
+  "description": "Stage 3b call derived from the matches in msk-xr/matching/example_2.json. 'Acute fracture of the right fourth metacarpal neck…' vs 'Acute fracture of the right fifth metacarpal neck with…': location major (fourth vs fifth metacarpal neck fracture; the bone of a fracture sets the reduction and splinting); 'Normal alignment at the carpometacarpal and…' vs 'No dislocation': no error (two normal statements; not sent to the judge in live runs, kept to show prompt rule 1).",
+  "user": {
+    "series_uuid": "msk-xr_example_2",
+    "indication": "24-year-old man with right hand pain and swelling after punching a wall.",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_1",
+          "text": "Acute fracture of the right fourth metacarpal neck with approximately 35 degrees of volar angulation of the distal fragment.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 35,
+              "unit": "degrees",
+              "category": "other"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_1",
+          "text": "Acute fracture of the right fifth metacarpal neck with approximately 35 degrees of volar angulation of the distal fragment.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "urgent",
+          "laterality": "right",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 35,
+              "unit": "degrees",
+              "category": "other"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "Normal alignment at the carpometacarpal and metacarpophalangeal joints.",
+          "clinical_status": "normal",
+          "clinical_significance": "urgent",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "No dislocation.",
+          "clinical_status": "normal",
+          "clinical_significance": "urgent",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "location",
+            "reasoning": "fourth vs fifth metacarpal neck fracture; the bone of a fracture sets the reduction and splinting",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": []
+      }
+    ]
+  }
+}

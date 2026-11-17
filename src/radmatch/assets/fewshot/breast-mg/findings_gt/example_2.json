@@ -1,0 +1,46 @@
+[
+  {
+    "text": "Scattered areas of fibroglandular density in both breasts (ACR breast density b).",
+    "measurements": [],
+    "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "New 6 mm group of amorphous calcifications in the left breast upper outer quadrant, middle depth, BI-RADS 0.",
+    "measurements": [
+      {
+        "value": 6,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "laterality": "left",
+    "comparison": "new",
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Stable 0.9 cm oval circumscribed mass in the right breast at 7 o'clock, posterior depth.",
+    "measurements": [
+      {
+        "value": 0.9,
+        "unit": "cm",
+        "category": "size"
+      }
+    ],
+    "laterality": "right",
+    "comparison": "stable",
+    "clinical_status": "abnormal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Stable postsurgical architectural distortion in the right breast upper inner quadrant.",
+    "measurements": [],
+    "laterality": "right",
+    "comparison": "stable",
+    "clinical_status": "abnormal",
+    "clinical_significance": "routine"
+  }
+]

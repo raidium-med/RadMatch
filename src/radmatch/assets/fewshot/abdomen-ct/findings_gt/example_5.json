@@ -1,0 +1,134 @@
+[
+  {
+    "text": "Liver normal in size and shape, with smooth margins and uniform density.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No focal liver lesion.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No intrahepatic or extrahepatic bile duct dilatation.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Gallbladder surgically absent, with mild fat stranding in the gallbladder fossa.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Pancreas normal in size and density.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No peripancreatic exudate.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Spleen not enlarged, with uniform density.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Kidneys normal in size and position.",
+    "measurements": [],
+    "laterality": "bilateral",
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "15 mm round low-density lesion with clear borders in the upper pole of the left kidney, likely a cyst.",
+    "measurements": [
+      {
+        "value": 15,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "laterality": "left",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No hydronephrosis.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Postoperative changes of the ascending colon, with a little fat stranding.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Several retroperitoneal lymph nodes, the largest 14 mm in short axis.",
+    "measurements": [
+      {
+        "value": 14,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "No free fluid in the abdominal cavity.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "No free gas in the abdominal cavity.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "Bladder well filled, with no wall thickening.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  }
+]

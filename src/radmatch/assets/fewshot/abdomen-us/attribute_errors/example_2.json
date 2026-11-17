@@ -1,0 +1,125 @@
+{
+  "scenario": "Fibroid layer location major, cyst size across a postmenopausal threshold, two normal statements",
+  "description": "Stage 3b call derived from the matches in abdomen-us/matching/example_2.json. '2.1 cm subserosal fibroid in the posterior uterine body' vs '2.1 cm submucosal fibroid in the posterior uterine body': location major (subserosal vs submucosal fibroid; a submucosal fibroid can explain the bleeding and is resected hysteroscopically); '2.8 cm simple cyst in the left ovary, O-RADS US 2' vs '3.2 cm simple cyst in the left ovary, O-RADS US 2': measurement major (2.8 vs 3.2 cm simple cyst after menopause; 3 cm separates no follow-up from follow-up ultrasound (O-RADS US)); 'No pelvic free fluid' vs 'No free fluid in the pelvis': no error (two normal statements; not sent to the judge in live runs, kept to show prompt rule 1).",
+  "user": {
+    "series_uuid": "abdomen-us_example_2",
+    "indication": "58-year-old woman with postmenopausal bleeding.",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "pred_finding": {
+          "finding_id": "p_2",
+          "text": "2.1 cm subserosal fibroid in the posterior uterine body.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": null,
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 2.1,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_2",
+          "text": "2.1 cm submucosal fibroid in the posterior uterine body.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": null,
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 2.1,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 2,
+        "pred_finding": {
+          "finding_id": "p_4",
+          "text": "2.8 cm simple cyst in the left ovary, O-RADS US 2.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "routine",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 2.8,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        },
+        "gt_finding": {
+          "finding_id": "gt_4",
+          "text": "3.2 cm simple cyst in the left ovary, O-RADS US 2.",
+          "clinical_status": "abnormal",
+          "clinical_significance": "notable",
+          "laterality": "left",
+          "comparison": null,
+          "measurements": [
+            {
+              "value": 3.2,
+              "unit": "cm",
+              "category": "size"
+            }
+          ]
+        }
+      },
+      {
+        "pair_id": 3,
+        "pred_finding": {
+          "finding_id": "p_5",
+          "text": "No pelvic free fluid.",
+          "clinical_status": "normal",
+          "clinical_significance": "routine",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        },
+        "gt_finding": {
+          "finding_id": "gt_5",
+          "text": "No free fluid in the pelvis.",
+          "clinical_status": "normal",
+          "clinical_significance": "routine",
+          "laterality": null,
+          "comparison": null,
+          "measurements": []
+        }
+      }
+    ]
+  },
+  "assistant": {
+    "errors_per_pair": [
+      {
+        "pair_id": 1,
+        "errors": [
+          {
+            "dimension": "location",
+            "reasoning": "subserosal vs submucosal fibroid; a submucosal fibroid can explain the bleeding and is resected hysteroscopically",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 2,
+        "errors": [
+          {
+            "dimension": "measurement",
+            "reasoning": "2.8 vs 3.2 cm simple cyst after menopause; 3 cm separates no follow-up from follow-up ultrasound (O-RADS US)",
+            "severity": "major"
+          }
+        ]
+      },
+      {
+        "pair_id": 3,
+        "errors": []
+      }
+    ]
+  }
+}

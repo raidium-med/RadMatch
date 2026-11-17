@@ -1,0 +1,150 @@
+{
+  "scenario": "Constructed: translated report vocabulary, a denial and a category negative, expected post-surgical state",
+  "description": "Constructed. 'Fast-in fast-out' is arterial enhancement with washout; a 'low-density shadow' is a hypodense lesion (two readings of the renal cyst); 'No evidence of metastatic disease' denies a lesion suspicious for metastasis; 'No source of hematuria' names no entity, so it does not deny the renal calculus (both left unmatched); a dilated bile duct and one the gt explains by cholecystectomy are the same duct.",
+  "user": {
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Fast-in fast-out lesion in liver segment 8, 2.1 cm.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 2.1,
+            "unit": "cm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_2",
+        "text": "Low-density shadow in the left kidney.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_3",
+        "text": "Hepatic lesion in segment 3 suspicious for metastasis.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_4",
+        "text": "No source of hematuria identified.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_5",
+        "text": "Common bile duct dilated to 9 mm.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 9,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "2.1 cm segment 8 lesion with arterial enhancement and washout, LI-RADS 5.",
+        "clinical_status": "abnormal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 2.1,
+            "unit": "cm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "Simple left renal cyst.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "No evidence of metastatic disease in the abdomen.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_4",
+        "text": "4 mm nonobstructing left lower pole renal calculus.",
+        "clinical_status": "abnormal",
+        "laterality": "left",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 4,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_5",
+        "text": "Common bile duct 9 mm, expected after cholecystectomy.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 9,
+            "unit": "mm",
+            "category": "size"
+          }
+        ]
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "Fast-in fast-out = arterial enhancement with washout, same lesion."
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_2",
+        "reasoning": "Low-density shadow and cyst are two readings of the left renal lesion."
+      },
+      {
+        "pred_id": "p_3",
+        "gt_id": "gt_3",
+        "reasoning": "'no metastatic disease' denies the lesion suspicious for metastasis."
+      },
+      {
+        "pred_id": "p_5",
+        "gt_id": "gt_5",
+        "reasoning": "Same common bile duct measurement."
+      }
+    ],
+    "unmatched_pred": [
+      "p_4"
+    ],
+    "unmatched_gt": [
+      "gt_4"
+    ]
+  }
+}

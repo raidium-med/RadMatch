@@ -1,0 +1,213 @@
+{
+ "scenario": "Constructed: aortic segments, per-vessel coronary calcium, PE burden, one abnormality read two ways, leftovers across systems",
+ "description": "Constructed. Each aortic segment is matched only to the same segment; a per-vessel coronary calcium statement is one finding; clot burden belongs to the PE finding; a soft-tissue focus read as residual thymus on one side and as a thymoma on the other is one abnormality (one pair); unmatched findings from different systems are never paired.",
+ "user": {
+  "pred_findings": [
+   {
+    "finding_id": "p_1",
+    "text": "Aortic root 3.9 cm.",
+    "clinical_status": "normal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": [
+     {
+      "value": 3.9,
+      "unit": "cm",
+      "category": "size"
+     }
+    ]
+   },
+   {
+    "finding_id": "p_2",
+    "text": "Ascending aorta aneurysmal, 4.7 cm.",
+    "clinical_status": "abnormal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": [
+     {
+      "value": 4.7,
+      "unit": "cm",
+      "category": "size"
+     }
+    ]
+   },
+   {
+    "finding_id": "p_3",
+    "text": "Descending thoracic aorta 2.8 cm.",
+    "clinical_status": "normal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": [
+     {
+      "value": 2.8,
+      "unit": "cm",
+      "category": "size"
+     }
+    ]
+   },
+   {
+    "finding_id": "p_4",
+    "text": "Coronary artery calcification in the LAD and RCA.",
+    "clinical_status": "abnormal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_5",
+    "text": "Pulmonary emboli in the left lower lobe segmental arteries with a large clot burden.",
+    "clinical_status": "abnormal",
+    "laterality": "left",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_6",
+    "text": "Triangular soft tissue in the anterior mediastinum, likely residual thymus.",
+    "clinical_status": "normal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "p_7",
+    "text": "Mild degenerative change of the thoracic spine.",
+    "clinical_status": "abnormal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   }
+  ],
+  "gt_findings": [
+   {
+    "finding_id": "gt_1",
+    "text": "Aortic root 4.0 cm.",
+    "clinical_status": "normal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": [
+     {
+      "value": 4.0,
+      "unit": "cm",
+      "category": "size"
+     }
+    ]
+   },
+   {
+    "finding_id": "gt_2",
+    "text": "Ascending aortic aneurysm, 4.6 cm.",
+    "clinical_status": "abnormal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": [
+     {
+      "value": 4.6,
+      "unit": "cm",
+      "category": "size"
+     }
+    ]
+   },
+   {
+    "finding_id": "gt_3",
+    "text": "Aortic arch 3.1 cm.",
+    "clinical_status": "normal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": [
+     {
+      "value": 3.1,
+      "unit": "cm",
+      "category": "size"
+     }
+    ]
+   },
+   {
+    "finding_id": "gt_4",
+    "text": "Descending thoracic aorta 2.7 cm.",
+    "clinical_status": "normal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": [
+     {
+      "value": 2.7,
+      "unit": "cm",
+      "category": "size"
+     }
+    ]
+   },
+   {
+    "finding_id": "gt_5",
+    "text": "Mild coronary artery calcium in the LAD and RCA, none in the left main or circumflex.",
+    "clinical_status": "abnormal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_6",
+    "text": "Segmental pulmonary emboli in the left lower lobe, small clot burden.",
+    "clinical_status": "abnormal",
+    "laterality": "left",
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_7",
+    "text": "Anterior mediastinal soft-tissue mass, suspicious for thymoma.",
+    "clinical_status": "abnormal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   },
+   {
+    "finding_id": "gt_8",
+    "text": "Small hiatal hernia.",
+    "clinical_status": "abnormal",
+    "laterality": null,
+    "comparison": null,
+    "measurements": []
+   }
+  ]
+ },
+ "assistant": {
+  "matches": [
+   {
+    "pred_id": "p_1",
+    "gt_id": "gt_1",
+    "reasoning": "Same segment, aortic root."
+   },
+   {
+    "pred_id": "p_2",
+    "gt_id": "gt_2",
+    "reasoning": "Same segment, ascending aorta."
+   },
+   {
+    "pred_id": "p_3",
+    "gt_id": "gt_4",
+    "reasoning": "Same segment, descending aorta."
+   },
+   {
+    "pred_id": "p_4",
+    "gt_id": "gt_5",
+    "reasoning": "Same coronary calcification in the LAD and RCA, given per vessel or as a list."
+   },
+   {
+    "pred_id": "p_5",
+    "gt_id": "gt_6",
+    "reasoning": "Same left lower lobe emboli, whatever clot burden each gives."
+   },
+   {
+    "pred_id": "p_6",
+    "gt_id": "gt_7",
+    "reasoning": "One anterior mediastinal focus read two ways."
+   }
+  ],
+  "unmatched_pred": [
+   "p_7"
+  ],
+  "unmatched_gt": [
+   "gt_3",
+   "gt_8"
+  ]
+ }
+}

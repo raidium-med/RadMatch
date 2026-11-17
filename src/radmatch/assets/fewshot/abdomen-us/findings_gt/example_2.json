@@ -1,0 +1,76 @@
+[
+  {
+    "text": "Anteverted uterus measuring 8.2 x 4.5 x 4.0 cm.",
+    "measurements": [
+      {
+        "value": 8.2,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 4.5,
+        "unit": "cm",
+        "category": "size"
+      },
+      {
+        "value": 4.0,
+        "unit": "cm",
+        "category": "size"
+      }
+    ],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  },
+  {
+    "text": "2.1 cm submucosal fibroid in the posterior uterine body.",
+    "measurements": [
+      {
+        "value": 2.1,
+        "unit": "cm",
+        "category": "size"
+      }
+    ],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "Thickened endometrium measuring 9 mm.",
+    "measurements": [
+      {
+        "value": 9,
+        "unit": "mm",
+        "category": "size"
+      }
+    ],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "urgent"
+  },
+  {
+    "text": "3.2 cm simple cyst in the left ovary, O-RADS US 2.",
+    "measurements": [
+      {
+        "value": 3.2,
+        "unit": "cm",
+        "category": "size"
+      }
+    ],
+    "laterality": "left",
+    "comparison": null,
+    "clinical_status": "abnormal",
+    "clinical_significance": "notable"
+  },
+  {
+    "text": "No free fluid in the pelvis.",
+    "measurements": [],
+    "laterality": null,
+    "comparison": null,
+    "clinical_status": "normal",
+    "clinical_significance": "routine"
+  }
+]

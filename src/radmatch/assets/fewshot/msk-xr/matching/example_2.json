@@ -1,0 +1,102 @@
+{
+  "scenario": "Fracture placed in a neighbouring bone + two normal statements + SPU",
+  "description": "Built from msk-xr/findings_{gt,pred}/example_2 (constructed hand radiographs after a punch injury). The metacarpal neck fracture is matched although the pred places it in the fourth metacarpal (no gt fracture there; the bone is a location error downstream); the alignment and dislocation statements are two normal assessments of the joints; the foreign body the gt never mentions is SPU (no gt statement denies it).",
+  "user": {
+    "indication": "24-year-old man with right hand pain and swelling after punching a wall.",
+    "pred_findings": [
+      {
+        "finding_id": "p_1",
+        "text": "Acute fracture of the right fourth metacarpal neck with approximately 35 degrees of volar angulation of the distal fragment.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 35,
+            "unit": "degrees",
+            "category": "other"
+          }
+        ]
+      },
+      {
+        "finding_id": "p_2",
+        "text": "Normal alignment at the carpometacarpal and metacarpophalangeal joints.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_3",
+        "text": "Radiopaque foreign body in the dorsal soft tissues over the right fifth metacarpophalangeal joint.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "p_4",
+        "text": "Normal bone mineralization.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      }
+    ],
+    "gt_findings": [
+      {
+        "finding_id": "gt_1",
+        "text": "Acute fracture of the right fifth metacarpal neck with approximately 35 degrees of volar angulation of the distal fragment.",
+        "clinical_status": "abnormal",
+        "laterality": "right",
+        "comparison": null,
+        "measurements": [
+          {
+            "value": 35,
+            "unit": "degrees",
+            "category": "other"
+          }
+        ]
+      },
+      {
+        "finding_id": "gt_2",
+        "text": "No dislocation.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      },
+      {
+        "finding_id": "gt_3",
+        "text": "Normal bone mineralization.",
+        "clinical_status": "normal",
+        "laterality": null,
+        "comparison": null,
+        "measurements": []
+      }
+    ]
+  },
+  "assistant": {
+    "matches": [
+      {
+        "pred_id": "p_1",
+        "gt_id": "gt_1",
+        "reasoning": "One metacarpal neck fracture, placed in the fourth vs fifth metacarpal."
+      },
+      {
+        "pred_id": "p_2",
+        "gt_id": "gt_2",
+        "reasoning": "Normal joint alignment and no dislocation are one assessment of the joints."
+      },
+      {
+        "pred_id": "p_4",
+        "gt_id": "gt_3",
+        "reasoning": "Identical bone mineralization statement."
+      }
+    ],
+    "unmatched_pred": [
+      "p_3"
+    ],
+    "unmatched_gt": []
+  }
+}
